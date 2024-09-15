@@ -1,7 +1,8 @@
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/build/
+!**/src/**/build/
+!**/resources/**/build/
 
 ### IntelliJ IDEA ###
 .idea/*
@@ -9,7 +10,9 @@ build/
 *.iml
 *.ipr
 out/
-!**/out/
+!**/src/**/out/
+!**/resources/**/out/
+.profileconfig.json
 
 ### Kotlin ###
 .kotlin
