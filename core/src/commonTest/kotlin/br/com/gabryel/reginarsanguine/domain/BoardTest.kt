@@ -12,6 +12,15 @@ class BoardTest {
 
         nextTurn.at(0, 0) should beCellWith(LEFT, SECURITY_OFFICER)
     }
+
+    // TODO when making a move, should increment pins on all increment positions
+    // TODO when making a move on a position where you have no enough pins, should fail
+    // TODO when making a move on a position where the other player has control, should fail
+    // TODO when making a move on a position where you have no enough pins, should fail
+    // TODO when making a move on a position outside the board, should fail
+
+    // TODO when making a move, should increment pins on all increment positions
+    // TODO when making a move, should not increment pins over 3
 }
 
 

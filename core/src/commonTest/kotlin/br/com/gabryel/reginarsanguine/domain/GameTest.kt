@@ -21,5 +21,7 @@ class GameTest {
 
         nextTurn.nextPlayer shouldBeEqual RIGHT
     }
+
+    // TODO when making two consecutive skips, should end game
 }
 

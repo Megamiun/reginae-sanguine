@@ -21,5 +21,7 @@ class TurnTest {
 
         nextTurn.nextPlayer shouldBeEqual RIGHT
     }
+
+    // TODO when making a move as the wrong player, should fail
 }
 
