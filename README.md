@@ -15,3 +15,9 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
   - [ ] Should allow users to create custom decks
   - [ ] Should allow users to invite each other
 - [ ] Have a Android version that interfaces with the server
+
+## Principles
+
+- This is a study project
+- This project will be modular, made to be reusable and portable to different contexts
+- Other than for the modularity, it should be kept as simple as possible internally
