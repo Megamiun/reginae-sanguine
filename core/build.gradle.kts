@@ -8,6 +8,11 @@ kotlin {
     jvm()
 
     sourceSets {
+        sourceSets["commonMain"].dependencies {
+            implementation(project.dependencies.platform("io.arrow-kt:arrow-stack:1.2.4"))
+            implementation("io.arrow-kt:arrow-core")
+        }
+
         sourceSets["commonTest"].dependencies {
             implementation(kotlin("test"))
             implementation("io.kotest:kotest-property:$kotestVersion")

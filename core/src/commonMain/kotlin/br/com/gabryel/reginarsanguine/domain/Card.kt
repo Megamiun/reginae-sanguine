@@ -14,5 +14,5 @@ enum class Card(val increments: Map<Pair<Int, Int>, Int>, val value: Int, val pr
         0 to 1 to 1,
         -1 to 0 to 1,
         -2 to 0 to 1
-    ), 1, 1)
+    ), 2, 3)
 }
