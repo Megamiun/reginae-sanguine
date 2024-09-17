@@ -1,7 +1,7 @@
 package br.com.gabryel.reginarsanguine.domain
 
 // TODO Temporary, enum will be just for testing
-enum class Card(val increments: Map<Pair<Int, Int>, Int>, val value: Int, val price: Int) {
+enum class Card(val increments: Map<Position, Int>, val value: Int, val price: Int) {
     SECURITY_OFFICER(mapOf(
         1 to 0 to 1,
         0 to 1 to 1,
@@ -14,5 +14,8 @@ enum class Card(val increments: Map<Pair<Int, Int>, Int>, val value: Int, val pr
         0 to 1 to 1,
         -1 to 0 to 1,
         -2 to 0 to 1
-    ), 2, 3)
+    ), 3, 2),
+    INCREMENT_4(mapOf(
+        0 to 1 to 4,
+    ), 0, 1)
 }

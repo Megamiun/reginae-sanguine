@@ -1,4 +1,4 @@
-package br.com.gabryel.reginarsanguine.domain
+package br.com.gabryel.reginarsanguine.domain.matchers
 
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult

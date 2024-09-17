@@ -18,7 +18,7 @@ sealed interface Failure : Result<Nothing> {
 
   data class DoesNotBelongToPlayer(val cell: Cell): Failure
 
-  data class CellOutsideOfBoard(val x: Int, val y: Int): Failure
+  data class CellOutsideOfBoard(val position: Position): Failure
 
   data class NotPlayerTurn(val turn: Turn): Failure
 }
