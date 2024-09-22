@@ -30,5 +30,3 @@ class CellTest {
         updatedCell shouldBe cardCellWith(RIGHT, SECURITY_OFFICER, 1)
     }
 }
-
-

@@ -11,28 +11,32 @@ import br.com.gabryel.reginarsanguine.util.buildResult
 data class Board(
     private val width: Int,
     private val height: Int,
-    private val state: Map<Position, Cell> = mapOf(
-        (0 to 0) to Cell(LEFT, 1),
-        (1 to 0) to Cell(LEFT, 1),
-        (2 to 0) to Cell(LEFT, 1),
-        (0 to 4) to Cell(RIGHT, 1),
-        (1 to 4) to Cell(RIGHT, 1),
-        (2 to 4) to Cell(RIGHT, 1),
-    )
-): CellContainer {
-
+    private val state: Map<Position, Cell> =
+        mapOf(
+            (0 to 0) to Cell(LEFT, 1),
+            (1 to 0) to Cell(LEFT, 1),
+            (2 to 0) to Cell(LEFT, 1),
+            (0 to 4) to Cell(RIGHT, 1),
+            (1 to 4) to Cell(RIGHT, 1),
+            (2 to 4) to Cell(RIGHT, 1),
+        ),
+) : CellContainer {
     companion object {
         fun default() = Board(5, 3)
     }
 
-    fun play(player: PlayerPosition, action: Action) = buildResult {
+    fun play(
+        player: PlayerPosition,
+        action: Action,
+    ) = buildResult {
         when (action) {
             is Action.Skip -> this@Board
             is Play -> {
                 val cell = getCellAt(action.position).orRaiseError()
 
-                ensure(cell.owner == player) { DoesNotBelongToPlayer(cell) }
+                ensure(cell.owner == player) { CellDoesNotBelongToPlayer(cell) }
                 ensure(cell.pins >= action.card.price) { NotEnoughPins(cell) }
+                ensure(cell.card != null) { CellOccupied(cell) }
 
                 val newCell = cell.copy(owner = player, card = action.card)
                 val incremented = action.incrementAll(player)
@@ -44,16 +48,18 @@ data class Board(
         }
     }
 
-    private fun Play.incrementAll(player: PlayerPosition) = card.increments
-        .mapKeys { (displacement) -> position + displacement }
-        .mapValues { (newPosition, increment) ->
-            getCellAt(newPosition).map { it.increment(player, increment) }
-        }.filterIsInstance<Position, Success<Cell>>()
-        .mapValues { (_, newCell) -> newCell.value }
+    private fun Play.incrementAll(player: PlayerPosition) =
+        card.increments
+            .mapKeys { (displacement) -> position + displacement }
+            .mapValues { (newPosition, increment) ->
+                getCellAt(newPosition).map { it.increment(player, increment) }
+            }.filterIsInstance<Position, Success<Cell>>()
+            .mapValues { (_, newCell) -> newCell.value }
 
-    override fun getCellAt(position: Position) = buildResult {
-        ensure(position.row() in 0 until height && position.column() in 0 until width) { CellOutsideOfBoard(position) }
+    override fun getCellAt(position: Position) =
+        buildResult {
+            ensure(position.row() in 0 until height && position.column() in 0 until width) { OutOfBoard(position) }
 
-        state[position] ?: Cell.EMPTY
-    }
+            state[position] ?: Cell.EMPTY
+        }
 }
