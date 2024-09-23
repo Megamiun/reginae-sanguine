@@ -1,6 +1,5 @@
 [*.{kt,kts}]
-# TODO Remove Card in the future
-ij_kotlin_packages_to_use_import_on_demand=br.com.gabryel.reginarsanguine.domain.Failure.*,br.com.gabryel.reginarsanguine.domain.matchers.*,br.com.gabryel.reginarsanguine.domain.Card.*
+ij_kotlin_packages_to_use_import_on_demand=br.com.gabryel.reginarsanguine.domain.Failure.*,br.com.gabryel.reginarsanguine.domain.matchers.*
 
 ij_kotlin_name_count_to_use_star_import = 99
 ij_kotlin_name_count_to_use_star_import_for_members = 99

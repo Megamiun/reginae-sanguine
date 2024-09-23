@@ -1,9 +1,12 @@
 package br.com.gabryel.reginarsanguine.domain
 
 import arrow.core.raise.ensure
+import br.com.gabryel.reginarsanguine.domain.Action.Skip
 import br.com.gabryel.reginarsanguine.domain.Failure.NotPlayerTurn
 import br.com.gabryel.reginarsanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginarsanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginarsanguine.domain.State.Ended.Tie
+import br.com.gabryel.reginarsanguine.domain.State.Ongoing
 import br.com.gabryel.reginarsanguine.util.buildResult
 
 data class Game(
@@ -32,4 +35,12 @@ data class Game(
             val newBoard = board.play(player, action).orRaiseError()
             copy(player = player, board = newBoard, previous = copy(action = action))
         }
+
+    fun getState(): State {
+        return if (previous?.action == Skip && previous.previous?.action == Skip) {
+            Tie
+        } else {
+            Ongoing
+        }
+    }
 }

@@ -36,7 +36,7 @@ data class Board(
 
                 ensure(cell.owner == player) { CellDoesNotBelongToPlayer(cell) }
                 ensure(cell.pins >= action.card.price) { NotEnoughPins(cell) }
-                ensure(cell.card != null) { CellOccupied(cell) }
+                ensure(cell.card == null) { CellOccupied(cell) }
 
                 val newCell = cell.copy(owner = player, card = action.card)
                 val incremented = action.incrementAll(player)
@@ -48,13 +48,14 @@ data class Board(
         }
     }
 
-    private fun Play.incrementAll(player: PlayerPosition) =
-        card.increments
-            .mapKeys { (displacement) -> position + displacement }
-            .mapValues { (newPosition, increment) ->
-                getCellAt(newPosition).map { it.increment(player, increment) }
-            }.filterIsInstance<Position, Success<Cell>>()
-            .mapValues { (_, newCell) -> newCell.value }
+    fun getScores(): Map<PlayerPosition, Int> {
+        return PlayerPosition.entries.associateWith { player ->
+            state.values
+                .filter { it.owner == player }
+                .mapNotNull { it.card?.value }
+                .sum()
+        }
+    }
 
     override fun getCellAt(position: Position) =
         buildResult {
@@ -62,4 +63,12 @@ data class Board(
 
             state[position] ?: Cell.EMPTY
         }
+
+    private fun Play.incrementAll(player: PlayerPosition) =
+        card.increments
+            .mapKeys { (displacement) -> position + displacement }
+            .mapValues { (newPosition, increment) ->
+                getCellAt(newPosition).map { it.increment(player, increment) }
+            }.filterIsInstance<Position, Success<Cell>>()
+            .mapValues { (_, newCell) -> newCell.value }
 }

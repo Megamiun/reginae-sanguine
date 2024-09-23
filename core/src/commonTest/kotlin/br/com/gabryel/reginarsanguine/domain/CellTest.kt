@@ -1,10 +1,9 @@
 package br.com.gabryel.reginarsanguine.domain
 
-import br.com.gabryel.reginarsanguine.domain.Card.SECURITY_OFFICER
 import br.com.gabryel.reginarsanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginarsanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginarsanguine.domain.matchers.cardCellWith
-import br.com.gabryel.reginarsanguine.domain.matchers.emptyCellOwnedBy
+import br.com.gabryel.reginarsanguine.domain.helpers.SampleCards.SECURITY_OFFICER
+import br.com.gabryel.reginarsanguine.domain.matchers.*
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 

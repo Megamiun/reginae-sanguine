@@ -1,12 +1,16 @@
 package br.com.gabryel.reginarsanguine.domain
 
 import br.com.gabryel.reginarsanguine.domain.Action.Play
-import br.com.gabryel.reginarsanguine.domain.Card.*
 import br.com.gabryel.reginarsanguine.domain.Failure.*
 import br.com.gabryel.reginarsanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginarsanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginarsanguine.domain.helpers.SampleCards.RIOT_TROOPER
+import br.com.gabryel.reginarsanguine.domain.helpers.SampleCards.SECURITY_OFFICER
+import br.com.gabryel.reginarsanguine.domain.helpers.SampleCards.cardOf
 import br.com.gabryel.reginarsanguine.domain.matchers.*
 import br.com.gabryel.reginarsanguine.util.buildResult
+import io.kotest.matchers.maps.containExactly
+import io.kotest.matchers.should
 import kotlin.test.Test
 
 class BoardTest {
@@ -75,4 +79,22 @@ class BoardTest {
                 (2 to 1) to unclaimedCell(),
             )
     }
+
+    @Test
+    fun `when playing a card, should add points player score`() {
+        val nextBoard =
+            Board.default()
+                .play(LEFT, Play(1 to 0, cardOf(value = 4)))
+
+        nextBoard.shouldBeSuccess()
+            .getScores() should
+            containExactly(
+                LEFT to 4,
+                RIGHT to 0,
+            )
+    }
+
+    // TODO given current score for first player in a row, when playing a lesser card on same row with second player, should not consider points for second player score
+    // TODO given current score for first player in a row, when playing a bigger card on same row with second player, should only consider points for second player score
+    // TODO given first player in a row, when playing another card on another row with second player, should consider points for both players
 }
