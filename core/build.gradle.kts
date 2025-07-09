@@ -1,15 +1,16 @@
 plugins {
-    kotlin("multiplatform") version "2.0.10"
+    kotlin("multiplatform")
 }
 
-val kotestVersion = "5.7.2"
+val kotestVersion = "6.0.0.M4"
+val arrowVersion = "2.1.2"
 
 kotlin {
     jvm()
 
     sourceSets {
         sourceSets["commonMain"].dependencies {
-            implementation(project.dependencies.platform("io.arrow-kt:arrow-stack:1.2.4"))
+            implementation(project.dependencies.platform("io.arrow-kt:arrow-stack:$arrowVersion"))
             implementation("io.arrow-kt:arrow-core")
         }
 

@@ -17,8 +17,15 @@ sealed interface Failure : Result<Nothing> {
 
     override fun <T> flatmap(transform: (Nothing) -> Result<T>) = this
 
+    // Game State Errors
+    object GameEnded : Failure
+
     data class NotPlayerTurn(val turn: Game) : Failure
 
+    // Player State Errors
+    data class CardNotOnHand(val card: String): Failure
+
+    // Board/Cell State Errors
     data class OutOfBoard(val position: Position) : Failure
 
     data class NotEnoughPins(val cell: Cell) : Failure

@@ -10,12 +10,10 @@ data class Cell(val owner: PlayerPosition? = null, val pins: Int = 0, val card: 
     fun increment(
         player: PlayerPosition,
         inc: Int,
-    ): Cell =
-        if (card != null) {
-            this
-        } else if (owner == null || player == owner) {
+    ): Cell = when {
+        card != null -> this
+        owner == null || player == owner ->
             copy(owner = player, pins = min(3, pins + inc))
-        } else {
-            copy(owner = player)
-        }
+        else -> copy(owner = player)
+    }
 }

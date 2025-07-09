@@ -6,6 +6,7 @@ import br.com.gabryel.reginarsanguine.domain.Position
 object SampleCards {
     val SECURITY_OFFICER =
         Card(
+            "Security Officer",
             mapOf(
                 1 to 0 to 1,
                 0 to 1 to 1,
@@ -17,6 +18,7 @@ object SampleCards {
         )
     val RIOT_TROOPER =
         Card(
+            "Riot Trooper",
             mapOf(
                 1 to 0 to 1,
                 2 to 0 to 1,
@@ -29,8 +31,9 @@ object SampleCards {
         )
 
     fun cardOf(
+        name: String = "Unnamed",
         increments: Map<Position, Int> = emptyMap(),
         value: Int = 0,
         price: Int = 0,
-    ) = Card(increments, value, price)
+    ) = Card(name, increments, value, price)
 }

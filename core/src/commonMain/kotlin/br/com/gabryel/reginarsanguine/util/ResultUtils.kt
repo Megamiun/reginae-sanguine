@@ -18,4 +18,5 @@ value class ResultRaise<A>(private val raise: Raise<Failure>) : Raise<Failure> b
         }
 }
 
-inline fun <A> buildResult(run: ResultRaise<A>.() -> A): Result<A> = recover({ Success(run(ResultRaise(this))) }) { it }
+inline fun <A> buildResult(run: ResultRaise<A>.() -> A): Result<A> =
+    recover({ Success(run(ResultRaise(this))) }) { it }

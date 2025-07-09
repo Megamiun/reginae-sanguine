@@ -13,7 +13,7 @@ fun haveCell(
     position: Position,
     match: Matcher<Cell>,
 ) = Matcher<CellContainer> { board ->
-    val cell = board.shouldHaveCellAt(position)
+    val cell = board shouldHaveCellAt position
 
     val result = match.test(cell)
     MatcherResult(
@@ -33,4 +33,4 @@ fun haveCells(vararg cellDescriptors: Pair<Position, Matcher<Cell>>) =
         Matcher.all(matchers = cellMatchers.toTypedArray()).test(board)
     }
 
-fun CellContainer.shouldHaveCellAt(position: Position): Cell = getCellAt(position).shouldBeSuccess()
+infix fun CellContainer.shouldHaveCellAt(position: Position): Cell = getCellAt(position).shouldBeSuccess()
