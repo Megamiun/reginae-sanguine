@@ -23,7 +23,7 @@ sealed interface Failure : Result<Nothing> {
     data class NotPlayerTurn(val turn: Game) : Failure
 
     // Player State Errors
-    data class CardNotOnHand(val card: String): Failure
+    data class CardNotOnHand(val card: String) : Failure
 
     // Board/Cell State Errors
     data class OutOfBoard(val position: Position) : Failure

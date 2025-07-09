@@ -79,13 +79,12 @@ class GameTest {
     @Test
     fun `when a player makes a move, the other player should draw a new card`() {
         val nextTurn = buildResult {
-            defaultGame()
-                .play(LEFT, Skip).orRaiseError()
+            defaultGame().play(LEFT, Skip).orRaiseError()
         }
 
         nextTurn.shouldBeSuccess().havePlayerOn(RIGHT) should satisfyAll(
             haveCardsAtHand(SECURITY_OFFICER, RIOT_TROOPER),
-            haveCardsAtDeck()
+            haveCardsAtDeck(),
         )
     }
 

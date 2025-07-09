@@ -53,16 +53,18 @@ data class Board(
         state[position] ?: Cell.EMPTY
     }
 
-    private fun getRowScore(row: Int): Pair<PlayerPosition, Int> = PlayerPosition.entries.associateWith { player ->
-        state.entries
-            .filter { it.value.owner == player && it.key.row() == row }
-            .mapNotNull { it.value.card?.value }
-            .sum()
-    }.maxBy { it.value }.toPair()
+    private fun getRowScore(row: Int): Pair<PlayerPosition, Int> = PlayerPosition.entries
+        .associateWith { player ->
+            state.entries
+                .filter { it.value.owner == player && it.key.row() == row }
+                .mapNotNull { it.value.card?.value }
+                .sum()
+        }.maxBy { it.value }
+        .toPair()
 
     private fun addScore(
         acc: Map<PlayerPosition, Int>,
-        curr: Pair<PlayerPosition, Int>
+        curr: Pair<PlayerPosition, Int>,
     ) = acc + (curr.first to (curr.second + (acc[curr.first] ?: 0)))
 
     private fun Play<Card>.incrementAll(player: PlayerPosition) =

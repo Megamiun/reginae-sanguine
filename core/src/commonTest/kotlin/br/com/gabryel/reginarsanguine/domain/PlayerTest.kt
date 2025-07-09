@@ -12,8 +12,9 @@ class PlayerTest {
         val afterPlay = Player(listOf(SECURITY_OFFICER, RIOT_TROOPER))
             .selectCard(SECURITY_OFFICER.id)
 
-        afterPlay.map { it.first }  shouldBeSuccessfulAnd haveCardsAtHand(RIOT_TROOPER)
+        afterPlay.map { it.first } shouldBeSuccessfulAnd haveCardsAtHand(RIOT_TROOPER)
     }
+
     @Test
     fun `when player plays card that has multiple copies on hand, should return player without one instance of given card`() {
         val afterPlay = Player(listOf(SECURITY_OFFICER, SECURITY_OFFICER, RIOT_TROOPER, SECURITY_OFFICER))

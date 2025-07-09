@@ -1,6 +1,8 @@
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
+
 plugins {
     kotlin("multiplatform") version "2.2.0" apply false
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+    id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
 }
 
 allprojects {
@@ -11,5 +13,9 @@ allprojects {
 
     repositories {
         mavenCentral()
+    }
+
+    configure<KtlintExtension> {
+        verbose = true
     }
 }

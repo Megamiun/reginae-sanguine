@@ -104,6 +104,5 @@ class BoardTest {
             LEFT to 0,
             RIGHT to 5,
         )
-
     }
 }

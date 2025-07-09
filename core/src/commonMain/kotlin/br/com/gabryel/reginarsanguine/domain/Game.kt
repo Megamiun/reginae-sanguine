@@ -39,9 +39,14 @@ data class Game(
         val otherPlayerAfterDraw = players.getValue(position).draw()
 
         when (action) {
-            is Skip -> copy(moveFrom = position, players = players + mapOf(position.next to otherPlayerAfterDraw), previous = copy(action = action))
+            is Skip -> copy(
+                moveFrom = position,
+                players = players + mapOf(position.next to otherPlayerAfterDraw),
+                previous = copy(action = action),
+            )
             is Play -> {
-                val (playerAfterPlay, card) = players.getValue(position)
+                val (playerAfterPlay, card) = players
+                    .getValue(position)
                     .selectCard(action.card)
                     .orRaiseError()
 
@@ -54,9 +59,8 @@ data class Game(
     }
 
     fun getState(): State =
-        if (previous?.action == Skip && previous.previous?.action == Skip) {
+        if (previous?.action == Skip && previous.previous?.action == Skip)
             Tie
-        } else {
+        else
             Ongoing
-        }
 }
