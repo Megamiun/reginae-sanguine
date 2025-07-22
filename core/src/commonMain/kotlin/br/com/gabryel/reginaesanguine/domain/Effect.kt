@@ -45,4 +45,4 @@ interface Effect {
     val relativePosition: List<Position>
 }
 
-class RaisePower(override val relativePosition: List<Position>, val amount: Int = 1): Effect
+class RaisePower(override val relativePosition: List<Position>, val amount: Int = 1) : Effect

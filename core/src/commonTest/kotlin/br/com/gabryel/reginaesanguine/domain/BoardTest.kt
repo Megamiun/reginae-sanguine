@@ -1,7 +1,10 @@
 package br.com.gabryel.reginaesanguine.domain
 
 import br.com.gabryel.reginaesanguine.domain.Action.Play
-import br.com.gabryel.reginaesanguine.domain.Failure.*
+import br.com.gabryel.reginaesanguine.domain.Failure.CellDoesNotBelongToPlayer
+import br.com.gabryel.reginaesanguine.domain.Failure.CellOccupied
+import br.com.gabryel.reginaesanguine.domain.Failure.NotEnoughPins
+import br.com.gabryel.reginaesanguine.domain.Failure.OutOfBoard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.helpers.BOTTOM_LANE
@@ -15,7 +18,15 @@ import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.cardOf
 import br.com.gabryel.reginaesanguine.domain.helpers.TOP_LANE
-import br.com.gabryel.reginaesanguine.domain.matchers.*
+import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
+import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWithTotalPower
+import br.com.gabryel.reginaesanguine.domain.matchers.emptyCellOwnedBy
+import br.com.gabryel.reginaesanguine.domain.matchers.haveCell
+import br.com.gabryel.reginaesanguine.domain.matchers.haveCells
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeFailure
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccess
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccessfulAnd
+import br.com.gabryel.reginaesanguine.domain.matchers.unclaimedCell
 import br.com.gabryel.reginaesanguine.util.buildResult
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
@@ -82,11 +93,11 @@ class BoardTest {
 
     @Test
     fun `when playing a card as RIGHT player, should increment pins on all mirrored increment positions described in the cards`() {
-        val nextBoard = Board.default().copy(state = mapOf((MIDDLE_LANE to CENTER_RIGHT_COLUMN) to Cell(RIGHT)))
+        val nextBoard = Board.default().copy(state = mapOf((MIDDLE_LANE to CENTER_RIGHT_COLUMN) to Cell(RIGHT, 1)))
             .play(RIGHT, Play(MIDDLE_LANE to CENTER_RIGHT_COLUMN, CRYSTALLINE_CRAB))
 
         nextBoard shouldBeSuccessfulAnd haveCells(
-            (BOTTOM_LANE to CENTER_RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 2),
+            (BOTTOM_LANE to CENTER_RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
             (TOP_LANE to CENTER_RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
             (MIDDLE_LANE to RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
             // Some extras for security
@@ -136,18 +147,18 @@ class BoardTest {
         }
 
         nextBoard shouldBeSuccessfulAnd
-                haveCell(MIDDLE_LANE to LEFT_COLUMN, cardCellWithTotalPower(3))
+            haveCell(MIDDLE_LANE to LEFT_COLUMN, cardCellWithTotalPower(3))
     }
 
     @Test
     fun `when a card with power raise effects is played by RIGHT player, should apply mirrored effect to affected entities`() {
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE to RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(MIDDLE_LANE to CENTER_RIGHT_COLUMN, CRYSTALLINE_CRAB)).orRaiseError()
+                .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(RIGHT, Play(MIDDLE_LANE to CENTER_RIGHT_COLUMN, CRYSTALLINE_CRAB)).orRaiseError()
         }
 
         nextBoard shouldBeSuccessfulAnd
-                haveCell(MIDDLE_LANE to RIGHT_COLUMN, cardCellWithTotalPower(3))
+            haveCell(MIDDLE_LANE to RIGHT_COLUMN, cardCellWithTotalPower(3))
     }
 }

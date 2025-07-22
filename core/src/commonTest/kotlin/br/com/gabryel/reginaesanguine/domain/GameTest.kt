@@ -2,13 +2,23 @@ package br.com.gabryel.reginaesanguine.domain
 
 import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Action.Skip
-import br.com.gabryel.reginaesanguine.domain.Failure.*
+import br.com.gabryel.reginaesanguine.domain.Failure.GameEnded
+import br.com.gabryel.reginaesanguine.domain.Failure.NotPlayerTurn
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
-import br.com.gabryel.reginaesanguine.domain.matchers.*
+import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
+import br.com.gabryel.reginaesanguine.domain.matchers.haveCardsAtDeck
+import br.com.gabryel.reginaesanguine.domain.matchers.haveCardsAtHand
+import br.com.gabryel.reginaesanguine.domain.matchers.haveCell
+import br.com.gabryel.reginaesanguine.domain.matchers.havePlayerOn
+import br.com.gabryel.reginaesanguine.domain.matchers.satisfyAll
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeFailure
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccess
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccessfulAnd
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldFailWith
 import br.com.gabryel.reginaesanguine.util.buildResult
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.should

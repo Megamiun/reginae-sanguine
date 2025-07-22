@@ -42,7 +42,7 @@ object SampleCards {
             ),
             1,
             1,
-            listOf(RaisePower(listOf(0 to -1), 2))
+            listOf(RaisePower(listOf(0 to -1), 2)),
         )
 
     fun cardOf(

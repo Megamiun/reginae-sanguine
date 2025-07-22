@@ -1,9 +1,11 @@
 package br.com.gabryel.reginaesanguine.domain
 
-import br.com.gabryel.reginaesanguine.domain.Failure.*
+import br.com.gabryel.reginaesanguine.domain.Failure.CardNotOnHand
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
-import br.com.gabryel.reginaesanguine.domain.matchers.*
+import br.com.gabryel.reginaesanguine.domain.matchers.haveCardsAtHand
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccessfulAnd
+import br.com.gabryel.reginaesanguine.domain.matchers.shouldFailWith
 import kotlin.test.Test
 
 class PlayerTest {

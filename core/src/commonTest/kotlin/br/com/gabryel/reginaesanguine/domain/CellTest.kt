@@ -3,7 +3,8 @@ package br.com.gabryel.reginaesanguine.domain
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
-import br.com.gabryel.reginaesanguine.domain.matchers.*
+import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
+import br.com.gabryel.reginaesanguine.domain.matchers.emptyCellOwnedBy
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 

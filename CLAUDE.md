@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ./gradlew build
 
 # Run tests
-./gradlew test
+./gradlew jvmTest
 
 # Check code style (run before committing)
 ./gradlew ktlintCheck

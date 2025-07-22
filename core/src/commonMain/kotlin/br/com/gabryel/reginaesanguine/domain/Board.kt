@@ -3,7 +3,10 @@ package br.com.gabryel.reginaesanguine.domain
 import arrow.core.filterIsInstance
 import arrow.core.raise.ensure
 import br.com.gabryel.reginaesanguine.domain.Action.Play
-import br.com.gabryel.reginaesanguine.domain.Failure.*
+import br.com.gabryel.reginaesanguine.domain.Failure.CellDoesNotBelongToPlayer
+import br.com.gabryel.reginaesanguine.domain.Failure.CellOccupied
+import br.com.gabryel.reginaesanguine.domain.Failure.NotEnoughPins
+import br.com.gabryel.reginaesanguine.domain.Failure.OutOfBoard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.util.buildResult
@@ -36,8 +39,8 @@ data class Board(
         ensure(cell.card == null) { CellOccupied(cell) }
 
         val newState = state +
-                (action.position to cell.copy(owner = player, card = action.card)) +
-                action.incrementAll(player)
+            (action.position to cell.copy(owner = player, card = action.card)) +
+            action.incrementAll(player)
 
         val afterEffectsState = addEffects(action, player, newState)
 
@@ -47,7 +50,7 @@ data class Board(
     private fun addEffects(action: Play<Card>, player: PlayerPosition, newState: Map<Position, Cell>) =
         action.card.effects.fold(newState) { newState, effect ->
             newState + effect.relativePosition.mapNotNull { displacement ->
-                val effectPosition = action.position + displacement
+                val effectPosition = action.position + player.correct(displacement)
 
                 newState.getCellAt(effectPosition)
                     .map { cell ->
@@ -86,7 +89,7 @@ data class Board(
 
     private fun Play<Card>.incrementAll(player: PlayerPosition) =
         card.increments
-            .mapKeys { (displacement) -> position + displacement }
+            .mapKeys { (displacement) -> position + player.correct(displacement) }
             .mapValues { (newPosition, increment) ->
                 getCellAt(newPosition).map { it.increment(player, increment) }
             }.filterIsInstance<Position, Success<Cell>>()
