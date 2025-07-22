@@ -34,7 +34,7 @@ object SampleCards {
 
     val CRYSTALLINE_CRAB =
         Card(
-            "Crystalline Creab",
+            "Crystalline Crab",
             mapOf(
                 1 to 0 to 1,
                 -1 to 0 to 1,
@@ -42,7 +42,8 @@ object SampleCards {
             ),
             1,
             1,
-            listOf(RaisePower(listOf(0 to -1), 2)),
+            listOf(0 to -1),
+            listOf(RaisePower(2)),
         )
 
     fun cardOf(

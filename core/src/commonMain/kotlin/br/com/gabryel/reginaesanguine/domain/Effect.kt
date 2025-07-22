@@ -41,8 +41,6 @@ package br.com.gabryel.reginaesanguine.domain
  *
  * * X can be negative for inverse effect
  */
-interface Effect {
-    val relativePosition: List<Position>
-}
+interface Effect
 
-class RaisePower(override val relativePosition: List<Position>, val amount: Int = 1) : Effect
+class RaisePower(val amount: Int = 1) : Effect

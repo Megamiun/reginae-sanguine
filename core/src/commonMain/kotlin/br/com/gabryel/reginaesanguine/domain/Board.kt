@@ -1,6 +1,5 @@
 package br.com.gabryel.reginaesanguine.domain
 
-import arrow.core.filterIsInstance
 import arrow.core.raise.ensure
 import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Failure.CellDoesNotBelongToPlayer
@@ -12,20 +11,23 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.util.buildResult
 
 data class Board(
-    private val width: Int,
-    private val height: Int,
-    private val state: Map<Position, Cell> =
-        mapOf(
+    private val state: Map<Position, Cell> = createInitialState(),
+    private val width: Int = 5,
+    private val height: Int = 3,
+) : CellContainer {
+    companion object {
+        fun default() = Board()
+
+        private fun createInitialState(): Map<Position, Cell> = mapOf(
+            // Left player starting positions
             (0 to 0) to Cell(LEFT, 1),
             (1 to 0) to Cell(LEFT, 1),
             (2 to 0) to Cell(LEFT, 1),
+            // Right player starting positions
             (0 to 4) to Cell(RIGHT, 1),
             (1 to 4) to Cell(RIGHT, 1),
             (2 to 4) to Cell(RIGHT, 1),
-        ),
-) : CellContainer {
-    companion object {
-        fun default() = Board(5, 3)
+        )
     }
 
     fun play(
@@ -38,42 +40,53 @@ data class Board(
         ensure(cell.pins >= action.card.cost) { NotEnoughPins(cell) }
         ensure(cell.card == null) { CellOccupied(cell) }
 
-        val newState = state +
-            (action.position to cell.copy(owner = player, card = action.card)) +
-            action.incrementAll(player)
-
-        val afterEffectsState = addEffects(action, player, newState)
-
-        copy(state = afterEffectsState)
+        placeCard(action.position, cell, player, action.card)
+            .applyCardIncrements(action, player)
+            .applyCardEffects(action, player)
     }
-
-    private fun addEffects(action: Play<Card>, player: PlayerPosition, newState: Map<Position, Cell>) =
-        action.card.effects.fold(newState) { newState, effect ->
-            newState + effect.relativePosition.mapNotNull { displacement ->
-                val effectPosition = action.position + player.correct(displacement)
-
-                newState.getCellAt(effectPosition)
-                    .map { cell ->
-                        val modifiedCell = cell.copy(appliedEffects = cell.appliedEffects + listOf(player to effect))
-                        effectPosition to modifiedCell
-                    }
-                    .orNull()
-            }
-        }
 
     fun getScores(): Map<PlayerPosition, Int> = (0..2)
-        .map(::getRowScore)
-        .fold(mapOf(), ::addScore)
+        .map(::getLaneScore)
+        .fold(mapOf(), ::accumulateScore)
 
-    override fun getCellAt(position: Position) = state.getCellAt(position)
-
-    private fun Map<Position, Cell>.getCellAt(position: Position): Result<Cell> = buildResult {
+    override fun getCellAt(position: Position): Result<Cell> = buildResult {
         ensure(position.lane() in 0 until height && position.column() in 0 until width) { OutOfBoard(position) }
-
-        this@getCellAt[position] ?: Cell.EMPTY
+        state[position] ?: Cell.EMPTY
     }
 
-    private fun getRowScore(row: Int): Pair<PlayerPosition, Int> = PlayerPosition.entries
+    private fun placeCard(position: Position, cell: Cell, player: PlayerPosition, card: Card): Board =
+        copy(state = state + (position to cell.copy(owner = player, card = card)))
+
+    private fun applyCardIncrements(
+        action: Play<Card>,
+        player: PlayerPosition,
+    ): Board {
+        val affectedCells = action.card.increments
+            .mapKeys { (displacement) -> action.position + player.correct(displacement) }
+            .mapNotNull { (newPosition, increment) ->
+                getCellAt(newPosition)
+                    .map { cell -> newPosition to cell.increment(player, increment) }
+                    .orNull()
+            }
+
+        return copy(state = state + affectedCells)
+    }
+
+    private fun applyCardEffects(action: Play<Card>, player: PlayerPosition): Board {
+        val affectedCards = action.card.effectDisplacements.mapNotNull { displacement ->
+            val effectPosition = action.position + player.correct(displacement)
+            getCellAt(effectPosition)
+                .map { cell -> effectPosition to cell.applyEffects(action.card.effects, player) }
+                .orNull()
+        }
+
+        return copy(state = state + affectedCards)
+    }
+
+    private fun Cell.applyEffects(effects: List<Effect>, player: PlayerPosition) =
+        copy(appliedEffects = appliedEffects + effects.map { player to it })
+
+    private fun getLaneScore(row: Int): Pair<PlayerPosition, Int> = PlayerPosition.entries
         .associateWith { player ->
             state.entries
                 .filter { it.value.owner == player && it.key.lane() == row }
@@ -82,16 +95,8 @@ data class Board(
         }.maxBy { it.value }
         .toPair()
 
-    private fun addScore(
+    private fun accumulateScore(
         acc: Map<PlayerPosition, Int>,
         curr: Pair<PlayerPosition, Int>,
     ) = acc + (curr.first to (curr.second + (acc[curr.first] ?: 0)))
-
-    private fun Play<Card>.incrementAll(player: PlayerPosition) =
-        card.increments
-            .mapKeys { (displacement) -> position + player.correct(displacement) }
-            .mapValues { (newPosition, increment) ->
-                getCellAt(newPosition).map { it.increment(player, increment) }
-            }.filterIsInstance<Position, Success<Cell>>()
-            .mapValues { (_, newCell) -> newCell.value }
 }
