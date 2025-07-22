@@ -190,4 +190,18 @@ class BoardTest {
             RIGHT to 5,
         )
     }
+
+    @Test
+    fun `when two players have equal power in same lane, both should get 0 points`() {
+        val nextBoard = buildResult {
+            Board.default()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+        }
+
+        nextBoard.shouldBeSuccess().getScores() should containExactly(
+            LEFT to 0,
+            RIGHT to 0,
+        )
+    }
 }

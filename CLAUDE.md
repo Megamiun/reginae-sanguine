@@ -72,7 +72,7 @@ Uses custom `Result<T>` type (`Success<T>` | `Failure`) with specific failure ty
 - Property-based testing with Kotest
 - Custom DSL for domain-specific assertions
 - Comprehensive test coverage of game rules and edge cases
-- When starting new features, should always create tests for relevant scenarios
+- When starting new features, should always create tests for relevant scenarios first
 
 ## Game Rules Implementation
 
