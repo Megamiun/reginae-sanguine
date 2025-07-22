@@ -19,6 +19,7 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
 ## Decisions
 
 - This is a study project
+- Claude will be used (sparingly probably) to better understand AI agents usage. All uses will be declared on the touched commits
 - This project will be modular, made to be reusable and portable to different contexts
 - Other than for the modularity, it should be kept as simple as possible internally
 - Shortcuts will be taken, if it expedites testability
