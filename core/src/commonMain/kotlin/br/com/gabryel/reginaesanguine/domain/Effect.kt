@@ -13,7 +13,7 @@ package br.com.gabryel.reginaesanguine.domain
  * - Add card X to hand
  * - Spawn card X
  * - Gives X Score bonus Points
- * - Replace Ally
+ * - Replace Entity
  * - Destroy Entities
  *
  * Known multipliers:
@@ -45,4 +45,6 @@ interface Effect
 
 class RaisePower(val amount: Int = 1) : Effect
 
-class LaneBonusPoints(val bonusPoints: Int = 1) : Effect
+class WinLaneBonusPoints(val bonusPoints: Int = 1) : Effect
+
+class DestroyEntity : Effect

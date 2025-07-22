@@ -83,8 +83,15 @@ data class Board(
         return copy(state = state + affectedCards)
     }
 
-    private fun Cell.applyEffects(effects: List<Effect>, player: PlayerPosition) =
-        copy(appliedEffects = appliedEffects + effects.map { player to it })
+    private fun Cell.applyEffects(effects: List<Effect>, player: PlayerPosition): Cell {
+        val hasDestroy = effects.any { it is DestroyEntity }
+        val newCard = if (hasDestroy && card != null && owner != player) null else card
+
+        return copy(
+            card = newCard,
+            appliedEffects = appliedEffects + effects.map { player to it },
+        )
+    }
 
     private fun getLaneScore(lane: Int): Pair<PlayerPosition, Int>? {
         val basePowers = PlayerPosition.entries.associateWith { player ->
@@ -96,7 +103,7 @@ data class Board(
 
         val laneBonus = getPlayerCardsInLane(winner.key, lane)
             .flatMap { it.effects }
-            .mapNotNull { it as? LaneBonusPoints }
+            .mapNotNull { it as? WinLaneBonusPoints }
             .sumOf { it.bonusPoints }
 
         return winner.key to (winner.value + laneBonus)

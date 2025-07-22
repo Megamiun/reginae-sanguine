@@ -1,9 +1,8 @@
 package br.com.gabryel.reginaesanguine.domain.helpers
 
 import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.LaneBonusPoints
+import br.com.gabryel.reginaesanguine.domain.Effect
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.RaisePower
 
 object SampleCards {
     val SECURITY_OFFICER =
@@ -33,37 +32,12 @@ object SampleCards {
             2,
         )
 
-    val CRYSTALLINE_CRAB =
-        Card(
-            "Crystalline Crab",
-            mapOf(
-                1 to 0 to 1,
-                -1 to 0 to 1,
-                0 to -1 to 1,
-            ),
-            1,
-            1,
-            listOf(0 to -1),
-            listOf(RaisePower(2)),
-        )
-
-    val TIFA =
-        Card(
-            "Tifa",
-            mapOf(
-                -1 to 0 to 1,
-                -2 to 0 to 1,
-                0 to 1 to 1,
-            ),
-            1,
-            1,
-            effects = listOf(LaneBonusPoints(5)),
-        )
-
     fun cardOf(
         name: String = "Unnamed",
         increments: Map<Position, Int> = emptyMap(),
-        value: Int = 0,
-        price: Int = 0,
-    ) = Card(name, increments, value, price)
+        value: Int = 1,
+        price: Int = 1,
+        effectDisplacements: List<Position> = emptyList(),
+        effects: List<Effect> = emptyList(),
+    ) = Card(name, increments, value, price, effectDisplacements, effects)
 }

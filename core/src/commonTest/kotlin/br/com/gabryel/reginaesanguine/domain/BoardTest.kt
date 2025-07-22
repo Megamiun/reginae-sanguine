@@ -8,15 +8,14 @@ import br.com.gabryel.reginaesanguine.domain.Failure.OutOfBoard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.helpers.BOTTOM_LANE
+import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_LEFT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_RIGHT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.LEFT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.MIDDLE_LANE
 import br.com.gabryel.reginaesanguine.domain.helpers.RIGHT_COLUMN
-import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.CRYSTALLINE_CRAB
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
-import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.TIFA
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.cardOf
 import br.com.gabryel.reginaesanguine.domain.helpers.TOP_LANE
 import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
@@ -94,15 +93,19 @@ class BoardTest {
 
     @Test
     fun `when playing a card as RIGHT player, should increment pins on all mirrored increment positions described in the cards`() {
-        val nextBoard = Board.default().copy(state = mapOf((MIDDLE_LANE to CENTER_RIGHT_COLUMN) to Cell(RIGHT, 1)))
-            .play(RIGHT, Play(MIDDLE_LANE to CENTER_RIGHT_COLUMN, CRYSTALLINE_CRAB))
+        val powerRaise = cardOf(
+            "Only Increment Right",
+            mapOf(0 to 1 to 1),
+        )
+
+        val nextBoard = Board.default()
+            .copy(state = mapOf((MIDDLE_LANE to CENTER_COLUMN) to Cell(RIGHT, 1)))
+            .play(RIGHT, Play(MIDDLE_LANE to CENTER_COLUMN, powerRaise))
 
         nextBoard shouldBeSuccessfulAnd haveCells(
-            (BOTTOM_LANE to CENTER_RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
-            (TOP_LANE to CENTER_RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
-            (MIDDLE_LANE to RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
+            (MIDDLE_LANE to CENTER_LEFT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
             // Some extras for security
-            (TOP_LANE to RIGHT_COLUMN) to unclaimedCell(),
+            (MIDDLE_LANE to CENTER_RIGHT_COLUMN) to unclaimedCell(),
         )
     }
 
@@ -140,11 +143,17 @@ class BoardTest {
     }
 
     @Test
-    fun `when a card with power raise effects is played, should add effect to affected entities`() {
+    fun `when a card with RaisePower effects is played, should add effect to affected entities`() {
+        val powerRaise = cardOf(
+            "Power Raiser",
+            effectDisplacements = listOf(0 to -1),
+            effects = listOf(RaisePower(2)),
+        )
+
         val nextBoard = buildResult {
             Board.default()
                 .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(MIDDLE_LANE to CENTER_LEFT_COLUMN, CRYSTALLINE_CRAB)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to CENTER_LEFT_COLUMN, powerRaise)).orRaiseError()
         }
 
         nextBoard shouldBeSuccessfulAnd
@@ -152,22 +161,12 @@ class BoardTest {
     }
 
     @Test
-    fun `when a card with power raise effects is played by RIGHT player, should apply mirrored effect to affected entities`() {
+    fun `when a player wins a lane with a WinLaneBonusPoints card, should receive bonus points`() {
+        val laneBonus = cardOf("Lane Bonus", effects = listOf(WinLaneBonusPoints(5)))
+
         val nextBoard = buildResult {
             Board.default()
-                .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(RIGHT, Play(MIDDLE_LANE to CENTER_RIGHT_COLUMN, CRYSTALLINE_CRAB)).orRaiseError()
-        }
-
-        nextBoard shouldBeSuccessfulAnd
-            haveCell(MIDDLE_LANE to RIGHT_COLUMN, cardCellWithTotalPower(3))
-    }
-
-    @Test
-    fun `when a player wins a lane with a LaneBonusPoints card, should receive bonus points`() {
-        val nextBoard = buildResult {
-            Board.default()
-                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, TIFA)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, laneBonus)).orRaiseError()
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -177,11 +176,13 @@ class BoardTest {
     }
 
     @Test
-    fun `when a player loses a lane with a LaneBonusPoints card, should not receive bonus points`() {
+    fun `when a player loses a lane with a WinLaneBonusPoints card, should not receive bonus points`() {
+        val laneBonus = cardOf("Lane Bonus", effects = listOf(WinLaneBonusPoints(5)))
+
         val strongCard = cardOf(name = "Strong", value = 5)
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, TIFA)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, laneBonus)).orRaiseError()
                 .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, strongCard)).orRaiseError()
         }
 
@@ -203,5 +204,36 @@ class BoardTest {
             LEFT to 0,
             RIGHT to 0,
         )
+    }
+
+    @Test
+    fun `when a card with DestroyEntity effect is played, should remove target card`() {
+        val destroyer = cardOf("Destroyer", value = 1, effectDisplacements = listOf(0 to 4), effects = listOf(DestroyEntity()))
+
+        val nextBoard = buildResult {
+            Board.default()
+                .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, destroyer)).orRaiseError()
+        }
+
+        nextBoard shouldBeSuccessfulAnd haveCell(MIDDLE_LANE to RIGHT_COLUMN, emptyCellOwnedBy(RIGHT, 1))
+    }
+
+    @Test
+    fun `when a card with a effect is played by RIGHT player, should apply mirrored effect to affected entities`() {
+        val powerRaise = cardOf(
+            "Power Raiser",
+            effectDisplacements = listOf(0 to -1),
+            effects = listOf(RaisePower(2)),
+        )
+
+        val nextBoard = buildResult {
+            Board.default()
+                .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(RIGHT, Play(MIDDLE_LANE to CENTER_RIGHT_COLUMN, powerRaise)).orRaiseError()
+        }
+
+        nextBoard shouldBeSuccessfulAnd
+            haveCell(MIDDLE_LANE to RIGHT_COLUMN, cardCellWithTotalPower(3))
     }
 }
