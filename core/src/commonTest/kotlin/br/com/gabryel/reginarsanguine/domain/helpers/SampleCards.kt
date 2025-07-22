@@ -2,6 +2,7 @@ package br.com.gabryel.reginarsanguine.domain.helpers
 
 import br.com.gabryel.reginarsanguine.domain.Card
 import br.com.gabryel.reginarsanguine.domain.Position
+import br.com.gabryel.reginarsanguine.domain.RaisePower
 
 object SampleCards {
     val SECURITY_OFFICER =
@@ -16,6 +17,7 @@ object SampleCards {
             1,
             1,
         )
+
     val RIOT_TROOPER =
         Card(
             "Riot Trooper",
@@ -28,6 +30,19 @@ object SampleCards {
             ),
             3,
             2,
+        )
+
+    val CRYSTALLINE_CRAB =
+        Card(
+            "Crystalline Creab",
+            mapOf(
+                1 to 0 to 1,
+                -1 to 0 to 1,
+                0 to -1 to 1,
+            ),
+            1,
+            1,
+            listOf(RaisePower(listOf(0 to -1), 2))
         )
 
     fun cardOf(

@@ -4,9 +4,17 @@ import br.com.gabryel.reginarsanguine.domain.Action.Play
 import br.com.gabryel.reginarsanguine.domain.Failure.*
 import br.com.gabryel.reginarsanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginarsanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginarsanguine.domain.helpers.BOTTOM_LANE
+import br.com.gabryel.reginarsanguine.domain.helpers.CENTER_LEFT_COLUMN
+import br.com.gabryel.reginarsanguine.domain.helpers.CENTER_RIGHT_COLUMN
+import br.com.gabryel.reginarsanguine.domain.helpers.LEFT_COLUMN
+import br.com.gabryel.reginarsanguine.domain.helpers.MIDDLE_LANE
+import br.com.gabryel.reginarsanguine.domain.helpers.RIGHT_COLUMN
+import br.com.gabryel.reginarsanguine.domain.helpers.SampleCards.CRYSTALLINE_CRAB
 import br.com.gabryel.reginarsanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginarsanguine.domain.helpers.SampleCards.SECURITY_OFFICER
 import br.com.gabryel.reginarsanguine.domain.helpers.SampleCards.cardOf
+import br.com.gabryel.reginarsanguine.domain.helpers.TOP_LANE
 import br.com.gabryel.reginarsanguine.domain.matchers.*
 import br.com.gabryel.reginarsanguine.util.buildResult
 import io.kotest.matchers.maps.containExactly
@@ -17,15 +25,15 @@ class BoardTest {
     @Test
     fun `when playing a card on a valid position, should add player card to position`() {
         val nextBoard = Board.default()
-            .play(LEFT, Play(1 to 0, SECURITY_OFFICER))
+            .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER))
 
-        nextBoard shouldBeSuccessfulAnd haveCell(1 to 0, cardCellWith(LEFT, SECURITY_OFFICER))
+        nextBoard shouldBeSuccessfulAnd haveCell(MIDDLE_LANE to LEFT_COLUMN, cardCellWith(LEFT, SECURITY_OFFICER))
     }
 
     @Test
     fun `when playing a card on a position where you have no enough pins, should fail with NotEnoughPins`() {
         val nextBoard = Board.default()
-            .play(LEFT, Play(1 to 0, RIOT_TROOPER))
+            .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, RIOT_TROOPER))
 
         nextBoard.shouldBeFailure<NotEnoughPins>()
     }
@@ -33,7 +41,7 @@ class BoardTest {
     @Test
     fun `when playing a card on a position you have no control, should fail with CellDoesNotBelongToPlayer`() {
         val nextBoard = Board.default()
-            .play(RIGHT, Play(1 to 0, SECURITY_OFFICER))
+            .play(RIGHT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER))
 
         nextBoard.shouldBeFailure<CellDoesNotBelongToPlayer>()
     }
@@ -50,9 +58,9 @@ class BoardTest {
     fun `when playing a card on a position where you already have a card, should fail with CellOccupied`() {
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(1 to 0, SECURITY_OFFICER)).orRaiseError()
-                .play(RIGHT, Play(1 to 4, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(1 to 0, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
         }
 
         nextBoard.shouldBeFailure<CellOccupied>()
@@ -61,15 +69,28 @@ class BoardTest {
     @Test
     fun `when playing a card, should increment pins on all increment positions described in the cards`() {
         val nextBoard = Board.default()
-            .play(LEFT, Play(1 to 0, SECURITY_OFFICER))
+            .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER))
 
         nextBoard shouldBeSuccessfulAnd haveCells(
-            (0 to 0) to emptyCellOwnedBy(LEFT, 2),
-            (2 to 0) to emptyCellOwnedBy(LEFT, 2),
-            (1 to 1) to emptyCellOwnedBy(LEFT, 1),
+            (BOTTOM_LANE to LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 2),
+            (TOP_LANE to LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 2),
+            (MIDDLE_LANE to CENTER_LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 1),
             // Some extras for security
-            (0 to 1) to unclaimedCell(),
-            (2 to 1) to unclaimedCell(),
+            (TOP_LANE to CENTER_LEFT_COLUMN) to unclaimedCell(),
+        )
+    }
+
+    @Test
+    fun `when playing a card as RIGHT player, should increment pins on all mirrored increment positions described in the cards`() {
+        val nextBoard = Board.default().copy(state = mapOf((MIDDLE_LANE to CENTER_RIGHT_COLUMN) to Cell(RIGHT)))
+            .play(RIGHT, Play(MIDDLE_LANE to CENTER_RIGHT_COLUMN, CRYSTALLINE_CRAB))
+
+        nextBoard shouldBeSuccessfulAnd haveCells(
+            (BOTTOM_LANE to CENTER_RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 2),
+            (TOP_LANE to CENTER_RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
+            (MIDDLE_LANE to RIGHT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
+            // Some extras for security
+            (TOP_LANE to RIGHT_COLUMN) to unclaimedCell(),
         )
     }
 
@@ -79,8 +100,8 @@ class BoardTest {
         val bigCard = cardOf(name = "ADD5", value = 5)
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(1 to 0, smallCard)).orRaiseError()
-                .play(RIGHT, Play(2 to 4, bigCard)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, smallCard)).orRaiseError()
+                .play(RIGHT, Play(TOP_LANE to RIGHT_COLUMN, bigCard)).orRaiseError()
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -96,13 +117,37 @@ class BoardTest {
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(1 to 0, smallCard)).orRaiseError()
-                .play(RIGHT, Play(1 to 4, bigCard)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, smallCard)).orRaiseError()
+                .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, bigCard)).orRaiseError()
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
             LEFT to 0,
             RIGHT to 5,
         )
+    }
+
+    @Test
+    fun `when a card with power raise effects is played, should add effect to affected entities`() {
+        val nextBoard = buildResult {
+            Board.default()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to CENTER_LEFT_COLUMN, CRYSTALLINE_CRAB)).orRaiseError()
+        }
+
+        nextBoard shouldBeSuccessfulAnd
+                haveCell(MIDDLE_LANE to LEFT_COLUMN, cardCellWithTotalPower(3))
+    }
+
+    @Test
+    fun `when a card with power raise effects is played by RIGHT player, should apply mirrored effect to affected entities`() {
+        val nextBoard = buildResult {
+            Board.default()
+                .play(LEFT, Play(MIDDLE_LANE to RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE to CENTER_RIGHT_COLUMN, CRYSTALLINE_CRAB)).orRaiseError()
+        }
+
+        nextBoard shouldBeSuccessfulAnd
+                haveCell(MIDDLE_LANE to RIGHT_COLUMN, cardCellWithTotalPower(3))
     }
 }

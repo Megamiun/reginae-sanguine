@@ -5,4 +5,9 @@ enum class PlayerPosition(getNext: Lazy<PlayerPosition>) {
     RIGHT(lazy { LEFT });
 
     val next by getNext
+
+    fun correct(displacement: Displacement) = when (this) {
+        LEFT -> displacement
+        RIGHT -> displacement.lane() to displacement.column() * -1
+    }
 }

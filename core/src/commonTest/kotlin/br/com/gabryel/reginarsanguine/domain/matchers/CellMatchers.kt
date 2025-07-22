@@ -32,6 +32,10 @@ fun cardCellWith(
     Cell::card shouldMatch beEqual(card),
 )
 
+fun cardCellWithTotalPower(
+    power: Int,
+) = Cell::totalPower shouldMatch beEqual(power)
+
 fun cardCellWith(
     owner: PlayerPosition,
     card: Card,

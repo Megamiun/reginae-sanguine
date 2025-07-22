@@ -32,32 +32,49 @@ data class Board(
         val cell = getCellAt(action.position).orRaiseError()
 
         ensure(cell.owner == player) { CellDoesNotBelongToPlayer(cell) }
-        ensure(cell.pins >= action.card.price) { NotEnoughPins(cell) }
+        ensure(cell.pins >= action.card.cost) { NotEnoughPins(cell) }
         ensure(cell.card == null) { CellOccupied(cell) }
 
-        val newCell = cell.copy(owner = player, card = action.card)
-        val incremented = action.incrementAll(player)
+        val newState = state +
+                (action.position to cell.copy(owner = player, card = action.card)) +
+                action.incrementAll(player)
 
-        val allChanged = incremented + (action.position to newCell)
+        val afterEffectsState = addEffects(action, player, newState)
 
-        copy(state = state + allChanged)
+        copy(state = afterEffectsState)
     }
+
+    private fun addEffects(action: Play<Card>, player: PlayerPosition, newState: Map<Position, Cell>) =
+        action.card.effects.fold(newState) { newState, effect ->
+            newState + effect.relativePosition.mapNotNull { displacement ->
+                val effectPosition = action.position + displacement
+
+                newState.getCellAt(effectPosition)
+                    .map { cell ->
+                        val modifiedCell = cell.copy(appliedEffects = cell.appliedEffects + listOf(player to effect))
+                        effectPosition to modifiedCell
+                    }
+                    .orNull()
+            }
+        }
 
     fun getScores(): Map<PlayerPosition, Int> = (0..2)
         .map(::getRowScore)
         .fold(mapOf(), ::addScore)
 
-    override fun getCellAt(position: Position) = buildResult {
-        ensure(position.row() in 0 until height && position.column() in 0 until width) { OutOfBoard(position) }
+    override fun getCellAt(position: Position) = state.getCellAt(position)
 
-        state[position] ?: Cell.EMPTY
+    private fun Map<Position, Cell>.getCellAt(position: Position): Result<Cell> = buildResult {
+        ensure(position.lane() in 0 until height && position.column() in 0 until width) { OutOfBoard(position) }
+
+        this@getCellAt[position] ?: Cell.EMPTY
     }
 
     private fun getRowScore(row: Int): Pair<PlayerPosition, Int> = PlayerPosition.entries
         .associateWith { player ->
             state.entries
-                .filter { it.value.owner == player && it.key.row() == row }
-                .mapNotNull { it.value.card?.value }
+                .filter { it.value.owner == player && it.key.lane() == row }
+                .mapNotNull { it.value.card?.power }
                 .sum()
         }.maxBy { it.value }
         .toPair()

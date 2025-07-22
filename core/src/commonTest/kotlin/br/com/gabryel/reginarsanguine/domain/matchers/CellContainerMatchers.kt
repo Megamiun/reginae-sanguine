@@ -4,7 +4,7 @@ import br.com.gabryel.reginarsanguine.domain.Cell
 import br.com.gabryel.reginarsanguine.domain.CellContainer
 import br.com.gabryel.reginarsanguine.domain.Position
 import br.com.gabryel.reginarsanguine.domain.column
-import br.com.gabryel.reginarsanguine.domain.row
+import br.com.gabryel.reginarsanguine.domain.lane
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.compose.all
@@ -18,8 +18,8 @@ fun haveCell(
     val result = match.test(cell)
     MatcherResult(
         result.passed(),
-        { "Cell at [${position.row()}, ${position.column()}]: " + result.failureMessage() },
-        { "Cell at [${position.row()}, ${position.column()}]: " + result.negatedFailureMessage() },
+        { "Cell at [${position.lane()}, ${position.column()}]: " + result.failureMessage() },
+        { "Cell at [${position.lane()}, ${position.column()}]: " + result.negatedFailureMessage() },
     )
 }
 

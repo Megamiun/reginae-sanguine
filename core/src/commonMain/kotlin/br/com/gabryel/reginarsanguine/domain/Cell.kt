@@ -2,7 +2,12 @@ package br.com.gabryel.reginarsanguine.domain
 
 import kotlin.math.min
 
-data class Cell(val owner: PlayerPosition? = null, val pins: Int = 0, val card: Card? = null) {
+data class Cell(
+    val owner: PlayerPosition? = null,
+    val pins: Int = 0,
+    val card: Card? = null,
+    val appliedEffects: List<Pair<PlayerPosition, Effect>> = listOf()
+) {
     companion object {
         val EMPTY = Cell()
     }
@@ -15,5 +20,18 @@ data class Cell(val owner: PlayerPosition? = null, val pins: Int = 0, val card: 
         owner == null || player == owner ->
             copy(owner = player, pins = min(3, pins + inc))
         else -> copy(owner = player)
+    }
+
+    val totalPower = card?.let {
+        owner?.let {
+            val addedPower = appliedEffects
+                // TODO Only considers ally Raise for now
+                .filter { effect -> effect.first == owner }
+                .map { it.second }
+                .filterIsInstance<RaisePower>()
+                .sumOf { it.amount }
+
+            card.power + addedPower
+        }
     }
 }

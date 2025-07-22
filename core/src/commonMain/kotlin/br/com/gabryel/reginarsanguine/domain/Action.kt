@@ -4,5 +4,5 @@ package br.com.gabryel.reginarsanguine.domain
 sealed interface Action<CARD_TYPE> {
     data object Skip : Action<Nothing>
 
-    data class Play<CARD_TYPE>(val position: Position, val card: CARD_TYPE) : Action<CARD_TYPE>
+    data class Play<CARD_TYPE>(val position: Pair<Int, Int>, val card: CARD_TYPE) : Action<CARD_TYPE>
 }
