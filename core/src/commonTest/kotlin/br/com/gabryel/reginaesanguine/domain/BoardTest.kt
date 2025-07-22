@@ -16,6 +16,7 @@ import br.com.gabryel.reginaesanguine.domain.helpers.RIGHT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.CRYSTALLINE_CRAB
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
+import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.TIFA
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.cardOf
 import br.com.gabryel.reginaesanguine.domain.helpers.TOP_LANE
 import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
@@ -122,7 +123,7 @@ class BoardTest {
     }
 
     @Test
-    fun `given two players have different amount of points in same row, when retrieving scores, only consider greatest score`() {
+    fun `given two players have different amount of points in same lane, when retrieving scores, only consider greatest score`() {
         val smallCard = cardOf(name = "ADD4", value = 4)
         val bigCard = cardOf(name = "ADD5", value = 5)
 
@@ -160,5 +161,33 @@ class BoardTest {
 
         nextBoard shouldBeSuccessfulAnd
             haveCell(MIDDLE_LANE to RIGHT_COLUMN, cardCellWithTotalPower(3))
+    }
+
+    @Test
+    fun `when a player wins a lane with a LaneBonusPoints card, should receive bonus points`() {
+        val nextBoard = buildResult {
+            Board.default()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, TIFA)).orRaiseError()
+        }
+
+        nextBoard.shouldBeSuccess().getScores() should containExactly(
+            LEFT to 6,
+            RIGHT to 0,
+        )
+    }
+
+    @Test
+    fun `when a player loses a lane with a LaneBonusPoints card, should not receive bonus points`() {
+        val strongCard = cardOf(name = "Strong", value = 5)
+        val nextBoard = buildResult {
+            Board.default()
+                .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, TIFA)).orRaiseError()
+                .play(RIGHT, Play(MIDDLE_LANE to RIGHT_COLUMN, strongCard)).orRaiseError()
+        }
+
+        nextBoard.shouldBeSuccess().getScores() should containExactly(
+            LEFT to 0,
+            RIGHT to 5,
+        )
     }
 }

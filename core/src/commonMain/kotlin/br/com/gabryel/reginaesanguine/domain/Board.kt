@@ -47,7 +47,7 @@ data class Board(
 
     fun getScores(): Map<PlayerPosition, Int> = (0..2)
         .map(::getLaneScore)
-        .fold(mapOf(), ::accumulateScore)
+        .fold(mapOf(LEFT to 0, RIGHT to 0), ::accumulateScore)
 
     override fun getCellAt(position: Position): Result<Cell> = buildResult {
         ensure(position.lane() in 0 until height && position.column() in 0 until width) { OutOfBoard(position) }
@@ -86,14 +86,25 @@ data class Board(
     private fun Cell.applyEffects(effects: List<Effect>, player: PlayerPosition) =
         copy(appliedEffects = appliedEffects + effects.map { player to it })
 
-    private fun getLaneScore(row: Int): Pair<PlayerPosition, Int> = PlayerPosition.entries
-        .associateWith { player ->
-            state.entries
-                .filter { it.value.owner == player && it.key.lane() == row }
-                .mapNotNull { it.value.card?.power }
-                .sum()
-        }.maxBy { it.value }
-        .toPair()
+    private fun getLaneScore(lane: Int): Pair<PlayerPosition, Int> {
+        val basePowers = PlayerPosition.entries.associateWith { player ->
+            getPlayerCardsInLane(player, lane).sumOf { it.power }
+        }
+
+        val winner = basePowers.maxBy { it.value }
+
+        val laneBonus = getPlayerCardsInLane(winner.key, lane)
+            .flatMap { it.effects }
+            .mapNotNull { it as? LaneBonusPoints }
+            .sumOf { it.bonusPoints }
+
+        return winner.key to (winner.value + laneBonus)
+    }
+
+    private fun getPlayerCardsInLane(player: PlayerPosition, lane: Int): List<Card> =
+        state.entries
+            .filter { it.value.owner == player && it.key.lane() == lane }
+            .mapNotNull { it.value.card }
 
     private fun accumulateScore(
         acc: Map<PlayerPosition, Int>,

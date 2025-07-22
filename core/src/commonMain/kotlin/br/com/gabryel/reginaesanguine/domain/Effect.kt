@@ -44,3 +44,5 @@ package br.com.gabryel.reginaesanguine.domain
 interface Effect
 
 class RaisePower(val amount: Int = 1) : Effect
+
+class LaneBonusPoints(val bonusPoints: Int = 1) : Effect

@@ -1,6 +1,7 @@
 package br.com.gabryel.reginaesanguine.domain.helpers
 
 import br.com.gabryel.reginaesanguine.domain.Card
+import br.com.gabryel.reginaesanguine.domain.LaneBonusPoints
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.RaisePower
 
@@ -44,6 +45,19 @@ object SampleCards {
             1,
             listOf(0 to -1),
             listOf(RaisePower(2)),
+        )
+
+    val TIFA =
+        Card(
+            "Tifa",
+            mapOf(
+                -1 to 0 to 1,
+                -2 to 0 to 1,
+                0 to 1 to 1,
+            ),
+            1,
+            1,
+            effects = listOf(LaneBonusPoints(5)),
         )
 
     fun cardOf(
