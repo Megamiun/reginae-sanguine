@@ -32,30 +32,30 @@ data class Game(
     }
 
     fun play(
-        position: PlayerPosition,
+        player: PlayerPosition,
         action: Action<out String>,
     ): Result<Game> = buildResult {
-        ensure(nextPlayer == position) { NotPlayerTurn(this@Game) }
+        ensure(nextPlayer == player) { NotPlayerTurn(this@Game) }
         ensure(getState() !is Ended) { GameEnded }
 
-        val otherPlayerAfterDraw = players.getValue(position).draw()
+        val otherPlayerAfterDraw = players.getValue(player).draw()
 
         when (action) {
             is Skip -> copy(
-                moveFrom = position,
-                players = players + mapOf(position.next to otherPlayerAfterDraw),
+                moveFrom = player,
+                players = players + mapOf(player.next to otherPlayerAfterDraw),
                 previous = copy(action = action),
             )
             is Play -> {
                 val (playerAfterPlay, card) = players
-                    .getValue(position)
+                    .getValue(player)
                     .selectCard(action.card)
                     .orRaiseError()
 
-                val newPlayers = mapOf(position to playerAfterPlay, position.next to otherPlayerAfterDraw)
+                val newPlayers = mapOf(player to playerAfterPlay, player.next to otherPlayerAfterDraw)
 
-                val newBoard = board.play(position, Play(action.position, card)).orRaiseError()
-                copy(moveFrom = position, players = newPlayers, board = newBoard, previous = copy(action = action))
+                val newBoard = board.play(player, Play(action.position, card)).orRaiseError()
+                copy(moveFrom = player, players = newPlayers, board = newBoard, previous = copy(action = action))
             }
         }
     }

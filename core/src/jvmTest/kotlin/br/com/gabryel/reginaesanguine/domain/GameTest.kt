@@ -7,6 +7,8 @@ import br.com.gabryel.reginaesanguine.domain.Failure.NotPlayerTurn
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
+import br.com.gabryel.reginaesanguine.domain.helpers.LEFT_COLUMN
+import br.com.gabryel.reginaesanguine.domain.helpers.MIDDLE_LANE
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
 import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
@@ -96,6 +98,15 @@ class GameTest {
             haveCardsAtHand(SECURITY_OFFICER, RIOT_TROOPER),
             haveCardsAtDeck(),
         )
+    }
+
+    @Test
+    fun `when a player makes a move, the player should lose the given card`() {
+        val nextTurn = buildResult {
+            defaultGame().play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER.id)).orRaiseError()
+        }
+
+        nextTurn.shouldBeSuccess().havePlayerOn(LEFT) should haveCardsAtHand(RIOT_TROOPER)
     }
 
     @Test
