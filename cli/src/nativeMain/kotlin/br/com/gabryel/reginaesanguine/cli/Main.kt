@@ -3,85 +3,62 @@ package br.com.gabryel.reginaesanguine.cli
 import br.com.gabryel.reginaesanguine.domain.Action
 import br.com.gabryel.reginaesanguine.domain.Action.Skip
 import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.Cell
 import br.com.gabryel.reginaesanguine.domain.Failure
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Player
-import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.Result
 import br.com.gabryel.reginaesanguine.domain.State
-import br.com.gabryel.reginaesanguine.domain.State.Ended.Tie
-import br.com.gabryel.reginaesanguine.domain.State.Ended.Won
 import br.com.gabryel.reginaesanguine.domain.Success
-import br.com.gabryel.reginaesanguine.domain.column
-import br.com.gabryel.reginaesanguine.domain.lane
-import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.log
-import kotlin.math.roundToInt
 import kotlin.random.Random.Default.nextDouble
 import kotlin.random.Random.Default.nextInt
 import kotlin.test.fail
 
 private val coordinatePattern = Regex("""(\d+)[\W+](\d+)""")
 
-private const val CELL_WIDTH = 9
-
-private val EMPTY = "".padEnd(CELL_WIDTH)
-
 fun main() {
-    println("Starting new game!")
-
     val deck = createRandomDeckOfSize(20)
+    val renderer = GameRenderer()
 
-    runGame(deck, deck)
+    runGame(deck, deck, renderer)
 }
 
-private fun runGame(leftDeck: List<Card>, rightDeck: List<Card>) {
+private fun runGame(leftDeck: List<Card>, rightDeck: List<Card>, renderer: GameRenderer) {
     val startTurn = Game.forPlayers(
         Player(deck = leftDeck.shuffled()),
         Player(deck = rightDeck.shuffled()),
     )
 
     generateSequence(startTurn) { turn ->
-        println("".padEnd(30, '-'))
         val nextPlayer = turn.nextPlayer
+        renderer.renderGameHeader(turn.round, nextPlayer.toString())
 
-        println("Round ${turn.round}: $nextPlayer turn!")
-        println("".padEnd(30, '-'))
-
-        turn.renderBoard()
-        turn.renderScore()
+        renderer.renderBoard(turn)
+        renderer.renderScore(turn)
 
         val state = turn.getState()
         if (state is State.Ended) {
-            println("\nGame ended!")
-
-            when (state) {
-                is Won -> println("\nPlayer ${state.player} won!")
-                is Tie -> println("\nTie!")
-            }
+            renderer.renderGameEnd(state)
             return@generateSequence null
         }
 
-        turn.executeTurn()
+        turn.executeTurn(renderer)
     }.last()
 }
 
-private fun Game.executeTurn(): Game = generateSequence {
+private fun Game.executeTurn(renderer: GameRenderer): Game = generateSequence {
     val player = players[nextPlayer] ?: fail("Player not found")
-    val action = readAction(player)
+    val action = readAction(player, renderer)
 
     play(nextPlayer, action)
 }.onEach {
-    if (it is Failure)
-        println("\nInvalid action [$it]")
+    if (it is Failure) renderer.renderActionError(it)
 }.filterIsInstance<Success<Game>>()
     .map { it.value }
     .first()
 
 private fun createRandomDeckOfSize(cards: Int): List<Card> = (1..cards).map {
-    val increments = (1..nextInt(4)).map {
+    val increments = (0..1 + nextInt(4)).map {
         (nextInt(-1, 2) to nextInt(-1, 2)) to 1
     }.distinct().toMap()
 
@@ -93,10 +70,10 @@ private fun createRandomDeckOfSize(cards: Int): List<Card> = (1..cards).map {
     )
 }
 
-private tailrec fun readAction(player: Player): Action<out String> =
-    when (askUserInput("Choose action: ", listOf("SKIP", "PLAY"))) {
+private tailrec fun readAction(player: Player, renderer: GameRenderer): Action<out String> =
+    when (askUserInput("Choose action: ", listOf("SKIP", "PLAY"), renderer)) {
         "SKIP" -> Skip
-        "PLAY" -> when (val card = askUserInput("Choose card: ", player.hand) { card -> card.describe() }) {
+        "PLAY" -> when (val card = askUserInput("Choose card: ", player.hand, renderer) { renderer.describeCard(it) }) {
             is Card -> {
                 print("\nPlay '${card.name}' at (Lane-Column): ")
 
@@ -104,86 +81,34 @@ private tailrec fun readAction(player: Player): Action<out String> =
                 val userInputValue = coordinatePattern.find(userPositionInput)
 
                 if (userInputValue == null) {
-                    println("\nPosition not recognized: $userPositionInput")
-                    readAction(player)
+                    renderer.renderPositionError(userPositionInput)
+                    readAction(player, renderer)
                 } else {
                     val (lane, col) = userInputValue.groupValues.drop(1).map { it.toInt() }
                     Action.Play(lane to col, card.id)
                 }
             }
-            else -> readAction(player)
+            else -> readAction(player, renderer)
         }
-        else -> readAction(player)
+        else -> readAction(player, renderer)
     }
 
-private fun <T> askUserInput(question: String, options: List<T>, describeOption: (T) -> String = { it.toString() }): T? {
-    println()
-    options.forEachIndexed { index, option ->
-        println("[$index] ${describeOption(option)}")
-    }
+private fun <T> askUserInput(
+    question: String,
+    options: List<T>,
+    renderer: GameRenderer,
+    describeOption: (T) -> String = { it.toString() }
+): T? {
+    renderer.renderInputOptions(options, describeOption)
+    renderer.renderInputPrompt(question)
 
-    print("\n$question")
     val userInput = readln().trim()
     val userChoice = userInput.toIntOrNull()
 
     if (userChoice == null || userChoice > options.lastIndex) {
-        println("\nInvalid input: $userInput")
-        println("Expecting inputs from 0 to ${options.lastIndex}")
+        renderer.renderInputValidationError(userInput, options.lastIndex)
         return null
     }
 
     return options[userChoice]
-}
-
-private fun Card.describe(): String = "$name ($ $cost, ⚡ $power) - $increments"
-
-private fun Game.renderBoard() {
-    println("\nCurrent board:")
-
-    val padding = "".cellCentered()
-    val cellLine = "".padEnd(CELL_WIDTH, '─')
-    val topRow = (0 until width).joinToString("┬", prefix = "$padding┌", postfix = "┐$padding\n") { cellLine }
-    val middleRow = (0 until width).joinToString("┼", prefix = "\n$padding├", postfix = "┤$padding\n") { cellLine }
-    val bottomRow = (0 until width).joinToString("┴", prefix = "\n$padding└", postfix = "┘$padding") { cellLine }
-
-    val content = ((height - 1) downTo 0).joinToString(middleRow, prefix = topRow, postfix = bottomRow) { lane ->
-        val positions = (0 until width).map { col -> lane to col }
-        val cells = positions.map(::getCellAt)
-
-        listOf(
-            listOf(padding) + positions.map { it.describePosition() } + listOf(padding),
-            // TODO Add row score
-            listOf("⚡ L".cellCentered()) + cells.map { it.describeOwner() } + listOf("⚡ R".cellCentered()),
-            listOf(padding) + cells.map { it.describeCard() } + listOf(padding),
-        ).joinToString("\n") { it.joinToString("│") }
-    }
-
-    println(content)
-}
-
-private fun Game.renderScore() {
-    println("\nCurrent score:")
-    players.keys.forEach { player ->
-        println(" - $player: ⚡ 0") // TODO Get scores
-    }
-}
-
-private fun Position.describePosition() = "${lane()}-${column()}".cellCentered()
-
-private fun Result<Cell>.describeOwner() = (this as? Success<Cell>)?.value
-    ?.owner?.name
-    ?.cellCentered()
-    ?: EMPTY
-
-private fun Result<Cell>.describeCard() = (this as? Success<Cell>)?.value
-    ?.totalPower?.let { "⚡ $it".cellCentered() }
-    ?: EMPTY
-
-private fun Any.cellCentered(width: Int = CELL_WIDTH): String {
-    val content = toString()
-    val missing = (width - content.length).toDouble()
-    val leftPad = "".padStart(floor(missing / 2).roundToInt())
-    val rightPad = "".padStart(ceil(missing / 2).roundToInt())
-
-    return "$leftPad$this$rightPad"
 }

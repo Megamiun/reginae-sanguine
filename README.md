@@ -13,8 +13,20 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
 ### CLI
 
 ```bash
-  # To run on a Linux System. Other possible setups: linuxArm64, mingw64
-  ./gradlew :cli:linkDebugExecutableLinuxX64; ./cli/build/bin/linuxX64/debugExecutable/cli.kexe
+# Linux x64
+./gradlew :cli:linkDebugExecutableLinuxX64 && ./cli/build/bin/linuxX64/debugExecutable/cli.kexe
+
+# Linux ARM64
+./gradlew :cli:linkDebugExecutableLinuxArm64 && ./cli/build/bin/linuxArm64/debugExecutable/cli.kexe
+
+# Windows x64
+./gradlew :cli:linkDebugExecutableMingwX64 && ./cli/build/bin/mingwX64/debugExecutable/cli.exe
+
+# macOS x64 (macOS systems only)
+./gradlew :cli:linkDebugExecutableMacosX64 && ./cli/build/bin/macosX64/debugExecutable/cli.kexe
+
+# macOS ARM64 (macOS systems only)
+./gradlew :cli:linkDebugExecutableMacosArm64 && ./cli/build/bin/macosArm64/debugExecutable/cli.kexe
 ```
 
 ## Goals

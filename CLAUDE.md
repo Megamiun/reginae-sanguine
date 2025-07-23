@@ -63,14 +63,9 @@ reginae-sanguine/
 
 # Clean build
 ./gradlew clean
-
-# Module-specific commands
-./gradlew :core:build
-./gradlew :cli:build
 ```
 
 ## Architecture Principles
-
 ### Domain-Driven Design
 - **Core module** contains pure domain logic with no external dependencies
 - **Application modules** (CLI, Web, etc.) depend on core but not on each other
@@ -85,6 +80,7 @@ reginae-sanguine/
 - **Common code** in core module for maximum reusability
 - **Platform-specific implementations** in application modules
 - Consistent API across all platforms and clients
+- Targets for Native projects: linuxX64, linuxArm64, mingwX64, macosX64, macosArm64
 
 ## Code Quality Standards
 - **KtLint** enforces official Kotlin code style

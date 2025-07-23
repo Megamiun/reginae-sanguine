@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
     kotlin("multiplatform")
 }
@@ -13,9 +15,15 @@ kotlin {
         }
     }
 
-    listOf(linuxArm64(), linuxX64(), mingwX64()).forEach { nativeTarget ->
-        nativeTarget.binaries.executable {
-            entryPoint = "br.com.gabryel.reginaesanguine.cli.main"
-        }
+    listOf(linuxArm64(), linuxX64(), mingwX64()).forEach(::configureNative)
+
+    if (System.getProperty("os.name").startsWith("Mac OS X")) {
+        listOf(macosX64(), macosArm64()).forEach(::configureNative)
+    }
+}
+
+fun configureNative(target: KotlinNativeTarget) {
+    target.binaries.executable {
+        entryPoint = "br.com.gabryel.reginaesanguine.cli.main"
     }
 }

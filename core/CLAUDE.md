@@ -23,6 +23,9 @@ The **Core module** provides the pure game engine implementation with domain log
 
 # Clean core module
 ./gradlew :core:clean
+
+# When validating changes, run:
+./gradle check :cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
 ```
 
 ## Architecture & Structure

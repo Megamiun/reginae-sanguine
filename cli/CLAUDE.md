@@ -21,8 +21,11 @@ The **CLI module** provides a command-line interface for the Reginae Sanguine ca
 # Format CLI module code
 ./gradlew :cli:ktlintFormat
 
-# Run the CLI application (when implemented)
-./gradlew :cli:run
+# Run the CLI application
+./gradlew :cli:linkDebugExecutableLinuxX64 && ./cli/build/bin/linuxX64/debugExecutable/cli.kexe  # Change targets on other platforms
+
+# When validating changes, run:
+./gradle :cli:check :cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
 ```
 
 ## Architecture & Structure
