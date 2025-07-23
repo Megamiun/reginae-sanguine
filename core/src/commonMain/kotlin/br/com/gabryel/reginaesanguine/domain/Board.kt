@@ -12,8 +12,8 @@ import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class Board(
     private val state: Map<Position, Cell> = createInitialState(),
-    private val width: Int = 5,
-    private val height: Int = 3,
+    override val width: Int = 5,
+    override val height: Int = 3,
 ) : CellContainer {
     companion object {
         fun default() = Board()
