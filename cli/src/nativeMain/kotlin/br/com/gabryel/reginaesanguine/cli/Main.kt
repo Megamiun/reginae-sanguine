@@ -44,14 +44,18 @@ private fun runGame(leftDeck: List<Card>, rightDeck: List<Card>) {
     )
 
     generateSequence(startTurn) { turn ->
+        println("".padEnd(30, '-'))
+        val nextPlayer = turn.nextPlayer
+
+        println("Round ${turn.round}: $nextPlayer turn!")
+        println("".padEnd(30, '-'))
+
+        turn.renderBoard()
+        turn.renderScore()
+
         val state = turn.getState()
         if (state is State.Ended) {
             println("\nGame ended!")
-            println("\nScore:")
-
-            turn.players.keys.forEach { player ->
-                println(" - $player: ") // TODO Get scores
-            }
 
             when (state) {
                 is Won -> println("\nPlayer ${state.player} won!")
@@ -65,18 +69,7 @@ private fun runGame(leftDeck: List<Card>, rightDeck: List<Card>) {
 }
 
 private fun Game.executeTurn(): Game = generateSequence {
-    println("".padEnd(30, '-'))
-    val nextPlayer = nextPlayer
-
-    println("Round $round: $nextPlayer turn!")
-    println("".padEnd(30, '-'))
-    println("\nCurrent board:")
-
-    println(describe())
-
-    val player = players[nextPlayer]
-        ?: fail("Player not found")
-
+    val player = players[nextPlayer] ?: fail("Player not found")
     val action = readAction(player)
 
     play(nextPlayer, action)
@@ -144,14 +137,16 @@ private fun <T> askUserInput(question: String, options: List<T>, describeOption:
 
 private fun Card.describe(): String = "$name ($ $cost, ⚡ $power) - $increments"
 
-private fun Game.describe(): String {
-    val padding = "".cellCentered()
-    val middle = "".padEnd((width * (CELL_WIDTH + 1)) - 1, '-')
-    val topRow = "${padding}0${middle}0${padding}\n"
-    val middleRow = "\n${padding}1${middle}1${padding}\n"
-    val bottomRow = "\n${padding}2${middle}2$padding"
+private fun Game.renderBoard() {
+    println("\nCurrent board:")
 
-    return ((height - 1) downTo 0).joinToString(middleRow, prefix = topRow, postfix = bottomRow) { lane ->
+    val padding = "".cellCentered()
+    val cellLine = "".padEnd(CELL_WIDTH, '─')
+    val topRow = (0 until width).joinToString("┬", prefix = "$padding┌", postfix = "┐$padding\n") { cellLine }
+    val middleRow = (0 until width).joinToString("┼", prefix = "\n$padding├", postfix = "┤$padding\n") { cellLine }
+    val bottomRow = (0 until width).joinToString("┴", prefix = "\n$padding└", postfix = "┘$padding") { cellLine }
+
+    val content = ((height - 1) downTo 0).joinToString(middleRow, prefix = topRow, postfix = bottomRow) { lane ->
         val positions = (0 until width).map { col -> lane to col }
         val cells = positions.map(::getCellAt)
 
@@ -160,7 +155,16 @@ private fun Game.describe(): String {
             // TODO Add row score
             listOf("⚡ L".cellCentered()) + cells.map { it.describeOwner() } + listOf("⚡ R".cellCentered()),
             listOf(padding) + cells.map { it.describeCard() } + listOf(padding),
-        ).joinToString("\n") { it.joinToString("|") }
+        ).joinToString("\n") { it.joinToString("│") }
+    }
+
+    println(content)
+}
+
+private fun Game.renderScore() {
+    println("\nCurrent score:")
+    players.keys.forEach { player ->
+        println(" - $player: ⚡ 0") // TODO Get scores
     }
 }
 
