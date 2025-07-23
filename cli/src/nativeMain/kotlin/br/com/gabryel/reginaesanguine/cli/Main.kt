@@ -1,13 +1,22 @@
 package br.com.gabryel.reginaesanguine.cli
 
+import br.com.gabryel.reginaesanguine.domain.Action
+import br.com.gabryel.reginaesanguine.domain.Action.Skip
 import br.com.gabryel.reginaesanguine.domain.Card
+import br.com.gabryel.reginaesanguine.domain.Failure
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Player
+import br.com.gabryel.reginaesanguine.domain.State
+import br.com.gabryel.reginaesanguine.domain.State.Ended.Tie
+import br.com.gabryel.reginaesanguine.domain.State.Ended.Won
+import br.com.gabryel.reginaesanguine.domain.Success
 import kotlin.math.floor
 import kotlin.math.log
 import kotlin.random.Random.Default.nextDouble
 import kotlin.random.Random.Default.nextInt
 import kotlin.test.fail
+
+private val coordinatePattern = Regex("""(\d+)[\W+](\d+)""")
 
 fun main() {
     println("Starting new game!")
@@ -21,33 +30,94 @@ fun main() {
             "Test Card $it",
             increments,
             nextInt(1, 4),
-            3 - floor(log(nextDouble(10.0, 1000.0), 10.0)).toInt(),
+            3 - floor(log(nextDouble(1.0, 250.0), 10.0)).toInt(),
         )
     }
 
     generateSequence(Game.forPlayers(Player(deck = deck.shuffled()), Player(deck = deck.shuffled()))) { turn ->
-        println("\nRound ${turn.round}: ${turn.nextPlayer} turn!")
-        println("\nCurrent board:")
+        val state = turn.getState()
+        if (state is State.Ended) {
+            println("\nGame ended!")
+            println("\nScore:")
 
-        println(turn.describe())
+            turn.players.keys.forEach { player ->
+                println(" - $player: ") // TODO Get scores
+            }
 
-        println("\nCurrent hand:")
-
-        val player = turn.players[turn.nextPlayer]
-            ?: fail("Player not found")
-
-        println("[0] WAIT")
-        player.hand.forEachIndexed { index, card ->
-            println("[${index + 1}] ${card.describe()}")
+            when (state) {
+                is Won -> println("\nPlayer ${state.player} won!")
+                is Tie -> println("\nTie!")
+            }
+            return@generateSequence null
         }
 
-        print("\nChoose action: ")
-        val action = readln()
+        generateSequence {
+            println("".padEnd(30, '-'))
+            val nextPlayer = turn.nextPlayer
 
-        turn
+            println("Round ${turn.round}: $nextPlayer turn!")
+            println("".padEnd(30, '-'))
+            println("\nCurrent board:")
+
+            println(turn.describe())
+
+            val player = turn.players[nextPlayer]
+                ?: fail("Player not found")
+
+            val action = readAction(player)
+
+            turn.play(nextPlayer, action)
+        }.onEach {
+            if (it is Failure)
+                println("\nInvalid action [$it]")
+        }.filterIsInstance<Success<Game>>()
+            .map { it.value }
+            .first()
     }.last()
 }
 
-private fun Card.describe(): String = "$name (⚡ $power, $ $cost) - $increments"
+private tailrec fun readAction(player: Player): Action<out String> =
+    when (askUserInput("Choose action: ", listOf("SKIP", "PLAY"))) {
+        "SKIP" -> Skip
+        "PLAY" -> when (val card = askUserInput("Choose card: ", player.hand) { card -> card.describe() }) {
+            is Card -> {
+                print("\nPlay '${card.name}' at (Lane-Column): ")
+
+                val userPositionInput = readln().trim()
+                val userInputValue = coordinatePattern.find(userPositionInput)
+
+                if (userInputValue == null) {
+                    println("\nPosition not recognized: $userPositionInput")
+                    readAction(player)
+                } else {
+                    val (lane, col) = userInputValue.groupValues.drop(1).map { it.toInt() }
+                    Action.Play(lane to col, card.id)
+                }
+            }
+            else -> readAction(player)
+        }
+        else -> readAction(player)
+    }
+
+private fun <T> askUserInput(question: String, options: List<T>, describeOption: (T) -> String = { it.toString() }): T? {
+    println()
+    options.forEachIndexed { index, option ->
+        println("[$index] ${describeOption(option)}")
+    }
+
+    print("\n$question")
+    val userInput = readln().trim()
+    val userChoice = userInput.toIntOrNull()
+
+    if (userChoice == null || userChoice > options.lastIndex) {
+        println("\nInvalid input: $userInput")
+        println("Expecting inputs from 0 to ${options.lastIndex}")
+        return null
+    }
+
+    return options[userChoice]
+}
+
+private fun Card.describe(): String = "$name ($ $cost, ⚡ $power) - $increments"
 
 private fun Game.describe(): String = "board" // TODO print board
