@@ -46,7 +46,7 @@ data class Board(
     }
 
     fun getScores(): Map<PlayerPosition, Int> = (0..2)
-        .mapNotNull(::getLaneScore)
+        .mapNotNull(::getWinLaneScore)
         .fold(mapOf(LEFT to 0, RIGHT to 0), ::accumulateScore)
 
     override fun getCellAt(position: Position): Result<Cell> = buildResult {
@@ -93,20 +93,30 @@ data class Board(
         )
     }
 
-    private fun getLaneScore(lane: Int): Pair<PlayerPosition, Int>? {
+    private fun getWinLaneScore(lane: Int): Pair<PlayerPosition, Int>? {
+        val score = getLaneScores(lane)
+        val winner = score.maxBy { it.value }
+
+        if (score.values.all { it == winner.value }) return null
+
+        return winner.toPair()
+    }
+
+    fun getLaneScores(lane: Int): Map<PlayerPosition, Int> {
         val basePowers = PlayerPosition.entries.associateWith { player ->
             getPlayerCardsInLane(player, lane).sumOf { it.power }
         }
 
         val winner = basePowers.maxBy { it.value }
-        if (basePowers.values.all { it == winner.value }) return null
+
+        if (basePowers.values.all { it == winner.value }) return basePowers
 
         val laneBonus = getPlayerCardsInLane(winner.key, lane)
             .flatMap { it.effects }
             .mapNotNull { it as? WinLaneBonusPoints }
             .sumOf { it.bonusPoints }
 
-        return winner.key to (winner.value + laneBonus)
+        return basePowers + (winner.key to (winner.value + laneBonus))
     }
 
     private fun getPlayerCardsInLane(player: PlayerPosition, lane: Int): List<Card> =

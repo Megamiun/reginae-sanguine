@@ -4,6 +4,8 @@ import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Cell
 import br.com.gabryel.reginaesanguine.domain.Failure
 import br.com.gabryel.reginaesanguine.domain.Game
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Result
 import br.com.gabryel.reginaesanguine.domain.State
@@ -36,11 +38,11 @@ class GameRenderer {
         val content = ((game.height - 1) downTo 0).joinToString(middleRow, prefix = topRow, postfix = bottomRow) { lane ->
             val positions = (0 until game.width).map { col -> lane to col }
             val cells = positions.map(game::getCellAt)
+            val scores = game.getLaneScore(lane)
 
             listOf(
                 listOf(padding) + positions.map { it.describePosition() } + listOf(padding),
-                // TODO Add row score
-                listOf("⚡ L".cellCentered()) + cells.map { it.describeOwner() } + listOf("⚡ R".cellCentered()),
+                listOf("⚡ ${scores[LEFT]}".cellCentered()) + cells.map { it.describeOwner() } + listOf("⚡ ${scores[RIGHT]}".cellCentered()),
                 listOf(padding) + cells.map { it.describeCard() } + listOf(padding),
             ).joinToString("\n") { it.joinToString("│") }
         }
@@ -50,8 +52,9 @@ class GameRenderer {
 
     fun renderScore(game: Game) {
         println("\nCurrent score:")
+        val scores = game.getScores()
         game.players.keys.forEach { player ->
-            println(" - $player: ⚡ 0") // TODO Get scores
+            println(" - $player: ⚡ ${scores[player]}")
         }
     }
 
@@ -104,8 +107,13 @@ class GameRenderer {
         ?: empty
 
     private fun Result<Cell>.describeCard() = (this as? Success<Cell>)?.value
-        ?.totalPower?.let { "⚡ $it".cellCentered() }
-        ?: empty
+        ?.takeIf { it.owner != null }
+        ?.run {
+            listOfNotNull(
+                totalPower?.let { "⚡$it" },
+                "$$pins",
+            ).joinToString(" ").cellCentered()
+        } ?: empty
 
     private fun Any.cellCentered(width: Int = cellWidth): String {
         val content = toString()

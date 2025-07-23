@@ -60,6 +60,10 @@ data class Game(
         }
     }
 
+    fun getScores(): Map<PlayerPosition, Int> = board.getScores()
+
+    fun getLaneScore(lane: Int): Map<PlayerPosition, Int> = board.getLaneScores(lane)
+
     fun getState(): State =
         if (previous?.action == Skip && previous.previous?.action == Skip)
             Tie
