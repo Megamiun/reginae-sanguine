@@ -9,16 +9,20 @@ kotlin {
     jvm()
 
     sourceSets {
-        sourceSets["commonMain"].dependencies {
+        commonMain.dependencies {
             implementation(project.dependencies.platform("io.arrow-kt:arrow-stack:$arrowVersion"))
             implementation("io.arrow-kt:arrow-core")
         }
 
-        sourceSets["commonTest"].dependencies {
+        commonTest.dependencies {
             implementation(kotlin("test"))
             implementation("io.kotest:kotest-property:$kotestVersion")
             implementation("io.kotest:kotest-assertions-core:$kotestVersion")
         }
+    }
+
+    listOf(linuxArm64(), linuxX64(), mingwX64()).forEach { nativeTarget ->
+        nativeTarget.binaries.staticLib()
     }
 }
 

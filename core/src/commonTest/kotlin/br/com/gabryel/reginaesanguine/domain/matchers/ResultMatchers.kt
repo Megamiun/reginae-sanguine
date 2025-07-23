@@ -3,8 +3,8 @@ package br.com.gabryel.reginaesanguine.domain.matchers
 import br.com.gabryel.reginaesanguine.domain.Failure
 import br.com.gabryel.reginaesanguine.domain.Result
 import br.com.gabryel.reginaesanguine.domain.Success
-import br.com.gabryel.reginaesanguine.util.ResultRaise
-import br.com.gabryel.reginaesanguine.util.buildResult
+import br.com.gabryel.reginaesanguine.domain.util.ResultRaise
+import br.com.gabryel.reginaesanguine.domain.util.buildResult
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf

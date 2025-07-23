@@ -1,3 +1,3 @@
 rootProject.name = "reginae-sanguine"
 
-include("core")
+include("core", "cli")

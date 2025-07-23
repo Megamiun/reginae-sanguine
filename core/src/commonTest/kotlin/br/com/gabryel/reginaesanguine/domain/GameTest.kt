@@ -19,7 +19,7 @@ import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeFailure
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccess
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccessfulAnd
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldFailWith
-import br.com.gabryel.reginaesanguine.util.buildResult
+import br.com.gabryel.reginaesanguine.domain.util.buildResult
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.should
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -96,6 +96,17 @@ class GameTest {
             haveCardsAtHand(SECURITY_OFFICER, RIOT_TROOPER),
             haveCardsAtDeck(),
         )
+    }
+
+    @Test
+    fun `when the game starts, both players should start with defined amount of cards drawn`() {
+        val nextTurn = buildResult {
+            val defaultPlayer = Player(deck = (1..10).map { RIOT_TROOPER })
+            Game.forPlayers(defaultPlayer, defaultPlayer, 2)
+        }
+
+        nextTurn.shouldBeSuccess().havePlayerOn(LEFT) should haveCardsAtHand(RIOT_TROOPER, RIOT_TROOPER)
+        nextTurn.shouldBeSuccess().havePlayerOn(RIGHT) should haveCardsAtHand(RIOT_TROOPER, RIOT_TROOPER)
     }
 
     private fun defaultGame(): Game {

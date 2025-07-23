@@ -27,7 +27,7 @@ import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeFailure
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccess
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccessfulAnd
 import br.com.gabryel.reginaesanguine.domain.matchers.unclaimedCell
-import br.com.gabryel.reginaesanguine.util.buildResult
+import br.com.gabryel.reginaesanguine.domain.util.buildResult
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import kotlin.test.Test

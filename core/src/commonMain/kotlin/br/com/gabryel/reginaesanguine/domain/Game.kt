@@ -10,7 +10,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
 import br.com.gabryel.reginaesanguine.domain.State.Ended.Tie
 import br.com.gabryel.reginaesanguine.domain.State.Ongoing
-import br.com.gabryel.reginaesanguine.util.buildResult
+import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class Game(
     private val moveFrom: PlayerPosition,
@@ -19,14 +19,16 @@ data class Game(
     val action: Action<out String>? = null,
     val previous: Game? = null
 ) : CellContainer by board {
+    val round: Int = 1 + (previous?.round ?: 0)
+
     val nextPlayer = when (moveFrom) {
         LEFT -> RIGHT
         RIGHT -> LEFT
     }
 
     companion object {
-        fun forPlayers(left: Player, right: Player) =
-            Game(RIGHT, Board.default(), mapOf(LEFT to left, RIGHT to right))
+        fun forPlayers(left: Player, right: Player, drawn: Int = 5) =
+            Game(RIGHT, Board.default(), mapOf(LEFT to left.draw(drawn), RIGHT to right.draw(drawn)))
     }
 
     fun play(

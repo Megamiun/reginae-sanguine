@@ -8,7 +8,7 @@ import br.com.gabryel.reginaesanguine.domain.Failure.NotEnoughPins
 import br.com.gabryel.reginaesanguine.domain.Failure.OutOfBoard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.util.buildResult
+import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class Board(
     private val state: Map<Position, Cell> = createInitialState(),

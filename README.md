@@ -2,6 +2,21 @@
 
 Study project for learning Domain Driven Design and Kotlin Multiplatform inspired on Final Fantasy VII Rebirth's Queens Blood.
 
+## Running
+
+### Tests
+
+```bash
+  ./gradlew jvmTest
+```
+
+### CLI
+
+```bash
+  # To run on a Linux System. Other possible setups: linuxArm64, mingw64
+  ./gradlew :cli:linkDebugExecutableLinuxX64; ./cli/build/bin/linuxX64/debugExecutable/cli.kexe
+```
+
 ## Goals
 
 - [ ] Create a multiplatform core as the game engine
@@ -14,7 +29,7 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
   - [ ] Should allow users to register in
   - [ ] Should allow users to create custom decks
   - [ ] Should allow users to invite each other
-- [ ] Have a Android version that interfaces with the server
+- [ ] Have an Android version that interfaces with the server
 
 ## Decisions
 
