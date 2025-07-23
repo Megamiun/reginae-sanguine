@@ -50,4 +50,4 @@ fun main() {
 
 private fun Card.describe(): String = "$name (⚡ $power, $ $cost) - $increments"
 
- private fun Game.describe(): String = "board" // TODO print board
+private fun Game.describe(): String = "board" // TODO print board
