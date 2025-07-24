@@ -11,7 +11,7 @@ import io.kotest.matchers.nulls.beNull
 fun unclaimedCell() =
     Matcher.all(
         Cell::owner shouldMatch beNull(),
-        Cell::pins shouldMatch beEqual(0),
+        Cell::rank shouldMatch beEqual(0),
         Cell::card shouldMatch beNull(),
     )
 
@@ -20,7 +20,7 @@ fun emptyCellOwnedBy(
     pins: Int,
 ) = Matcher.all(
     Cell::owner shouldMatch beEqual(owner),
-    Cell::pins shouldMatch beEqual(pins),
+    Cell::rank shouldMatch beEqual(pins),
     Cell::card shouldMatch beNull(),
 )
 
@@ -42,6 +42,6 @@ fun cardCellWith(
     pins: Int,
 ) = Matcher.all(
     Cell::owner shouldMatch beEqual(owner),
-    Cell::pins shouldMatch beEqual(pins),
+    Cell::rank shouldMatch beEqual(pins),
     Cell::card shouldMatch beEqual(card),
 )

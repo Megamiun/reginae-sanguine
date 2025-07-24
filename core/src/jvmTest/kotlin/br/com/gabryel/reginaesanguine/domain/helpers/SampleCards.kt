@@ -36,8 +36,8 @@ object SampleCards {
         name: String = "Unnamed",
         increments: Map<Position, Int> = emptyMap(),
         value: Int = 1,
-        price: Int = 1,
+        rank: Int = 1,
         effectDisplacements: List<Position> = emptyList(),
         effects: List<Effect> = emptyList(),
-    ) = Card(name, increments, value, price, effectDisplacements, effects)
+    ) = Card(name, increments, value, rank, effectDisplacements, effects)
 }

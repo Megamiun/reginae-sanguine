@@ -4,7 +4,7 @@ import kotlin.math.min
 
 data class Cell(
     val owner: PlayerPosition? = null,
-    val pins: Int = 0,
+    val rank: Int = 0,
     val card: Card? = null,
     val appliedEffects: List<Pair<PlayerPosition, Effect>> = listOf()
 ) {
@@ -18,7 +18,7 @@ data class Cell(
     ): Cell = when {
         card != null -> this
         owner == null || player == owner ->
-            copy(owner = player, pins = min(3, pins + inc))
+            copy(owner = player, rank = min(3, rank + inc))
         else -> copy(owner = player)
     }
 

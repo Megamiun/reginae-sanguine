@@ -82,7 +82,7 @@ core/
 
 ## Game Rules Implementation
 - **Board**: 5 columns × 3 rows, players start controlling 3 cells each
-- **Pin System**: Cards cost pins, placement increments adjacent cells
+- **Rank System**: Cards rank, placement increments adjacent cells
 - **Card Placement**: Requires sufficient pins and empty cells
 - **Win Condition**: Row-based scoring system comparing cell power
 - **Game End**: Two consecutive skips or board full

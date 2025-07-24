@@ -37,7 +37,7 @@ data class Board(
         val cell = getCellAt(action.position).orRaiseError()
 
         ensure(cell.owner == player) { CellDoesNotBelongToPlayer(cell) }
-        ensure(cell.pins >= action.card.cost) { NotEnoughPins(cell) }
+        ensure(cell.rank >= action.card.rank) { NotEnoughPins(cell) }
         ensure(cell.card == null) { CellOccupied(cell) }
 
         placeCard(action.position, cell, player, action.card)
