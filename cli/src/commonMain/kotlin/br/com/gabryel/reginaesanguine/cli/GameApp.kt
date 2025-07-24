@@ -167,6 +167,7 @@ fun GameApp(viewModel: GameViewModel) {
                 else -> {}
             }
         }
+        // TODO Explain game on the Right
 //        Box(modifier = Modifier.width(1).height(10).fillWith('#'))
     }
 }

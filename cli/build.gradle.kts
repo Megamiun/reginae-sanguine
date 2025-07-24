@@ -2,14 +2,18 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.compose")
+    id("org.jetbrains.compose")
 }
 
 val arrowVersion = "2.1.2"
+val mosaicVersion = "0.17.0"
 
 kotlin {
     sourceSets {
-        nativeMain.dependencies {
+        commonMain.dependencies {
             implementation(project.dependencies.platform("io.arrow-kt:arrow-stack:$arrowVersion"))
+            implementation("com.jakewharton.mosaic:mosaic-runtime:$mosaicVersion")
             implementation("io.arrow-kt:arrow-core")
             implementation(project(":core"))
         }
