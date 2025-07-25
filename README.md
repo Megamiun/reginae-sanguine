@@ -33,15 +33,21 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
 
 - [ ] Create a multiplatform core as the game engine
   - [ ] Should be able to support the game with all the original rules
-  - [ ] Should allow for custom cards
-  - [ ] Should allow for configuring different board initial size and configuration
-- [ ] Have a native GUI Linux version that allows two player to choose decks and play
+  - [x] Should allow for custom cards
+  - [x] Should allow for configuring different board initial size and configuration
+- [ ] Have a Kotlin/Native CLI version
   - [ ] Should receive initial configuration via config files
+  - [x] Should allow for local play on same device
+  - [ ] Should allow for remote play via server
+- [ ] Have a GUI version using Jetpack Compose
+- [ ] Have a GUI Linux version using C interop
 - [ ] Create a webserver which allows people to play online
   - [ ] Should allow users to register in
   - [ ] Should allow users to create custom decks
   - [ ] Should allow users to invite each other
-- [ ] Have an Android version that interfaces with the server
+- [ ] Have an Android version
+  - [ ] Should allow for local play on same device
+  - [ ] Should allow for remote play via server
 
 ## Decisions
 
