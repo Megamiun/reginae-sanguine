@@ -1,11 +1,8 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import kotlin.collections.forEach
-
 plugins {
     kotlin("multiplatform")
 }
 
-val kotestVersion = "6.0.0.M4"
+val kotestVersion = "6.0.0.M5"
 val arrowVersion = "2.1.2"
 
 kotlin {
@@ -24,10 +21,10 @@ kotlin {
         }
     }
 
-    listOf(linuxArm64(), linuxX64(), mingwX64()).forEach(::configureNative)
+    listOf(linuxArm64(), linuxX64(), mingwX64())
 
     if (System.getProperty("os.name").startsWith("Mac OS X")) {
-        listOf(macosX64(), macosArm64()).forEach(::configureNative)
+        listOf(macosX64(), macosArm64())
     }
 }
 
@@ -35,8 +32,4 @@ tasks {
     withType<Test> {
         useJUnitPlatform()
     }
-}
-
-private fun configureNative(target: KotlinNativeTarget) {
-    target.binaries.staticLib()
 }
