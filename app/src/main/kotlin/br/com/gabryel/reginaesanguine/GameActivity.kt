@@ -1,6 +1,6 @@
 package br.com.gabryel.reginaesanguine
 
-import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,8 +27,7 @@ import kotlin.random.Random.Default.nextInt
 class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        requestedOrientation = SCREEN_ORIENTATION_LANDSCAPE
+        requestedOrientation = SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 
         val deck = createRandomDeckOfSize(20)
 
