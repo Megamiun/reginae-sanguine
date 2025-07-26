@@ -40,7 +40,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build :cli
-        run: ./gradlew :cli:build
+        run: ./gradlew :cli:build -x :cli::cli:linkReleaseExecutableMingwX64 -x linkReleaseExecutableLinuxX64 -x :cli:linkReleaseExecutableLinuxArm64 -Dorg.gradle.jvmargs=-Xmx4g
 
   build-app:
     name: Build app
@@ -59,4 +59,4 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build :app
-        run: ./gradlew :app:build -Dorg.gradle.jvmargs=-Xmx4g
+        run: ./gradlew :app:build -x :app:packageRelease -Dorg.gradle.jvmargs=-Xmx4g
