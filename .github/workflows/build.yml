@@ -3,6 +3,9 @@ name: Build
 on:
   push:
 
+env:
+  JAVA_OPTS: -Xmx4g
+
 jobs:
   build-core:
     name: Build core
@@ -60,4 +63,3 @@ jobs:
 
       - name: Build :app
         run: ./gradlew :app:build
-
