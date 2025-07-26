@@ -4,7 +4,8 @@ on:
   push:
 
 jobs:
-  build:
+  build-core:
+    name: Build core
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -22,8 +23,41 @@ jobs:
       - name: Build :core
         run: ./gradlew :core:build
 
+  build-cli:
+    name: Build cli
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Build :cli
         run: ./gradlew :cli:build
 
+  build-app:
+    name: Build app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Build :app
         run: ./gradlew :app:build
+
