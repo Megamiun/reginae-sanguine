@@ -3,8 +3,8 @@ package br.com.gabryel.reginaesanguine.domain
 import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Failure.CellDoesNotBelongToPlayer
 import br.com.gabryel.reginaesanguine.domain.Failure.CellOccupied
-import br.com.gabryel.reginaesanguine.domain.Failure.NotEnoughPins
-import br.com.gabryel.reginaesanguine.domain.Failure.OutOfBoard
+import br.com.gabryel.reginaesanguine.domain.Failure.CellOutOfBoard
+import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.helpers.BOTTOM_LANE
@@ -42,11 +42,11 @@ class BoardTest {
     }
 
     @Test
-    fun `when playing a card on a position where you have no enough pins, should fail with NotEnoughPins`() {
+    fun `when playing a card on a position where you have no enough rank, should fail with NotEnoughrank`() {
         val nextBoard = Board.default()
             .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, RIOT_TROOPER))
 
-        nextBoard.shouldBeFailure<NotEnoughPins>()
+        nextBoard.shouldBeFailure<CellRankLowerThanCard>()
     }
 
     @Test
@@ -62,7 +62,7 @@ class BoardTest {
         val nextBoard = Board.default()
             .play(RIGHT, Play(-1 to -1, SECURITY_OFFICER))
 
-        nextBoard.shouldBeFailure<OutOfBoard>()
+        nextBoard.shouldBeFailure<CellOutOfBoard>()
     }
 
     @Test
@@ -78,7 +78,7 @@ class BoardTest {
     }
 
     @Test
-    fun `when playing a card, should increment pins on all increment positions described in the cards`() {
+    fun `when playing a card, should increment rank on all increment positions described in the cards`() {
         val nextBoard = Board.default()
             .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER))
 
@@ -92,7 +92,7 @@ class BoardTest {
     }
 
     @Test
-    fun `when playing a card as RIGHT player, should increment pins on all mirrored increment positions described in the cards`() {
+    fun `when playing a card as RIGHT player, should increment rank on all mirrored increment positions described in the cards`() {
         val powerRaise = cardOf(
             "Only Increment Right",
             mapOf(0 to 1 to 1),

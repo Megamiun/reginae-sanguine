@@ -11,8 +11,6 @@ import kotlin.math.log
 import kotlin.random.Random.Default.nextDouble
 import kotlin.random.Random.Default.nextInt
 
-private val coordinatePattern = Regex("""(\d+)[\W+](\d+)""")
-
 fun main() = runMosaicMain {
     val deck = createRandomDeckOfSize(20)
     val startGame = Game.forPlayers(

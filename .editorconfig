@@ -8,3 +8,5 @@
     ktlint_standard_multiline-if-else = disabled
     ktlint_standard_chain-method-continuation = disabled
     ktlint_standard_trailing-comma-on-declaration-site = disabled
+
+    ktlint_function_naming_ignore_when_annotated_with=Composable

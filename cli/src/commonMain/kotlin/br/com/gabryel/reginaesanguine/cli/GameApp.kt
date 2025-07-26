@@ -88,7 +88,7 @@ fun GameApp(viewModel: GameViewModel) {
 
                 Grid(gridWithSize(IntSize(1, game.height), cellSize).borderless()) { (lane) ->
                     Box(modifier = Modifier.matchParentSize(), contentAlignment = Center) {
-                        Text(game.getLaneScore(lane)[LEFT]?.let { "⚡ $it" }.orEmpty())
+                        Text(game.getLaneScore(lane)[LEFT]?.let { "R $it" }.orEmpty())
                     }
                 }
                 Grid(gridWithSize(IntSize(game.width, game.height), cellSize)) { position ->
@@ -105,7 +105,7 @@ fun GameApp(viewModel: GameViewModel) {
                 }
                 Grid(gridWithSize(IntSize(1, game.height), cellSize).borderless()) { (lane) ->
                     Box(modifier = Modifier.matchParentSize(), contentAlignment = Center) {
-                        Text(game.getLaneScore(lane)[RIGHT]?.let { "⚡ $it" }.orEmpty())
+                        Text(game.getLaneScore(lane)[RIGHT]?.let { "R $it" }.orEmpty())
                     }
                 }
             }

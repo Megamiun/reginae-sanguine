@@ -1,3 +1,11 @@
 rootProject.name = "reginae-sanguine"
 
-include("core", "cli")
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+include("core", "cli", "app")

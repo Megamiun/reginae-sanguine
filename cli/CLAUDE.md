@@ -13,7 +13,7 @@ The **CLI module** provides a command-line interface for the Reginae Sanguine ca
 ./gradlew :cli:build
 
 # Run CLI tests
-./gradlew :cli:jvmTest
+./gradlew :cli:allTests
 
 # Check code style for CLI module
 ./gradlew :cli:ktlintCheck
@@ -25,13 +25,14 @@ The **CLI module** provides a command-line interface for the Reginae Sanguine ca
 ./gradlew :cli:linkDebugExecutableLinuxX64 && ./cli/build/bin/linuxX64/debugExecutable/cli.kexe  # Change targets on other platforms
 
 # When validating changes, run:
-./gradle :cli:check :cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
+./gradlew :cli:check :cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
 ```
 
 ## Architecture & Structure
 
 ### Technology Stack
-- **Kotlin Multiplatform** targeting JVM and Native platforms
+- **Kotlin Multiplatform** for Native platforms (Linux, Windows, macOS)
+- **Jetpack Compose** with Mosaic for terminal UI
 - **Arrow-kt** for functional programming and error handling
 - **Dependencies on core module** for game engine functionality
 
@@ -40,16 +41,20 @@ The **CLI module** provides a command-line interface for the Reginae Sanguine ca
 cli/
 ├── build.gradle.kts           # Module build configuration
 └── src/
-    ├── nativeMain/kotlin/     # Native CLI implementation
-    └── nativeTest/kotlin/     # Native-specific tests
+    └── commonMain/kotlin/     # Common CLI implementation
+        └── br/com/gabryel/reginaesanguine/cli/
+            ├── GameApp.kt         # Main Compose TUI application
+            ├── GameViewModel.kt   # Game state management
+            ├── Main.kt           # Entry point
+            └── components/       # Reusable UI components
 ```
 
 ### Key Responsibilities
-- **User Interface**: Text-based game interface for human players
+- **Terminal UI**: Compose-based terminal user interface
 - **Game Flow**: Managing game sessions and player interactions
-- **Input Handling**: Processing user commands and validating input
-- **Output Formatting**: Displaying game state, board, and results
-- **Configuration**: Loading game settings and card definitions
+- **Input Handling**: Keyboard input processing and command validation
+- **Visual Display**: Rich board visualization with colors and formatting
+- **State Management**: ViewModel pattern for game state handling
 
 ### Integration with Core
 - Uses `br.com.gabryel.reginaesanguine.domain.*` for all game logic
@@ -66,7 +71,7 @@ cli/
 4. **Progressive Disclosure**: Show help and hints as needed
 
 ## Development Notes
-- **Platform Targets**: Currently configured for Linux and Windows
+- **Platform Targets**: Linux (x64/ARM64), Windows (x64), macOS (x64/ARM64)
 - **Dependency Management**: Inherits versions from root project
 - **Code Style**: Follows same KtLint rules as core module
 - **Error Handling**: Must handle all Result<T> cases from core domain

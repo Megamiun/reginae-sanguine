@@ -58,9 +58,9 @@ core/
 **Core Entities:**
 - `Game` - Root aggregate managing state and turns
 - `Board` - 5x3 grid implementing `CellContainer` interface  
-- `Player` - Hand/deck management with pin system
+- `Player` - Hand/deck management with rank system
 - `Card` - Cost, power, position-based increments, and effects
-- `Cell` - Board cells with owner, pins, and applied effects
+- `Cell` - Board cells with owner, ranks, and applied effects
 
 **Key Types:**
 - `Position` - Type alias for `Pair<Int, Int>` coordinates
@@ -83,7 +83,7 @@ core/
 ## Game Rules Implementation
 - **Board**: 5 columns × 3 rows, players start controlling 3 cells each
 - **Rank System**: Cards rank, placement increments adjacent cells
-- **Card Placement**: Requires sufficient pins and empty cells
+- **Card Placement**: Requires sufficient ranks and empty cells
 - **Win Condition**: Row-based scoring system comparing cell power
 - **Game End**: Two consecutive skips or board full
 

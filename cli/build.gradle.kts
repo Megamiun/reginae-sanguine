@@ -17,6 +17,10 @@ kotlin {
             implementation("io.arrow-kt:arrow-core")
             implementation(project(":core"))
         }
+
+        all {
+            languageSettings.enableLanguageFeature("WhenGuards")
+        }
     }
 
     listOf(linuxArm64(), linuxX64(), mingwX64()).forEach(::configureNative)

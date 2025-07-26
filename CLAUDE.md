@@ -17,7 +17,10 @@ reginae-sanguine/
 ├── cli/                  # Command-line interface module
 │   ├── CLAUDE.md         # CLI module documentation
 │   └── src/              # CLI implementation
-└── [future modules]      # Web, Android, Desktop GUI, etc.
+├── app/                  # Android application module
+│   ├── CLAUDE.md         # Android module documentation
+│   └── src/              # Android UI implementation
+└── [future modules]      # Web, Desktop GUI, etc.
 ```
 
 ## Module Division & Responsibilities
@@ -41,9 +44,17 @@ reginae-sanguine/
 - Game session management
 - Human-readable output formatting
 
+### App Module (`app/`)
+**Purpose**: Android mobile client application  
+**Technology**: Kotlin for Android with Jetpack Compose  
+**Responsibilities**:
+- Mobile game interface with touch interactions
+- Jetpack Compose UI with Material 3 design
+- Android-specific features and optimizations
+- Integration with core game engine
+
 ### Future Modules (Planned)
 - **Web Server**: Online multiplayer with REST API
-- **Android App**: Mobile client application  
 - **Desktop GUI**: Native desktop application with graphical interface
 
 ## Development Commands
@@ -95,6 +106,7 @@ reginae-sanguine/
 4. **Code Style**: Run `ktlintCheck` before committing
 
 ## Commit Message Style
+- When creating commit message, for big commits, be more generic instead of going for all details 
 - If Claude participated significantly in implementing current commit:
   - Start commit message with 🤖 followed by a blank space 
   - Add credits at the end: "This commit was implemented by Claude."
@@ -104,3 +116,4 @@ reginae-sanguine/
 For detailed module-specific guidance, refer to:
 - [Core Module Documentation](core/CLAUDE.md)
 - [CLI Module Documentation](cli/CLAUDE.md)
+- [App Module Documentation](app/CLAUDE.md)

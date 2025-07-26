@@ -4,8 +4,8 @@ import arrow.core.raise.ensure
 import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Failure.CellDoesNotBelongToPlayer
 import br.com.gabryel.reginaesanguine.domain.Failure.CellOccupied
-import br.com.gabryel.reginaesanguine.domain.Failure.NotEnoughPins
-import br.com.gabryel.reginaesanguine.domain.Failure.OutOfBoard
+import br.com.gabryel.reginaesanguine.domain.Failure.CellOutOfBoard
+import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
@@ -37,7 +37,7 @@ data class Board(
         val cell = getCellAt(action.position).orRaiseError()
 
         ensure(cell.owner == player) { CellDoesNotBelongToPlayer(cell) }
-        ensure(cell.rank >= action.card.rank) { NotEnoughPins(cell) }
+        ensure(cell.rank >= action.card.rank) { CellRankLowerThanCard(cell) }
         ensure(cell.card == null) { CellOccupied(cell) }
 
         placeCard(action.position, cell, player, action.card)
@@ -50,7 +50,7 @@ data class Board(
         .fold(mapOf(LEFT to 0, RIGHT to 0), ::accumulateScore)
 
     override fun getCellAt(position: Position): Result<Cell> = buildResult {
-        ensure(position.lane() in 0 until height && position.column() in 0 until width) { OutOfBoard(position) }
+        ensure(position.lane() in 0 until height && position.column() in 0 until width) { CellOutOfBoard(position) }
         state[position] ?: Cell.EMPTY
     }
 

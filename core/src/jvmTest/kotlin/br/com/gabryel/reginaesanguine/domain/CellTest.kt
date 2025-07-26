@@ -10,7 +10,7 @@ import kotlin.test.Test
 
 class CellTest {
     @Test
-    fun `when incrementing cell, should not increment pins over 3`() {
+    fun `when incrementing cell, should not increment ranks over 3`() {
         val updatedCell = Cell.EMPTY.increment(LEFT, 4)
 
         updatedCell shouldBe emptyCellOwnedBy(LEFT, 3)
@@ -24,7 +24,7 @@ class CellTest {
     }
 
     @Test
-    fun `when incrementing card cell, should not increment pins`() {
+    fun `when incrementing card cell, should not increment ranks`() {
         val updatedCell = Cell(RIGHT, 1, SECURITY_OFFICER).increment(LEFT, 1)
 
         updatedCell shouldBe cardCellWith(RIGHT, SECURITY_OFFICER, 1)

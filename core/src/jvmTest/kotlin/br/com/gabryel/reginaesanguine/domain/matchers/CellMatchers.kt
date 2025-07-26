@@ -17,10 +17,10 @@ fun unclaimedCell() =
 
 fun emptyCellOwnedBy(
     owner: PlayerPosition,
-    pins: Int,
+    rank: Int,
 ) = Matcher.all(
     Cell::owner shouldMatch beEqual(owner),
-    Cell::rank shouldMatch beEqual(pins),
+    Cell::rank shouldMatch beEqual(rank),
     Cell::card shouldMatch beNull(),
 )
 
@@ -39,9 +39,9 @@ fun cardCellWithTotalPower(
 fun cardCellWith(
     owner: PlayerPosition,
     card: Card,
-    pins: Int,
+    rank: Int,
 ) = Matcher.all(
     Cell::owner shouldMatch beEqual(owner),
-    Cell::rank shouldMatch beEqual(pins),
+    Cell::rank shouldMatch beEqual(rank),
     Cell::card shouldMatch beEqual(card),
 )

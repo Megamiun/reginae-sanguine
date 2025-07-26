@@ -32,9 +32,9 @@ sealed interface Failure : Result<Nothing> {
     data class CardNotOnHand(val card: String) : Failure
 
     // Board/Cell State Errors
-    data class OutOfBoard(val position: Position) : Failure
+    data class CellOutOfBoard(val position: Position) : Failure
 
-    data class NotEnoughPins(val cell: Cell) : Failure
+    data class CellRankLowerThanCard(val cell: Cell) : Failure
 
     data class CellDoesNotBelongToPlayer(val cell: Cell) : Failure
 

@@ -120,6 +120,8 @@ class GameTest {
         nextTurn.shouldBeSuccess().havePlayerOn(RIGHT) should haveCardsAtHand(RIOT_TROOPER, RIOT_TROOPER)
     }
 
+    // when game starts, should allow players to mulligan(discard) cards once in initial hand
+
     private fun defaultGame(): Game {
         val defaultPlayer = Player(listOf(SECURITY_OFFICER), listOf(RIOT_TROOPER))
         return Game.forPlayers(defaultPlayer, defaultPlayer)
