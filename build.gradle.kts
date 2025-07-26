@@ -1,13 +1,17 @@
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
-    kotlin("multiplatform") version "2.2.0" apply false
-    kotlin("plugin.compose") version "2.2.0" apply false
-    id("org.jetbrains.compose") version "1.8.2" apply false
+    val kotlinVersion = "2.2.0"
+    val androidVersion = "8.11.1"
 
-    id("com.android.application") version "8.11.1" apply false
-    id("com.android.library") version "8.11.1" apply false
-    id("org.jetbrains.kotlin.android") version "2.1.20" apply false
+    kotlin("android") version kotlinVersion apply false
+    kotlin("multiplatform") version kotlinVersion apply false
+    kotlin("plugin.compose") version kotlinVersion apply false
+
+    id("com.android.application") version androidVersion apply false
+    id("com.android.library") version androidVersion apply false
+
+    id("org.jetbrains.compose") version "1.8.2" apply false
 
     id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
 }

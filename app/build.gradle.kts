@@ -22,6 +22,7 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = JVM_11
+            freeCompilerArgs = listOf("-XXLanguage:+WhenGuards")
         }
     }
     buildFeatures {

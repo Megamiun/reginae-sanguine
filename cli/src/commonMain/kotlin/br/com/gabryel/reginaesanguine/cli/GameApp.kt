@@ -44,7 +44,6 @@ import com.jakewharton.mosaic.ui.TextStyle.Companion.Bold
 import com.jakewharton.mosaic.ui.unit.IntSize
 import kotlin.test.fail
 
-@Suppress("ktlint:standard:function-naming") // TODO See options later
 @Composable
 fun GameApp(viewModel: GameViewModel) {
     val cellWidth = 9

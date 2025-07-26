@@ -2,7 +2,6 @@ package br.com.gabryel.reginaesanguine.cli.components
 
 import androidx.compose.runtime.Composable
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.plus
 import com.jakewharton.mosaic.layout.ContentDrawScope
 import com.jakewharton.mosaic.layout.DrawModifier
 import com.jakewharton.mosaic.layout.height
@@ -18,7 +17,6 @@ import com.jakewharton.mosaic.ui.Spacer
 import com.jakewharton.mosaic.ui.unit.IntOffset
 import com.jakewharton.mosaic.ui.unit.IntSize
 
-@Suppress("ktlint:standard:function-naming") // TODO See options later
 @Composable
 fun Grid(
     gridConfiguration: GridConfiguration,

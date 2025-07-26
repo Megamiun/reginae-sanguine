@@ -8,7 +8,6 @@ import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Row
 import com.jakewharton.mosaic.ui.Text
 
-@Suppress("ktlint:standard:function-naming") // TODO See options later
 @Composable
 fun <T> OptionChooser(
     header: String,
