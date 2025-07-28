@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.ui.theme.components
+package br.com.gabryel.reginaesanguine.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope

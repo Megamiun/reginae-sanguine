@@ -1,4 +1,6 @@
 import org.gradle.api.JavaVersion.VERSION_11
+import org.gradle.kotlin.dsl.main
+import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 
 plugins {
@@ -15,18 +17,36 @@ android {
         applicationId = "br.com.gabryel.reginaesanguine"
         minSdk = 28
     }
+
     compileOptions {
         sourceCompatibility = VERSION_11
         targetCompatibility = VERSION_11
     }
+
     kotlin {
         compilerOptions {
             jvmTarget = JVM_11
             freeCompilerArgs = listOf("-XXLanguage:+WhenGuards")
         }
     }
+
     buildFeatures {
         compose = true
+    }
+
+    tasks {
+        val prepareAssets by registering {
+            group = "asset"
+            description = "Prepare assets for the game"
+
+            doLast {
+                val drawables = file("src/main/res/drawable")
+                rootProject.layout.projectDirectory.dir("assets").asFileTree.forEach { card ->
+                    val name = card.path.split("/").takeLast(3).joinToString("_")
+                    card.copyTo(drawables.resolve(name.lowercase()), true)
+                }
+            }
+        }
     }
 }
 

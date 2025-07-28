@@ -6,6 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import br.com.gabryel.reginaesanguine.R
 
@@ -20,7 +21,10 @@ val Typography = Typography(bodyLarge = defaultTextStyle())
 fun defaultTextStyle(multiplier: Float = 1f) = TextStyle(
     fontFamily = monoFont,
     fontWeight = Normal,
-    fontSize = 16.sp * multiplier,
+    fontSize = defaultTextSize(multiplier),
     lineHeight = 24.sp * multiplier,
     letterSpacing = 0.5.sp,
+    color = WhiteLight,
 )
+
+fun defaultTextSize(multiplier: Float = 1f) = 16.sp * multiplier
