@@ -16,7 +16,7 @@ High-quality card assets inspired by Queen's Blood are available from:
 
 [Queen's Blood assets](https://miguelsanto.com/projects/queens-blood) by Miguel Espírito Santo**
 
-These assets are fan-created recreations based on the original game and are provided separately from this codebase. A task will be available for downloading and making the assets available in the future.
+These assets are fan-created recreations based on the original game and are provided separately from this codebase.
 
 ## Asset Structure
 
