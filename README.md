@@ -31,6 +31,7 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
 
 ## Goals
 ### Base
+
 - [ ] Create a multiplatform core as the game engine
   - [ ] Should be able to support the game with all the original rules
   - [x] Should allow for custom cards
@@ -51,6 +52,7 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
   - [ ] Should allow for remote play via server
 
 ### Stretch
+
 - [ ] Create a Ktor webserver which allows people to play online
   - [ ] Should allow users to register in server
   - [ ] Should allow users to create custom decks
@@ -74,9 +76,24 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
   - [ ] Should allow users to invite each other
 
 ## Decisions
+
 - This is a study project
 - Claude will be used (sparingly probably) to better understand AI agents usage. All uses will be declared on the touched commits
 - This project will be modular, made to be reusable and portable to different contexts
 - Other than for the modularity, it should be kept as simple as possible internally
 - Shortcuts will be taken, if it expedites testability
 - Arrow Raise interface will be used as an experiment
+
+## Credits
+
+At the moment, I would like to first of all acknowledge Square Enix® marvelous work in creating this board game inside their video game "Final Fantasy VII Rebirth". From the get go, this game captured my attention and seemed like the perfect game to both play and practice my programming and engineering skills with. This would have not been possible without their original input.
+
+Also, I would like to credit [Miguel Espírito Santo](https://miguelsanto.com/), which has created the assets I will be using for card set derived from the main game. Without his help, this project would be a lot less visually complete and amateurish.
+
+## License
+
+As I see right, this project will include two licenses, one [AGPLv3 license](LICENSE) for the general public to allow only for study reasons, and another unrestricted [MIT License](LICENSE-SQUARE-ENIX) for Square Enix as they are the only reason this could exist.
+
+## Disclaimer
+
+This project is a fan-made study project inspired by the "Queen's Blood" minigame from Final Fantasy VII Rebirth. All concepts, characters, card designs, imagery, logos, and other intellectual property related to Final Fantasy VII are the exclusive property of Square Enix Co., Ltd. This project is created solely for educational and non-commercial purposes and is not affiliated with, endorsed by, or sponsored by Square Enix.
