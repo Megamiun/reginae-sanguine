@@ -8,4 +8,4 @@ pluginManagement {
     }
 }
 
-include("core", "cli", "app", "desktop")
+include("core", "cli", "app")

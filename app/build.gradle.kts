@@ -1,11 +1,72 @@
 import org.gradle.api.JavaVersion.VERSION_11
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 
 plugins {
-    kotlin("android")
+    kotlin("multiplatform")
     kotlin("plugin.compose")
 
     id("com.android.application")
+    id("org.jetbrains.compose")
+}
+
+kotlin {
+    androidTarget()
+    jvm("desktop") {
+        compilerOptions {
+            jvmTarget = JVM_11
+            freeCompilerArgs = listOf("-XXLanguage:+WhenGuards")
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            runtimeOnly(compose.runtime)
+
+            implementation(project(":core"))
+
+            implementation(compose.components.resources)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.ui)
+
+            implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+        }
+
+        androidMain.dependencies {
+            implementation("androidx.appcompat:appcompat:1.7.1")
+            implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
+            implementation("androidx.activity:activity-compose:1.10.1")
+
+            implementation(project.dependencies.platform("androidx.compose:compose-bom:2025.07.00"))
+            implementation("androidx.compose.ui:ui-graphics")
+            implementation("androidx.compose.ui:ui-tooling-preview")
+        }
+
+        get("desktopMain").dependencies {
+            runtimeOnly(compose.desktop.currentOs)
+            implementation(compose.desktop.common)
+        }
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "br.com.gabryel.reginaesanguine.MainKt"
+
+        nativeDistributions {
+            targetFormats(Dmg, Msi, Deb)
+            packageName = "Reginae Sanguine"
+            packageVersion = "1.0.0"
+
+            windows {
+                menu = true
+                upgradeUuid = "7291a285-2f28-4558-ae9e-90f421747bdc"
+            }
+        }
+    }
 }
 
 android {
@@ -22,15 +83,15 @@ android {
         targetCompatibility = VERSION_11
     }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget = JVM_11
-            freeCompilerArgs = listOf("-XXLanguage:+WhenGuards")
-        }
-    }
-
     buildFeatures {
         compose = true
+    }
+
+    dependencies {
+        androidTestImplementation("androidx.compose.ui:ui-test")
+
+        debugImplementation("androidx.compose.ui:ui-tooling")
+        debugImplementation("androidx.compose.ui:ui-test-manifest")
     }
 
     tasks {
@@ -47,24 +108,4 @@ android {
             }
         }
     }
-}
-
-dependencies {
-    implementation(project(":core"))
-
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
-    implementation("androidx.activity:activity-compose:1.10.1")
-
-    implementation(platform("androidx.compose:compose-bom:2025.07.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-
-    androidTestImplementation(platform("androidx.compose:compose-bom:2025.07.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test")
-
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
