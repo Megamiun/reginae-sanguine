@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.ui
+package br.com.gabryel.reginaesanguine
 
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 import android.os.Bundle
@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.core.view.WindowCompat.getInsetsController
 import androidx.core.view.WindowInsetsCompat.Type.systemBars
-import br.com.gabryel.reginaesanguine.GameBoard
 import br.com.gabryel.reginaesanguine.domain.Board
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Cell
@@ -22,6 +21,7 @@ import br.com.gabryel.reginaesanguine.domain.Player
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.services.ResourceLoader
+import br.com.gabryel.reginaesanguine.ui.GameBoard
 import br.com.gabryel.reginaesanguine.ui.theme.PurpleLight
 import br.com.gabryel.reginaesanguine.ui.theme.ReginaeSanguineTheme
 import java.util.logging.Logger
@@ -79,8 +79,6 @@ class GameActivity : ComponentActivity() {
         }
 
         val drawable = "${pack}_${color}_$id"
-        Logger.getLogger("ResourceLoader").info(drawable)
-
         val id = resources.getIdentifier(drawable, "drawable", packageName)
 
         if (id != 0) painterResource(id) else null

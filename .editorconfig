@@ -10,3 +10,6 @@
     ktlint_standard_trailing-comma-on-declaration-site = disabled
 
     ktlint_function_naming_ignore_when_annotated_with=Composable
+
+[**/generated/**/*]
+    ktlint = disabled

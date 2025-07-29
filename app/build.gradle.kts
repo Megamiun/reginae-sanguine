@@ -1,12 +1,11 @@
 import org.gradle.api.JavaVersion.VERSION_11
-import org.gradle.kotlin.dsl.main
-import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 
 plugins {
+    kotlin("android")
+    kotlin("plugin.compose")
+
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {

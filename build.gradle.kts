@@ -6,6 +6,7 @@ plugins {
     val kotlinVersion = "2.2.0"
     val androidVersion = "8.11.1"
 
+    kotlin("jvm") version kotlinVersion apply false
     kotlin("android") version kotlinVersion apply false
     kotlin("multiplatform") version kotlinVersion apply false
     kotlin("plugin.compose") version kotlinVersion apply false

@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine
+package br.com.gabryel.reginaesanguine.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,8 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ContentScale.Companion.Crop
 import androidx.compose.ui.layout.ContentScale.Companion.Fit
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
@@ -149,13 +146,13 @@ private fun BoxScope.ArtlessCard(color: Color, card: Card) {
 @Composable
 private fun ResizableText(text: String, maxFontSize: TextUnit = defaultTextSize(), modifier: Modifier = Modifier) {
     var fontSize by remember { mutableStateOf(maxFontSize) }
-    Text(
-        text,
-        modifier = modifier,
-        fontSize = fontSize,
-        maxLines = 1,
-        onTextLayout = { layout -> if (layout.multiParagraph.didExceedMaxLines) fontSize *= .98F },
-    )
+//    Text(
+//        text,
+//        modifier = modifier,
+//        fontSize = fontSize,
+//        maxLines = 1,
+//        onTextLayout = { layout -> if (layout.multiParagraph.didExceedMaxLines) fontSize *= .98F },
+//    )
 }
 
 @Composable
@@ -209,7 +206,7 @@ private fun PowerIndicator(power: Int, color: Color, multiplier: Float = 1f) {
             Box(modifier = smallCircleModifier.align(findAlignmentBias(it, 0.85f)))
         }
 
-        Text(power.toString(), style = defaultTextStyle(multiplier))
+//        Text(power.toString(), style = defaultTextStyle(multiplier))
     }
 }
 
