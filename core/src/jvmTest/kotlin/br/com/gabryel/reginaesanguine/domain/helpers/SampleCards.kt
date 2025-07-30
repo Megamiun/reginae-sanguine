@@ -7,12 +7,13 @@ import br.com.gabryel.reginaesanguine.domain.Position
 object SampleCards {
     val SECURITY_OFFICER =
         Card(
+            "001",
             "Security Officer",
-            mapOf(
-                1 to 0 to 1,
-                0 to 1 to 1,
-                -1 to 0 to 1,
-                0 to -1 to 1,
+            setOf(
+                1 to 0,
+                0 to 1,
+                -1 to 0,
+                0 to -1,
             ),
             1,
             1,
@@ -20,24 +21,26 @@ object SampleCards {
 
     val RIOT_TROOPER =
         Card(
+            "002",
             "Riot Trooper",
-            mapOf(
-                1 to 0 to 1,
-                2 to 0 to 1,
-                0 to 1 to 1,
-                -1 to 0 to 1,
-                -2 to 0 to 1,
+            setOf(
+                1 to 0,
+                2 to 0,
+                0 to 1,
+                -1 to 0,
+                -2 to 0,
             ),
             3,
             2,
         )
 
     fun cardOf(
-        name: String = "Unnamed",
-        increments: Map<Position, Int> = emptyMap(),
+        id: String = "Unnamed",
+        name: String = id,
+        increments: Set<Position> = emptySet(),
         value: Int = 1,
         rank: Int = 1,
         effectDisplacements: List<Position> = emptyList(),
         effects: List<Effect> = emptyList(),
-    ) = Card(name, increments, value, rank, effectDisplacements, effects)
+    ) = Card(id, name, increments, value, rank, effectDisplacements, effects)
 }

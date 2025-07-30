@@ -95,7 +95,7 @@ class BoardTest {
     fun `when playing a card as RIGHT player, should increment rank on all mirrored increment positions described in the cards`() {
         val powerRaise = cardOf(
             "Only Increment Right",
-            mapOf(0 to 1 to 1),
+            increments = setOf(0 to 1),
         )
 
         val nextBoard = Board.default()
@@ -235,5 +235,22 @@ class BoardTest {
 
         nextBoard shouldBeSuccessfulAnd
             haveCell(MIDDLE_LANE to RIGHT_COLUMN, cardCellWithTotalPower(3))
+    }
+
+    @Test
+    fun `when playing a card with RaiseRank effect, should increment rank on increment positions by specified amount`() {
+        val cardWithRaiseRank = cardOf(
+            "Rank Raiser",
+            increments = setOf(0 to 1, 1 to 0),
+            effects = listOf(RaiseRank(2)),
+        )
+
+        val nextBoard = Board.default()
+            .play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, cardWithRaiseRank))
+
+        nextBoard shouldBeSuccessfulAnd haveCells(
+            (TOP_LANE to LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 3),
+            (MIDDLE_LANE to CENTER_LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 2),
+        )
     }
 }

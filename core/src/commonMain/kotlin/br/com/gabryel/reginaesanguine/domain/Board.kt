@@ -57,15 +57,16 @@ data class Board(
     private fun placeCard(position: Position, cell: Cell, player: PlayerPosition, card: Card): Board =
         copy(state = state + (position to cell.copy(owner = player, card = card)))
 
-    private fun applyCardIncrements(
-        action: Play<Card>,
-        player: PlayerPosition,
-    ): Board {
+    private fun applyCardIncrements(action: Play<Card>, player: PlayerPosition): Board {
+        val incrementBy = action.card.effects
+            .filterIsInstance<RaiseRank>().firstOrNull()
+            ?.amount ?: 1
+
         val affectedCells = action.card.increments
-            .mapKeys { (displacement) -> action.position + player.correct(displacement) }
-            .mapNotNull { (newPosition, increment) ->
+            .map { displacement -> action.position + player.correct(displacement) }
+            .mapNotNull { newPosition ->
                 getCellAt(newPosition)
-                    .map { cell -> newPosition to cell.increment(player, increment) }
+                    .map { cell -> newPosition to cell.increment(player, incrementBy) }
                     .orNull()
             }
 

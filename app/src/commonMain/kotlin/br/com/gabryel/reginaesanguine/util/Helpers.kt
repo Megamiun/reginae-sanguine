@@ -12,6 +12,7 @@ fun createRandomDeckOfSize(cards: Int): List<Card> = (1..cards).map {
     }.distinct().toMap()
 
     Card(
+        "$it",
         "Test Card $it",
         increments,
         nextInt(1, 4),

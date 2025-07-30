@@ -48,3 +48,5 @@ class RaisePower(val amount: Int = 1) : Effect
 class WinLaneBonusPoints(val bonusPoints: Int = 1) : Effect
 
 class DestroyEntity : Effect
+
+class RaiseRank(val amount: Int = 1) : Effect
