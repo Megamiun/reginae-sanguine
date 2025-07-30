@@ -1,5 +1,7 @@
 package br.com.gabryel.reginaesanguine.domain
 
+import br.com.gabryel.reginaesanguine.domain.effect.Effect
+import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
 import kotlin.math.min
 
 data class Cell(

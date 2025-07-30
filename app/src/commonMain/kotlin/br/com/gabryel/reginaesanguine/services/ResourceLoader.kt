@@ -3,7 +3,6 @@ package br.com.gabryel.reginaesanguine.services
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
-import coil3.compose.AsyncImagePainter
 
 fun interface ResourceLoader {
     @Composable

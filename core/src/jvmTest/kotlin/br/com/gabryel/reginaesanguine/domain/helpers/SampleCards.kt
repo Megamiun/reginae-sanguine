@@ -1,8 +1,8 @@
 package br.com.gabryel.reginaesanguine.domain.helpers
 
 import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.Effect
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.effect.Effect
 
 object SampleCards {
     val SECURITY_OFFICER =
@@ -40,7 +40,7 @@ object SampleCards {
         increments: Set<Position> = emptySet(),
         value: Int = 1,
         rank: Int = 1,
-        effectDisplacements: List<Position> = emptyList(),
-        effects: List<Effect> = emptyList(),
-    ) = Card(id, name, increments, value, rank, effectDisplacements, effects)
+        affected: List<Position> = emptyList(),
+        effect: Effect? = null,
+    ) = Card(id, name, increments, value, rank, affected, effect)
 }

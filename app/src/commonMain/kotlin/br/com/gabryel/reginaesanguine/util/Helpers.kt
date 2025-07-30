@@ -8,8 +8,8 @@ import kotlin.random.Random.Default.nextInt
 
 fun createRandomDeckOfSize(cards: Int): List<Card> = (1..cards).map {
     val increments = (0..1 + nextInt(4)).map {
-        (nextInt(-1, 2) to nextInt(-1, 2)) to 1
-    }.distinct().toMap()
+        (nextInt(-1, 2) to nextInt(-1, 2))
+    }.toSet()
 
     Card(
         "$it",

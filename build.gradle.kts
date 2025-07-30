@@ -43,7 +43,7 @@ tasks {
 
         delete(".temp/queens_blood.zip")
         delete(".temp/queens_blood/")
-        delete("assets/queens_blood/")
+        delete("assets/cards/queens_blood/")
     }
 
     val downloadAssets by registering(Download::class) {
@@ -81,10 +81,15 @@ tasks {
         doLast {
             listOf("red", "blue").forEach { color ->
                 val uppercaseColor = color.uppercase()
-
                 val assetDir = file("assets/cards/queens_blood/$color")
+
+                fun String.prependToXDigits(digits: Int): String =
+                    if (count { char -> char.isDigit() } >= digits) this
+                    else "0$this".prependToXDigits(3)
+
                 fileTree(".temp/assets/queens_blood/1. Cards/for Whatever (PNGs)/$uppercaseColor DECK/").forEach {
                     val id = it.name.split(" ")[0].drop(1)
+                        .prependToXDigits(3)
 
                     it.copyTo(assetDir.resolve("$id.png"), true)
                 }

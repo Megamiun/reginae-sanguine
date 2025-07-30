@@ -24,8 +24,8 @@ import kotlin.system.exitProcess
 fun main() = application {
     val deck = createRandomDeckOfSize(20)
 
-    val knownCard = Card("001", mapOf(), 1, 1)
-    val unknownCard = Card("Art Missing", mapOf(), 3, 3)
+    val knownCard = Card("001", "Security Officer", setOf(), 1, 1)
+    val unknownCard = Card("Custom", "Custom", setOf(), 3, 3)
 
     val game = Game.forPlayers(
         Player(deck = deck.shuffled()),

@@ -8,6 +8,10 @@ import br.com.gabryel.reginaesanguine.domain.Failure.CellOutOfBoard
 import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
+import br.com.gabryel.reginaesanguine.domain.effect.Effect
+import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
+import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class Board(
@@ -85,7 +89,7 @@ data class Board(
     }
 
     private fun Cell.applyEffects(effects: List<Effect>, player: PlayerPosition): Cell {
-        val hasDestroy = effects.any { it is DestroyEntity }
+        val hasDestroy = effects.any { it is DestroyCards }
         val newCard = if (hasDestroy && card != null && owner != player) null else card
 
         return copy(
@@ -114,7 +118,7 @@ data class Board(
 
         val laneBonus = getPlayerCardsInLane(winner.key, lane)
             .flatMap { it.effects }
-            .mapNotNull { it as? WinLaneBonusPoints }
+            .mapNotNull { it as? ScoreBonus }
             .sumOf { it.bonusPoints }
 
         return basePowers + (winner.key to (winner.value + laneBonus))

@@ -22,6 +22,12 @@ kotlin {
     }
 
     sourceSets {
+        all {
+            dependencies {
+                implementation(project.dependencies.platform("androidx.compose:compose-bom:2025.07.00"))
+            }
+        }
+
         commonMain.dependencies {
             runtimeOnly(compose.runtime)
 
@@ -40,7 +46,6 @@ kotlin {
             implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
             implementation("androidx.activity:activity-compose:1.10.1")
 
-            implementation(project.dependencies.platform("androidx.compose:compose-bom:2025.07.00"))
             implementation("androidx.compose.ui:ui-graphics")
             implementation("androidx.compose.ui:ui-tooling-preview")
         }
@@ -93,18 +98,20 @@ android {
         debugImplementation("androidx.compose.ui:ui-tooling")
         debugImplementation("androidx.compose.ui:ui-test-manifest")
     }
+}
 
-    tasks {
-        val prepareAssets by registering {
-            group = "asset"
-            description = "Prepare assets for the game"
+tasks {
+    val prepareAssets by registering {
+        group = "asset"
+        description = "Prepare assets for the game"
 
-            doLast {
-                val drawables = file("src/main/res/drawable")
-                rootProject.layout.projectDirectory.dir("assets").asFileTree.forEach { card ->
-                    val name = card.path.split("/").takeLast(3).joinToString("_")
-                    card.copyTo(drawables.resolve(name.lowercase()), true)
-                }
+        doLast {
+            val drawables = file("src/commonMain/composeResources/drawable")
+            drawables.delete()
+
+            rootProject.layout.projectDirectory.dir("assets").asFileTree.forEach { card ->
+                val name = card.path.split("/").takeLast(3).joinToString("_")
+                card.copyTo(drawables.resolve(name.lowercase()), true)
             }
         }
     }
