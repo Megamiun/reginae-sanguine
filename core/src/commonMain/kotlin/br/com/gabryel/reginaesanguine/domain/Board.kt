@@ -62,9 +62,7 @@ data class Board(
         copy(state = state + (position to cell.copy(owner = player, card = card)))
 
     private fun applyCardIncrements(action: Play<Card>, player: PlayerPosition): Board {
-        val incrementBy = action.card.effects
-            .filterIsInstance<RaiseRank>().firstOrNull()
-            ?.amount ?: 1
+        val incrementBy = (action.card.effect as? RaiseRank)?.amount ?: 1
 
         val affectedCells = action.card.increments
             .map { displacement -> action.position + player.correct(displacement) }
@@ -78,23 +76,24 @@ data class Board(
     }
 
     private fun applyCardEffects(action: Play<Card>, player: PlayerPosition): Board {
-        val affectedCards = action.card.effectDisplacements.mapNotNull { displacement ->
-            val effectPosition = action.position + player.correct(displacement)
-            getCellAt(effectPosition)
-                .map { cell -> effectPosition to cell.applyEffects(action.card.effects, player) }
-                .orNull()
-        }
+        val affectedCards = action.card.effect?.let {
+            action.card.affected.mapNotNull { displacement ->
+                val effectPosition = action.position + player.correct(displacement)
+                getCellAt(effectPosition)
+                    .map { cell -> effectPosition to cell.applyEffect(action.card.effect, player) }
+                    .orNull()
+            }
+        }.orEmpty()
 
         return copy(state = state + affectedCards)
     }
 
-    private fun Cell.applyEffects(effects: List<Effect>, player: PlayerPosition): Cell {
-        val hasDestroy = effects.any { it is DestroyCards }
-        val newCard = if (hasDestroy && card != null && owner != player) null else card
+    private fun Cell.applyEffect(effect: Effect, player: PlayerPosition): Cell {
+        val newCard = if (effect is DestroyCards && card != null && owner != player) null else card
 
         return copy(
             card = newCard,
-            appliedEffects = appliedEffects + effects.map { player to it },
+            appliedEffects = appliedEffects + (player to effect),
         )
     }
 
@@ -117,9 +116,8 @@ data class Board(
         if (basePowers.values.all { it == winner.value }) return basePowers
 
         val laneBonus = getPlayerCardsInLane(winner.key, lane)
-            .flatMap { it.effects }
-            .mapNotNull { it as? ScoreBonus }
-            .sumOf { it.bonusPoints }
+            .mapNotNull { it.effect as? ScoreBonus }
+            .sumOf { it.points }
 
         return basePowers + (winner.key to (winner.value + laneBonus))
     }

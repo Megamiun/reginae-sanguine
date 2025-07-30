@@ -18,6 +18,8 @@ plugins {
 
     id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
     id("de.undercouch.download") version "5.6.0"
+
+    id("com.dorongold.task-tree") version "4.0.1"
 }
 
 allprojects {

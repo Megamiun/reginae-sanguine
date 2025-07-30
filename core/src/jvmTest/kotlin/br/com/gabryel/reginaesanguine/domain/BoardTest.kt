@@ -11,6 +11,10 @@ import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
 import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ENEMIES
+import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
+import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.helpers.BOTTOM_LANE
 import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_LEFT_COLUMN
@@ -151,7 +155,7 @@ class BoardTest {
         val powerRaise = cardOf(
             "Power Raiser",
             affected = listOf(0 to -1),
-            effect = RaisePower(2),
+            effect = RaisePower(2, ALLIES, WhenPlayed()),
         )
 
         val nextBoard = buildResult {
@@ -166,7 +170,7 @@ class BoardTest {
 
     @Test
     fun `when a player wins a lane with a WinLaneBonusPoints card, should receive bonus points`() {
-        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5))
+        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5, WhenLaneWon))
 
         val nextBoard = buildResult {
             Board.default()
@@ -181,7 +185,7 @@ class BoardTest {
 
     @Test
     fun `when a player loses a lane with a WinLaneBonusPoints card, should not receive bonus points`() {
-        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5))
+        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5, WhenLaneWon))
 
         val strongCard = cardOf(name = "Strong", value = 5)
         val nextBoard = buildResult {
@@ -212,7 +216,12 @@ class BoardTest {
 
     @Test
     fun `when a card with DestroyEntity effect is played, should remove target card`() {
-        val destroyer = cardOf("Destroyer", value = 1, affected = listOf(0 to 4), effect = DestroyCards())
+        val destroyer = cardOf(
+            "Destroyer",
+            value = 1,
+            affected = listOf(0 to 4),
+            effect = DestroyCards(ENEMIES, WhenPlayed()),
+        )
 
         val nextBoard = buildResult {
             Board.default()
@@ -228,7 +237,7 @@ class BoardTest {
         val powerRaise = cardOf(
             "Power Raiser",
             affected = listOf(0 to -1),
-            effect = RaisePower(2),
+            effect = RaisePower(2, ALLIES, WhenPlayed()),
         )
 
         val nextBoard = buildResult {
@@ -246,7 +255,7 @@ class BoardTest {
         val cardWithRaiseRank = cardOf(
             "Rank Raiser",
             increments = setOf(0 to 1, 1 to 0),
-            effect = RaiseRank(2),
+            effect = RaiseRank(2, WhenPlayed()),
         )
 
         val nextBoard = Board.default()

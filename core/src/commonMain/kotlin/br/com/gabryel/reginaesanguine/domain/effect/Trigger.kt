@@ -1,10 +1,12 @@
 package br.com.gabryel.reginaesanguine.domain.effect
 
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
+
 interface Trigger
 
-class WhenPlayed(val scope: TargetType) : Trigger
+class WhenPlayed(val scope: TargetType = SELF) : Trigger
 
-class OnStatusChange(val status: StatusType, val scope: TargetType)
+class OnStatusChange(val status: StatusType = StatusType.ANY, val scope: TargetType = TargetType.ANY) : Trigger
 
 class WhenFirstStatusChange(val status: StatusType) : Trigger
 

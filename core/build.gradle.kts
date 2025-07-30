@@ -2,7 +2,7 @@ plugins {
     kotlin("multiplatform")
 }
 
-val kotestVersion = "6.0.0.M5"
+val kotestVersion = "6.0.0.M8"
 val arrowVersion = "2.1.2"
 
 kotlin {

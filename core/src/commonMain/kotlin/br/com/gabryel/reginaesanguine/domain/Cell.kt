@@ -14,10 +14,7 @@ data class Cell(
         val EMPTY = Cell()
     }
 
-    fun increment(
-        player: PlayerPosition,
-        inc: Int,
-    ): Cell = when {
+    fun increment(player: PlayerPosition, inc: Int): Cell = when {
         card != null -> this
         owner == null || player == owner ->
             copy(owner = player, rank = min(3, rank + inc))
