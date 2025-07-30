@@ -1,0 +1,2678 @@
+{
+  "pack": "queens_blood",
+  "name": "Standard",
+  "cards": [
+    {
+      "id": "001",
+      "name": "Security Officer",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_001.png",
+      "gridParsed": false
+    },
+    {
+      "id": "002",
+      "name": "Riot Trooper",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_002.png",
+      "gridParsed": false
+    },
+    {
+      "id": "003",
+      "name": "Grenadier",
+      "power": 1,
+      "rank": 2,
+      "filename": "queens_blood_blue_003.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "004",
+      "name": "J-Unit Sweeper",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_004.png",
+      "gridParsed": false
+    },
+    {
+      "id": "005",
+      "name": "Queen Bee",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_005.png",
+      "gridParsed": false
+    },
+    {
+      "id": "006",
+      "name": "Toxirat",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_006.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -3,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "007",
+      "name": "Levrikon",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_007.png",
+      "gridParsed": false
+    },
+    {
+      "id": "008",
+      "name": "Grasslands Wolf",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_008.png",
+      "gridParsed": false
+    },
+    {
+      "id": "009",
+      "name": "Mu",
+      "power": 1,
+      "rank": 2,
+      "filename": "queens_blood_blue_009.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 1,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play"
+      }
+    },
+    {
+      "id": "010",
+      "name": "Mandragora",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_010.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "010A"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, add Mandragora Minion to your hand"
+      }
+    },
+    {
+      "id": "010A",
+      "name": "Mandragora Minion",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_010A.png",
+      "gridParsed": false
+    },
+    {
+      "id": "011",
+      "name": "Elphadunk",
+      "power": 4,
+      "rank": 2,
+      "filename": "queens_blood_blue_011.png",
+      "gridParsed": false
+    },
+    {
+      "id": "012",
+      "name": "Cactuar",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_012.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "013",
+      "name": "Crystalline Crab",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_013.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "014",
+      "name": "Quetzalcoatl",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_014.png",
+      "gridParsed": false
+    },
+    {
+      "id": "015",
+      "name": "Zu",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_015.png",
+      "gridParsed": false
+    },
+    {
+      "id": "016",
+      "name": "Devil Rider",
+      "power": 4,
+      "rank": 2,
+      "filename": "queens_blood_blue_016.png",
+      "gridParsed": false
+    },
+    {
+      "id": "017",
+      "name": "Screamer",
+      "power": 1,
+      "rank": 3,
+      "filename": "queens_blood_blue_017.png",
+      "gridParsed": false
+    },
+    {
+      "id": "018",
+      "name": "Flan",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_018.png",
+      "gridParsed": false
+    },
+    {
+      "id": "019",
+      "name": "Crawler",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_019.png",
+      "gridParsed": false
+    },
+    {
+      "id": "020",
+      "name": "Archdragon",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_020.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -3,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ENEMIES",
+        "description": "When played, lower the power of enemy cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "021",
+      "name": "Ogre",
+      "power": 5,
+      "rank": 2,
+      "filename": "queens_blood_blue_021.png",
+      "gridParsed": false
+    },
+    {
+      "id": "022",
+      "name": "Deathwheel",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_022.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -3,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "023",
+      "name": "Fleetwing",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_023.png",
+      "gridParsed": false
+    },
+    {
+      "id": "024",
+      "name": "Zemzelett",
+      "power": 1,
+      "rank": 2,
+      "filename": "queens_blood_blue_024.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "025",
+      "name": "Ignilisk",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_025.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "026",
+      "name": "Capparwire",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_026.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "027",
+      "name": "Mindflayer",
+      "power": 1,
+      "rank": 2,
+      "filename": "queens_blood_blue_027.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ANY",
+        "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+      }
+    },
+    {
+      "id": "028",
+      "name": "Scrutineye",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_028.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 1,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ANY",
+        "description": "Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+      }
+    },
+    {
+      "id": "029",
+      "name": "Hell Rider II",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_029.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -3,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ENEMIES",
+        "description": "When played, lower the power of enemy cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "030",
+      "name": "Flametrooper",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_030.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -3,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ANY",
+        "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "031",
+      "name": "Spearhawk",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_031.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "032",
+      "name": "Sea Devil",
+      "power": 1,
+      "rank": 3,
+      "filename": "queens_blood_blue_032.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "WhenPlayed",
+          "scope": "ALLIES"
+        },
+        "description": "When allied cards are played from hand, raise this card's power by 1"
+      }
+    },
+    {
+      "id": "033",
+      "name": "Shoalopod",
+      "power": 1,
+      "rank": 2,
+      "filename": "queens_blood_blue_033.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 4,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 4 while this card is in play"
+      }
+    },
+    {
+      "id": "034",
+      "name": "Crown Lance",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_034.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -2,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 2"
+      }
+    },
+    {
+      "id": "035",
+      "name": "Tonberry King",
+      "power": 1,
+      "rank": 2,
+      "filename": "queens_blood_blue_035.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenDestroyed",
+          "scope": "ALLIES"
+        },
+        "description": "When allied cards are destroyed, raise this card's power by 2"
+      }
+    },
+    {
+      "id": "036",
+      "name": "Sandhog Pie",
+      "power": 1,
+      "rank": 1,
+      "filename": "036.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ALLIES",
+        "description": "When destroyed, raise the power of allied cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "037",
+      "name": "Bloatfloat",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_037.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ANY",
+        "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "038",
+      "name": "Bagnadrana",
+      "power": 2,
+      "rank": 3,
+      "filename": "queens_blood_blue_038.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "WhenPlayed",
+          "scope": "ENEMIES"
+        },
+        "description": "When enemy cards are played from hand, raise this card's power by 1"
+      }
+    },
+    {
+      "id": "039",
+      "name": "Cockatrice",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_039.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "DestroyCards",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, destroy allied and enemy cards on affected tiles"
+      }
+    },
+    {
+      "id": "040",
+      "name": "Heatseeker",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_040.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "040A"
+        ],
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "description": "When destroyed, add Heatseeker Minion to your hand"
+      }
+    },
+    {
+      "id": "040A",
+      "name": "Heatseeker Minion",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_040A.png",
+      "gridParsed": false
+    },
+    {
+      "id": "041",
+      "name": "Bomb",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_041.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ANY",
+        "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "042",
+      "name": "Thug",
+      "power": 4,
+      "rank": 2,
+      "filename": "queens_blood_blue_042.png",
+      "gridParsed": false
+    },
+    {
+      "id": "043",
+      "name": "Death Claw",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_043.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "WhenDestroyed",
+          "scope": "ENEMIES"
+        },
+        "description": "When enemy cards are destroyed, raise this card's power by 1"
+      }
+    },
+    {
+      "id": "044",
+      "name": "Landworm",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_044.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenDestroyed",
+          "scope": "ENEMIES"
+        },
+        "description": "When enemy cards are destroyed, raise this card's power by 2"
+      }
+    },
+    {
+      "id": "045",
+      "name": "Sandspitter",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_045.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "046",
+      "name": "Chimera",
+      "power": 4,
+      "rank": 2,
+      "filename": "queens_blood_blue_046.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 2,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENFEEBLED",
+          "scope": "ENEMIES"
+        },
+        "description": "Raise power by 2 for each enfeebled enemy card"
+      }
+    },
+    {
+      "id": "047",
+      "name": "Joker",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_047.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "WhenDestroyed",
+          "scope": "ANY"
+        },
+        "description": "When allied and enemy cards are destroyed, raise this card's power by 1"
+      }
+    },
+    {
+      "id": "048",
+      "name": "Amphidex",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_048.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ALLIES",
+        "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "049",
+      "name": "Frightflower",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_049.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ANY",
+        "description": "When destroyed, raise the power of allied and enemy cards on affected tiles by 2"
+      }
+    },
+    {
+      "id": "050",
+      "name": "Gagighandi",
+      "power": 4,
+      "rank": 2,
+      "filename": "queens_blood_blue_050.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -2,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ENEMIES",
+        "description": "When first enhanced, lower the power of enemy cards on affected tiles by 2"
+      }
+    },
+    {
+      "id": "051",
+      "name": "Insectoid Chimera",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_051.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": 0,
+        "target": "ALLIES",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "Destroy an allied card and replace it"
+      }
+    },
+    {
+      "id": "052",
+      "name": "Gigantoad",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_052.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": 0,
+        "target": "ALLIES",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "Destroy an allied card and replace it"
+      }
+    },
+    {
+      "id": "053",
+      "name": "Maloceros",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_053.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ScoreBonus",
+        "points": 10,
+        "trigger": {
+          "type": "WhenLaneWon"
+        },
+        "description": "When you win the lane, receive a score bonus of 10"
+      }
+    },
+    {
+      "id": "054",
+      "name": "Grandhorn",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_054.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": 0,
+        "target": "ALLIES",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "Destroy an allied card and replace it"
+      }
+    },
+    {
+      "id": "055",
+      "name": "Great Malboro",
+      "power": 3,
+      "rank": 3,
+      "filename": "queens_blood_blue_055.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -6,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 6"
+      }
+    },
+    {
+      "id": "056",
+      "name": "Grangalan",
+      "power": 3,
+      "rank": 3,
+      "filename": "056.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "056A"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, add Grangalan Junior to your hand"
+      }
+    },
+    {
+      "id": "056A",
+      "name": "Grangalan Junior",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_056A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "056B"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, add Grangalan Baby to your hand"
+      }
+    },
+    {
+      "id": "056B",
+      "name": "Grangalan Baby",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_056B.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -5,
+        "target": "ANY",
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5"
+      }
+    },
+    {
+      "id": "057",
+      "name": "Amalgam",
+      "power": 1,
+      "rank": 1,
+      "filename": "057.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "057A"
+        ],
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "description": "When destroyed, add Resurrected Amalgam to your hand"
+      }
+    },
+    {
+      "id": "057A",
+      "name": "Resurrected Amalgam",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_057A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -2,
+        "target": "ANY",
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "description": "Lower the power of allied and enemy cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "058",
+      "name": "Skeeskee",
+      "power": 1,
+      "rank": 1,
+      "filename": "058.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 1,
+        "trigger": {
+          "type": "WhenDestroyed",
+          "scope": "ALLIES"
+        },
+        "target": "SELF",
+        "description": "When allied cards are destroyed, raise this card's power by 1"
+      }
+    },
+    {
+      "id": "059",
+      "name": "Griffon",
+      "power": 1,
+      "rank": 1,
+      "filename": "059.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": 1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ALLIES",
+        "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+      }
+    },
+    {
+      "id": "060",
+      "name": "Basilisk",
+      "power": 2,
+      "rank": 3,
+      "filename": "060.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "DestroyCards",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ENEMIES",
+        "description": "When played, destroy enemy cards on affected tiles"
+      }
+    },
+    {
+      "id": "061",
+      "name": "Reapertail",
+      "power": 3,
+      "rank": 1,
+      "filename": "061.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -2,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENFEEBLED"
+        },
+        "target": "ENEMIES",
+        "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+      }
+    },
+    {
+      "id": "062",
+      "name": "Jabberwock",
+      "power": 6,
+      "rank": 2,
+      "filename": "062.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "063",
+      "name": "Desert Sahagin",
+      "power": 3,
+      "rank": 1,
+      "filename": "063.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 4,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENFEEBLED"
+        },
+        "target": "ALLIES",
+        "description": "When first enfeebled, raise the power of allied cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "064",
+      "name": "Cavestalker",
+      "power": 4,
+      "rank": 2,
+      "filename": "064.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -2,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENFEEBLED"
+        },
+        "target": "ENEMIES",
+        "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+      }
+    },
+    {
+      "id": "065",
+      "name": "Stone Golem",
+      "power": 4,
+      "rank": 1,
+      "filename": "065.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ENEMIES",
+        "description": "When first enhanced, lower the power of enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "066",
+      "name": "Two Face",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_066.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "StatusBonus",
+        "enhancedAmount": 4,
+        "enfeebledAmount": 4,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ANY",
+        "description": "Enhanced: Raise power of allied and enemy cards on affected tiles by 4. Enfeebled: Lower their power by 4"
+      }
+    },
+    {
+      "id": "067",
+      "name": "Gi Specter",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_067.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      }
+    },
+    {
+      "id": "068",
+      "name": "Valron",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_068.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 2,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENFEEBLED",
+          "scope": "ALLIES"
+        },
+        "description": "Raise power by 2 for each other enfeebled allied card"
+      }
+    },
+    {
+      "id": "069",
+      "name": "Disgorgon",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_069.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaiseRank",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, raise position ranks by 2"
+      }
+    },
+    {
+      "id": "070",
+      "name": "Dragon",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_070.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ENEMIES",
+        "description": "When played, lower the power of enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "071",
+      "name": "Twin Brain",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_071.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaiseRank",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, raise position ranks by 2"
+      }
+    },
+    {
+      "id": "072",
+      "name": "Black Bat",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_072.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "073",
+      "name": "Bahba Velamyu",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_073.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ENEMIES",
+        "description": "When destroyed, lower the power of enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "074",
+      "name": "Rictus",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_074.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENFEEBLED",
+          "scope": "ANY"
+        },
+        "description": "Raise power by 1 for each other enfeebled allied and enemy card"
+      }
+    },
+    {
+      "id": "075",
+      "name": "Adjudicator",
+      "power": 1,
+      "rank": 2,
+      "filename": "queens_blood_blue_075.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ANY",
+          "scope": "ANY"
+        },
+        "description": "Raise power by 1 for each other enhanced or enfeebled allied and enemy card"
+      }
+    },
+    {
+      "id": "076",
+      "name": "Yin & Yang",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_076.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": 1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ALLIES",
+        "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+      }
+    },
+    {
+      "id": "077",
+      "name": "Diabolic Variant",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_077.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      }
+    },
+    {
+      "id": "078",
+      "name": "Special Forces Operator",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_078.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "079",
+      "name": "2-C SOLDIER Operator",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_079.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "080",
+      "name": "Kelzmelzer",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_080.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      }
+    },
+    {
+      "id": "081",
+      "name": "Panthera Protector",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_081.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 4,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ALLIES",
+        "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "082",
+      "name": "Hecteyes",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_082.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ALLIES",
+        "description": "When destroyed, raise the power of allied cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "083",
+      "name": "Floating Death",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_083.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "084",
+      "name": "Ironclad",
+      "power": 1,
+      "rank": 3,
+      "filename": "queens_blood_blue_084.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 3,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENHANCED",
+          "scope": "ENEMIES"
+        },
+        "description": "Raise power by 3 for each enhanced enemy card"
+      }
+    },
+    {
+      "id": "085",
+      "name": "Moss-Grown Adamantoise",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_085.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaiseRank",
+        "amount": 3,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, raise position ranks by 3"
+      }
+    },
+    {
+      "id": "086",
+      "name": "Cloud",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_086.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenFirstReachesPower",
+          "threshold": 7
+        },
+        "target": "ALLIES",
+        "description": "When this card's power first reaches 7, raise the power of allied cards on affected tiles by 2"
+      }
+    },
+    {
+      "id": "087",
+      "name": "Barret",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_087.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -8,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ENEMIES",
+        "description": "When played, lower the power of enemy cards on affected tiles by 8"
+      }
+    },
+    {
+      "id": "088",
+      "name": "Tifa",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_088.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ScoreBonus",
+        "points": 5,
+        "trigger": {
+          "type": "WhenLaneWon"
+        },
+        "description": "When you win the lane, receive a score bonus of 5"
+      }
+    },
+    {
+      "id": "089",
+      "name": "Aerith",
+      "power": 1,
+      "rank": 2,
+      "filename": "queens_blood_blue_089.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "090",
+      "name": "Red XIII",
+      "power": 3,
+      "rank": 1,
+      "filename": "queens_blood_blue_090.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -2,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENFEEBLED"
+        },
+        "target": "ENEMIES",
+        "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+      }
+    },
+    {
+      "id": "091",
+      "name": "Yuffie",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_091.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      }
+    },
+    {
+      "id": "092",
+      "name": "Cait Sith",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_092.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "092A"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, add Moogle to your hand"
+      }
+    },
+    {
+      "id": "092A",
+      "name": "Moogle",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_092A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 1,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play"
+      }
+    },
+    {
+      "id": "093",
+      "name": "Cid",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_093.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "093A"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, add The Tiny Bronco to your hand"
+      }
+    },
+    {
+      "id": "093A",
+      "name": "The Tiny Bronco",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_093A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaiseRank",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, raise position ranks by 2"
+      }
+    },
+    {
+      "id": "094",
+      "name": "Vincent",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_094.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "094A"
+        ],
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "description": "When destroyed, add Galian Beast to your hand"
+      }
+    },
+    {
+      "id": "094A",
+      "name": "Galian Beast",
+      "power": 4,
+      "rank": 2,
+      "filename": "queens_blood_blue_094A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "target": "ANY",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, lower power of allied and enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "095",
+      "name": "Ifrit",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_095.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 2,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENHANCED",
+          "scope": "ALLIES"
+        },
+        "description": "Raise the power by 2 for each other enhanced allied card"
+      }
+    },
+    {
+      "id": "096",
+      "name": "Shiva",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_096.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "SpawnCards",
+        "cardIds": [
+          "096A",
+          "096B",
+          "096C"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, spawn Diamond Dust of power 2, 4, or 6 in empty positions"
+      }
+    },
+    {
+      "id": "096A",
+      "name": "Diamond Dust I",
+      "power": 2,
+      "rank": 0,
+      "filename": "queens_blood_blue_096A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "FlavourText",
+        "description": "Spawned on empty position of rank 1"
+      }
+    },
+    {
+      "id": "096B",
+      "name": "Diamond Dust I",
+      "power": 4,
+      "rank": 0,
+      "filename": "queens_blood_blue_096B.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "FlavourText",
+        "description": "Spawned on empty position of rank 2"
+      }
+    },
+    {
+      "id": "096C",
+      "name": "Diamond Dust III",
+      "power": 6,
+      "rank": 0,
+      "filename": "queens_blood_blue_096C.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "FlavourText",
+        "description": "Spawned on empty position of rank 3"
+      }
+    },
+    {
+      "id": "097",
+      "name": "Ramuh",
+      "power": 3,
+      "rank": 3,
+      "filename": "queens_blood_blue_097.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -3,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "098",
+      "name": "Titan",
+      "power": 5,
+      "rank": 2,
+      "filename": "queens_blood_blue_098.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaiseRank",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, raise position ranks by 2"
+      }
+    },
+    {
+      "id": "099",
+      "name": "Kujata",
+      "power": 6,
+      "rank": 1,
+      "filename": "queens_blood_blue_099.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -5,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ENEMIES",
+        "description": "When first enhanced, lower the power of enemy cards on affected tiles by 5"
+      }
+    },
+    {
+      "id": "100",
+      "name": "Odin",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_100.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 2,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENHANCED",
+          "scope": "ENEMIES"
+        },
+        "description": "Raise power by 2 for each enhanced enemy card"
+      }
+    },
+    {
+      "id": "101",
+      "name": "Phoenix",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_101.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 5,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ALLIES",
+        "description": "When destroyed, raise the power of allied cards on affected tiles by 5"
+      }
+    },
+    {
+      "id": "102",
+      "name": "Leviathan",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_102.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -3,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ENEMIES",
+        "description": "Lower the power of enemy cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "103",
+      "name": "Alexander",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_103.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 3,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENFEEBLED",
+          "scope": "ALLIES"
+        },
+        "description": "Raise power by 3 for each other enfeebled allied card"
+      }
+    },
+    {
+      "id": "104",
+      "name": "Bahamut",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_104.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -5,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ENEMIES",
+        "description": "When played, lower the power of enemy cards on affected tiles by 5"
+      }
+    },
+    {
+      "id": "105",
+      "name": "Bahamut Arisen",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_105.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "SpawnCards",
+        "cardIds": [
+          "105A",
+          "105B",
+          "105C"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, spawn Elementals - cards that enhance when destroyed - in your empty positions"
+      }
+    },
+    {
+      "id": "105A",
+      "name": "Elemental I",
+      "power": 1,
+      "rank": 0,
+      "filename": "queens_blood_blue_105A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 1,
+        "target": "ANY",
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "description": "Spawned on empty positions of rank 1. When destroyed, raise the power of allied and enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "105B",
+      "name": "Elemental II",
+      "power": 1,
+      "rank": 0,
+      "filename": "queens_blood_blue_105B.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "target": "ANY",
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "description": "Spawned on empty positions of rank 2. When destroyed, raise the power of allied and enemy cards on affected tiles by 2"
+      }
+    },
+    {
+      "id": "105C",
+      "name": "Elemental III",
+      "power": 1,
+      "rank": 0,
+      "filename": "queens_blood_blue_105C.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "target": "ANY",
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "description": "Spawned on empty positions of rank 3. When destroyed, raise the power of allied and enemy cards on affected tiles by 3"
+      }
+    },
+    {
+      "id": "106",
+      "name": "Gilgamesh",
+      "power": 3,
+      "rank": 3,
+      "filename": "queens_blood_blue_106.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      }
+    },
+    {
+      "id": "107",
+      "name": "Chocobo & Moogle",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_107.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENHANCED",
+          "scope": "ALLIES"
+        },
+        "description": "Raise power by 1 for each other enhanced allied card"
+      }
+    },
+    {
+      "id": "108",
+      "name": "Fat Chocobo",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_108.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "FlavourText",
+        "description": "Creates a surfeit of positions around it when played"
+      }
+    },
+    {
+      "id": "109",
+      "name": "Posh Chocobo",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_109.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ScoreBonus",
+        "points": 3,
+        "trigger": {
+          "type": "WhenLaneWon"
+        },
+        "description": "When you win the lane, receive a score bonus of 3"
+      }
+    },
+    {
+      "id": "110",
+      "name": "Moogle Trio",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_110.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "110A",
+          "110B"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, add both Moogle Mage and Moogle Bard to your hand"
+      }
+    },
+    {
+      "id": "110A",
+      "name": "Moogle Bard",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_110A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "target": "ALLIES",
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "description": "Raise power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "110B",
+      "name": "Moogle Mage",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_110B.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ENEMIES",
+        "description": "When played, lower the power of enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "111",
+      "name": "Magic Pot",
+      "power": 1,
+      "rank": 3,
+      "filename": "queens_blood_blue_111.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "112",
+      "name": "Materia Guardian",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_112.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -6,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENFEEBLED"
+        },
+        "target": "ENEMIES",
+        "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 6"
+      }
+    },
+    {
+      "id": "113",
+      "name": "Midgardsormr",
+      "power": 5,
+      "rank": 2,
+      "filename": "queens_blood_blue_113.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "WhenDestroyed",
+          "scope": "ANY"
+        },
+        "description": "When allied and enemy cards are destroyed, raise this card's power by 1"
+      }
+    },
+    {
+      "id": "114",
+      "name": "Mythril Golem",
+      "power": 8,
+      "rank": 1,
+      "filename": "queens_blood_blue_114.png",
+      "gridParsed": false
+    },
+    {
+      "id": "115",
+      "name": "Terror of the Deep",
+      "power": 2,
+      "rank": 3,
+      "filename": "queens_blood_blue_115.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ANY",
+        "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+      }
+    },
+    {
+      "id": "116",
+      "name": "Grasptropod",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_116.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ANY",
+        "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "117",
+      "name": "Custom Valkyrie",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_117.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "118",
+      "name": "Gigatrice",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_118.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "DestroyCards",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, destroy allied and enemy cards on affected tiles"
+      }
+    },
+    {
+      "id": "119",
+      "name": "Dyne",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_119.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -5,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 5"
+      }
+    },
+    {
+      "id": "120",
+      "name": "Anuran Suppressor",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_120.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 2,
+        "trigger": {
+          "type": "WhenDestroyed",
+          "scope": "ENEMIES"
+        },
+        "description": "When enemy cards are destroyed, raise this card's power by 2"
+      }
+    },
+    {
+      "id": "121",
+      "name": "Specimen H1024",
+      "power": 6,
+      "rank": 3,
+      "filename": "queens_blood_blue_121.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ANY",
+        "description": "Raise the power of allied and enemy cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "122",
+      "name": "Crimson Mare Mk. II",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_122.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -5,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENFEEBLED"
+        },
+        "target": "ANY",
+        "description": "When first enfeebled, lower the power of allied and enemy cards on affected tiles by 5"
+      }
+    },
+    {
+      "id": "123",
+      "name": "Gi Nattak",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_123.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ReplaceAlly",
+        "powerMultiplier": 1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ALLIES",
+        "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+      }
+    },
+    {
+      "id": "124",
+      "name": "Forgotten Specimen",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_124.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "125",
+      "name": "Don Corneo & Abzu",
+      "power": 4,
+      "rank": 2,
+      "filename": "queens_blood_blue_125.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "AddCardsToHand",
+        "cardIds": [
+          "125A",
+          "125B"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, add both Cacneo and Donberry to your hand"
+      }
+    },
+    {
+      "id": "125A",
+      "name": "Cacneo",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_125A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "target": "ALLIES",
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "125B",
+      "name": "Donberry",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_125B.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "DestroyCards",
+        "target": "ENEMIES",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, destroy enemy cards on affected tiles"
+      }
+    },
+    {
+      "id": "126",
+      "name": "Red Dragon",
+      "power": 6,
+      "rank": 3,
+      "filename": "queens_blood_blue_126.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -4,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "127",
+      "name": "Demon Gate",
+      "power": 5,
+      "rank": 3,
+      "filename": "queens_blood_blue_127.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -9,
+        "trigger": {
+          "type": "WhenDestroyed"
+        },
+        "target": "ENEMIES",
+        "description": "When destroyed, lower the power of enemy cards on affected tiles by 9"
+      }
+    },
+    {
+      "id": "128",
+      "name": "Reno",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_128.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "129",
+      "name": "Rude",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_129.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "130",
+      "name": "Elena",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_130.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -99,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ANY",
+        "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 99"
+      }
+    },
+    {
+      "id": "131",
+      "name": "Tseng",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_131.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 4,
+        "trigger": {
+          "type": "WhenFirstStatusChanged",
+          "status": "ENHANCED"
+        },
+        "target": "ALLIES",
+        "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 4"
+      }
+    },
+    {
+      "id": "132",
+      "name": "Rufus",
+      "power": 4,
+      "rank": 2,
+      "filename": "queens_blood_blue_132.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "FlavourText",
+        "description": "Creates an intimidatingly large number of positions around him when played"
+      }
+    },
+    {
+      "id": "133",
+      "name": "Roche",
+      "power": 5,
+      "rank": 2,
+      "filename": "queens_blood_blue_133.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": -1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ALLIES",
+        "description": "When played, lower the power of allied cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "134",
+      "name": "J-Squad",
+      "power": 2,
+      "rank": 3,
+      "filename": "queens_blood_blue_134.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "SpawnCards",
+        "cardIds": [
+          "134A",
+          "134B",
+          "134C"
+        ],
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "description": "When played, spawn Hype Johnnys - cards that enhance while in play - in your empty positions"
+      }
+    },
+    {
+      "id": "134A",
+      "name": "Hype Johnnys I",
+      "power": 1,
+      "rank": 0,
+      "filename": "queens_blood_blue_134A.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 1,
+        "target": "ALLIES",
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "description": "Spawned on empty position of rank 1. Raise power of allied and enemy cards on affected tiles by 1 while this card is in play"
+      }
+    },
+    {
+      "id": "134B",
+      "name": "Hype Johnnys II",
+      "power": 1,
+      "rank": 0,
+      "filename": "queens_blood_blue_134B.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "target": "ALLIES",
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "description": "Spawned on empty position of rank 2. Raise power of allied and enemy cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "134C",
+      "name": "Hype Johnnys III",
+      "power": 1,
+      "rank": 0,
+      "filename": "queens_blood_blue_134C.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 3,
+        "target": "ALLIES",
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "description": "Spawned on empty position of rank 3. Raise power of allied and enemy cards on affected tiles by 3 while this card is in play"
+      }
+    },
+    {
+      "id": "135",
+      "name": "Chocobo Jockey",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_135.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ScoreBonus",
+        "points": 10,
+        "trigger": {
+          "type": "WhenLaneWon"
+        },
+        "description": "When you win the lane, receive a score bonus of 10"
+      }
+    },
+    {
+      "id": "136",
+      "name": "Space Ranger",
+      "power": 2,
+      "rank": 1,
+      "filename": "queens_blood_blue_136.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENHANCED",
+          "scope": "ENEMIES"
+        },
+        "description": "Raise power by 1 for each enhanced enemy card"
+      }
+    },
+    {
+      "id": "137",
+      "name": "Haunted Hotel",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_137.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ALLIES",
+        "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "138",
+      "name": "Skywheel",
+      "power": 2,
+      "rank": 3,
+      "filename": "queens_blood_blue_138.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "FlavourText",
+        "description": "Adds positions in the shape of a certain Gold Saucer attraction"
+      }
+    },
+    {
+      "id": "139",
+      "name": "Loveless",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_139.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 1,
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ANY",
+        "description": "When played, raise the power of allied and enemy cards on affected tiles by 1"
+      }
+    },
+    {
+      "id": "140",
+      "name": "Saucer Squad",
+      "power": 3,
+      "rank": 2,
+      "filename": "queens_blood_blue_140.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "FlavourText",
+        "description": "Makes use of its adorable nature to enliven the battlefield"
+      }
+    },
+    {
+      "id": "141",
+      "name": "Dio",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_141.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 1,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENHANCED",
+          "scope": "ANY"
+        },
+        "description": "Raise power by 1 for each other enhanced allied and enemy card"
+      }
+    },
+    {
+      "id": "142",
+      "name": "Ultimate Party Animal",
+      "power": 1,
+      "rank": 1,
+      "filename": "queens_blood_blue_142.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "ScoreBonus",
+        "points": -1,
+        "trigger": {
+          "type": "WhenLaneWon"
+        },
+        "description": "If this card is in play when the round ends, the loser of each lane's score is added to the victor's"
+      }
+    },
+    {
+      "id": "143",
+      "name": "Sephiroth",
+      "power": 4,
+      "rank": 3,
+      "filename": "queens_blood_blue_143.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "DestroyCards",
+        "trigger": {
+          "type": "WhenPlayed"
+        },
+        "target": "ENEMIES",
+        "description": "When played, destroy enemy cards on affected tiles"
+      }
+    },
+    {
+      "id": "144",
+      "name": "Emerald Witch",
+      "power": 2,
+      "rank": 2,
+      "filename": "queens_blood_blue_144.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "amount": 2,
+        "trigger": {
+          "type": "WhileActive"
+        },
+        "target": "ANY",
+        "description": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play"
+      }
+    },
+    {
+      "id": "145",
+      "name": "Shadowblood Queen",
+      "power": 3,
+      "rank": 3,
+      "filename": "queens_blood_blue_145.png",
+      "gridParsed": false,
+      "effect": {
+        "type": "RaisePower",
+        "target": "SELF",
+        "amount": 3,
+        "trigger": {
+          "type": "OnStatusChange",
+          "status": "ENFEEBLED",
+          "scope": "ANY"
+        },
+        "description": "Raise power by 3 for each other enfeebled allied and enemy card"
+      }
+    }
+  ]
+}

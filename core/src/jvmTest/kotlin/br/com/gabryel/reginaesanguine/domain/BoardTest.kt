@@ -154,7 +154,7 @@ class BoardTest {
     fun `when a card with RaisePower effects is played, should add effect to affected entities`() {
         val powerRaise = cardOf(
             "Power Raiser",
-            affected = listOf(0 to -1),
+            affected = setOf(0 to -1),
             effect = RaisePower(2, ALLIES, WhenPlayed()),
         )
 
@@ -169,7 +169,7 @@ class BoardTest {
     }
 
     @Test
-    fun `when a player wins a lane with a WinLaneBonusPoints card, should receive bonus points`() {
+    fun `when a player wins a lane with a ScoreBonus card with OnLaneWon, should receive bonus points`() {
         val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5, WhenLaneWon))
 
         val nextBoard = buildResult {
@@ -184,7 +184,7 @@ class BoardTest {
     }
 
     @Test
-    fun `when a player loses a lane with a WinLaneBonusPoints card, should not receive bonus points`() {
+    fun `when a player loses a lane with a ScoreBonus card with OnLaneWon, should not receive bonus points`() {
         val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5, WhenLaneWon))
 
         val strongCard = cardOf(name = "Strong", value = 5)
@@ -219,7 +219,7 @@ class BoardTest {
         val destroyer = cardOf(
             "Destroyer",
             value = 1,
-            affected = listOf(0 to 4),
+            affected = setOf(0 to 4),
             effect = DestroyCards(ENEMIES, WhenPlayed()),
         )
 
@@ -236,7 +236,7 @@ class BoardTest {
     fun `when a card with a effect is played by RIGHT player, should apply mirrored effect to affected entities`() {
         val powerRaise = cardOf(
             "Power Raiser",
-            affected = listOf(0 to -1),
+            affected = setOf(0 to -1),
             effect = RaisePower(2, ALLIES, WhenPlayed()),
         )
 

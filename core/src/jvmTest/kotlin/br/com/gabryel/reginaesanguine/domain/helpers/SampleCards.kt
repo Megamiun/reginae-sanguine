@@ -40,7 +40,7 @@ object SampleCards {
         increments: Set<Position> = emptySet(),
         value: Int = 1,
         rank: Int = 1,
-        affected: List<Position> = emptyList(),
+        affected: Set<Position> = emptySet(),
         effect: Effect? = null,
     ) = Card(id, name, increments, value, rank, affected, effect)
 }

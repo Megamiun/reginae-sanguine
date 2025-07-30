@@ -8,7 +8,7 @@ data class Card(
     val increments: Set<Position>,
     val power: Int,
     val rank: Int,
-    val affected: List<Position> = listOf(),
+    val affected: Set<Position> = setOf(),
     val effect: Effect? = null
 ) {
     override fun toString() = "[$id] [$name]"

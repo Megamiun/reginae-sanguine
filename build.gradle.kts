@@ -39,7 +39,7 @@ allprojects {
 }
 
 tasks {
-    val cleanAssets by registering(Delete::class) {
+    register("cleanAssets", Delete::class) {
         group = "asset"
         description = "Cleans asset pack for Queen's Blood cards"
 
@@ -74,7 +74,7 @@ tasks {
         into(".temp/assets/queens_blood/")
     }
 
-    val prepareAssets by registering {
+    register("prepareAssets") {
         group = "asset"
         description = "Prepare assets for the game"
 

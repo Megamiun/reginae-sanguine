@@ -101,7 +101,7 @@ android {
 }
 
 tasks {
-    val prepareAssets by registering {
+    register("prepareAssets") {
         group = "asset"
         description = "Prepare assets for the game"
 
@@ -109,10 +109,12 @@ tasks {
             val drawables = file("src/commonMain/composeResources/drawable")
             drawables.delete()
 
-            rootProject.layout.projectDirectory.dir("assets").asFileTree.forEach { card ->
-                val name = card.path.split("/").takeLast(3).joinToString("_")
-                card.copyTo(drawables.resolve(name.lowercase()), true)
-            }
+            rootProject.layout.projectDirectory.dir("assets").asFileTree
+                .filter { it.name.endsWith(".png") }
+                .forEach { card ->
+                    val name = card.path.split("/").takeLast(3).joinToString("_")
+                    card.copyTo(drawables.resolve(name.lowercase()), true)
+                }
         }
     }
 }

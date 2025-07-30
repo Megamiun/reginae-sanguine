@@ -12,6 +12,7 @@ import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
 import br.com.gabryel.reginaesanguine.domain.effect.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
 import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
+import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class Board(
@@ -117,7 +118,8 @@ data class Board(
 
         val laneBonus = getPlayerCardsInLane(winner.key, lane)
             .mapNotNull { it.effect as? ScoreBonus }
-            .sumOf { it.points }
+            .filter { it.trigger is WhenLaneWon }
+            .sumOf { it.amount }
 
         return basePowers + (winner.key to (winner.value + laneBonus))
     }

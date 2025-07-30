@@ -31,12 +31,12 @@ class SpawnCards(
 ) : Effect
 
 class ScoreBonus(
-    val points: Int,
+    val amount: Int,
     override val trigger: Trigger,
-    override val description: String = "Add $points score on $trigger",
+    override val description: String = "Add $amount score on $trigger",
 ) : Effect
 
-class FromLoserScoreBonus(
+class LoserScoreBonus(
     override val trigger: Trigger,
     override val description: String = "Add points from loser to score on $trigger",
 ) : Effect
@@ -44,7 +44,7 @@ class FromLoserScoreBonus(
 class DestroyCards(
     val target: TargetType,
     override val trigger: Trigger,
-    override val description: String = "Add points from loser to score on $trigger",
+    override val description: String = "Destroy $target cards on $trigger",
 ) : Effect
 
 class ReplaceAlly(
