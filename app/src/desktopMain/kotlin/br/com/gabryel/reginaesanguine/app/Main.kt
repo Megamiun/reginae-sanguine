@@ -19,6 +19,7 @@ import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Player
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginaesanguine.domain.atColumn
 import kotlin.system.exitProcess
 
 fun main() = application {
@@ -33,12 +34,12 @@ fun main() = application {
     ).copy(
         board = Board(
             mapOf(
-                (0 to 0) to Cell(LEFT, 1, knownCard),
-                (1 to 0) to Cell(LEFT, 2),
-                (2 to 0) to Cell(LEFT, 3, unknownCard),
-                (0 to 4) to Cell(RIGHT, 1, knownCard),
-                (1 to 4) to Cell(RIGHT, 2),
-                (2 to 4) to Cell(RIGHT, 3, unknownCard),
+                (0 atColumn 0) to Cell(LEFT, 1, knownCard),
+                (1 atColumn 0) to Cell(LEFT, 2),
+                (2 atColumn 0) to Cell(LEFT, 3, unknownCard),
+                (0 atColumn 4) to Cell(RIGHT, 1, knownCard),
+                (1 atColumn 4) to Cell(RIGHT, 2),
+                (2 atColumn 4) to Cell(RIGHT, 3, unknownCard),
             ),
         ),
     )

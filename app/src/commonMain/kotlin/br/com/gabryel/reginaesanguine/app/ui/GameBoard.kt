@@ -48,8 +48,6 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Success
-import br.com.gabryel.reginaesanguine.domain.column
-import br.com.gabryel.reginaesanguine.domain.lane
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -60,8 +58,8 @@ private val playerCellInternalModifier = Modifier
 
 @Composable
 fun GameBoard(game: Game, resourceLoader: ResourceLoader) {
-    val lateralSize = IntSize(1, game.height)
-    val gridSize = IntSize(game.width, game.height)
+    val lateralSize = IntSize(1, game.size.height)
+    val gridSize = IntSize(game.size.width, game.size.height)
 
     Column(
         modifier = Modifier.Companion
@@ -182,7 +180,7 @@ private fun BoxScope.Rank(modifier: Modifier, alignment: Alignment = Center) {
 
 @Composable
 private fun PlayerLanePowerCell(game: Game, position: Position, player: PlayerPosition) {
-    val playerPower = game.getLaneScore(position.lane())[player] ?: 0
+    val playerPower = game.getLaneScore(position.lane)[player] ?: 0
 
     val color = when (player) {
         LEFT -> Emerald
@@ -214,7 +212,7 @@ private fun findAlignmentBias(angle: Float, distance: Float): Alignment {
 }
 
 private fun Modifier.boardCell(position: Position): Modifier =
-    if ((position.lane() + position.column()) % 2 == 0) {
+    if ((position.lane + position.column) % 2 == 0) {
         cellSize().background(WhiteLight)
     } else {
         cellSize().background(PurpleDark)

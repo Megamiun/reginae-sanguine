@@ -28,3 +28,9 @@
   - Happened on linux_x64, doesn't happen on JVM tests
 - Potentially more slow to build than other targets, even more with multiple targets
 - Tests with space in the name fail on native targets
+
+# Interesting topics
+- Serialization with Kotlinx
+  - Extension ready serialization
+- Jetpack Compose for multiple devices
+  - Differences and difficulties

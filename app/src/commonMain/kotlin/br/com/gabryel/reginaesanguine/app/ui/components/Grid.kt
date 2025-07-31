@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.atColumn
 
 @Composable
 fun Grid(
@@ -18,7 +19,7 @@ fun Grid(
     FlowRow(maxItemsInEachRow = gridSize.width, maxLines = gridSize.height, modifier = modifier) {
         repeat(gridSize.height) { row ->
             repeat(gridSize.width) { col ->
-                val position = row to col
+                val position = row atColumn col
                 Box(modifier = Modifier.cellModifier(position)) {
                     getCell(position)
                 }

@@ -17,28 +17,24 @@ import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class Board(
     private val state: Map<Position, Cell> = createInitialState(),
-    override val width: Int = 5,
-    override val height: Int = 3,
+    override val size: Size = Size(5, 3)
 ) : CellContainer {
     companion object {
         fun default() = Board()
 
         private fun createInitialState(): Map<Position, Cell> = mapOf(
             // Left player starting positions
-            (0 to 0) to Cell(LEFT, 1),
-            (1 to 0) to Cell(LEFT, 1),
-            (2 to 0) to Cell(LEFT, 1),
+            (0 atColumn 0) to Cell(LEFT, 1),
+            (1 atColumn 0) to Cell(LEFT, 1),
+            (2 atColumn 0) to Cell(LEFT, 1),
             // Right player starting positions
-            (0 to 4) to Cell(RIGHT, 1),
-            (1 to 4) to Cell(RIGHT, 1),
-            (2 to 4) to Cell(RIGHT, 1),
+            (0 atColumn 4) to Cell(RIGHT, 1),
+            (1 atColumn 4) to Cell(RIGHT, 1),
+            (2 atColumn 4) to Cell(RIGHT, 1),
         )
     }
 
-    fun play(
-        player: PlayerPosition,
-        action: Play<Card>,
-    ) = buildResult {
+    fun play(player: PlayerPosition, action: Play<Card>) = buildResult {
         val cell = getCellAt(action.position).orRaiseError()
 
         ensure(cell.owner == player) { CellDoesNotBelongToPlayer(cell) }
@@ -55,7 +51,7 @@ data class Board(
         .fold(mapOf(LEFT to 0, RIGHT to 0), ::accumulateScore)
 
     override fun getCellAt(position: Position): Result<Cell> = buildResult {
-        ensure(position.lane() in 0 until height && position.column() in 0 until width) { CellOutOfBoard(position) }
+        ensure(position in size) { CellOutOfBoard(position) }
         state[position] ?: Cell.EMPTY
     }
 
@@ -126,7 +122,7 @@ data class Board(
 
     private fun getPlayerCardsInLane(player: PlayerPosition, lane: Int): List<Card> =
         state.entries
-            .filter { it.value.owner == player && it.key.lane() == lane }
+            .filter { it.value.owner == player && it.key.lane == lane }
             .mapNotNull { it.value.card }
 
     private fun accumulateScore(

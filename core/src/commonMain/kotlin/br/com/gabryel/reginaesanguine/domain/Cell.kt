@@ -16,9 +16,9 @@ data class Cell(
 
     fun increment(player: PlayerPosition, inc: Int): Cell = when {
         card != null -> this
-        owner == null || player == owner ->
-            copy(owner = player, rank = min(3, rank + inc))
-        else -> copy(owner = player)
+        // TODO Validate what happens if player steals cell from another player
+        player.opponent == owner -> copy(owner = player)
+        else -> copy(owner = player, rank = min(3, rank + inc))
     }
 
     val totalPower = card?.let {

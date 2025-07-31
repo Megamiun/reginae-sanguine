@@ -3,8 +3,6 @@ package br.com.gabryel.reginaesanguine.domain.matchers
 import br.com.gabryel.reginaesanguine.domain.Cell
 import br.com.gabryel.reginaesanguine.domain.CellContainer
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.column
-import br.com.gabryel.reginaesanguine.domain.lane
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.compose.all
@@ -18,8 +16,8 @@ fun haveCell(
     val result = match.test(cell)
     MatcherResult(
         result.passed(),
-        { "Cell at [${position.lane()}, ${position.column()}]: " + result.failureMessage() },
-        { "Cell at [${position.lane()}, ${position.column()}]: " + result.negatedFailureMessage() },
+        { "Cell at [${position.lane}, ${position.column}]: " + result.failureMessage() },
+        { "Cell at [${position.lane}, ${position.column}]: " + result.negatedFailureMessage() },
     )
 }
 

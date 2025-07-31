@@ -1,7 +1,7 @@
 package br.com.gabryel.reginaesanguine.domain.helpers
 
 import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.effect.Effect
 
 object SampleCards {
@@ -10,10 +10,10 @@ object SampleCards {
             "001",
             "Security Officer",
             setOf(
-                1 to 0,
-                0 to 1,
-                -1 to 0,
-                0 to -1,
+                Displacement(1, 0),
+                Displacement(0, 1),
+                Displacement(-1, 0),
+                Displacement(0, -1),
             ),
             1,
             1,
@@ -24,11 +24,11 @@ object SampleCards {
             "002",
             "Riot Trooper",
             setOf(
-                1 to 0,
-                2 to 0,
-                0 to 1,
-                -1 to 0,
-                -2 to 0,
+                Displacement(1, 0),
+                Displacement(2, 0),
+                Displacement(0, 1),
+                Displacement(-1, 0),
+                Displacement(-2, 0),
             ),
             3,
             2,
@@ -37,10 +37,10 @@ object SampleCards {
     fun cardOf(
         id: String = "Unnamed",
         name: String = id,
-        increments: Set<Position> = emptySet(),
+        increments: Set<Displacement> = emptySet(),
         value: Int = 1,
         rank: Int = 1,
-        affected: Set<Position> = emptySet(),
+        affected: Set<Displacement> = emptySet(),
         effect: Effect? = null,
     ) = Card(id, name, increments, value, rank, affected, effect)
 }

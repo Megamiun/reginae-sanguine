@@ -1,14 +1,40 @@
 package br.com.gabryel.reginaesanguine.domain
 
-// Not sure if this is the most interesting impl
-typealias Position = Pair<Int, Int>
-typealias Displacement = Pair<Int, Int>
-typealias Size = Pair<Int, Int>
+import kotlinx.serialization.Serializable
 
-fun Pair<Int, Int>.lane() = first
+@Serializable
+data class Position(val x: Int, val y: Int) {
+    val column = x
+    val lane = y
 
-fun Pair<Int, Int>.column() = second
+    operator fun plus(displacement: Displacement) =
+        (lane + displacement.lane) atColumn (column + displacement.column)
 
-operator fun Position.plus(displacement: Displacement): Position = lane() + displacement.lane() to column() + displacement.column()
+    fun constrainTo(size: Size) =
+        lane.mod(size.height) atColumn column.mod(size.width)
+}
 
-fun Position.constrainTo(size: Size): Position = lane().mod(size.lane()) to column().mod(size.column())
+infix fun Int.atLane(lane: Int) = Position(this, lane)
+
+infix fun Int.atColumn(column: Int) = Position(column, this)
+
+@Serializable
+data class Displacement(val x: Int, val y: Int) {
+    companion object {
+        val UPWARD = Displacement(0, 1)
+        val DOWNWARD = Displacement(0, -1)
+        val LEFTWARD = Displacement(-1, 0)
+        val RIGHTWARD = Displacement(1, 0)
+    }
+
+    val column = x
+    val lane = y
+
+    fun mirrorHorizontal() = copy(x = x * -1)
+}
+
+@Serializable
+class Size(val width: Int, val height: Int) {
+    operator fun contains(position: Position) =
+        position.lane in 0 until height && position.column in 0 until width
+}

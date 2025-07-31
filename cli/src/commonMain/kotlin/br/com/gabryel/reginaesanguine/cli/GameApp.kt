@@ -12,6 +12,10 @@ import br.com.gabryel.reginaesanguine.cli.components.GridConfiguration.Companion
 import br.com.gabryel.reginaesanguine.cli.components.OptionChooser
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Cell
+import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.DOWNWARD
+import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.LEFTWARD
+import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.RIGHTWARD
+import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.UPWARD
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
@@ -21,10 +25,7 @@ import br.com.gabryel.reginaesanguine.domain.State.Ended.Tie
 import br.com.gabryel.reginaesanguine.domain.State.Ended.Won
 import br.com.gabryel.reginaesanguine.domain.State.Ongoing
 import br.com.gabryel.reginaesanguine.domain.Success
-import br.com.gabryel.reginaesanguine.domain.column
-import br.com.gabryel.reginaesanguine.domain.constrainTo
-import br.com.gabryel.reginaesanguine.domain.lane
-import br.com.gabryel.reginaesanguine.domain.plus
+import br.com.gabryel.reginaesanguine.domain.atColumn
 import com.jakewharton.mosaic.LocalTerminalState
 import com.jakewharton.mosaic.layout.KeyEvent
 import com.jakewharton.mosaic.layout.height
@@ -53,9 +54,9 @@ fun GameApp(viewModel: GameViewModel) {
     val game = state.game
     val player = game.players[game.nextPlayer] ?: fail("Couldn´t find player ${game.nextPlayer}")
 
-    val area = game.height to game.width
+    val area = game.size
     var selectedChoice by mutableStateOf(0)
-    var selectedPosition by mutableStateOf(0 to 0)
+    var selectedPosition by mutableStateOf(0 atColumn 0)
 
     Row {
         Column(
@@ -65,10 +66,10 @@ fun GameApp(viewModel: GameViewModel) {
                 .onKeyEvent { event ->
                     if (state is ChoosePosition) {
                         when (event) {
-                            KeyEvent("ArrowUp") -> selectedPosition = (selectedPosition + (-1 to 0)).constrainTo(area)
-                            KeyEvent("ArrowDown") -> selectedPosition = (selectedPosition + (1 to 0)).constrainTo(area)
-                            KeyEvent("ArrowLeft") -> selectedPosition = (selectedPosition + (0 to -1)).constrainTo(area)
-                            KeyEvent("ArrowRight") -> selectedPosition = (selectedPosition + (0 to 1)).constrainTo(area)
+                            KeyEvent("ArrowUp") -> selectedPosition = (selectedPosition + UPWARD).constrainTo(area)
+                            KeyEvent("ArrowDown") -> selectedPosition = (selectedPosition + DOWNWARD).constrainTo(area)
+                            KeyEvent("ArrowLeft") -> selectedPosition = (selectedPosition + LEFTWARD).constrainTo(area)
+                            KeyEvent("ArrowRight") -> selectedPosition = (selectedPosition + RIGHTWARD).constrainTo(area)
                             KeyEvent("Enter") -> viewModel.choosePosition(selectedPosition)
                             else -> return@onKeyEvent false
                         }
@@ -85,12 +86,12 @@ fun GameApp(viewModel: GameViewModel) {
             Row {
                 val cellSize = IntSize(cellWidth, 3)
 
-                Grid(gridWithSize(IntSize(1, game.height), cellSize).borderless()) { (lane) ->
+                Grid(gridWithSize(IntSize(1, area.height), cellSize).borderless()) { (lane) ->
                     Box(modifier = Modifier.matchParentSize(), contentAlignment = Center) {
                         Text(game.getLaneScore(lane)[LEFT]?.let { "R $it" }.orEmpty())
                     }
                 }
-                Grid(gridWithSize(IntSize(game.width, game.height), cellSize)) { position ->
+                Grid(gridWithSize(IntSize(area.width, area.height), cellSize)) { position ->
                     val cellContent = game.getCellAt(position)
 
                     val textStyle = if (state is ChoosePosition && position == selectedPosition) Bold
@@ -102,7 +103,7 @@ fun GameApp(viewModel: GameViewModel) {
                         Text(cellContent.describeCard().orEmpty(), textStyle = textStyle)
                     }
                 }
-                Grid(gridWithSize(IntSize(1, game.height), cellSize).borderless()) { (lane) ->
+                Grid(gridWithSize(IntSize(1, area.height), cellSize).borderless()) { (lane) ->
                     Box(modifier = Modifier.matchParentSize(), contentAlignment = Center) {
                         Text(game.getLaneScore(lane)[RIGHT]?.let { "R $it" }.orEmpty())
                     }
@@ -173,7 +174,7 @@ fun GameApp(viewModel: GameViewModel) {
 
 fun Card.describe(): String = "$name (R $rank, P $power) - $increments"
 
-private fun Position.describePosition() = "${lane()}-${column()}"
+private fun Position.describePosition() = "$lane-$column"
 
 private fun Result<Cell>.describeOwner() = (this as? Success<Cell>)?.value
     ?.owner?.name

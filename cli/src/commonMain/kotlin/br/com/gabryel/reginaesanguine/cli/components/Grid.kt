@@ -2,6 +2,7 @@ package br.com.gabryel.reginaesanguine.cli.components
 
 import androidx.compose.runtime.Composable
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.atColumn
 import com.jakewharton.mosaic.layout.ContentDrawScope
 import com.jakewharton.mosaic.layout.DrawModifier
 import com.jakewharton.mosaic.layout.height
@@ -33,7 +34,7 @@ fun Grid(
                     (0 until gridSize.width).forEach { col ->
                         Box(modifier = Modifier.height(cellSize.height + 1).width(cellSize.width + 1)) {
                             Box(modifier = Modifier.size(cellSize).offset(1, 1)) {
-                                getData(row to col)
+                                getData(row atColumn col)
                             }
                         }
                     }

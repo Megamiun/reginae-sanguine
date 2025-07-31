@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -9,6 +10,8 @@ kotlin {
         commonMain.dependencies {
             implementation(project.dependencies.platform(libs.arrow.stack))
             implementation(libs.arrow.core)
+
+            implementation(libs.kotlinx.serialization.json)
         }
 
         commonTest.dependencies {

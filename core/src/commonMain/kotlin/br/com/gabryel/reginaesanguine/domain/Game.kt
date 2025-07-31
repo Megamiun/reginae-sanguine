@@ -31,10 +31,7 @@ data class Game(
             Game(RIGHT, Board.default(), mapOf(LEFT to left.draw(drawn), RIGHT to right.draw(drawn)))
     }
 
-    fun play(
-        player: PlayerPosition,
-        action: Action<out String>,
-    ): Result<Game> = buildResult {
+    fun play(player: PlayerPosition, action: Action<out String>): Result<Game> = buildResult {
         ensure(nextPlayer == player) { NotPlayerTurn(this@Game) }
         ensure(getState() !is Ended) { GameEnded }
 
@@ -43,7 +40,7 @@ data class Game(
         when (action) {
             is Skip -> copy(
                 moveFrom = player,
-                players = players + mapOf(player.next to otherPlayerAfterDraw),
+                players = players + mapOf(player.opponent to otherPlayerAfterDraw),
                 previous = copy(action = action),
             )
             is Play -> {
@@ -52,7 +49,7 @@ data class Game(
                     .selectCard(action.card)
                     .orRaiseError()
 
-                val newPlayers = mapOf(player to playerAfterPlay, player.next to otherPlayerAfterDraw)
+                val newPlayers = mapOf(player to playerAfterPlay, player.opponent to otherPlayerAfterDraw)
 
                 val newBoard = board.play(player, Play(action.position, card)).orRaiseError()
                 copy(moveFrom = player, players = newPlayers, board = newBoard, previous = copy(action = action))

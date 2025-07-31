@@ -31,15 +31,15 @@ class GameTest {
     @Test
     fun `when playing a card on a valid position, should add player card to position`() {
         val nextTurn = defaultGame()
-            .play(LEFT, Play(1 to 0, SECURITY_OFFICER.id))
+            .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER.id))
 
-        nextTurn shouldBeSuccessfulAnd haveCell(1 to 0, cardCellWith(LEFT, SECURITY_OFFICER))
+        nextTurn shouldBeSuccessfulAnd haveCell(MIDDLE_LANE atColumn LEFT_COLUMN, cardCellWith(LEFT, SECURITY_OFFICER))
     }
 
     @Test
     fun `when playing a card, should change player`() {
         val nextTurn = defaultGame()
-            .play(LEFT, Play(1 to 0, SECURITY_OFFICER.id))
+            .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER.id))
 
         nextTurn
             .shouldBeSuccess()
@@ -49,14 +49,14 @@ class GameTest {
     @Test
     fun `when playing a card as the wrong player, should fail with NotPlayerTurn`() {
         val nextTurn = defaultGame()
-            .play(RIGHT, Play(1 to 0, SECURITY_OFFICER.id))
+            .play(RIGHT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER.id))
 
         nextTurn.shouldBeFailure<NotPlayerTurn>()
     }
 
     @Test
     fun `when playing a card, should register last action to previous turn`() {
-        val action = Play(1 to 0, SECURITY_OFFICER.id)
+        val action = Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER.id)
         val nextTurn = defaultGame()
             .play(LEFT, action)
 
@@ -103,7 +103,7 @@ class GameTest {
     @Test
     fun `when a player makes a move, the player should lose the given card`() {
         val nextTurn = buildResult {
-            defaultGame().play(LEFT, Play(MIDDLE_LANE to LEFT_COLUMN, SECURITY_OFFICER.id)).orRaiseError()
+            defaultGame().play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER.id)).orRaiseError()
         }
 
         nextTurn.shouldBeSuccess().havePlayerOn(LEFT) should haveCardsAtHand(RIOT_TROOPER)
