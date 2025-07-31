@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -45,14 +45,13 @@ fun main() = application {
         ),
     )
 
-    Window(title = "Reginae Sanguine", onCloseRequest = { exitProcess(0) }) {
-        ReginaeSanguineTheme {
-            Scaffold { paddingValues ->
-                Box(
-                    Modifier.fillMaxSize().padding(paddingValues),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    GameBoard(game, ResCardImageLoader())
+    context(ResCardImageLoader()) {
+        Window(title = "Reginae Sanguine", onCloseRequest = { exitProcess(0) }) {
+            ReginaeSanguineTheme {
+                Scaffold { paddingValues ->
+                    Box(Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Center) {
+                        GameBoard(game)
+                    }
                 }
             }
         }

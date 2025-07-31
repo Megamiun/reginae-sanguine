@@ -19,7 +19,7 @@ class ResCardImageLoader : CardImageLoader {
             RIGHT -> "red"
         }
 
-        val path = "drawable/${pack}_${color}_$id.png"
+        val path = "drawable/${pack}_${color}_$id.png".lowercase()
         return runCatching {
             val uri = Res.getUri(path)
             rememberAsyncImagePainter(

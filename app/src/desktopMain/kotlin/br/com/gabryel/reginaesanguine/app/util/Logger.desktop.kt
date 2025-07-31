@@ -1,17 +1,20 @@
 package br.com.gabryel.reginaesanguine.app.util
 
+import java.util.logging.Level.INFO
 import java.util.logging.Level.SEVERE
 import java.util.logging.Logger
 import kotlin.reflect.KClass
 
-actual class Logger actual constructor(val clazz: KClass<*>) {
-    private val logger = Logger.getLogger(clazz.simpleName)
+actual class Logger actual constructor(loggerName: String) {
+    actual constructor(clazz: KClass<*>) : this(clazz.simpleName.orEmpty())
 
-    actual fun error(text: String) {
-        logger.log(SEVERE, text)
+    private val logger = Logger.getLogger(loggerName)
+
+    actual fun error(text: Any?, exception: Throwable?) {
+        logger.log(SEVERE, "$text", exception)
     }
 
-    actual fun error(text: String, exception: Throwable) {
-        logger.log(SEVERE, text, exception)
+    actual fun info(text: Any?, exception: Throwable?) {
+        logger.log(INFO, "$text", exception)
     }
 }

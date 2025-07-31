@@ -3,6 +3,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
@@ -13,6 +14,10 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs = listOf("-Xcontext-parameters", "-Xexpect-actual-classes")
+    }
+
     androidTarget()
     jvm("desktop") {
         compilerOptions {
@@ -38,9 +43,8 @@ kotlin {
         }
 
         commonMain.dependencies {
-            runtimeOnly(compose.runtime)
-
             implementation(project(":core"))
+            runtimeOnly(compose.runtime)
 
             implementation(compose.components.resources)
             implementation(compose.foundation)
@@ -132,6 +136,12 @@ tasks {
                     val name = card.path.split("/").takeLast(3).joinToString("_")
                     card.copyTo(drawables.resolve(name.lowercase()), true)
                 }
+        }
+    }
+
+    withType<KotlinCompile> {
+        compilerOptions {
+            freeCompilerArgs.add("-Xcontext-parameters")
         }
     }
 }

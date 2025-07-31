@@ -52,7 +52,7 @@ fun GameApp(viewModel: GameViewModel) {
 
     val state by viewModel.state.collectAsState()
     val game = state.game
-    val player = game.players[game.nextPlayer] ?: fail("Couldn´t find player ${game.nextPlayer}")
+    val player = game.players[game.nextPlayerPosition] ?: fail("Couldn´t find player ${game.nextPlayerPosition}")
 
     val area = game.size
     var selectedChoice by mutableStateOf(0)

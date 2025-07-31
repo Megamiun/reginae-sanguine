@@ -58,7 +58,7 @@ sealed interface State {
     data class ChooseAction(override val game: Game, override val error: String? = null) : State {
         fun toChooseCard() = ChooseCard(game)
 
-        fun skip() = when (val game = game.play(game.nextPlayer, Skip)) {
+        fun skip() = when (val game = game.play(game.nextPlayerPosition, Skip)) {
             is Success<Game> -> ChooseAction(game.value)
             is Failure -> copy(error = game.toString())
         }
@@ -69,7 +69,7 @@ sealed interface State {
     }
 
     data class ChoosePosition(override val game: Game, val card: Card, override val error: String? = null) : State {
-        fun choosePosition(position: Position) = when (val game = game.play(game.nextPlayer, Play(position, card.id))) {
+        fun choosePosition(position: Position) = when (val game = game.play(game.nextPlayerPosition, Play(position, card.id))) {
             is Success<Game> -> ChooseAction(game.value)
             is Failure -> copy(error = game.toString())
         }

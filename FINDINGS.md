@@ -19,15 +19,19 @@
     - To identify how to create a LocalFontFamilyResolver
     - To understand that I needed a Window Composable as a root
     - Commit #d544fd97
-- Bug recognized: Scaffolding loses padding when window of the application is changed 
+- Bugs recognized: 
+  - Scaffolding loses padding when window of the application is changed
+  - Elements partially out of screen are not drawn at first
 - androidx.compose prefix is confusing, as both androidx.compose and jetbrains.compose exist 
   - Multiple androidx.compose packages work at all targets, but not *all*
 
 ## Multiplatform
-- Possible bug: Apparently when running the CLI version, cards are not lost when played. 
-  - Happened on linux_x64, doesn't happen on JVM tests
 - Potentially more slow to build than other targets, even more with multiple targets
 - Tests with space in the name fail on native targets
+- Multiple implementations can be very bothersome to implement per platform, as:
+  - Drag and drop
+  - Logging
+  - Resources loading
 
 # Interesting topics
 - Serialization with Kotlinx

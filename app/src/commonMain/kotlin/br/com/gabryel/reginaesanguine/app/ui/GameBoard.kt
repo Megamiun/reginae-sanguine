@@ -1,215 +1,105 @@
 package br.com.gabryel.reginaesanguine.app.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.draganddrop.dragAndDropSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.TopEnd
-import androidx.compose.ui.Alignment.Companion.TopStart
-import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draganddrop.DragAndDropEvent
+import androidx.compose.ui.draganddrop.DragAndDropTransferData
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.layout.ContentScale.Companion.Fit
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
-import br.com.gabryel.reginaesanguine.app.ui.theme.Emerald
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
-import br.com.gabryel.reginaesanguine.app.ui.theme.Ruby
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
-import br.com.gabryel.reginaesanguine.app.ui.theme.Yellow
-import br.com.gabryel.reginaesanguine.app.ui.theme.createTextStyle
+import br.com.gabryel.reginaesanguine.app.util.Logger
+import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Game
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Success
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-
-private val playerCellInternalModifier = Modifier
-    .fillMaxSize()
-    .border(1.dp, Black)
 
 @Composable
-fun GameBoard(game: Game, cardImageLoader: CardImageLoader) {
-    val lateralSize = IntSize(1, game.size.height)
-    val gridSize = IntSize(game.size.width, game.size.height)
+context(cardImageLoader: CardImageLoader)
+fun BoxScope.GameBoard(startGame: Game) {
+    val logger = remember { Logger("GameBoard") }
+    val gameState = remember { mutableStateOf(startGame) }
+    val lateralSize = IntSize(1, gameState.value.size.height)
+    val gridSize = IntSize(gameState.value.size.width, gameState.value.size.height)
 
-    Column(
-        modifier = Modifier.Companion
-            .background(WhiteDark)
-            .padding(4.dp),
-    ) {
+    Column(modifier = Modifier.background(WhiteDark).padding(4.dp)) {
         Row(modifier = Modifier.border(1.dp, Black)) {
             Grid(lateralSize, cellModifier = Modifier::playerCell) { position ->
-                PlayerLanePowerCell(game, position, LEFT)
+                PlayerLanePowerCell(gameState.value, position, LEFT)
             }
             Grid(
                 gridSize,
                 modifier = Modifier.border(0.1.dp, WhiteDark),
                 cellModifier = Modifier::boardCell,
             ) { position ->
-                GridPlayableCell(game, position, cardImageLoader)
+                GridPlayableCell(gameState.value, position) { cardId ->
+                    when (
+                        val newGameState = gameState.value.play(
+                            gameState.value.nextPlayerPosition,
+                            Play(position, cardId),
+                        )
+                    ) {
+                        is Success<Game> -> {
+                            gameState.value = newGameState.value
+                            true
+                        }
+                        else -> {
+                            logger.error("$newGameState")
+                            false
+                        }
+                    }
+                }
             }
             Grid(lateralSize, cellModifier = Modifier::playerCell) { position ->
-                PlayerLanePowerCell(game, position, RIGHT)
+                PlayerLanePowerCell(gameState.value, position, RIGHT)
             }
         }
     }
-}
 
-@Composable
-private fun BoxScope.GridPlayableCell(
-    game: Game,
-    position: Position,
-    cardImageLoader: CardImageLoader
-) {
-    val cellContent = game.getCellAt(position)
-
-    if (cellContent !is Success || cellContent.value.owner == null)
-        return
-
-    val cell = cellContent.value
-
-    val card = cell.card
-    val owner = cell.owner
-
-    if (owner == null) return
-
-    val color = when (cell.owner) {
-        LEFT -> Emerald
-        else -> Ruby
-    }
-
-    if (card == null) {
-        RankGroup(cell.rank, 10f, color)
-        return
-    }
-
-    val image = cardImageLoader.loadCardImage("queens_blood", owner, card.id)
-
-    if (image != null) {
-        Box(modifier = Modifier.matchParentSize(), contentAlignment = Center) {
-            Image(image, contentDescription = "TODO", contentScale = Fit)
-        }
-    } else {
-        ArtlessCard(color, card)
-    }
-}
-
-@Composable
-private fun BoxScope.ArtlessCard(color: Color, card: Card) {
-    Box(
-        modifier = Modifier.matchParentSize().padding(2.dp).background(color),
-        contentAlignment = Center,
-    ) {
-        Box(Modifier.size(27.dp).align(TopStart), contentAlignment = Center) {
-            RankGroup(card.rank, 8f, color, multiplier = 3.5f)
-        }
-        Box(Modifier.size(27.dp).align(TopEnd), contentAlignment = Center) {
-            PowerIndicator(card.power, Black, multiplier = 0.6f)
-        }
-        ResizableText(card.name, modifier = Modifier.rotate(90f).align(Center))
-    }
-}
-
-@Composable
-private fun ResizableText(text: String, modifier: Modifier = Modifier) {
-    var multiplier by remember { mutableStateOf(1f) }
-    Text(
-        text,
-        modifier = modifier,
-        style = createTextStyle(multiplier),
-        maxLines = 1,
-        onTextLayout = { layout -> if (layout.multiParagraph.didExceedMaxLines) multiplier *= .98F },
-    )
-}
-
-@Composable
-private fun BoxScope.RankGroup(rank: Int, size: Float, color: Color, multiplier: Float = 1f) {
-    val rankModifier = Modifier
-        .size(size.dp)
-        .clip(CircleShape)
-        .background(color)
-        .border(1.dp, WhiteLight, CircleShape)
-
-    when (rank) {
-        1 -> Rank(rankModifier)
-        2 -> {
-            Rank(rankModifier, BiasAlignment(-0.2f * multiplier, 0f * multiplier))
-            Rank(rankModifier, BiasAlignment(0.2f * multiplier, 0f * multiplier))
-        }
-        3 -> {
-            Rank(rankModifier, BiasAlignment(-0.2f * multiplier, 0.15f * multiplier))
-            Rank(rankModifier, BiasAlignment(0.2f * multiplier, 0.15f * multiplier))
-            Rank(rankModifier, BiasAlignment(0f * multiplier, -0.15f * multiplier))
+    Row(modifier = Modifier.align(BottomCenter).fillMaxWidth().height(60.dp), horizontalArrangement = Arrangement.Center) {
+        gameState.value.nextPlayer.hand.forEachIndexed { index, card ->
+            Card(
+                gameState.value.nextPlayerPosition,
+                card,
+                Modifier.wrapContentSize(unbounded = true)
+                    .height(90.dp)
+                    .aspectRatio(0.73f)
+                    .dragAndDropSource { offset -> getTransferData(offset, card) },
+            )
         }
     }
 }
 
-@Composable
-private fun BoxScope.Rank(modifier: Modifier, alignment: Alignment = Center) {
-    Box(modifier = modifier.align(alignment = alignment))
-}
+expect fun drop(event: DragAndDropEvent, drop: (String) -> Boolean): Boolean
 
-@Composable
-private fun PlayerLanePowerCell(game: Game, position: Position, player: PlayerPosition) {
-    val playerPower = game.getLaneScore(position.lane)[player] ?: 0
-
-    val color = when (player) {
-        LEFT -> Emerald
-        RIGHT -> Ruby
-    }
-
-    Box(modifier = playerCellInternalModifier, contentAlignment = Center) {
-        PowerIndicator(playerPower, color)
-    }
-}
-
-@Composable
-private fun PowerIndicator(power: Int, color: Color, multiplier: Float = 1f) {
-    val circleModifier = Modifier.size(35.dp * multiplier).clip(CircleShape).background(Yellow)
-    val smallCircleModifier = Modifier.size(23.dp * multiplier).clip(CircleShape).background(color)
-
-    Box(modifier = circleModifier, contentAlignment = Center) {
-        listOf(30f, 150f, 270f).forEach {
-            Box(modifier = smallCircleModifier.align(findAlignmentBias(it, 0.85f)))
-        }
-
-        Text(power.toString(), style = createTextStyle(multiplier))
-    }
-}
-
-private fun findAlignmentBias(angle: Float, distance: Float): Alignment {
-    val angleRadians = (angle * PI / 180).toFloat()
-    return BiasAlignment(cos(angleRadians) * distance, sin(angleRadians) * distance)
-}
+expect fun getTransferData(offset: Offset, card: Card): DragAndDropTransferData
 
 private fun Modifier.boardCell(position: Position): Modifier =
     if ((position.lane + position.column) % 2 == 0) {

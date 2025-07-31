@@ -57,12 +57,14 @@ class GameActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            ReginaeSanguineTheme {
-                Box(
-                    modifier = Modifier.fillMaxSize().background(PurpleLight),
-                    contentAlignment = Center,
-                ) {
-                    GameBoard(game, ResCardImageLoader())
+            context(ResCardImageLoader()) {
+                ReginaeSanguineTheme {
+                    Box(
+                        modifier = Modifier.fillMaxSize().background(PurpleLight),
+                        contentAlignment = Center,
+                    ) {
+                        GameBoard(game)
+                    }
                 }
             }
         }

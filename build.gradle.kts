@@ -32,6 +32,7 @@ allprojects {
     }
 
     configure<KtlintExtension> {
+        version = "1.7.1"
         verbose = true
     }
 }

@@ -21,10 +21,10 @@ data class Game(
 ) : CellContainer by board {
     val round: Int = 1 + (previous?.round ?: 0)
 
-    val nextPlayer = when (moveFrom) {
-        LEFT -> RIGHT
-        RIGHT -> LEFT
-    }
+    val nextPlayerPosition = moveFrom.opponent
+
+    val nextPlayer = players[nextPlayerPosition]
+        ?: throw IllegalStateException("No player on $nextPlayerPosition on game")
 
     companion object {
         fun forPlayers(left: Player, right: Player, drawn: Int = 5) =
@@ -32,7 +32,7 @@ data class Game(
     }
 
     fun play(player: PlayerPosition, action: Action<out String>): Result<Game> = buildResult {
-        ensure(nextPlayer == player) { NotPlayerTurn(this@Game) }
+        ensure(nextPlayerPosition == player) { NotPlayerTurn(this@Game) }
         ensure(getState() !is Ended) { GameEnded }
 
         val otherPlayerAfterDraw = players.getValue(player).draw()

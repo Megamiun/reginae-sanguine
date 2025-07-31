@@ -43,7 +43,7 @@ class GameTest {
 
         nextTurn
             .shouldBeSuccess()
-            .nextPlayer.shouldBeEqual(RIGHT)
+            .nextPlayerPosition.shouldBeEqual(RIGHT)
     }
 
     @Test
