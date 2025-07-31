@@ -9,8 +9,8 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import coil3.compose.rememberAsyncImagePainter
 
-class ResResourceLoader : ResourceLoader {
-    private val logger = Logger(this.javaClass)
+class ResCardImageLoader : CardImageLoader {
+    private val logger = Logger(this::class)
 
     @Composable
     override fun loadCardImage(pack: String, player: PlayerPosition, id: String): Painter? {

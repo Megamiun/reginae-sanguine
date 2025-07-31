@@ -34,3 +34,6 @@
   - Extension ready serialization
 - Jetpack Compose for multiple devices
   - Differences and difficulties
+  - Kotlin/Native has no auto bundled resources and a classLoader
+  - Features disappear when you add more targets
+    - i.e., I only lost access to Java libs in the :app common sourceSet when I added iOS as a target

@@ -21,6 +21,15 @@ kotlin {
         }
     }
 
+    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+        iosTarget.binaries {
+            framework {
+                baseName = "shared"
+                isStatic = true
+            }
+        }
+    }
+
     sourceSets {
         all {
             dependencies {
@@ -90,6 +99,14 @@ android {
 
     buildFeatures {
         compose = true
+    }
+
+    sourceSets {
+        getByName("main") {
+            assets {
+                srcDirs("src/androidMain/assets", "src/commonMain/resources")
+            }
+        }
     }
 
     dependencies {

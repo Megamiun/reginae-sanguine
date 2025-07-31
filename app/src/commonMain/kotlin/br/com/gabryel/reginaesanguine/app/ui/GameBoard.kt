@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale.Companion.Fit
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
+import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
 import br.com.gabryel.reginaesanguine.app.ui.theme.Emerald
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
@@ -57,7 +57,7 @@ private val playerCellInternalModifier = Modifier
     .border(1.dp, Black)
 
 @Composable
-fun GameBoard(game: Game, resourceLoader: ResourceLoader) {
+fun GameBoard(game: Game, cardImageLoader: CardImageLoader) {
     val lateralSize = IntSize(1, game.size.height)
     val gridSize = IntSize(game.size.width, game.size.height)
 
@@ -75,7 +75,7 @@ fun GameBoard(game: Game, resourceLoader: ResourceLoader) {
                 modifier = Modifier.border(0.1.dp, WhiteDark),
                 cellModifier = Modifier::boardCell,
             ) { position ->
-                GridPlayableCell(game, position, resourceLoader)
+                GridPlayableCell(game, position, cardImageLoader)
             }
             Grid(lateralSize, cellModifier = Modifier::playerCell) { position ->
                 PlayerLanePowerCell(game, position, RIGHT)
@@ -88,7 +88,7 @@ fun GameBoard(game: Game, resourceLoader: ResourceLoader) {
 private fun BoxScope.GridPlayableCell(
     game: Game,
     position: Position,
-    resourceLoader: ResourceLoader
+    cardImageLoader: CardImageLoader
 ) {
     val cellContent = game.getCellAt(position)
 
@@ -112,7 +112,7 @@ private fun BoxScope.GridPlayableCell(
         return
     }
 
-    val image = resourceLoader.loadCardImage("queens_blood", owner, card.id)
+    val image = cardImageLoader.loadCardImage("queens_blood", owner, card.id)
 
     if (image != null) {
         Box(modifier = Modifier.matchParentSize(), contentAlignment = Center) {

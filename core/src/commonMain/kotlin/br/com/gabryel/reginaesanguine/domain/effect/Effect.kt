@@ -18,6 +18,7 @@ class RaisePower(
 ) : Effect
 
 @Serializable
+@SerialName("RaiseRank")
 class RaiseRank(
     val amount: Int = 1,
     override val trigger: Trigger,
@@ -25,6 +26,7 @@ class RaiseRank(
 ) : Effect
 
 @Serializable
+@SerialName("AddCardsToHand")
 class AddCardsToHand(
     val cardIds: List<String>,
     override val trigger: Trigger,
@@ -32,6 +34,7 @@ class AddCardsToHand(
 ) : Effect
 
 @Serializable
+@SerialName("SpawnCards")
 class SpawnCards(
     val cardIds: List<String>,
     override val trigger: Trigger,
@@ -39,6 +42,7 @@ class SpawnCards(
 ) : Effect
 
 @Serializable
+@SerialName("ScoreBonus")
 class ScoreBonus(
     val amount: Int,
     override val trigger: Trigger,
@@ -46,12 +50,14 @@ class ScoreBonus(
 ) : Effect
 
 @Serializable
+@SerialName("LoserScoreBonus")
 class LoserScoreBonus(
     override val trigger: Trigger,
     override val description: String = "Add points from loser to score on $trigger",
 ) : Effect
 
 @Serializable
+@SerialName("DestroyCards")
 class DestroyCards(
     val target: TargetType,
     override val trigger: Trigger,
@@ -59,6 +65,7 @@ class DestroyCards(
 ) : Effect
 
 @Serializable
+@SerialName("ReplaceAlly")
 class ReplaceAlly(
     val powerMultiplier: Int = 0,
     val target: TargetType,
@@ -67,6 +74,7 @@ class ReplaceAlly(
 ) : Effect
 
 @Serializable
+@SerialName("StatusBonus")
 class StatusBonus(
     val enhancedAmount: Int,
     val enfeebledAmount: Int,
@@ -76,6 +84,7 @@ class StatusBonus(
 }
 
 @Serializable
+@SerialName("FlavourText")
 class FlavourText(override val description: String) : Effect {
     override val trigger = None
 }

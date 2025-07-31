@@ -778,7 +778,7 @@
       "gridParsed": false,
       "effect": {
         "type": "ScoreBonus",
-        "points": 10,
+        "amount": 10,
         "trigger": {
           "type": "WhenLaneWon"
         },
@@ -1439,7 +1439,7 @@
       "gridParsed": false,
       "effect": {
         "type": "ScoreBonus",
-        "points": 5,
+        "amount": 5,
         "trigger": {
           "type": "WhenLaneWon"
         },
@@ -1945,7 +1945,7 @@
       "gridParsed": false,
       "effect": {
         "type": "ScoreBonus",
-        "points": 3,
+        "amount": 3,
         "trigger": {
           "type": "WhenLaneWon"
         },
@@ -2503,7 +2503,7 @@
       "gridParsed": false,
       "effect": {
         "type": "ScoreBonus",
-        "points": 10,
+        "amount": 10,
         "trigger": {
           "type": "WhenLaneWon"
         },
@@ -2615,7 +2615,7 @@
       "gridParsed": false,
       "effect": {
         "type": "ScoreBonus",
-        "points": -1,
+        "amount": -1,
         "trigger": {
           "type": "WhenLaneWon"
         },

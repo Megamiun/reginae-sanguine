@@ -8,10 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import br.com.gabryel.reginaesanguine.app.services.ResResourceLoader
+import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
+import br.com.gabryel.reginaesanguine.app.services.ResourcesResourceLoader
 import br.com.gabryel.reginaesanguine.app.ui.GameBoard
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
-import br.com.gabryel.reginaesanguine.app.util.createRandomDeckOfSize
+import br.com.gabryel.reginaesanguine.app.util.createTestDeck
 import br.com.gabryel.reginaesanguine.domain.Board
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Cell
@@ -23,7 +24,7 @@ import br.com.gabryel.reginaesanguine.domain.atColumn
 import kotlin.system.exitProcess
 
 fun main() = application {
-    val deck = createRandomDeckOfSize(20)
+    val deck = createTestDeck(ResourcesResourceLoader())
 
     val knownCard = Card("001", "Security Officer", setOf(), 1, 1)
     val unknownCard = Card("Custom", "Custom", setOf(), 3, 3)
@@ -51,7 +52,7 @@ fun main() = application {
                     Modifier.fillMaxSize().padding(paddingValues),
                     contentAlignment = Alignment.Center,
                 ) {
-                    GameBoard(game, ResResourceLoader())
+                    GameBoard(game, ResCardImageLoader())
                 }
             }
         }
