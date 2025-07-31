@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.ui.theme
+package br.com.gabryel.reginaesanguine.app.ui.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors

@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.util
+package br.com.gabryel.reginaesanguine.app.util
 
 import java.util.logging.Level.SEVERE
 import java.util.logging.Logger

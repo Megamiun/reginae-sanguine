@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.ui
+package br.com.gabryel.reginaesanguine.app.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +32,15 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale.Companion.Fit
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
+import br.com.gabryel.reginaesanguine.app.ui.components.Grid
+import br.com.gabryel.reginaesanguine.app.ui.theme.Emerald
+import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
+import br.com.gabryel.reginaesanguine.app.ui.theme.Ruby
+import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
+import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
+import br.com.gabryel.reginaesanguine.app.ui.theme.Yellow
+import br.com.gabryel.reginaesanguine.app.ui.theme.createTextStyle
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
@@ -41,15 +50,6 @@ import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Success
 import br.com.gabryel.reginaesanguine.domain.column
 import br.com.gabryel.reginaesanguine.domain.lane
-import br.com.gabryel.reginaesanguine.services.ResourceLoader
-import br.com.gabryel.reginaesanguine.ui.components.Grid
-import br.com.gabryel.reginaesanguine.ui.theme.Emerald
-import br.com.gabryel.reginaesanguine.ui.theme.PurpleDark
-import br.com.gabryel.reginaesanguine.ui.theme.Ruby
-import br.com.gabryel.reginaesanguine.ui.theme.WhiteDark
-import br.com.gabryel.reginaesanguine.ui.theme.WhiteLight
-import br.com.gabryel.reginaesanguine.ui.theme.Yellow
-import br.com.gabryel.reginaesanguine.ui.theme.createTextStyle
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -64,7 +64,7 @@ fun GameBoard(game: Game, resourceLoader: ResourceLoader) {
     val gridSize = IntSize(game.width, game.height)
 
     Column(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .background(WhiteDark)
             .padding(4.dp),
     ) {

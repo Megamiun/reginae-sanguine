@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine
+package br.com.gabryel.reginaesanguine.app
 
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 import android.os.Bundle
@@ -12,6 +12,11 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat.getInsetsController
 import androidx.core.view.WindowInsetsCompat.Type.systemBars
+import br.com.gabryel.reginaesanguine.app.services.ResResourceLoader
+import br.com.gabryel.reginaesanguine.app.ui.GameBoard
+import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
+import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
+import br.com.gabryel.reginaesanguine.app.util.createRandomDeckOfSize
 import br.com.gabryel.reginaesanguine.domain.Board
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Cell
@@ -19,11 +24,6 @@ import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Player
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.services.ResResourceLoader
-import br.com.gabryel.reginaesanguine.ui.GameBoard
-import br.com.gabryel.reginaesanguine.ui.theme.PurpleLight
-import br.com.gabryel.reginaesanguine.ui.theme.ReginaeSanguineTheme
-import br.com.gabryel.reginaesanguine.util.createRandomDeckOfSize
 
 class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

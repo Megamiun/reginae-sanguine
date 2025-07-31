@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.util
+package br.com.gabryel.reginaesanguine.app.util
 
 import android.util.Log
 

@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.util
+package br.com.gabryel.reginaesanguine.app.util
 
 import br.com.gabryel.reginaesanguine.domain.Card
 import kotlin.math.floor

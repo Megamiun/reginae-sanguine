@@ -1,12 +1,12 @@
-package br.com.gabryel.reginaesanguine.services
+package br.com.gabryel.reginaesanguine.app.services
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import br.com.gabryel.app.generated.resources.Res
+import br.com.gabryel.reginaesanguine.app.util.Logger
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.util.Logger
 import coil3.compose.rememberAsyncImagePainter
 
 class ResResourceLoader : ResourceLoader {

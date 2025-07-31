@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.ui.theme
+package br.com.gabryel.reginaesanguine.app.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
