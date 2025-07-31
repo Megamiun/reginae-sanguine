@@ -8,8 +8,8 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.compose")
 
-    id("com.android.application")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.compose)
 }
 
 kotlin {
@@ -24,7 +24,7 @@ kotlin {
     sourceSets {
         all {
             dependencies {
-                implementation(project.dependencies.platform("androidx.compose:compose-bom:2025.07.00"))
+                implementation(project.dependencies.platform(libs.compose.bom))
             }
         }
 
@@ -38,16 +38,16 @@ kotlin {
             implementation(compose.material)
             implementation(compose.ui)
 
-            implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+            implementation(libs.coil.compose)
         }
 
         androidMain.dependencies {
-            implementation("androidx.appcompat:appcompat:1.7.1")
-            implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
-            implementation("androidx.activity:activity-compose:1.10.1")
+            implementation(libs.appcompat)
+            implementation(libs.lifecycle.runtime.ktx)
+            implementation(libs.activity.compose)
 
-            implementation("androidx.compose.ui:ui-graphics")
-            implementation("androidx.compose.ui:ui-tooling-preview")
+            implementation(libs.compose.ui.graphics)
+            implementation(libs.compose.ui.tooling.preview)
         }
 
         get("desktopMain").dependencies {
@@ -93,10 +93,10 @@ android {
     }
 
     dependencies {
-        androidTestImplementation("androidx.compose.ui:ui-test")
+        androidTestImplementation(libs.compose.ui.test)
 
-        debugImplementation("androidx.compose.ui:ui-tooling")
-        debugImplementation("androidx.compose.ui:ui-test-manifest")
+        debugImplementation(libs.compose.ui.tooling)
+        debugImplementation(libs.compose.ui.test.manifest)
     }
 }
 

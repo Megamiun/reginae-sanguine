@@ -3,23 +3,20 @@ import org.gradle.api.logging.LogLevel.LIFECYCLE
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
-    val kotlinVersion = "2.2.0"
-    val androidVersion = "8.11.1"
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.compose) apply false
 
-    kotlin("jvm") version kotlinVersion apply false
-    kotlin("android") version kotlinVersion apply false
-    kotlin("multiplatform") version kotlinVersion apply false
-    kotlin("plugin.compose") version kotlinVersion apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
 
-    id("com.android.application") version androidVersion apply false
-    id("com.android.library") version androidVersion apply false
+    alias(libs.plugins.jetbrains.compose) apply false
 
-    id("org.jetbrains.compose") version "1.8.2" apply false
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.download)
 
-    id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
-    id("de.undercouch.download") version "5.6.0"
-
-    id("com.dorongold.task-tree") version "4.0.1"
+    alias(libs.plugins.task.tree)
 }
 
 allprojects {

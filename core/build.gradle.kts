@@ -2,22 +2,19 @@ plugins {
     kotlin("multiplatform")
 }
 
-val kotestVersion = "6.0.0.M8"
-val arrowVersion = "2.1.2"
-
 kotlin {
     jvm()
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project.dependencies.platform("io.arrow-kt:arrow-stack:$arrowVersion"))
-            implementation("io.arrow-kt:arrow-core")
+            implementation(project.dependencies.platform(libs.arrow.stack))
+            implementation(libs.arrow.core)
         }
 
         commonTest.dependencies {
             implementation(kotlin("test"))
-            implementation("io.kotest:kotest-property:$kotestVersion")
-            implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+            implementation(libs.kotest.property)
+            implementation(libs.kotest.assertions.core)
         }
     }
 
