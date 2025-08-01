@@ -1,8 +1,5 @@
-package br.com.gabryel.reginaesanguine.cli
+package viewmodel
 
-import br.com.gabryel.reginaesanguine.cli.State.ChooseAction
-import br.com.gabryel.reginaesanguine.cli.State.ChooseCard
-import br.com.gabryel.reginaesanguine.cli.State.ChoosePosition
 import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Action.Skip
 import br.com.gabryel.reginaesanguine.domain.Card
@@ -12,6 +9,9 @@ import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Success
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import viewmodel.State.ChooseAction
+import viewmodel.State.ChooseCard
+import viewmodel.State.ChoosePosition
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
