@@ -11,6 +11,9 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.theme.Yellow
@@ -23,8 +26,10 @@ import kotlin.math.sin
 @Composable
 context(player: PlayerContext)
 fun PowerIndicator(power: Int, accented: Boolean, multiplier: Float = 1f) {
+    val size = 35.dp * multiplier
     val circleModifier = Modifier
-        .size(35.dp * multiplier)
+        .size(size)
+        .let { if (accented) it.outerGlow(YellowAccent, size) else it }
         .clip(CircleShape)
         .background(if (accented) YellowAccent else Yellow)
 
@@ -45,4 +50,13 @@ fun PowerIndicator(power: Int, accented: Boolean, multiplier: Float = 1f) {
 private fun findAlignmentBias(angle: Float, distance: Float): Alignment {
     val angleRadians = (angle * PI / 180).toFloat()
     return BiasAlignment(cos(angleRadians) * distance, sin(angleRadians) * distance)
+}
+
+private fun Modifier.outerGlow(glowColor: Color, diameter: Dp) = drawBehind {
+    val radiusPx = diameter.toPx() / 2
+    drawCircle(color = glowColor.copy(alpha = 0.1f), radius = radiusPx * 1.25f)
+    drawCircle(color = glowColor.copy(alpha = 0.2f), radius = radiusPx * 1.20f)
+    drawCircle(color = glowColor.copy(alpha = 0.3f), radius = radiusPx * 1.15f)
+    drawCircle(color = glowColor.copy(alpha = 0.5f), radius = radiusPx * 1.10f)
+    drawCircle(color = glowColor.copy(alpha = 0.7f), radius = radiusPx * 0.9f)
 }

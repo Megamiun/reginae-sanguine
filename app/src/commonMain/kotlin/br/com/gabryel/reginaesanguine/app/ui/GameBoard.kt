@@ -35,9 +35,8 @@ import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 
 @Composable
@@ -88,6 +87,9 @@ fun BoxScope.GameBoard(gameViewModel: GameViewModel) {
     Button(gameViewModel::skip, Modifier.align(BottomStart).size(70.dp, 30.dp).offset(15.dp, (-15).dp)) {
         Text("SKIP")
     }
+
+    if (game.getState() is State.Ended)
+        ResultOverlay(gameViewModel)
 }
 
 expect fun drop(event: DragAndDropEvent, drop: (String) -> Boolean): Boolean

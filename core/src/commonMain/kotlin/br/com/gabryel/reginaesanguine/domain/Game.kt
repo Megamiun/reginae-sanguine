@@ -63,4 +63,17 @@ data class Game(
             Tie
         else
             Ongoing
+
+    fun getLaneWinner(lane: Int): PlayerPosition? = getLaneScore(lane).getWinner()
+
+    fun getWinner(): PlayerPosition? = getScores().getWinner()
+
+    private fun Map<PlayerPosition, Int>.getWinner(): PlayerPosition? {
+        val max = maxBy { it.value }
+
+        if (values.all { it == max.value })
+            return null
+
+        return max.key
+    }
 }

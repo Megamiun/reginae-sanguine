@@ -58,20 +58,9 @@ fun BoxScope.GridPlayableCell(game: Game, position: Position, putCard: (String) 
 @Composable
 context(player: PlayerContext)
 fun PlayerLanePowerCell(game: Game, position: Position) {
-    val laneScore = game.getLaneScore(position.lane)
-    val playerPower = laneScore[player.position] ?: 0
+    val playerPower = game.getLaneScore(position.lane)[player.position] ?: 0
 
     Box(modifier = playerCellInternalModifier, contentAlignment = Center) {
-        PowerIndicator(playerPower, laneScore.isWinner())
+        PowerIndicator(playerPower, game.getLaneWinner(position.lane) == player.position)
     }
-}
-
-context(player: PlayerContext)
-private fun Map<PlayerPosition, Int>.isWinner(): Boolean {
-    val max = maxBy { it.value }
-
-    if (values.all { it == max.value })
-        return false
-
-    return max.key == player.position
 }
