@@ -5,8 +5,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import br.com.gabryel.reginaesanguine.cli.State.ChooseAction
-import br.com.gabryel.reginaesanguine.cli.State.ChoosePosition
 import br.com.gabryel.reginaesanguine.cli.components.Grid
 import br.com.gabryel.reginaesanguine.cli.components.GridConfiguration.Companion.gridWithSize
 import br.com.gabryel.reginaesanguine.cli.components.OptionChooser
@@ -26,6 +24,10 @@ import br.com.gabryel.reginaesanguine.domain.State.Ended.Won
 import br.com.gabryel.reginaesanguine.domain.State.Ongoing
 import br.com.gabryel.reginaesanguine.domain.Success
 import br.com.gabryel.reginaesanguine.domain.atColumn
+import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.State
+import br.com.gabryel.reginaesanguine.viewmodel.State.ChooseAction
+import br.com.gabryel.reginaesanguine.viewmodel.State.ChoosePosition
 import com.jakewharton.mosaic.LocalTerminalState
 import com.jakewharton.mosaic.layout.KeyEvent
 import com.jakewharton.mosaic.layout.height
@@ -159,7 +161,7 @@ fun GameApp(viewModel: GameViewModel) {
                         onIndexChange = { selectedChoice = it },
                         describe = Card::describe,
                     ) {
-                        viewModel.chooseCard(it)
+                        viewModel.chooseCard(it.id)
                         selectedChoice = 0
                     }
                 }

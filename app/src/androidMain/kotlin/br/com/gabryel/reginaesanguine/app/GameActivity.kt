@@ -26,6 +26,7 @@ import br.com.gabryel.reginaesanguine.domain.Player
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.atColumn
+import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 
 class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,11 +60,8 @@ class GameActivity : ComponentActivity() {
         setContent {
             context(ResCardImageLoader()) {
                 ReginaeSanguineTheme {
-                    Box(
-                        modifier = Modifier.fillMaxSize().background(PurpleLight),
-                        contentAlignment = Center,
-                    ) {
-                        GameBoard(game)
+                    Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Center) {
+                        GameBoard(GameViewModel.forGame(game))
                     }
                 }
             }

@@ -12,10 +12,10 @@ import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale.Companion.Fit
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
+import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.ResizableText
 import br.com.gabryel.reginaesanguine.app.ui.theme.Emerald
 import br.com.gabryel.reginaesanguine.app.ui.theme.Ruby
@@ -24,32 +24,28 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 
 @Composable
-context(cardImageLoader: CardImageLoader)
+context(cardImageLoader: CardImageLoader, player: PlayerContext)
 fun Card(playerPosition: PlayerPosition, card: Card, modifier: Modifier = Modifier) {
-    val color = when (playerPosition) {
-        LEFT -> Emerald
-        else -> Ruby
-    }
-
     val image = cardImageLoader.loadCardImage("queens_blood", playerPosition, card.id)
 
     if (image != null) {
-        Box(modifier = modifier, contentAlignment = Center) {
+        Box(modifier, contentAlignment = Center) {
             Image(image, contentDescription = "TODO", contentScale = Fit)
         }
     } else {
-        ArtlessCard(color, card, modifier)
+        ArtlessCard(card, false, modifier)
     }
 }
 
 @Composable
-private fun ArtlessCard(color: Color, card: Card, modifier: Modifier = Modifier) {
-    Box(modifier = modifier.padding(2.dp).background(color), contentAlignment = Center) {
+context(player: PlayerContext)
+private fun ArtlessCard(card: Card, accented: Boolean, modifier: Modifier = Modifier) {
+    Box(modifier.padding(2.dp).background(player.color), contentAlignment = Center) {
         Box(Modifier.size(27.dp).align(TopStart), contentAlignment = Center) {
-            RankGroup(card.rank, 8f, color, multiplier = 3.5f)
+            RankGroup(card.rank, 8f, multiplier = 3.5f)
         }
         Box(Modifier.size(27.dp).align(TopEnd), contentAlignment = Center) {
-            PowerIndicator(card.power, Black, multiplier = 0.6f)
+            PowerIndicator(card.power, accented, multiplier = 0.6f)
         }
         ResizableText(card.name, modifier = Modifier.rotate(90f).align(Center))
     }

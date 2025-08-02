@@ -11,20 +11,29 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.theme.Yellow
+import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.theme.createTextStyle
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun PowerIndicator(power: Int, color: Color, multiplier: Float = 1f) {
-    val circleModifier = Modifier.size(35.dp * multiplier).clip(CircleShape).background(Yellow)
-    val smallCircleModifier = Modifier.size(23.dp * multiplier).clip(CircleShape).background(color)
+context(player: PlayerContext)
+fun PowerIndicator(power: Int, accented: Boolean, multiplier: Float = 1f) {
+    val circleModifier = Modifier
+        .size(35.dp * multiplier)
+        .clip(CircleShape)
+        .background(if (accented) YellowAccent else Yellow)
 
-    Box(modifier = circleModifier, contentAlignment = Center) {
+    val smallCircleModifier = Modifier
+        .size(23.dp * multiplier)
+        .clip(CircleShape)
+        .background(if (accented) player.colorAccent else player.color)
+
+    Box(circleModifier, contentAlignment = Center) {
         listOf(30f, 150f, 270f).forEach {
             Box(modifier = smallCircleModifier.align(findAlignmentBias(it, 0.85f)))
         }

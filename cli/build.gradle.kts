@@ -14,6 +14,7 @@ kotlin {
             implementation(libs.mosaic.runtime)
             implementation(libs.arrow.core)
             implementation(project(":core"))
+            implementation(project(":viewmodel"))
         }
 
         all {

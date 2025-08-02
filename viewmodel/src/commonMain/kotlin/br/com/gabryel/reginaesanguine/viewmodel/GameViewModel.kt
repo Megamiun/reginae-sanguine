@@ -1,17 +1,12 @@
-package viewmodel
+package br.com.gabryel.reginaesanguine.viewmodel
 
-import br.com.gabryel.reginaesanguine.domain.Action.Play
-import br.com.gabryel.reginaesanguine.domain.Action.Skip
-import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.Failure
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.Success
+import br.com.gabryel.reginaesanguine.viewmodel.State.ChooseAction
+import br.com.gabryel.reginaesanguine.viewmodel.State.ChooseCard
+import br.com.gabryel.reginaesanguine.viewmodel.State.ChoosePosition
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import viewmodel.State.ChooseAction
-import viewmodel.State.ChooseCard
-import viewmodel.State.ChoosePosition
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -22,57 +17,28 @@ class GameViewModel(private var stateFlow: MutableStateFlow<State>) {
         fun forGame(game: Game) = GameViewModel(MutableStateFlow(ChooseAction(game)))
     }
 
-    fun toChooseCard() {
-        val currentState = state.value
-        require<ChooseAction>(currentState)
+    fun skip() = update(ChooseAction::skip)
 
-        stateFlow.value = currentState.toChooseCard()
+    fun toChooseCard() = update(ChooseAction::toChooseCard)
+
+    fun chooseCard(cardId: String) = update<ChooseCard> { state ->
+        state.chooseCard(cardId)
     }
 
-    fun chooseCard(card: Card) {
-        val currentState = state.value
-        require<ChooseCard>(currentState)
-
-        stateFlow.value = currentState.chooseCard(card)
+    fun choosePosition(position: Position) = update<ChoosePosition> { state ->
+        state.play(position)
     }
 
-    fun choosePosition(position: Position) {
-        val currentState = state.value
-        require<ChoosePosition>(currentState)
-
-        stateFlow.value = currentState.choosePosition(position)
+    fun play(position: Position, cardId: String) = update<Playable> { state ->
+        state.play(position, cardId)
     }
 
-    fun skip() {
-        val currentState = state.value
-        require<ChooseAction>(currentState)
+    private inline fun <reified T> update(execute: (T) -> State): Boolean {
+        val previousState = state.value
+        require<T>(previousState)
 
-        stateFlow.value = currentState.skip()
-    }
-}
-
-sealed interface State {
-    val game: Game
-    val error: String?
-
-    data class ChooseAction(override val game: Game, override val error: String? = null) : State {
-        fun toChooseCard() = ChooseCard(game)
-
-        fun skip() = when (val game = game.play(game.nextPlayerPosition, Skip)) {
-            is Success<Game> -> ChooseAction(game.value)
-            is Failure -> copy(error = game.toString())
-        }
-    }
-
-    data class ChooseCard(override val game: Game, override val error: String? = null) : State {
-        fun chooseCard(card: Card) = ChoosePosition(game, card)
-    }
-
-    data class ChoosePosition(override val game: Game, val card: Card, override val error: String? = null) : State {
-        fun choosePosition(position: Position) = when (val game = game.play(game.nextPlayerPosition, Play(position, card.id))) {
-            is Success<Game> -> ChooseAction(game.value)
-            is Failure -> copy(error = game.toString())
-        }
+        stateFlow.value = execute(previousState)
+        return stateFlow.value.error == null
     }
 }
 

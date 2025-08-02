@@ -44,6 +44,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(project(":core"))
+            implementation(project(":viewmodel"))
             runtimeOnly(compose.runtime)
 
             implementation(compose.components.resources)

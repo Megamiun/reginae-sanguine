@@ -14,23 +14,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 
 @Composable
+context(player: PlayerContext)
 fun RankGroup(
     rank: Int,
     size: Float,
-    bgColor: Color,
     modifier: Modifier = Modifier,
     multiplier: Float = 1f
 ) {
     val rankModifier = Modifier
         .size(size.dp)
         .clip(CircleShape)
-        .background(bgColor)
+        .background(player.color)
         .border(1.dp, WhiteLight, CircleShape)
 
-    Box(modifier = modifier) {
+    Box(modifier) {
         when (rank) {
             1 -> Rank(rankModifier)
             2 -> {
@@ -48,5 +49,5 @@ fun RankGroup(
 
 @Composable
 private fun BoxScope.Rank(modifier: Modifier, alignment: Alignment = Center) {
-    Box(modifier = modifier.align(alignment = alignment))
+    Box(modifier.align(alignment = alignment))
 }

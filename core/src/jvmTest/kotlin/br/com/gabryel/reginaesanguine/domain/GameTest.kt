@@ -9,8 +9,10 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
 import br.com.gabryel.reginaesanguine.domain.helpers.LEFT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.MIDDLE_LANE
+import br.com.gabryel.reginaesanguine.domain.helpers.RIGHT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
+import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.cardOf
 import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCardsAtDeck
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCardsAtHand
@@ -43,7 +45,7 @@ class GameTest {
 
         nextTurn
             .shouldBeSuccess()
-            .nextPlayerPosition.shouldBeEqual(RIGHT)
+            .playerTurn.shouldBeEqual(RIGHT)
     }
 
     @Test
@@ -110,6 +112,21 @@ class GameTest {
     }
 
     @Test
+    fun `when a player makes a move, the opponent should draw a new card`() {
+        // Real implementation bug, the opponent player would copy the deck from the current player after play
+
+        val playerLeft = Player(listOf(SECURITY_OFFICER), listOf(SECURITY_OFFICER))
+        val playerRight = Player(listOf(RIOT_TROOPER), listOf(RIOT_TROOPER))
+
+        val nextTurn = buildResult {
+            Game.forPlayers(playerLeft, playerRight)
+                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER.id)).orRaiseError()
+        }
+
+        nextTurn.shouldBeSuccess().havePlayerOn(RIGHT) should haveCardsAtHand(RIOT_TROOPER, RIOT_TROOPER)
+    }
+
+    @Test
     fun `when the game starts, both players should start with defined amount of cards drawn`() {
         val nextTurn = buildResult {
             val defaultPlayer = Player(deck = (1..10).map { RIOT_TROOPER })
@@ -120,7 +137,7 @@ class GameTest {
         nextTurn.shouldBeSuccess().havePlayerOn(RIGHT) should haveCardsAtHand(RIOT_TROOPER, RIOT_TROOPER)
     }
 
-    // when game starts, should allow players to mulligan(discard) cards once in initial hand
+    // TODO when game starts, should allow players to mulligan(discard) cards once in initial hand
 
     private fun defaultGame(): Game {
         val defaultPlayer = Player(listOf(SECURITY_OFFICER), listOf(RIOT_TROOPER))

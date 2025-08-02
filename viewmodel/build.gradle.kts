@@ -8,6 +8,7 @@ plugins {
 }
 
 kotlin {
+    jvm()
     sourceSets {
         commonMain.dependencies {
             implementation(project.dependencies.platform(libs.arrow.stack))
@@ -21,15 +22,9 @@ kotlin {
         }
     }
 
-    listOf(linuxArm64(), linuxX64(), mingwX64()).forEach(::configureNative)
+    listOf(linuxArm64(), linuxX64(), mingwX64())
 
     if (System.getProperty("os.name").startsWith("Mac OS X")) {
-        listOf(macosX64(), macosArm64()).forEach(::configureNative)
-    }
-}
-
-fun configureNative(target: KotlinNativeTarget) {
-    target.binaries.executable {
-        entryPoint = "br.com.gabryel.reginaesanguine.cli.main"
+        listOf(macosX64(), macosArm64())
     }
 }

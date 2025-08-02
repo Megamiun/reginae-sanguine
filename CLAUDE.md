@@ -106,7 +106,8 @@ reginae-sanguine/
 4. **Code Style**: Run `ktlintCheck` before committing
 
 ## Commit Message Style
-- When creating commit message, for big commits, be more generic instead of going for all details 
+- When creating commit message, limit the message to 6 bullet points
+  - Use less if the commit is simple enough
 - If Claude participated significantly in implementing current commit:
   - Start commit message with 🤖 followed by a blank space 
   - Add credits at the end: "This commit was implemented by Claude."

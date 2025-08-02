@@ -8,4 +8,4 @@ pluginManagement {
     }
 }
 
-include("core", "cli", "app")
+include("core", "cli", "app", "viewmodel")

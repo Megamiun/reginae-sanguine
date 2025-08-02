@@ -13,46 +13,43 @@ import br.com.gabryel.reginaesanguine.domain.State.Ongoing
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class Game(
-    private val moveFrom: PlayerPosition,
     private val board: Board,
     val players: Map<PlayerPosition, Player>,
     val action: Action<out String>? = null,
-    val previous: Game? = null
+    val previous: Game? = null,
+    val playerTurn: PlayerPosition = LEFT
 ) : CellContainer by board {
     val round: Int = 1 + (previous?.round ?: 0)
 
-    val nextPlayerPosition = moveFrom.opponent
-
-    val nextPlayer = players[nextPlayerPosition]
-        ?: throw IllegalStateException("No player on $nextPlayerPosition on game")
+    val currentPlayer = players[playerTurn]
+        ?: throw IllegalStateException("No player on $playerTurn on game")
 
     companion object {
         fun forPlayers(left: Player, right: Player, drawn: Int = 5) =
-            Game(RIGHT, Board.default(), mapOf(LEFT to left.draw(drawn), RIGHT to right.draw(drawn)))
+            Game(Board.default(), mapOf(LEFT to left.draw(drawn), RIGHT to right.draw(drawn)), playerTurn = LEFT)
     }
 
     fun play(player: PlayerPosition, action: Action<out String>): Result<Game> = buildResult {
-        ensure(nextPlayerPosition == player) { NotPlayerTurn(this@Game) }
         ensure(getState() !is Ended) { GameEnded }
+        ensure(playerTurn == player) { NotPlayerTurn(this@Game) }
 
-        val otherPlayerAfterDraw = players.getValue(player).draw()
+        val otherPlayerAfterDraw = players.getValue(player.opponent).draw()
 
         when (action) {
             is Skip -> copy(
-                moveFrom = player,
+                playerTurn = playerTurn.opponent,
                 players = players + mapOf(player.opponent to otherPlayerAfterDraw),
                 previous = copy(action = action),
             )
             is Play -> {
-                val (playerAfterPlay, card) = players
-                    .getValue(player)
+                val (playerAfterPlay, card) = currentPlayer
                     .selectCard(action.card)
                     .orRaiseError()
 
                 val newPlayers = mapOf(player to playerAfterPlay, player.opponent to otherPlayerAfterDraw)
 
                 val newBoard = board.play(player, Play(action.position, card)).orRaiseError()
-                copy(moveFrom = player, players = newPlayers, board = newBoard, previous = copy(action = action))
+                copy(playerTurn = playerTurn.opponent, players = newPlayers, board = newBoard, previous = copy(action = action))
             }
         }
     }

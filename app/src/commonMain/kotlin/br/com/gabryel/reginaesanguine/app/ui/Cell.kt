@@ -14,19 +14,16 @@ import androidx.compose.ui.draganddrop.DragAndDropTarget
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
-import br.com.gabryel.reginaesanguine.app.ui.theme.Emerald
-import br.com.gabryel.reginaesanguine.app.ui.theme.Ruby
+import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Success
 
 private val playerCellInternalModifier = Modifier.fillMaxSize().border(1.dp, Black)
 
 @Composable
-context(cardImageLoader: CardImageLoader)
+context(_: CardImageLoader)
 fun BoxScope.GridPlayableCell(game: Game, position: Position, putCard: (String) -> Boolean) {
     val cellContent = game.getCellAt(position)
 
@@ -36,47 +33,45 @@ fun BoxScope.GridPlayableCell(game: Game, position: Position, putCard: (String) 
     val cell = cellContent.value
 
     val card = cell.card
-    val owner = cell.owner
+    val owner = cell.owner ?: return
 
-    if (owner == null) return
-
-    val color = when (cell.owner) {
-        LEFT -> Emerald
-        else -> Ruby
-    }
-
-    if (card == null) {
-        val externalAppCallback = remember {
-            object : DragAndDropTarget {
-                override fun onDrop(event: DragAndDropEvent) = drop(event) { putCard(it) }
+    context(PlayerContext.getDefaultFor(owner)) {
+        if (card == null) {
+            val dropCallback = remember {
+                object : DragAndDropTarget {
+                    override fun onDrop(event: DragAndDropEvent) = drop(event) { putCard(it) }
+                }
             }
+
+            RankGroup(
+                cell.rank,
+                10f,
+                Modifier.matchParentSize().dragAndDropTarget({ _ -> true }, dropCallback),
+            )
+            return
         }
 
-        RankGroup(
-            cell.rank,
-            10f,
-            color,
-            modifier = Modifier.matchParentSize().dragAndDropTarget(
-                { event -> true },
-                externalAppCallback,
-            ),
-        )
-        return
+        Card(owner, card, Modifier.matchParentSize())
     }
-
-    Card(owner, card, Modifier.matchParentSize())
 }
 
 @Composable
-fun PlayerLanePowerCell(game: Game, position: Position, player: PlayerPosition) {
-    val playerPower = game.getLaneScore(position.lane)[player] ?: 0
-
-    val color = when (player) {
-        LEFT -> Emerald
-        RIGHT -> Ruby
-    }
+context(player: PlayerContext)
+fun PlayerLanePowerCell(game: Game, position: Position) {
+    val laneScore = game.getLaneScore(position.lane)
+    val playerPower = laneScore[player.position] ?: 0
 
     Box(modifier = playerCellInternalModifier, contentAlignment = Center) {
-        PowerIndicator(playerPower, color)
+        PowerIndicator(playerPower, laneScore.isWinner())
     }
+}
+
+context(player: PlayerContext)
+private fun Map<PlayerPosition, Int>.isWinner(): Boolean {
+    val max = maxBy { it.value }
+
+    if (values.all { it == max.value })
+        return false
+
+    return max.key == player.position
 }

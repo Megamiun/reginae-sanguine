@@ -21,6 +21,7 @@ import br.com.gabryel.reginaesanguine.domain.Player
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.atColumn
+import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 import kotlin.system.exitProcess
 
 fun main() = application {
@@ -50,7 +51,7 @@ fun main() = application {
             ReginaeSanguineTheme {
                 Scaffold { paddingValues ->
                     Box(Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Center) {
-                        GameBoard(game)
+                        GameBoard(GameViewModel.forGame(game))
                     }
                 }
             }
