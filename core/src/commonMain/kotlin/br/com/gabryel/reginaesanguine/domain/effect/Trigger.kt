@@ -35,8 +35,8 @@ object WhenLaneWon : Trigger
 object WhileActive : Trigger
 
 @Serializable
-@SerialName("OnRoundEnd")
-object OnRoundEnd : Trigger
+@SerialName("OnGameEnd")
+object OnGameEnd : Trigger
 
 @Serializable
 @SerialName("None")

@@ -6,7 +6,7 @@ import br.com.gabryel.reginaesanguine.domain.effect.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.FlavourText
 import br.com.gabryel.reginaesanguine.domain.effect.LoserScoreBonus
 import br.com.gabryel.reginaesanguine.domain.effect.None
-import br.com.gabryel.reginaesanguine.domain.effect.OnRoundEnd
+import br.com.gabryel.reginaesanguine.domain.effect.OnGameEnd
 import br.com.gabryel.reginaesanguine.domain.effect.OnStatusChange
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
@@ -64,7 +64,7 @@ fun gameJsonParser(
             subclass(WhenFirstReachesPower::class)
             subclass(WhenLaneWon::class)
             subclass(WhileActive::class)
-            subclass(OnRoundEnd::class)
+            subclass(OnGameEnd::class)
             subclass(None::class)
 
             extraTriggers.forEach(::subclass)

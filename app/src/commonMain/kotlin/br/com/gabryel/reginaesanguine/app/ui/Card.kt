@@ -11,17 +11,13 @@ import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale.Companion.Fit
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.ResizableText
-import br.com.gabryel.reginaesanguine.app.ui.theme.Emerald
-import br.com.gabryel.reginaesanguine.app.ui.theme.Ruby
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 
 @Composable
 context(cardImageLoader: CardImageLoader, player: PlayerContext)
@@ -45,7 +41,7 @@ private fun ArtlessCard(card: Card, accented: Boolean, modifier: Modifier = Modi
             RankGroup(card.rank, 8f, multiplier = 3.5f)
         }
         Box(Modifier.size(27.dp).align(TopEnd), contentAlignment = Center) {
-            PowerIndicator(card.power, accented, multiplier = 0.6f)
+            PowerIndicator(card.power, accented = accented, multiplier = 0.6f)
         }
         ResizableText(card.name, modifier = Modifier.rotate(90f).align(Center))
     }

@@ -88,10 +88,7 @@ data class Board(
     private fun Cell.applyEffect(effect: Effect, player: PlayerPosition): Cell {
         val newCard = if (effect is DestroyCards && card != null && owner != player) null else card
 
-        return copy(
-            card = newCard,
-            appliedEffects = appliedEffects + (player to effect),
-        )
+        return copy(card = newCard, appliedEffects = appliedEffects + (player to effect))
     }
 
     private fun getWinLaneScore(lane: Int): Pair<PlayerPosition, Int>? {

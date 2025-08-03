@@ -6099,8 +6099,7 @@
       "rank": 1,
       "filename": "queens_blood_blue_142.png",
       "effect": {
-        "type": "ScoreBonus",
-        "amount": -1,
+        "type": "LoserScoreBonus",
         "trigger": {
           "type": "WhenLaneWon"
         },

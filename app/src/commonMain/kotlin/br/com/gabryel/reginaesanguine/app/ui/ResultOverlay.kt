@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.theme.Yellow
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.domain.Game
@@ -31,9 +33,26 @@ import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 fun ResultOverlay(gameViewModel: GameViewModel) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
+    val distanceFromCenter = (375).dp
 
-    Surface(color = Black.copy(alpha = 0.3f), modifier = Modifier.fillMaxSize()) {
-        ResultText(game)
+    Surface(color = Black.copy(alpha = 0.5f), modifier = Modifier.fillMaxSize()) {
+        Box(contentAlignment = Center) {
+            val score = game.getScores()
+
+            with(PlayerContext.left) {
+                PowerIndicator(
+                    score[LEFT] ?: error("No score found for player LEFT"),
+                    Modifier.offset(-distanceFromCenter),
+                )
+            }
+            ResultText(game)
+            with(PlayerContext.right) {
+                PowerIndicator(
+                    score[RIGHT] ?: error("No score found for player RIGHT"),
+                    Modifier.offset(distanceFromCenter),
+                )
+            }
+        }
     }
 }
 

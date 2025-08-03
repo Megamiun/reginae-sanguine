@@ -25,9 +25,14 @@ import kotlin.math.sin
 
 @Composable
 context(player: PlayerContext)
-fun PowerIndicator(power: Int, accented: Boolean, multiplier: Float = 1f) {
+fun PowerIndicator(
+    power: Int,
+    modifier: Modifier = Modifier,
+    accented: Boolean = false,
+    multiplier: Float = 1f
+) {
     val size = 35.dp * multiplier
-    val circleModifier = Modifier
+    val circleModifier = modifier
         .size(size)
         .let { if (accented) it.outerGlow(YellowAccent, size) else it }
         .clip(CircleShape)

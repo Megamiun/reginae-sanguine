@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.domain.Game
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Success
 
@@ -61,6 +60,6 @@ fun PlayerLanePowerCell(game: Game, position: Position) {
     val playerPower = game.getLaneScore(position.lane)[player.position] ?: 0
 
     Box(modifier = playerCellInternalModifier, contentAlignment = Center) {
-        PowerIndicator(playerPower, game.getLaneWinner(position.lane) == player.position)
+        PowerIndicator(playerPower, accented = game.getLaneWinner(position.lane) == player.position)
     }
 }

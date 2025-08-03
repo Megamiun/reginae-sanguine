@@ -3,7 +3,7 @@ package br.com.gabryel.reginaesanguine.app.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.draganddrop.dragAndDropSource
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -69,7 +69,7 @@ fun BoxScope.GameBoard(gameViewModel: GameViewModel) {
         }
     }
 
-    Row(Modifier.align(BottomCenter).height(60.dp), horizontalArrangement = Arrangement.Center) {
+    Row(Modifier.align(BottomCenter).height(60.dp), horizontalArrangement = Center) {
         context(PlayerContext.getDefaultFor(game.playerTurn)) {
             game.currentPlayer.hand.forEach { card ->
                 Card(

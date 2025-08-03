@@ -51,7 +51,7 @@ Triggers are objects with a `type` field and optional condition fields:
 - `WhileActive`: Effect is active while card remains on board
 - `WhenLaneWon`: Effect activates when the player wins the lane
 - `OnStatusChange`: Effect based on count of cards with specific status (status: ENHANCED/ENFEEBLED/ANY, scope: ALLIES/ENEMIES/ANY - both default to ANY)
-- `OnRoundEnd`: Effect activates at the end of each round
+- `OnGameEnd`: Effect activates at the end of each round
 - `None`: No trigger (used for FlavourText effects)
 
 ## Status Types (Enum Values)
