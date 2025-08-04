@@ -8,11 +8,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.darkColors
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
 import br.com.gabryel.reginaesanguine.app.ui.GameBoard
-import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
 import kotlin.system.exitProcess
 
 fun main() = application {
@@ -32,7 +32,7 @@ fun main() = application {
 
     context(ResCardImageLoader(useCoil)) {
         Window(title = "Reginae Sanguine", onCloseRequest = { exitProcess(0) }) {
-            MaterialTheme(colors = darkColors(background = PurpleLight)) {
+            MaterialTheme(colors = darkColors(background = Color(63, 48, 60))) {
                 Scaffold { paddingValues ->
                     Box(Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Center) {
                         GameBoard(allowsDragAndDrop, cards)
