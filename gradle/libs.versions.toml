@@ -1,65 +1,9 @@
 [versions]
-kotlin = "2.2.0"
-android = "8.11.1"
 compose = "1.8.2"
-arrow = "2.1.2"
-kotest = "6.0.0.M8"
-kotlinx-serialization-json = "1.9.0"
-mosaic = "0.17.0"
 compose-bom = "2025.07.00"
-coil = "3.3.0"
-
-# Android dependencies
-appcompat = "1.7.1"
-lifecycle = "2.9.2"
-activity-compose = "1.10.1"
-
-# Build plugins
-ktlint = "13.0.0"
-download = "5.6.0"
-task-tree = "4.0.1"
 
 [libraries]
-# Kotlinx
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
-
-# Arrow-kt
-arrow-stack = { group = "io.arrow-kt", name = "arrow-stack", version.ref = "arrow" }
-arrow-core = { group = "io.arrow-kt", name = "arrow-core" }
-
-# Kotest
-kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotest" }
-kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
-
-# Jetpack Compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test" }
-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-
-# Android
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
-
-# Third-party
-coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
-mosaic-runtime = { group = "com.jakewharton.mosaic", name = "mosaic-runtime", version.ref = "mosaic" }
 
 [plugins]
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
-android-application = { id = "com.android.application", version.ref = "android" }
-android-library = { id = "com.android.library", version.ref = "android" }
-
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
-
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
-download = { id = "de.undercouch.download", version.ref = "download" }
-task-tree = { id = "com.dorongold.task-tree", version.ref = "task-tree" }

@@ -7,5 +7,3 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
-include("core", "cli", "app", "viewmodel")
