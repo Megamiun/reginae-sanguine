@@ -3,31 +3,27 @@ package br.com.gabryel.reginaesanguine.app.services
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import br.com.gabryel.app.generated.resources.Res
+import br.com.gabryel.app.generated.resources.allDrawableResources
+import br.com.gabryel.reginaesanguine.app.Card
 import br.com.gabryel.reginaesanguine.app.util.Logger
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import coil3.compose.rememberAsyncImagePainter
+import org.jetbrains.compose.resources.painterResource
 
-class ResCardImageLoader : CardImageLoader {
+class ResCardImageLoader(private val useComposePainter: Boolean = false) : CardImageLoader {
     private val logger = Logger(this::class)
 
     @Composable
-    override fun loadCardImage(pack: String, player: PlayerPosition, id: String): Painter? {
-        val color = when (player) {
-            LEFT -> "blue"
-            RIGHT -> "red"
-        }
+    override fun loadCardImage(card: Card): Painter? = runCatching {
+        val resource = Res.allDrawableResources[card.id]
+            ?: return null
 
-        val path = "drawable/${pack}_${color}_$id.png".lowercase()
-        return runCatching {
-            val uri = Res.getUri(path)
-            rememberAsyncImagePainter(
-                uri,
-                onError = { logger.error("Error loading $path", it.result.throwable) },
-            )
-        }.onFailure { err ->
-            logger.error("Couldn't load card at $path", err)
-        }.getOrNull()
-    }
+        if (useComposePainter) {
+            painterResource(resource)
+        } else {
+            val uri = Res.getUri("drawable/${card.id}.${card.ext}")
+            rememberAsyncImagePainter(uri)
+        }
+    }.onFailure { err ->
+        logger.error("Couldn't load card at ${card.id}", err)
+    }.getOrNull()
 }

@@ -7,7 +7,6 @@ build/
 ### Assets ###
 /.temp/
 /assets/**/queens_blood/**/**.png
-**/drawable/queens_blood**
 
 ### IntelliJ IDEA ###
 .idea/*

@@ -21,7 +21,7 @@
     - Commit #d544fd97
 - Bugs recognized: 
   - Scaffolding loses padding when window of the application is changed
-  - Elements partially out of screen are not drawn at first
+  - [Issue](youtrack.jetbrains.com/issue/CMP-8680/Elements-partially-out-of-screen-are-not-drawn-until-resizing) - Elements partially out of screen are not drawn at first
 - androidx.compose prefix is confusing, as both androidx.compose and jetbrains.compose exist 
   - Multiple androidx.compose packages work at all targets, but not *all*
 
@@ -32,6 +32,10 @@
   - Drag and drop
   - Logging
   - Resources loading
+
+## Serialization
+- Bugs recognized:
+  - [Issue](https://github.com/spring-projects/spring-framework/issues/35281) ResponseEntity doesn't work with serialization
 
 # Interesting topics
 - Serialization with Kotlinx
