@@ -20,7 +20,12 @@ reginae-sanguine/
 ├── app/                  # Android application module
 │   ├── CLAUDE.md         # Android module documentation
 │   └── src/              # Android UI implementation
-└── [future modules]      # Web, Desktop GUI, etc.
+├── server/spring/        # Spring Boot server module
+│   ├── CLAUDE.md         # Server module documentation
+│   └── src/              # REST API and web server
+├── viewmodel/            # Shared UI state management
+│   └── src/              # ViewModels for UI components
+└── [future modules]      # Desktop GUI, etc.
 ```
 
 ## Module Division & Responsibilities
@@ -53,8 +58,24 @@ reginae-sanguine/
 - Android-specific features and optimizations
 - Integration with core game engine
 
+### Server Module (`server/spring/`)
+**Purpose**: Spring Boot web server for online multiplayer  
+**Technology**: Kotlin/JVM with Spring Boot  
+**Responsibilities**:
+- REST API for game management and deck operations
+- Online multiplayer game sessions
+- Card pack management and serving
+- Game state persistence and synchronization
+
+### ViewModel Module (`viewmodel/`)
+**Purpose**: Shared UI state management across client platforms  
+**Technology**: Kotlin Multiplatform (Common)  
+**Responsibilities**:
+- Shared ViewModels for UI components
+- State management patterns
+- UI logic abstraction for multiple platforms
+
 ### Future Modules (Planned)
-- **Web Server**: Online multiplayer with REST API
 - **Desktop GUI**: Native desktop application with graphical interface
 
 ## Development Commands
@@ -118,3 +139,5 @@ For detailed module-specific guidance, refer to:
 - [Core Module Documentation](core/CLAUDE.md)
 - [CLI Module Documentation](cli/CLAUDE.md)
 - [App Module Documentation](app/CLAUDE.md)
+- [Server Module Documentation](server/spring/CLAUDE.md)
+- [ViewModel Module Documentation](viewmodel/CLAUDE.md)
