@@ -22,7 +22,9 @@ import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonBuilder
 import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.SerializersModuleBuilder
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlin.reflect.KClass
@@ -36,9 +38,11 @@ import kotlin.reflect.KClass
  */
 fun gameJsonParser(
     extraEffects: Set<KClass<Effect>> = emptySet(),
-    extraTriggers: Set<KClass<Trigger>> = emptySet()
+    extraTriggers: Set<KClass<Trigger>> = emptySet(),
+    configure: SerializersModuleBuilder.() -> Unit = {}
 ) = Json {
     ignoreUnknownKeys = true
+    explicitNulls = false
 
     serializersModule = SerializersModule {
         polymorphic(Effect::class) {
@@ -69,5 +73,7 @@ fun gameJsonParser(
 
             extraTriggers.forEach(::subclass)
         }
+
+        configure()
     }
 }

@@ -20,17 +20,22 @@ kotlin {
 
     androidTarget()
     jvm("desktop") {
+        mainRun {
+            mainClass = "br.com.gabryel.reginaesanguine.app.MainKt"
+        }
         compilerOptions {
             jvmTarget = JVM_11
             freeCompilerArgs = listOf("-XXLanguage:+WhenGuards")
         }
     }
 
-    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
-        iosTarget.binaries {
-            framework {
-                baseName = "shared"
-                isStatic = true
+    if (System.getProperty("os.name").startsWith("Mac OS X")) {
+        listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+            iosTarget.binaries {
+                framework {
+                    baseName = "shared"
+                    isStatic = true
+                }
             }
         }
     }

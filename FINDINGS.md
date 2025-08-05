@@ -21,7 +21,9 @@
     - Commit #d544fd97
 - Bugs recognized: 
   - Scaffolding loses padding when window of the application is changed
-  - Elements partially out of screen are not drawn at first
+  - ~~[CMP-8680](youtrack.jetbrains.com/issue/CMP-8680/Elements-partially-out-of-screen-are-not-drawn-until-resizing) - Elements partially out of screen are not drawn at first~~ - False alarm
+  - [Coil-2150](https://github.com/coil-kt/coil/issues/2150) - Coil fails to load jpgs on Desktop sometimes
+  - [CMP-8685](https://youtrack.jetbrains.com/issue/CMP-8685/Scaffold-Padding-is-Lost-on-Monitor-Change) - Scaffold padding lost on monitor change
 - androidx.compose prefix is confusing, as both androidx.compose and jetbrains.compose exist 
   - Multiple androidx.compose packages work at all targets, but not *all*
 
@@ -32,6 +34,10 @@
   - Drag and drop
   - Logging
   - Resources loading
+
+## Serialization
+- Bugs recognized:
+  - [Spring-35281](https://github.com/spring-projects/spring-framework/issues/35281) ResponseEntity doesn't work with serialization
 
 # Interesting topics
 - Serialization with Kotlinx

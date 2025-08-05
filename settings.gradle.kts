@@ -8,4 +8,4 @@ pluginManagement {
     }
 }
 
-include("core", "cli", "app", "viewmodel")
+include("core", "cli", "app", "viewmodel", "server:spring")

@@ -1,10 +1,14 @@
 package br.com.gabryel.reginaesanguine.domain
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class Position(val x: Int, val y: Int) {
+    @Transient
     val column = x
+
+    @Transient
     val lane = y
 
     operator fun plus(displacement: Displacement) =
@@ -27,7 +31,10 @@ data class Displacement(val x: Int, val y: Int) {
         val RIGHTWARD = Displacement(1, 0)
     }
 
+    @Transient
     val column = x
+
+    @Transient
     val lane = y
 
     fun mirrorHorizontal() = copy(x = x * -1)
