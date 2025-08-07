@@ -49,7 +49,7 @@ class GameActivity : ComponentActivity() {
                     (2 atColumn 0) to Cell(LEFT, 3, unknownCard),
                     (0 atColumn 4) to Cell(RIGHT, 1, knownCard),
                     (1 atColumn 4) to Cell(RIGHT, 2),
-                    (2 atColumn 4) to Cell(RIGHT, 3, unknownCard),
+                    (2 atColumn 4) to Cell(RIGHT, 3),
                 ),
             ),
         )

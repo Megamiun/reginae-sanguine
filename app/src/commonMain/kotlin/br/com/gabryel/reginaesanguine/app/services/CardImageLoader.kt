@@ -6,5 +6,5 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 
 fun interface CardImageLoader {
     @Composable
-    fun loadCardImage(pack: String, player: PlayerPosition, id: String): Painter?
+    fun loadCardImage(pack: String, id: String): Painter?
 }

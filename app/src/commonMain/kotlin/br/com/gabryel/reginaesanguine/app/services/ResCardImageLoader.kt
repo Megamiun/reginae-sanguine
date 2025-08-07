@@ -14,13 +14,8 @@ class ResCardImageLoader : CardImageLoader {
     private val logger = Logger(this::class)
 
     @Composable
-    override fun loadCardImage(pack: String, player: PlayerPosition, id: String): Painter? {
-        val color = when (player) {
-            LEFT -> "blue"
-            RIGHT -> "red"
-        }
-
-        val name = "${pack}_${color}_$id".lowercase()
+    override fun loadCardImage(pack: String, id: String): Painter? {
+        val name = "queens_blood_base_$id".lowercase()
         val resource = Res.allDrawableResources[name] ?: return null
 
         return runCatching {

@@ -2,17 +2,23 @@ package br.com.gabryel.reginaesanguine.app.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush.Companion.radialGradient
@@ -30,27 +36,33 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 
 @Composable
-fun ResultOverlay(gameViewModel: GameViewModel) {
+fun ResultOverlay(gameViewModel: GameViewModel, boardSize: DpSize) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
-    val distanceFromCenter = (375).dp
 
     Surface(color = Black.copy(alpha = 0.5f), modifier = Modifier.fillMaxSize()) {
-        Box(contentAlignment = Center) {
-            val score = game.getScores()
-
+        val score = game.getScores()
+        Row(Modifier.fillMaxWidth().padding(20.dp), horizontalArrangement = Arrangement.Center) {
             with(PlayerContext.left) {
-                PowerIndicator(
-                    score[LEFT] ?: error("No score found for player LEFT"),
-                    Modifier.offset(-distanceFromCenter),
-                )
+                Box(Modifier.height(boardSize.height), Center) {
+                    PlayerPowerIndicator(
+                        score[LEFT] ?: error("No score found for player LEFT"),
+                        40.dp,
+                        Modifier.padding(5.dp),
+                    )
+                }
             }
-            ResultText(game)
+            Box(Modifier.size(boardSize), Center) {
+                ResultText(game)
+            }
             with(PlayerContext.right) {
-                PowerIndicator(
-                    score[RIGHT] ?: error("No score found for player RIGHT"),
-                    Modifier.offset(distanceFromCenter),
-                )
+                Box(Modifier.height(boardSize.height), Center) {
+                    PlayerPowerIndicator(
+                        score[RIGHT] ?: error("No score found for player RIGHT"),
+                        40.dp,
+                        Modifier.padding(5.dp),
+                    )
+                }
             }
         }
     }
@@ -60,23 +72,21 @@ fun ResultOverlay(gameViewModel: GameViewModel) {
 private fun ResultText(game: Game) {
     val boxSize = DpSize(180.dp, 60.dp)
 
-    BoxWithConstraints(Modifier.size(boxSize), contentAlignment = Center) {
-        Canvas(Modifier.size(boxSize)) {
-            drawArc(YellowAccent, 300f, 120f, false, size = size, style = Stroke(6f))
-            drawArc(YellowAccent, 120f, 120f, false, size = size, style = Stroke(6f))
-        }
+    Canvas(Modifier.size(boxSize)) {
+        drawArc(YellowAccent, 300f, 120f, false, size = size, style = Stroke(6f))
+        drawArc(YellowAccent, 120f, 120f, false, size = size, style = Stroke(6f))
+    }
 
-        Box(
-            Modifier
-                .size(35.dp, 35.dp)
-                .scale(4f, 1f)
-                .background(radialGradient(colors = listOf(Yellow, Transparent))),
-        )
+    Box(
+        Modifier
+            .size(35.dp, 35.dp)
+            .scale(4f, 1f)
+            .background(radialGradient(colors = listOf(Yellow, Transparent))),
+    )
 
-        when (game.getWinner()) {
-            LEFT -> Text("Victory", color = YellowAccent)
-            RIGHT -> Text("Lost", color = YellowAccent)
-            else -> Text("Tie", color = YellowAccent)
-        }
+    when (game.getWinner()) {
+        LEFT -> Text("Victory", color = YellowAccent)
+        RIGHT -> Text("Lost", color = YellowAccent)
+        else -> Text("Tie", color = YellowAccent)
     }
 }
