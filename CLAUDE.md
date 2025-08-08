@@ -127,7 +127,7 @@ reginae-sanguine/
 4. **Code Style**: Run `ktlintCheck` before committing
 
 ## Commit Message Style
-- When creating commit message, limit the message to 6 bullet points
+- When creating commit message, limit the message to 6 bullet points using `-` for bullet points
   - Use less if the commit is simple enough
 - If Claude participated significantly in implementing current commit:
   - Start commit message with 🤖 followed by a blank space 

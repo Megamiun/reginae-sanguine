@@ -1,7 +1,10 @@
 package br.com.gabryel.reginaesanguine.domain
 
+import br.com.gabryel.reginaesanguine.domain.util.ResultRaise
+import br.com.gabryel.reginaesanguine.domain.util.buildResult
+
 sealed interface Result<out S> {
-    fun <T> map(transform: (S) -> T): Result<T>
+    fun <T> map(transform: ResultRaise<T>.(S) -> T): Result<T>
 
     fun <T> flatmap(transform: (S) -> Result<T>): Result<T>
 
@@ -9,7 +12,7 @@ sealed interface Result<out S> {
 }
 
 data class Success<S>(val value: S) : Result<S> {
-    override fun <T> map(transform: (S) -> T) = Success(transform(value))
+    override fun <T> map(transform: ResultRaise<T>.(S) -> T) = buildResult { transform(value) }
 
     override fun <T> flatmap(transform: (S) -> Result<T>) = transform(value)
 
@@ -17,7 +20,7 @@ data class Success<S>(val value: S) : Result<S> {
 }
 
 sealed interface Failure : Result<Nothing> {
-    override fun <T> map(transform: (Nothing) -> T) = this
+    override fun <T> map(transform: ResultRaise<T>.(Nothing) -> T) = this
 
     override fun <T> flatmap(transform: (Nothing) -> Result<T>) = this
 
@@ -39,4 +42,8 @@ sealed interface Failure : Result<Nothing> {
     data class CellDoesNotBelongToPlayer(val cell: Cell) : Failure
 
     data class CellOccupied(val cell: Cell) : Failure
+
+    class UnknownError(val error: Throwable) : Failure {
+        override fun toString() = "Unknown Error: $error"
+    }
 }

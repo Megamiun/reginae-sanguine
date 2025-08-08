@@ -16,6 +16,8 @@ data class Position(val x: Int, val y: Int) {
 
     fun constrainTo(size: Size) =
         lane.mod(size.height) atColumn column.mod(size.width)
+
+    fun asDisplacement() = Displacement(x, y)
 }
 
 infix fun Int.atLane(lane: Int) = Position(this, lane)
@@ -38,6 +40,9 @@ data class Displacement(val x: Int, val y: Int) {
     val lane = y
 
     fun mirrorHorizontal() = copy(x = x * -1)
+
+    operator fun plus(displacement: Displacement) =
+        Displacement(x + displacement.y, y + displacement.y)
 }
 
 @Serializable

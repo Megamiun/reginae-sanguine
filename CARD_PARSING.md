@@ -14,7 +14,7 @@ This document provides guidance for parsing Queen's Blood card images into struc
 
 ### Grid Reading
 - **Yellow squares**: Increment positions (where ranks are raised by 1)
-- **Red squares**: Effect displacement positions
+- **Red squares**: Effect displacement positions (stored in effect.affected)
 - **White squares**: Where the card is placed, at position (x=0, y=0)
 
 ## JSON Structure
@@ -83,8 +83,8 @@ Triggers are objects with a `type` field and optional condition fields:
 ### Grid Parsing
 - Set `gridParsed: false` initially
 - Ignore parsing for the moment
-- Yellow squares become increment positions
-- Red squares become effect displacement positions
+- Yellow squares become increment positions (stored in card.increments)
+- Red squares become effect displacement positions (stored in effect.affected)
 - Requires manual verification due to visual complexity
 
 ## Data Validation

@@ -8,16 +8,16 @@ import br.com.gabryel.reginaesanguine.domain.Failure.CellOutOfBoard
 import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
-import br.com.gabryel.reginaesanguine.domain.effect.Effect
-import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
 import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
 import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
+val DEFAULT_BOARD_SIZE = Size(5, 3)
+
 data class Board(
     private val state: Map<Position, Cell> = createInitialState(),
-    override val size: Size = Size(5, 3)
+    private val effectRegistry: EffectRegistry = EffectRegistry(),
+    override val size: Size = DEFAULT_BOARD_SIZE
 ) : CellContainer {
     companion object {
         fun default() = Board()
@@ -42,8 +42,6 @@ data class Board(
         ensure(cell.card == null) { CellOccupied(cell) }
 
         placeCard(action.position, cell, player, action.card)
-            .applyCardIncrements(action, player)
-            .applyCardEffects(action, player)
     }
 
     fun getScores(): Map<PlayerPosition, Int> = (0..2)
@@ -55,40 +53,44 @@ data class Board(
         state[position] ?: Cell.EMPTY
     }
 
-    private fun placeCard(position: Position, cell: Cell, player: PlayerPosition, card: Card): Board =
-        copy(state = state + (position to cell.copy(owner = player, card = card)))
-
-    private fun applyCardIncrements(action: Play<Card>, player: PlayerPosition): Board {
-        val incrementBy = (action.card.effect as? RaiseRank)?.amount ?: 1
-
-        val affectedCells = action.card.increments
-            .map { displacement -> action.position + player.correct(displacement) }
-            .mapNotNull { newPosition ->
-                getCellAt(newPosition)
-                    .map { cell -> newPosition to cell.increment(player, incrementBy) }
-                    .orNull()
-            }
-
-        return copy(state = state + affectedCells)
+    override fun getScoreAt(position: Position): Result<Int> = buildResult {
+        ensure(position in size) { CellOutOfBoard(position) }
+        getTotalPowerAt(position)
     }
 
-    private fun applyCardEffects(action: Play<Card>, player: PlayerPosition): Board {
-        val affectedCards = action.card.effect?.let {
-            action.card.affected.mapNotNull { displacement ->
-                val effectPosition = action.position + player.correct(displacement)
-                getCellAt(effectPosition)
-                    .map { cell -> effectPosition to cell.applyEffect(action.card.effect, player) }
-                    .orNull()
-            }
-        }.orEmpty()
+    private fun placeCard(position: Position, cell: Cell, player: PlayerPosition, card: Card): Board {
+        val incremented = card.increments.mapNotNull { displacement ->
+            val newPosition = position + player.correct(displacement)
+            getCellAt(newPosition).orNull()
+                ?.takeIf { it.owner != player.opponent && it.card == null }
+                ?.let { cell -> newPosition to cell.increment(player, card.incrementValue) }
+        }
 
-        return copy(state = state + affectedCards)
+        val newCellCard = (position to cell.copy(card = card))
+        val newState = state + incremented + newCellCard
+
+        val newEffectRegistry = effectRegistry.onPlaceCard(player, card.effect, position)
+
+        return copy(state = newState, effectRegistry = newEffectRegistry)
+            .resolveEffects()
     }
 
-    private fun Cell.applyEffect(effect: Effect, player: PlayerPosition): Cell {
-        val newCard = if (effect is DestroyCards && card != null && owner != player) null else card
+    private fun resolveEffects(): Board {
+        val newState = destroy()
 
-        return copy(card = newCard, appliedEffects = appliedEffects + (player to effect))
+        if (newState == state) return this
+
+        val newEffectRegistry = effectRegistry.onDestroy(positions = effectRegistry.getDestroyable().map { it.second })
+
+        return copy(state = newState, effectRegistry = newEffectRegistry).resolveEffects()
+    }
+
+    private fun destroy(): Map<Position, Cell> = effectRegistry.getDestroyable().fold(state) { acc, (owner, position) ->
+        val originalCell = state[position] ?: return@fold acc
+
+        if (originalCell.owner == owner) acc
+        else // TODO Maybe we need to change cell ownership
+            acc + (position to originalCell.copy(card = null))
     }
 
     private fun getWinLaneScore(lane: Int): Pair<PlayerPosition, Int>? {
@@ -102,25 +104,34 @@ data class Board(
 
     fun getLaneScores(lane: Int): Map<PlayerPosition, Int> {
         val basePowers = PlayerPosition.entries.associateWith { player ->
-            getPlayerCardsInLane(player, lane).sumOf { it.power }
+            getPlayerPositionsInLane(player, lane)
+                .sumOf { position -> getTotalPowerAt(position) }
         }
 
         val winner = basePowers.maxBy { it.value }
 
         if (basePowers.values.all { it == winner.value }) return basePowers
 
-        val laneBonus = getPlayerCardsInLane(winner.key, lane)
-            .mapNotNull { it.effect as? ScoreBonus }
+        val laneBonus = getPlayerPositionsInLane(winner.key, lane)
+            .mapNotNull { getCellAt(it).orNull()?.card?.effect as? ScoreBonus }
             .filter { it.trigger is WhenLaneWon }
             .sumOf { it.amount }
 
         return basePowers + (winner.key to (winner.value + laneBonus))
     }
 
-    private fun getPlayerCardsInLane(player: PlayerPosition, lane: Int): List<Card> =
+    fun getTotalPowerAt(position: Position): Int {
+        val cell = getCellAt(position).orNull() ?: return 0
+        val card = cell.card ?: return 0
+        val owner = cell.owner ?: return 0
+
+        return card.power + effectRegistry.getExtraPowerAt(owner, position)
+    }
+
+    private fun getPlayerPositionsInLane(player: PlayerPosition, lane: Int): List<Position> =
         state.entries
             .filter { it.value.owner == player && it.key.lane == lane }
-            .mapNotNull { it.value.card }
+            .map { it.key }
 
     private fun accumulateScore(
         acc: Map<PlayerPosition, Int>,

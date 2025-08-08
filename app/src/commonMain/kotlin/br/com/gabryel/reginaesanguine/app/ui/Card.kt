@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -55,6 +54,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.effect.EffectWithAffected
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -147,7 +147,7 @@ private fun Modifier.setCellBackground(displacement: Displacement, card: Card): 
     }
 
 private fun Modifier.setCellBorder(displacement: Displacement, card: Card): Modifier =
-    if (displacement in card.affected)
+    if (displacement in ((card.effect as? EffectWithAffected)?.affected ?: emptySet()))
         border(0.4.dp, RubyAccent)
     else
         this

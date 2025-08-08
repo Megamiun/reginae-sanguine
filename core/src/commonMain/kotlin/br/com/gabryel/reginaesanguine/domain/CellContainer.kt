@@ -4,4 +4,6 @@ interface CellContainer {
     val size: Size
 
     fun getCellAt(position: Position): Result<Cell>
+
+    fun getScoreAt(position: Position): Result<Int>
 }

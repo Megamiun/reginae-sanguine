@@ -36,7 +36,7 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
   - [ ] Should be able to support the game with all the original rules
   - [x] Should allow for custom cards
   - [x] Should allow for configuring different board initial size and configuration
-- [ ] Create a Spring webserver which allows people to play online
+- [ ] Create a Spring/Node.js webserver which allows people to play online
   - [ ] Should allow users to register in server
   - [ ] Should allow users to create custom decks
   - [ ] Should allow users to invite each other

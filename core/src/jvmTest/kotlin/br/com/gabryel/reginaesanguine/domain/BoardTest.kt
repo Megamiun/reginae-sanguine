@@ -14,10 +14,13 @@ import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
 import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ENEMIES
+import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
+import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import br.com.gabryel.reginaesanguine.domain.helpers.BOTTOM_LANE
 import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_LEFT_COLUMN
@@ -30,9 +33,9 @@ import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICE
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.cardOf
 import br.com.gabryel.reginaesanguine.domain.helpers.TOP_LANE
 import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
-import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWithTotalPower
 import br.com.gabryel.reginaesanguine.domain.matchers.emptyCellOwnedBy
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCell
+import br.com.gabryel.reginaesanguine.domain.matchers.haveCellTotalPower
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCells
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeFailure
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccess
@@ -155,11 +158,7 @@ class BoardTest {
 
     @Test
     fun `when a card with RaisePower effects is played, should add effect to affected entities`() {
-        val powerRaise = cardOf(
-            "Power Raiser",
-            affected = setOf(LEFTWARD),
-            effect = RaisePower(2, ALLIES, WhenPlayed()),
-        )
+        val powerRaise = rasePowerCard(LEFTWARD, 2)
 
         val nextBoard = buildResult {
             Board.default()
@@ -168,7 +167,7 @@ class BoardTest {
         }
 
         nextBoard shouldBeSuccessfulAnd
-            haveCell(MIDDLE_LANE atColumn LEFT_COLUMN, cardCellWithTotalPower(3))
+            haveCellTotalPower(MIDDLE_LANE atColumn LEFT_COLUMN, 3)
     }
 
     @Test
@@ -219,17 +218,12 @@ class BoardTest {
 
     @Test
     fun `when a card with DestroyEntity effect is played, should remove target card`() {
-        val destroyer = cardOf(
-            "Destroyer",
-            value = 1,
-            affected = setOf(Displacement(4, 0)),
-            effect = DestroyCards(ENEMIES, WhenPlayed()),
-        )
+        val destroyUp = destroyerCard(destroyEffect = UPWARD, target = ALLIES, trigger = WhenPlayed())
 
         val nextBoard = buildResult {
             Board.default()
-                .play(RIGHT, Play(MIDDLE_LANE atColumn RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, destroyer)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(BOTTOM_LANE atColumn LEFT_COLUMN, destroyUp)).orRaiseError()
         }
 
         nextBoard shouldBeSuccessfulAnd haveCell(MIDDLE_LANE atColumn RIGHT_COLUMN, emptyCellOwnedBy(RIGHT, 1))
@@ -237,11 +231,7 @@ class BoardTest {
 
     @Test
     fun `when a card with a effect is played by RIGHT player, should apply mirrored effect to affected entities`() {
-        val powerRaise = cardOf(
-            "Power Raiser",
-            affected = setOf(LEFTWARD),
-            effect = RaisePower(2, ALLIES, WhenPlayed()),
-        )
+        val powerRaise = rasePowerCard(LEFTWARD, power = 2)
 
         val nextBoard = buildResult {
             Board.default()
@@ -250,7 +240,7 @@ class BoardTest {
         }
 
         nextBoard shouldBeSuccessfulAnd
-            haveCell(MIDDLE_LANE atColumn RIGHT_COLUMN, cardCellWithTotalPower(3))
+            haveCellTotalPower(MIDDLE_LANE atColumn RIGHT_COLUMN, 3)
     }
 
     @Test
@@ -258,7 +248,7 @@ class BoardTest {
         val cardWithRaiseRank = cardOf(
             "Rank Raiser",
             increments = setOf(RIGHTWARD, UPWARD),
-            effect = RaiseRank(2, WhenPlayed()),
+            effect = RaiseRank(2),
         )
 
         val nextBoard = Board.default()
@@ -269,4 +259,53 @@ class BoardTest {
             (MIDDLE_LANE atColumn CENTER_LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 2),
         )
     }
+
+    @Test
+    fun `when a card with WhileActive RaisePower is destroyed, should remove power bonus from target`() {
+        val whileActivePowerCard = rasePowerCard(UPWARD, power = 2, trigger = WhileActive)
+        val destroyUp = destroyerCard(UPWARD, ALLIES)
+
+        val board = buildResult {
+            Board.default()
+                .play(LEFT, Play(TOP_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, whileActivePowerCard)).orRaiseError()
+                .play(LEFT, Play(BOTTOM_LANE atColumn LEFT_COLUMN, destroyUp)).orRaiseError()
+        }
+
+        board shouldBeSuccessfulAnd haveCellTotalPower(TOP_LANE atColumn LEFT_COLUMN, 1)
+    }
+
+    @Test
+    fun `when a card with WhenPlayed RaisePower is destroyed, should keep power bonus on target`() {
+        val raiseUpWhenPlayed = rasePowerCard(UPWARD, power = 2)
+        val destroyUp = destroyerCard(UPWARD, ALLIES)
+
+        val board = buildResult {
+            Board.default()
+                .play(LEFT, Play(TOP_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, raiseUpWhenPlayed)).orRaiseError()
+                .play(LEFT, Play(BOTTOM_LANE atColumn LEFT_COLUMN, destroyUp)).orRaiseError()
+        }
+
+        board shouldBeSuccessfulAnd haveCellTotalPower(TOP_LANE atColumn LEFT_COLUMN, 3)
+    }
+
+    private fun rasePowerCard(
+        raiseEffect: Displacement,
+        power: Int,
+        target: TargetType = ALLIES,
+        trigger: Trigger = WhenPlayed()
+    ): Card = cardOf(
+        "Raise Power ($target at $raiseEffect $trigger)",
+        effect = RaisePower(power, target, trigger, affected = setOf(raiseEffect)),
+    )
+
+    private fun destroyerCard(
+        destroyEffect: Displacement,
+        target: TargetType = ENEMIES,
+        trigger: Trigger = WhenPlayed()
+    ): Card = cardOf(
+        "Card Destroyer ($target at $destroyEffect $trigger)",
+        effect = DestroyCards(target, trigger, affected = setOf(destroyEffect)),
+    )
 }

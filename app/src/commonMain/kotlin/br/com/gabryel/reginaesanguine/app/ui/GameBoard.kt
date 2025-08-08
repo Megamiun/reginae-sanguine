@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,6 +25,7 @@ import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
@@ -50,6 +52,11 @@ fun BoxScope.GameBoard(gameViewModel: GameViewModel) {
     val lateralSize = IntSize(1, game.size.height)
     val gridSize = IntSize(game.size.width, game.size.height)
     val cardSize = getCardSize()
+
+    if (state.error != null)
+        Box(Modifier.fillMaxWidth().align(TopCenter).background(Black), contentAlignment = TopCenter) {
+            Text(state.error.toString(), color = Red)
+        }
 
     Column(Modifier.align(TopCenter).offset(y = 20.dp).background(WhiteDark).padding(4.dp)) {
         Row(Modifier.border(1.dp, Black)) {

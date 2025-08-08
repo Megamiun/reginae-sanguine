@@ -66,14 +66,14 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
-    },
-    "affected": [
-      {
-        "x": 2,
-        "y": 0
-      }
-    ]
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 2,
+          "y": 0
+        }
+      ]
+    }
   },
   {
     "id": "004",
@@ -130,14 +130,14 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -196,14 +196,14 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -293,14 +293,14 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -325,14 +325,14 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -523,14 +523,14 @@
         "type": "WhenPlayed"
       },
       "target": "ENEMIES",
-      "description": "When played, lower the power of enemy cards on affected tiles by 3"
+      "description": "When played, lower the power of enemy cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": -1,
@@ -584,18 +584,18 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
-    },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": -2
-      }
-    ]
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": -2
+        }
+      ]
+    }
   },
   {
     "id": "023",
@@ -635,14 +635,14 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": -1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": -1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -671,18 +671,18 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -707,18 +707,18 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -747,26 +747,26 @@
         "type": "WhileActive"
       },
       "target": "ANY",
-      "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+      "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -795,18 +795,18 @@
         "type": "WhileActive"
       },
       "target": "ANY",
-      "description": "Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+      "description": "Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -831,18 +831,18 @@
         "type": "WhenPlayed"
       },
       "target": "ENEMIES",
-      "description": "When played, lower the power of enemy cards on affected tiles by 3"
+      "description": "When played, lower the power of enemy cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -875,22 +875,22 @@
         "type": "WhenDestroyed"
       },
       "target": "ANY",
-      "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3"
+      "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": -1,
@@ -927,14 +927,14 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -994,14 +994,14 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 4 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 4 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -1030,18 +1030,18 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 2"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 2",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -1093,18 +1093,18 @@
         "type": "WhenDestroyed"
       },
       "target": "ALLIES",
-      "description": "When destroyed, raise the power of allied cards on affected tiles by 3"
+      "description": "When destroyed, raise the power of allied cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -1129,14 +1129,14 @@
         "type": "WhenDestroyed"
       },
       "target": "ANY",
-      "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4"
+      "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 2,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -1187,14 +1187,14 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, destroy allied and enemy cards on affected tiles"
+      "description": "When played, destroy allied and enemy cards on affected tiles",
+      "affected": [
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -1271,42 +1271,42 @@
         "type": "WhenDestroyed"
       },
       "target": "ANY",
-      "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4"
+      "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -1422,26 +1422,26 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -1542,18 +1542,18 @@
         "status": "ENHANCED"
       },
       "target": "ALLIES",
-      "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 3"
+      "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -1578,42 +1578,42 @@
         "type": "WhenDestroyed"
       },
       "target": "ANY",
-      "description": "When destroyed, raise the power of allied and enemy cards on affected tiles by 2"
+      "description": "When destroyed, raise the power of allied and enemy cards on affected tiles by 2",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -1647,18 +1647,18 @@
         "status": "ENHANCED"
       },
       "target": "ENEMIES",
-      "description": "When first enhanced, lower the power of enemy cards on affected tiles by 2"
+      "description": "When first enhanced, lower the power of enemy cards on affected tiles by 2",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -1806,22 +1806,22 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 6"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 6",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -1928,42 +1928,42 @@
       "trigger": {
         "type": "WhenDestroyed"
       },
-      "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5"
+      "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2039,18 +2039,18 @@
       "trigger": {
         "type": "WhileActive"
       },
-      "description": "Lower the power of allied and enemy cards on affected tiles by 2 while this card is in play"
+      "description": "Lower the power of allied and enemy cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2106,14 +2106,14 @@
         "type": "WhenPlayed"
       },
       "target": "ALLIES",
-      "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+      "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power",
+      "affected": [
+        {
+          "x": 1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2137,14 +2137,14 @@
         "type": "WhenPlayed"
       },
       "target": "ENEMIES",
-      "description": "When played, destroy enemy cards on affected tiles"
+      "description": "When played, destroy enemy cards on affected tiles",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2174,18 +2174,18 @@
         "status": "ENFEEBLED"
       },
       "target": "ENEMIES",
-      "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+      "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2",
+      "affected": [
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 1,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 1,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2210,30 +2210,30 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2259,14 +2259,14 @@
         "status": "ENFEEBLED"
       },
       "target": "ALLIES",
-      "description": "When first enfeebled, raise the power of allied cards on affected tiles by 4"
+      "description": "When first enfeebled, raise the power of allied cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2292,22 +2292,22 @@
         "status": "ENFEEBLED"
       },
       "target": "ENEMIES",
-      "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+      "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2341,14 +2341,14 @@
         "status": "ENHANCED"
       },
       "target": "ENEMIES",
-      "description": "When first enhanced, lower the power of enemy cards on affected tiles by 4"
-    },
-    "affected": [
-      {
-        "x": 1,
-        "y": 0
-      }
-    ]
+      "description": "When first enhanced, lower the power of enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
+    }
   },
   {
     "id": "066",
@@ -2365,18 +2365,18 @@
         "status": "ENHANCED"
       },
       "target": "ANY",
-      "description": "Enhanced: Raise power of allied and enemy cards on affected tiles by 4. Enfeebled: Lower their power by 4"
+      "description": "Enhanced: Raise power of allied and enemy cards on affected tiles by 4. Enfeebled: Lower their power by 4",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2401,14 +2401,14 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2465,9 +2465,6 @@
     "effect": {
       "type": "RaiseRank",
       "amount": 2,
-      "trigger": {
-        "type": "WhenPlayed"
-      },
       "description": "When played, raise position ranks by 2"
     },
     "increments": [
@@ -2494,22 +2491,22 @@
         "type": "WhenPlayed"
       },
       "target": "ENEMIES",
-      "description": "When played, lower the power of enemy cards on affected tiles by 4"
+      "description": "When played, lower the power of enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2534,9 +2531,6 @@
     "effect": {
       "type": "RaiseRank",
       "amount": 2,
-      "trigger": {
-        "type": "WhenPlayed"
-      },
       "description": "When played, raise position ranks by 2"
     },
     "increments": [
@@ -2563,26 +2557,26 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2615,30 +2609,30 @@
         "type": "WhenDestroyed"
       },
       "target": "ENEMIES",
-      "description": "When destroyed, lower the power of enemy cards on affected tiles by 1"
+      "description": "When destroyed, lower the power of enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 1,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 1,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2717,18 +2711,18 @@
         "type": "WhenPlayed"
       },
       "target": "ALLIES",
-      "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+      "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power",
+      "affected": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2753,18 +2747,18 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2789,18 +2783,18 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2829,14 +2823,14 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2865,18 +2859,18 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -2906,14 +2900,14 @@
         "status": "ENHANCED"
       },
       "target": "ALLIES",
-      "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 4"
+      "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -2946,42 +2940,42 @@
         "type": "WhenDestroyed"
       },
       "target": "ALLIES",
-      "description": "When destroyed, raise the power of allied cards on affected tiles by 3"
-    },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ]
+      "description": "When destroyed, raise the power of allied cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
+    }
   },
   {
     "id": "083",
@@ -2996,42 +2990,42 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
-    },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ]
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
+    }
   },
   {
     "id": "084",
@@ -3070,9 +3064,6 @@
     "effect": {
       "type": "RaiseRank",
       "amount": 3,
-      "trigger": {
-        "type": "WhenPlayed"
-      },
       "description": "When played, raise position ranks by 3"
     },
     "increments": [
@@ -3116,42 +3107,42 @@
         "threshold": 7
       },
       "target": "ALLIES",
-      "description": "When this card's power first reaches 7, raise the power of allied cards on affected tiles by 2"
+      "description": "When this card's power first reaches 7, raise the power of allied cards on affected tiles by 2",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -3172,14 +3163,14 @@
         "type": "WhenPlayed"
       },
       "target": "ENEMIES",
-      "description": "When played, lower the power of enemy cards on affected tiles by 8"
+      "description": "When played, lower the power of enemy cards on affected tiles by 8",
+      "affected": [
+        {
+          "x": 2,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 2,
@@ -3233,18 +3224,18 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -3270,42 +3261,42 @@
         "status": "ENFEEBLED"
       },
       "target": "ENEMIES",
-      "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+      "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -3330,42 +3321,42 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -3429,14 +3420,14 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -3484,9 +3475,6 @@
     "effect": {
       "type": "RaiseRank",
       "amount": 2,
-      "trigger": {
-        "type": "WhenPlayed"
-      },
       "description": "When played, raise position ranks by 2"
     },
     "increments": [
@@ -3548,58 +3536,58 @@
       "trigger": {
         "type": "WhenPlayed"
       },
-      "description": "When played, lower power of allied and enemy cards on affected tiles by 1"
-    },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -1,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 1
-      },
-      {
-        "x": -2,
-        "y": 1
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -1
-      },
-      {
-        "x": -2,
-        "y": -1
-      },
-      {
-        "x": 1,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -1,
-        "y": -2
-      }
-    ]
+      "description": "When played, lower power of allied and enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -1,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": -2,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -1
+        },
+        {
+          "x": -2,
+          "y": -1
+        },
+        {
+          "x": 1,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -1,
+          "y": -2
+        }
+      ]
+    }
   },
   {
     "id": "095",
@@ -3694,42 +3682,42 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 2,
@@ -3774,9 +3762,6 @@
     "effect": {
       "type": "RaiseRank",
       "amount": 2,
-      "trigger": {
-        "type": "WhenPlayed"
-      },
       "description": "When played, raise position ranks by 2"
     },
     "increments": [
@@ -3808,22 +3793,22 @@
         "status": "ENHANCED"
       },
       "target": "ENEMIES",
-      "description": "When first enhanced, lower the power of enemy cards on affected tiles by 5"
+      "description": "When first enhanced, lower the power of enemy cards on affected tiles by 5",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -3888,26 +3873,26 @@
         "type": "WhenDestroyed"
       },
       "target": "ALLIES",
-      "description": "When destroyed, raise the power of allied cards on affected tiles by 5"
+      "description": "When destroyed, raise the power of allied cards on affected tiles by 5",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -3940,42 +3925,42 @@
         "type": "WhileActive"
       },
       "target": "ENEMIES",
-      "description": "Lower the power of enemy cards on affected tiles by 3 while this card is in play"
+      "description": "Lower the power of enemy cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -4044,18 +4029,18 @@
         "type": "WhenPlayed"
       },
       "target": "ENEMIES",
-      "description": "When played, lower the power of enemy cards on affected tiles by 5"
+      "description": "When played, lower the power of enemy cards on affected tiles by 5",
+      "affected": [
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -4111,42 +4096,42 @@
       "trigger": {
         "type": "WhenDestroyed"
       },
-      "description": "Spawned on empty positions of rank 1. When destroyed, raise the power of allied and enemy cards on affected tiles by 1"
-    },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ]
+      "description": "Spawned on empty positions of rank 1. When destroyed, raise the power of allied and enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
+    }
   },
   {
     "id": "105B",
@@ -4161,42 +4146,42 @@
       "trigger": {
         "type": "WhenDestroyed"
       },
-      "description": "Spawned on empty positions of rank 2. When destroyed, raise the power of allied and enemy cards on affected tiles by 2"
-    },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ]
+      "description": "Spawned on empty positions of rank 2. When destroyed, raise the power of allied and enemy cards on affected tiles by 2",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
+    }
   },
   {
     "id": "105C",
@@ -4211,42 +4196,42 @@
       "trigger": {
         "type": "WhenDestroyed"
       },
-      "description": "Spawned on empty positions of rank 3. When destroyed, raise the power of allied and enemy cards on affected tiles by 3"
-    },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ]
+      "description": "Spawned on empty positions of rank 3. When destroyed, raise the power of allied and enemy cards on affected tiles by 3",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
+    }
   },
   {
     "id": "106",
@@ -4261,26 +4246,26 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
-    },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ]
+      "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
+    }
   },
   {
     "id": "107",
@@ -4425,18 +4410,18 @@
       "trigger": {
         "type": "WhileActive"
       },
-      "description": "Raise power of allied cards on affected tiles by 2 while this card is in play"
+      "description": "Raise power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -4461,14 +4446,14 @@
         "type": "WhenPlayed"
       },
       "target": "ENEMIES",
-      "description": "When played, lower the power of enemy cards on affected tiles by 4"
+      "description": "When played, lower the power of enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 2,
@@ -4489,26 +4474,26 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
-    },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ]
+      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
+    }
   },
   {
     "id": "112",
@@ -4524,42 +4509,42 @@
         "status": "ENFEEBLED"
       },
       "target": "ENEMIES",
-      "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 6"
+      "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 6",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": -1,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 1,
+          "y": -2
+        },
+        {
+          "x": -1,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": -1,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 1,
-        "y": -2
-      },
-      {
-        "x": -1,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -4644,42 +4629,42 @@
         "type": "WhileActive"
       },
       "target": "ANY",
-      "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+      "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -4729,42 +4714,42 @@
         "status": "ENHANCED"
       },
       "target": "ANY",
-      "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 4"
+      "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": -2,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": -1
+        },
+        {
+          "x": -2,
+          "y": -1
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 1
-      },
-      {
-        "x": -2,
-        "y": 1
-      },
-      {
-        "x": 2,
-        "y": -1
-      },
-      {
-        "x": -2,
-        "y": -1
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -4797,26 +4782,26 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -4848,18 +4833,18 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, destroy allied and enemy cards on affected tiles"
+      "description": "When played, destroy allied and enemy cards on affected tiles",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -4900,26 +4885,26 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 5"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 5",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": -1
+        },
+        {
+          "x": 1,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 1
-      },
-      {
-        "x": 2,
-        "y": -1
-      },
-      {
-        "x": 1,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -4983,42 +4968,42 @@
         "type": "WhileActive"
       },
       "target": "ANY",
-      "description": "Raise the power of allied and enemy cards on affected tiles by 3 while this card is in play"
+      "description": "Raise the power of allied and enemy cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -5052,26 +5037,26 @@
         "status": "ENFEEBLED"
       },
       "target": "ANY",
-      "description": "When first enfeebled, lower the power of allied and enemy cards on affected tiles by 5"
+      "description": "When first enfeebled, lower the power of allied and enemy cards on affected tiles by 5",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -5104,18 +5089,18 @@
         "type": "WhenPlayed"
       },
       "target": "ALLIES",
-      "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+      "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -5140,18 +5125,18 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": -1,
+          "y": 2
+        },
+        {
+          "x": -1,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": -1,
-        "y": 2
-      },
-      {
-        "x": -1,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -5194,18 +5179,18 @@
       "trigger": {
         "type": "WhileActive"
       },
-      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -5233,14 +5218,14 @@
       "trigger": {
         "type": "WhenPlayed"
       },
-      "description": "When played, destroy enemy cards on affected tiles"
+      "description": "When played, destroy enemy cards on affected tiles",
+      "affected": [
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -5261,30 +5246,30 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
+      "description": "When played, lower the power of allied and enemy cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -5321,34 +5306,34 @@
         "type": "WhenDestroyed"
       },
       "target": "ENEMIES",
-      "description": "When destroyed, lower the power of enemy cards on affected tiles by 9"
+      "description": "When destroyed, lower the power of enemy cards on affected tiles by 9",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -5389,18 +5374,18 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -1,
+          "y": 1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -1,
-        "y": 1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -5425,18 +5410,18 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": -1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": -1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -5462,14 +5447,14 @@
         "status": "ENHANCED"
       },
       "target": "ANY",
-      "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 99"
+      "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 99",
+      "affected": [
+        {
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 1,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 1,
@@ -5491,14 +5476,14 @@
         "status": "ENHANCED"
       },
       "target": "ALLIES",
-      "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 4"
+      "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 4",
+      "affected": [
+        {
+          "x": 2,
+          "y": 0
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 0
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -5572,74 +5557,74 @@
         "type": "WhenPlayed"
       },
       "target": "ALLIES",
-      "description": "When played, lower the power of allied cards on affected tiles by 1"
+      "description": "When played, lower the power of allied cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -5691,42 +5676,42 @@
       "trigger": {
         "type": "WhileActive"
       },
-      "description": "Spawned on empty position of rank 1. Raise power of allied and enemy cards on affected tiles by 1 while this card is in play"
-    },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ]
+      "description": "Spawned on empty position of rank 1. Raise power of allied and enemy cards on affected tiles by 1 while this card is in play",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
+    }
   },
   {
     "id": "134B",
@@ -5741,42 +5726,42 @@
       "trigger": {
         "type": "WhileActive"
       },
-      "description": "Spawned on empty position of rank 2. Raise power of allied and enemy cards on affected tiles by 2 while this card is in play"
-    },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ]
+      "description": "Spawned on empty position of rank 2. Raise power of allied and enemy cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
+    }
   },
   {
     "id": "134C",
@@ -5791,42 +5776,42 @@
       "trigger": {
         "type": "WhileActive"
       },
-      "description": "Spawned on empty position of rank 3. Raise power of allied and enemy cards on affected tiles by 3 while this card is in play"
-    },
-    "affected": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": -2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 2,
-        "y": -2
-      },
-      {
-        "x": 0,
-        "y": -2
-      },
-      {
-        "x": -2,
-        "y": -2
-      }
-    ]
+      "description": "Spawned on empty position of rank 3. Raise power of allied and enemy cards on affected tiles by 3 while this card is in play",
+      "affected": [
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": -2,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 2,
+          "y": -2
+        },
+        {
+          "x": 0,
+          "y": -2
+        },
+        {
+          "x": -2,
+          "y": -2
+        }
+      ]
+    }
   },
   {
     "id": "135",
@@ -5894,26 +5879,26 @@
         "type": "WhileActive"
       },
       "target": "ALLIES",
-      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+      "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": -1
+        },
+        {
+          "x": 1,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 2,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 2,
-        "y": -1
-      },
-      {
-        "x": 1,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -5983,42 +5968,42 @@
         "type": "WhenPlayed"
       },
       "target": "ANY",
-      "description": "When played, raise the power of allied and enemy cards on affected tiles by 1"
-    },
-    "affected": [
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 1,
-        "y": 0
-      },
-      {
-        "x": -1,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      }
-    ]
+      "description": "When played, raise the power of allied and enemy cards on affected tiles by 1",
+      "affected": [
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": -1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        }
+      ]
+    }
   },
   {
     "id": "140",
@@ -6133,18 +6118,18 @@
         "type": "WhenPlayed"
       },
       "target": "ENEMIES",
-      "description": "When played, destroy enemy cards on affected tiles"
+      "description": "When played, destroy enemy cards on affected tiles",
+      "affected": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": -1
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 1
-      },
-      {
-        "x": 0,
-        "y": -1
-      }
-    ],
     "increments": [
       {
         "x": 0,
@@ -6177,42 +6162,42 @@
         "type": "WhileActive"
       },
       "target": "ANY",
-      "description": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play"
+      "description": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play",
+      "affected": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": -1,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 0
+        },
+        {
+          "x": -2,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": -1
+        },
+        {
+          "x": -1,
+          "y": -1
+        },
+        {
+          "x": 0,
+          "y": -2
+        }
+      ]
     },
-    "affected": [
-      {
-        "x": 0,
-        "y": 2
-      },
-      {
-        "x": 1,
-        "y": 1
-      },
-      {
-        "x": -1,
-        "y": 1
-      },
-      {
-        "x": 2,
-        "y": 0
-      },
-      {
-        "x": -2,
-        "y": 0
-      },
-      {
-        "x": 1,
-        "y": -1
-      },
-      {
-        "x": -1,
-        "y": -1
-      },
-      {
-        "x": 0,
-        "y": -2
-      }
-    ],
     "increments": [
       {
         "x": 0,

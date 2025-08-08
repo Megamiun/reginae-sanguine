@@ -6,6 +6,7 @@ import br.com.gabryel.reginaesanguine.domain.Position
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.compose.all
+import io.kotest.matchers.equals.beEqual
 
 fun haveCell(
     position: Position,
@@ -14,6 +15,20 @@ fun haveCell(
     val cell = board shouldHaveCellAt position
 
     val result = match.test(cell)
+    MatcherResult(
+        result.passed(),
+        { "Cell at [${position.lane}, ${position.column}]: " + result.failureMessage() },
+        { "Cell at [${position.lane}, ${position.column}]: " + result.negatedFailureMessage() },
+    )
+}
+
+fun haveCellTotalPower(
+    position: Position,
+    power: Int,
+) = Matcher<CellContainer> { board ->
+    val cellPower = board.getScoreAt(position).shouldBeSuccess()
+
+    val result = beEqual(power).test(cellPower)
     MatcherResult(
         result.passed(),
         { "Cell at [${position.lane}, ${position.column}]: " + result.failureMessage() },

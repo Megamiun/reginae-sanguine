@@ -54,7 +54,7 @@ fun GameApp(viewModel: GameViewModel) {
 
     val state by viewModel.state.collectAsState()
     val game = state.game
-    val player = game.players[game.nextPlayerPosition] ?: fail("Couldn´t find player ${game.nextPlayerPosition}")
+    val player = game.players[game.playerTurn] ?: fail("Couldn´t find player ${game.playerTurn}")
 
     val area = game.size
     var selectedChoice by mutableStateOf(0)
@@ -95,6 +95,7 @@ fun GameApp(viewModel: GameViewModel) {
                 }
                 Grid(gridWithSize(IntSize(area.width, area.height), cellSize)) { position ->
                     val cellContent = game.getCellAt(position)
+                    val cellPower = game.getScoreAt(position) as? Success<Int> ?: return@Grid
 
                     val textStyle = if (state is ChoosePosition && position == selectedPosition) Bold
                     else TextStyle.Unspecified
@@ -102,7 +103,7 @@ fun GameApp(viewModel: GameViewModel) {
                     Column(modifier = Modifier.matchParentSize(), horizontalAlignment = CenterHorizontally) {
                         Text(position.describePosition(), textStyle = textStyle)
                         Text(cellContent.describeOwner().orEmpty(), textStyle = textStyle)
-                        Text(cellContent.describeCard().orEmpty(), textStyle = textStyle)
+                        Text(cellContent.describeCard(cellPower.value).orEmpty(), textStyle = textStyle)
                     }
                 }
                 Grid(gridWithSize(IntSize(1, area.height), cellSize).borderless()) { (lane) ->
@@ -181,11 +182,11 @@ private fun Position.describePosition() = "$lane-$column"
 private fun Result<Cell>.describeOwner() = (this as? Success<Cell>)?.value
     ?.owner?.name
 
-private fun Result<Cell>.describeCard() = (this as? Success<Cell>)?.value
+private fun Result<Cell>.describeCard(cellPower: Int) = (this as? Success<Cell>)?.value
     ?.takeIf { it.owner != null }
     ?.run {
         listOfNotNull(
-            totalPower?.let { "P$it" },
+            cellPower.takeIf { it != 0 }?.let { "P$it" },
             "R$rank",
         ).joinToString(" ")
     }

@@ -1,5 +1,3 @@
-import de.undercouch.gradle.tasks.download.Download
-import org.gradle.api.logging.LogLevel.LIFECYCLE
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
@@ -12,6 +10,9 @@ plugins {
 
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
+
+    alias(libs.plugins.spring.boot) apply false
+    alias(libs.plugins.spring.dependency.management) apply false
 
     alias(libs.plugins.jetbrains.compose) apply false
 
