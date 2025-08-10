@@ -1,6 +1,13 @@
 package br.com.gabryel.reginaesanguine.domain.effect
 
+import br.com.gabryel.reginaesanguine.domain.Board
 import br.com.gabryel.reginaesanguine.domain.Displacement
+import br.com.gabryel.reginaesanguine.domain.EffectRegistry
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition
+import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.atColumn
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.NONE
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -10,12 +17,37 @@ interface Effect {
     val description: String
 }
 
-interface EffectWithAffected : Effect {
-    val affected: Set<Displacement>
+interface Raisable {
+    val target: TargetType
+
+    fun getRaiseBy(
+        board: Board,
+        registry: EffectRegistry,
+        source: PlayerPosition,
+        targeted: PlayerPosition,
+        sourcePosition: Position
+    ): Int = if (target.isTargetable(source, targeted))
+        getDefaultAmount(board, registry, source, sourcePosition)
+    else 0
+
+    fun getDefaultAmount(
+        board: Board,
+        registry: EffectRegistry,
+        sourcePlayer: PlayerPosition,
+        sourcePosition: Position
+    ): Int
 }
 
-interface Targetable {
+interface EffectWithAffected : Effect {
+    val affected: Set<Displacement>
+
     val target: TargetType
+
+    fun getAffectedPositions(sourcePosition: Position, sourcePlayer: PlayerPosition): List<Position> =
+        when (target) {
+            SELF -> listOf(sourcePosition)
+            else -> affected.map { displacement -> sourcePosition + sourcePlayer.correct(displacement) }
+        }
 }
 
 @Serializable
@@ -26,7 +58,49 @@ class RaisePower(
     override val trigger: Trigger,
     override val description: String = "Raises $target power by $amount on $trigger",
     override val affected: Set<Displacement> = setOf(),
-) : EffectWithAffected, Targetable
+) : EffectWithAffected, Raisable {
+    override fun getDefaultAmount(
+        board: Board,
+        registry: EffectRegistry,
+        sourcePlayer: PlayerPosition,
+        sourcePosition: Position
+    ): Int = amount
+}
+
+@Serializable
+@SerialName("RaisePowerByCount")
+class RaisePowerByCount(
+    val status: StatusType = StatusType.ANY,
+    val scope: TargetType = TargetType.ANY,
+    override val target: TargetType,
+    override val description: String = "Raises $target power by count of cards with status $status owned by $scope",
+    override val affected: Set<Displacement> = setOf(),
+) : EffectWithAffected, Raisable {
+    @Transient
+    override val trigger = WhileActive
+
+    override fun getDefaultAmount(
+        board: Board,
+        registry: EffectRegistry,
+        sourcePlayer: PlayerPosition,
+        sourcePosition: Position
+    ): Int {
+        val size = board.size
+
+        return (0..size.width).sumOf { column ->
+            (0..size.height).count { lane ->
+                val targetPosition = lane atColumn column
+                val owner = board.getCellAt(targetPosition).orNull()?.owner
+                    ?: return@count false
+
+                if (!scope.isTargetable(sourcePlayer, owner))
+                    return@count false
+
+                status.isUnderStatus(registry.getExtraPowerAt(targetPosition, board))
+            }
+        }
+    }
+}
 
 @Serializable
 @SerialName("RaiseRank")
@@ -51,42 +125,48 @@ class AddCardsToHand(
 class SpawnCards(
     val cardIds: List<String>,
     override val trigger: Trigger,
-    override val description: String = "Add cards $cardIds to field on $trigger",
-    override val affected: Set<Displacement> = setOf(),
-) : EffectWithAffected
+    override val description: String = "Add cards $cardIds to field on $trigger"
+) : Effect
 
 @Serializable
 @SerialName("ScoreBonus")
 class ScoreBonus(
     val amount: Int,
-    override val trigger: Trigger,
-    override val description: String = "Add $amount score on $trigger",
-) : Effect
+    override val description: String = "Add $amount score to lane if you wins lane",
+) : Effect {
+    @Transient
+    override val trigger = WhenLaneWon
+}
 
 @Serializable
 @SerialName("LoserScoreBonus")
 class LoserScoreBonus(
-    override val trigger: Trigger,
-    override val description: String = "Add points from loser to score on $trigger",
-) : Effect
+    override val description: String = "Add points from every lane loser score to winner score",
+) : Effect {
+    @Transient
+    override val trigger = WhenLaneWon
+}
 
 @Serializable
 @SerialName("DestroyCards")
 class DestroyCards(
     override val target: TargetType,
     override val trigger: Trigger,
-    override val description: String = "Destroy $target cards on $trigger",
     override val affected: Set<Displacement> = setOf(),
-) : EffectWithAffected, Targetable
+    override val description: String = "Destroy $target cards on $trigger",
+) : EffectWithAffected
 
 @Serializable
 @SerialName("ReplaceAlly")
 class ReplaceAlly(
     val powerMultiplier: Int = 0,
-    override val target: TargetType,
-    override val trigger: Trigger,
-    override val description: String = "Replace ally and raises $target power per $powerMultiplier on $trigger",
-) : Effect, Targetable
+    override val target: TargetType = NONE,
+    override val affected: Set<Displacement> = setOf(),
+    override val description: String = "Replace ally and raises $target power per $powerMultiplier",
+) : EffectWithAffected {
+    @Transient
+    override val trigger = None
+}
 
 @Serializable
 @SerialName("StatusBonus")
@@ -96,9 +176,24 @@ class StatusBonus(
     override val target: TargetType,
     override val description: String = "Raises $enhancedAmount power on enhanced and $enfeebledAmount power on enfeebled",
     override val affected: Set<Displacement> = setOf(),
-) : EffectWithAffected, Targetable {
+) : EffectWithAffected, Raisable {
     @Transient
-    override val trigger = OnStatusChange()
+    override val trigger = WhileActive
+
+    override fun getDefaultAmount(
+        board: Board,
+        registry: EffectRegistry,
+        sourcePlayer: PlayerPosition,
+        sourcePosition: Position
+    ): Int {
+        val netPowerOnSource = registry.getExtraPowerAt(sourcePosition, board)
+
+        return when {
+            netPowerOnSource > 0 -> enhancedAmount
+            netPowerOnSource < 0 -> enfeebledAmount
+            else -> 0
+        }
+    }
 }
 
 @Serializable

@@ -25,6 +25,6 @@ value class ResultRaise<A>(private val raise: Raise<Failure>) : Raise<Failure> b
 inline fun <A> buildResult(run: ResultRaise<A>.() -> A): Result<A> = try {
     recover({ Success(run(ResultRaise(this))) }) { it }
 } catch (err: Throwable) {
-    // TODO There must be a better solution
+    println(err.stackTraceToString())
     UnknownError(err)
 }

@@ -6,12 +6,14 @@ enum class TargetType {
     ALLIES,
     ENEMIES,
     ANY,
-    SELF;
+    SELF,
+    NONE;
 
     fun isTargetable(source: PlayerPosition, target: PlayerPosition) = when (this) {
         ALLIES -> source == target
         ENEMIES -> source != target
         ANY -> true
         SELF -> TODO("SELF not implemented yet")
+        NONE -> false
     }
 }

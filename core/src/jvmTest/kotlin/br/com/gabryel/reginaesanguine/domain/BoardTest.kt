@@ -14,19 +14,22 @@ import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
 import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
+import br.com.gabryel.reginaesanguine.domain.effect.StatusBonus
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ENEMIES
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
-import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
-import br.com.gabryel.reginaesanguine.domain.helpers.BOTTOM_LANE
-import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_COLUMN
-import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_LEFT_COLUMN
-import br.com.gabryel.reginaesanguine.domain.helpers.CENTER_RIGHT_COLUMN
-import br.com.gabryel.reginaesanguine.domain.helpers.LEFT_COLUMN
-import br.com.gabryel.reginaesanguine.domain.helpers.MIDDLE_LANE
+import br.com.gabryel.reginaesanguine.domain.helpers.A1
+import br.com.gabryel.reginaesanguine.domain.helpers.A2
+import br.com.gabryel.reginaesanguine.domain.helpers.B1
+import br.com.gabryel.reginaesanguine.domain.helpers.B2
+import br.com.gabryel.reginaesanguine.domain.helpers.B3
+import br.com.gabryel.reginaesanguine.domain.helpers.B4
+import br.com.gabryel.reginaesanguine.domain.helpers.B5
+import br.com.gabryel.reginaesanguine.domain.helpers.C1
 import br.com.gabryel.reginaesanguine.domain.helpers.RIGHT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
@@ -50,15 +53,15 @@ class BoardTest {
     @Test
     fun `when playing a card on a valid position, should add player card to position`() {
         val nextBoard = Board.default()
-            .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER))
+            .play(LEFT, Play(B1, SECURITY_OFFICER))
 
-        nextBoard shouldBeSuccessfulAnd haveCell(MIDDLE_LANE atColumn LEFT_COLUMN, cardCellWith(LEFT, SECURITY_OFFICER))
+        nextBoard shouldBeSuccessfulAnd haveCell(B1, cardCellWith(LEFT, SECURITY_OFFICER))
     }
 
     @Test
     fun `when playing a card on a position where you have no enough rank, should fail with NotEnoughrank`() {
         val nextBoard = Board.default()
-            .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, RIOT_TROOPER))
+            .play(LEFT, Play(B1, RIOT_TROOPER))
 
         nextBoard.shouldBeFailure<CellRankLowerThanCard>()
     }
@@ -66,7 +69,7 @@ class BoardTest {
     @Test
     fun `when playing a card on a position you have no control, should fail with CellDoesNotBelongToPlayer`() {
         val nextBoard = Board.default()
-            .play(RIGHT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER))
+            .play(RIGHT, Play(B1, SECURITY_OFFICER))
 
         nextBoard.shouldBeFailure<CellDoesNotBelongToPlayer>()
     }
@@ -83,9 +86,8 @@ class BoardTest {
     fun `when playing a card on a position where you already have a card, should fail with CellOccupied`() {
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(RIGHT, Play(MIDDLE_LANE atColumn RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
         }
 
         nextBoard.shouldBeFailure<CellOccupied>()
@@ -94,14 +96,14 @@ class BoardTest {
     @Test
     fun `when playing a card, should increment rank on all increment positions described in the cards`() {
         val nextBoard = Board.default()
-            .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER))
+            .play(LEFT, Play(B1, SECURITY_OFFICER))
 
         nextBoard shouldBeSuccessfulAnd haveCells(
-            (BOTTOM_LANE atColumn LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 2),
-            (TOP_LANE atColumn LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 2),
-            (MIDDLE_LANE atColumn CENTER_LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 1),
+            C1 to emptyCellOwnedBy(LEFT, 2),
+            A1 to emptyCellOwnedBy(LEFT, 2),
+            B2 to emptyCellOwnedBy(LEFT, 1),
             // Some extras for security
-            (TOP_LANE atColumn CENTER_LEFT_COLUMN) to unclaimedCell(),
+            A2 to unclaimedCell(),
         )
     }
 
@@ -113,23 +115,23 @@ class BoardTest {
         )
 
         val nextBoard = Board.default()
-            .copy(state = mapOf((MIDDLE_LANE atColumn CENTER_COLUMN) to Cell(RIGHT, 1)))
-            .play(RIGHT, Play(MIDDLE_LANE atColumn CENTER_COLUMN, powerRaise))
+            .copy(state = mapOf(B3 to Cell(RIGHT, 1)))
+            .play(RIGHT, Play(B3, powerRaise))
 
         nextBoard shouldBeSuccessfulAnd haveCells(
-            (MIDDLE_LANE atColumn CENTER_LEFT_COLUMN) to emptyCellOwnedBy(RIGHT, 1),
+            B2 to emptyCellOwnedBy(RIGHT, 1),
             // Some extras for security
-            (MIDDLE_LANE atColumn CENTER_RIGHT_COLUMN) to unclaimedCell(),
+            B4 to unclaimedCell(),
         )
     }
 
     @Test
     fun `when playing a card, should add points player score`() {
-        val smallCard = cardOf(name = "ADD4", value = 4)
-        val bigCard = cardOf(name = "ADD5", value = 5)
+        val smallCard = cardOf(name = "ADD4", power = 4)
+        val bigCard = cardOf(name = "ADD5", power = 5)
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, smallCard)).orRaiseError()
+                .play(LEFT, Play(B1, smallCard)).orRaiseError()
                 .play(RIGHT, Play(TOP_LANE atColumn RIGHT_COLUMN, bigCard)).orRaiseError()
         }
 
@@ -141,13 +143,13 @@ class BoardTest {
 
     @Test
     fun `given two players have different amount of points in same lane, when retrieving scores, only consider greatest score`() {
-        val smallCard = cardOf(name = "ADD4", value = 4)
-        val bigCard = cardOf(name = "ADD5", value = 5)
+        val smallCard = cardOf(name = "ADD4", power = 4)
+        val bigCard = cardOf(name = "ADD5", power = 5)
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, smallCard)).orRaiseError()
-                .play(RIGHT, Play(MIDDLE_LANE atColumn RIGHT_COLUMN, bigCard)).orRaiseError()
+                .play(LEFT, Play(B1, smallCard)).orRaiseError()
+                .play(RIGHT, Play(B5, bigCard)).orRaiseError()
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -158,25 +160,24 @@ class BoardTest {
 
     @Test
     fun `when a card with RaisePower effects is played, should add effect to affected entities`() {
-        val powerRaise = rasePowerCard(LEFTWARD, 2)
+        val powerRaise = raisePowerCard(LEFTWARD, 2)
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(MIDDLE_LANE atColumn CENTER_LEFT_COLUMN, powerRaise)).orRaiseError()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B2, powerRaise)).orRaiseError()
         }
 
-        nextBoard shouldBeSuccessfulAnd
-            haveCellTotalPower(MIDDLE_LANE atColumn LEFT_COLUMN, 3)
+        nextBoard shouldBeSuccessfulAnd haveCellTotalPower(B1, 3)
     }
 
     @Test
-    fun `when a player wins a lane with a ScoreBonus card with OnLaneWon, should receive bonus points`() {
-        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5, WhenLaneWon))
+    fun `when a player wins a lane with a ScoreBonus card, should receive bonus points`() {
+        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5))
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, laneBonus)).orRaiseError()
+                .play(LEFT, Play(B1, laneBonus)).orRaiseError()
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -186,14 +187,14 @@ class BoardTest {
     }
 
     @Test
-    fun `when a player loses a lane with a ScoreBonus card with OnLaneWon, should not receive bonus points`() {
-        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5, WhenLaneWon))
+    fun `when a player loses a lane with a ScoreBonus card, should not receive bonus points`() {
+        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5))
 
-        val strongCard = cardOf(name = "Strong", value = 5)
+        val strongCard = cardOf(name = "Strong", power = 5)
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, laneBonus)).orRaiseError()
-                .play(RIGHT, Play(MIDDLE_LANE atColumn RIGHT_COLUMN, strongCard)).orRaiseError()
+                .play(LEFT, Play(B1, laneBonus)).orRaiseError()
+                .play(RIGHT, Play(B5, strongCard)).orRaiseError()
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -206,8 +207,8 @@ class BoardTest {
     fun `when two players have equal power in same lane, both should get 0 points`() {
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(RIGHT, Play(MIDDLE_LANE atColumn RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
+                .play(RIGHT, Play(B5, SECURITY_OFFICER)).orRaiseError()
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -222,25 +223,24 @@ class BoardTest {
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(BOTTOM_LANE atColumn LEFT_COLUMN, destroyUp)).orRaiseError()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(C1, destroyUp)).orRaiseError()
         }
 
-        nextBoard shouldBeSuccessfulAnd haveCell(MIDDLE_LANE atColumn RIGHT_COLUMN, emptyCellOwnedBy(RIGHT, 1))
+        nextBoard shouldBeSuccessfulAnd haveCell(B5, emptyCellOwnedBy(RIGHT, 1))
     }
 
     @Test
     fun `when a card with a effect is played by RIGHT player, should apply mirrored effect to affected entities`() {
-        val powerRaise = rasePowerCard(LEFTWARD, power = 2)
+        val powerRaise = raisePowerCard(LEFTWARD, powerRaise = 2)
 
         val nextBoard = buildResult {
             Board.default()
-                .play(RIGHT, Play(MIDDLE_LANE atColumn RIGHT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(RIGHT, Play(MIDDLE_LANE atColumn CENTER_RIGHT_COLUMN, powerRaise)).orRaiseError()
+                .play(RIGHT, Play(B5, SECURITY_OFFICER)).orRaiseError()
+                .play(RIGHT, Play(B4, powerRaise)).orRaiseError()
         }
 
-        nextBoard shouldBeSuccessfulAnd
-            haveCellTotalPower(MIDDLE_LANE atColumn RIGHT_COLUMN, 3)
+        nextBoard shouldBeSuccessfulAnd haveCellTotalPower(B5, 3)
     }
 
     @Test
@@ -252,52 +252,104 @@ class BoardTest {
         )
 
         val nextBoard = Board.default()
-            .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, cardWithRaiseRank))
+            .play(LEFT, Play(B1, cardWithRaiseRank))
 
         nextBoard shouldBeSuccessfulAnd haveCells(
-            (TOP_LANE atColumn LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 3),
-            (MIDDLE_LANE atColumn CENTER_LEFT_COLUMN) to emptyCellOwnedBy(LEFT, 2),
+            (A1) to emptyCellOwnedBy(LEFT, 3),
+            (B2) to emptyCellOwnedBy(LEFT, 2),
         )
     }
 
     @Test
     fun `when a card with WhileActive RaisePower is destroyed, should remove power bonus from target`() {
-        val whileActivePowerCard = rasePowerCard(UPWARD, power = 2, trigger = WhileActive)
+        val whileActivePowerCard = raisePowerCard(UPWARD, powerRaise = 2, trigger = WhileActive)
         val destroyUp = destroyerCard(UPWARD, ALLIES)
 
         val board = buildResult {
             Board.default()
-                .play(LEFT, Play(TOP_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, whileActivePowerCard)).orRaiseError()
-                .play(LEFT, Play(BOTTOM_LANE atColumn LEFT_COLUMN, destroyUp)).orRaiseError()
+                .play(LEFT, Play(A1, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B1, whileActivePowerCard)).orRaiseError()
+                .play(LEFT, Play(C1, destroyUp)).orRaiseError()
         }
 
-        board shouldBeSuccessfulAnd haveCellTotalPower(TOP_LANE atColumn LEFT_COLUMN, 1)
+        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 1)
     }
 
     @Test
     fun `when a card with WhenPlayed RaisePower is destroyed, should keep power bonus on target`() {
-        val raiseUpWhenPlayed = rasePowerCard(UPWARD, power = 2)
+        val raiseUpWhenPlayed = raisePowerCard(UPWARD, powerRaise = 2)
         val destroyUp = destroyerCard(UPWARD, ALLIES)
 
         val board = buildResult {
             Board.default()
-                .play(LEFT, Play(TOP_LANE atColumn LEFT_COLUMN, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(MIDDLE_LANE atColumn LEFT_COLUMN, raiseUpWhenPlayed)).orRaiseError()
-                .play(LEFT, Play(BOTTOM_LANE atColumn LEFT_COLUMN, destroyUp)).orRaiseError()
+                .play(LEFT, Play(A1, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B1, raiseUpWhenPlayed)).orRaiseError()
+                .play(LEFT, Play(C1, destroyUp)).orRaiseError()
         }
 
-        board shouldBeSuccessfulAnd haveCellTotalPower(TOP_LANE atColumn LEFT_COLUMN, 3)
+        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 3)
     }
 
-    private fun rasePowerCard(
+    @Test
+    fun `when StatusBonus source card is enhanced, should give enhanced bonus to targets`() {
+        val powerBooster = raisePowerCard(UPWARD, 2, trigger = WhileActive)
+        val statusBonusCard = cardOf(
+            "Status Bonus",
+            effect = StatusBonus(3, -1, ALLIES, affected = setOf(UPWARD)),
+        )
+
+        val board = buildResult {
+            Board.default()
+                .play(LEFT, Play(A1, cardOf(power = 2))).orRaiseError()
+                .play(LEFT, Play(B1, statusBonusCard)).orRaiseError()
+                .play(LEFT, Play(C1, powerBooster)).orRaiseError()
+        }
+
+        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 5)
+    }
+
+    @Test
+    fun `when StatusBonus source card is enfeebled, should give enfeebled penalty to targets`() {
+        val powerReducer = raisePowerCard(UPWARD, -2, trigger = WhileActive)
+        val statusBonusCard = cardOf(
+            "Status Bonus",
+            effect = StatusBonus(3, -1, ALLIES, affected = setOf(UPWARD)),
+        )
+
+        val board = buildResult {
+            Board.default()
+                .play(LEFT, Play(A1, cardOf(power = 2))).orRaiseError()
+                .play(LEFT, Play(B1, statusBonusCard)).orRaiseError()
+                .play(LEFT, Play(C1, powerReducer)).orRaiseError()
+        }
+
+        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 1)
+    }
+
+    @Test
+    fun `when StatusBonus source card has no status, should give no bonus to targets`() {
+        val statusBonusCard = cardOf(
+            "Status Bonus",
+            effect = StatusBonus(3, -1, ANY, affected = setOf(UPWARD)),
+        )
+
+        val board = buildResult {
+            Board.default()
+                .play(LEFT, Play(A1, cardOf(power = 2))).orRaiseError()
+                .play(LEFT, Play(B1, statusBonusCard)).orRaiseError()
+        }
+
+        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 2)
+    }
+
+    private fun raisePowerCard(
         raiseEffect: Displacement,
-        power: Int,
+        powerRaise: Int,
         target: TargetType = ALLIES,
         trigger: Trigger = WhenPlayed()
     ): Card = cardOf(
         "Raise Power ($target at $raiseEffect $trigger)",
-        effect = RaisePower(power, target, trigger, affected = setOf(raiseEffect)),
+        effect = RaisePower(powerRaise, target, trigger, affected = setOf(raiseEffect)),
     )
 
     private fun destroyerCard(

@@ -6,9 +6,8 @@ import br.com.gabryel.reginaesanguine.domain.effect.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.FlavourText
 import br.com.gabryel.reginaesanguine.domain.effect.LoserScoreBonus
 import br.com.gabryel.reginaesanguine.domain.effect.None
-import br.com.gabryel.reginaesanguine.domain.effect.OnGameEnd
-import br.com.gabryel.reginaesanguine.domain.effect.OnStatusChange
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
+import br.com.gabryel.reginaesanguine.domain.effect.RaisePowerByCount
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
 import br.com.gabryel.reginaesanguine.domain.effect.ReplaceAlly
 import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
@@ -22,7 +21,6 @@ import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonBuilder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.SerializersModuleBuilder
 import kotlinx.serialization.modules.polymorphic
@@ -47,6 +45,7 @@ fun gameJsonParser(
     serializersModule = SerializersModule {
         polymorphic(Effect::class) {
             subclass(RaisePower::class)
+            subclass(RaisePowerByCount::class)
             subclass(RaiseRank::class)
             subclass(AddCardsToHand::class)
             subclass(SpawnCards::class)
@@ -58,20 +57,6 @@ fun gameJsonParser(
             subclass(FlavourText::class)
 
             extraEffects.forEach(::subclass)
-        }
-
-        polymorphic(Trigger::class) {
-            subclass(WhenPlayed::class)
-            subclass(WhenDestroyed::class)
-            subclass(OnStatusChange::class)
-            subclass(WhenFirstStatusChanged::class)
-            subclass(WhenFirstReachesPower::class)
-            subclass(WhenLaneWon::class)
-            subclass(WhileActive::class)
-            subclass(OnGameEnd::class)
-            subclass(None::class)
-
-            extraTriggers.forEach(::subclass)
         }
 
         configure()

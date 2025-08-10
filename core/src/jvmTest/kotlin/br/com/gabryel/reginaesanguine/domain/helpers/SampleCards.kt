@@ -38,8 +38,8 @@ object SampleCards {
         id: String = "Unnamed",
         name: String = id,
         increments: Set<Displacement> = emptySet(),
-        value: Int = 1,
+        power: Int = 1,
         rank: Int = 1,
         effect: Effect? = null,
-    ) = Card(id, name, increments, value, rank, effect)
+    ) = Card(id, name, increments, power, rank, effect)
 }

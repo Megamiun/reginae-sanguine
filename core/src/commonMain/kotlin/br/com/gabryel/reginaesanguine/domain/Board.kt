@@ -69,7 +69,7 @@ data class Board(
         val newCellCard = (position to cell.copy(card = card))
         val newState = state + incremented + newCellCard
 
-        val newEffectRegistry = effectRegistry.onPlaceCard(player, card.effect, position)
+        val newEffectRegistry = effectRegistry.onPlaceCard(player, card.effect, position, this)
 
         return copy(state = newState, effectRegistry = newEffectRegistry)
             .resolveEffects()
@@ -78,28 +78,9 @@ data class Board(
     private fun resolveEffects(): Board {
         val newState = destroy()
 
-        if (newState == state) return this
+        if (newState == this) return this
 
-        val newEffectRegistry = effectRegistry.onDestroy(positions = effectRegistry.getDestroyable().map { it.second })
-
-        return copy(state = newState, effectRegistry = newEffectRegistry).resolveEffects()
-    }
-
-    private fun destroy(): Map<Position, Cell> = effectRegistry.getDestroyable().fold(state) { acc, (owner, position) ->
-        val originalCell = state[position] ?: return@fold acc
-
-        if (originalCell.owner == owner) acc
-        else // TODO Maybe we need to change cell ownership
-            acc + (position to originalCell.copy(card = null))
-    }
-
-    private fun getWinLaneScore(lane: Int): Pair<PlayerPosition, Int>? {
-        val score = getLaneScores(lane)
-        val winner = score.maxBy { it.value }
-
-        if (score.values.all { it == winner.value }) return null
-
-        return winner.toPair()
+        return newState.resolveEffects()
     }
 
     fun getLaneScores(lane: Int): Map<PlayerPosition, Int> {
@@ -114,18 +95,42 @@ data class Board(
 
         val laneBonus = getPlayerPositionsInLane(winner.key, lane)
             .mapNotNull { getCellAt(it).orNull()?.card?.effect as? ScoreBonus }
-            .filter { it.trigger is WhenLaneWon }
             .sumOf { it.amount }
 
         return basePowers + (winner.key to (winner.value + laneBonus))
     }
 
-    fun getTotalPowerAt(position: Position): Int {
+    private fun destroy(): Board {
+        val destroyable = effectRegistry.getDestroyable(this)
+
+        val newState = destroyable.fold(state) { acc, position ->
+            val originalCell = acc[position] ?: return@fold acc
+
+            // TODO Maybe we need to change cell ownership
+            acc + (position to originalCell.copy(card = null))
+        }
+
+        val newBoard = copy(state = newState)
+
+        val newRegistry = effectRegistry.onDestroy(destroyable, newBoard)
+
+        return newBoard.copy(effectRegistry = newRegistry)
+    }
+
+    private fun getTotalPowerAt(position: Position): Int {
         val cell = getCellAt(position).orNull() ?: return 0
         val card = cell.card ?: return 0
-        val owner = cell.owner ?: return 0
 
-        return card.power + effectRegistry.getExtraPowerAt(owner, position)
+        return card.power + effectRegistry.getExtraPowerAt(position, this)
+    }
+
+    private fun getWinLaneScore(lane: Int): Pair<PlayerPosition, Int>? {
+        val score = getLaneScores(lane)
+        val winner = score.maxBy { it.value }
+
+        if (score.values.all { it == winner.value }) return null
+
+        return winner.toPair()
     }
 
     private fun getPlayerPositionsInLane(player: PlayerPosition, lane: Int): List<Position> =

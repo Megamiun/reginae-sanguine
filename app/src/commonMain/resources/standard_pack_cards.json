@@ -1683,7 +1683,6 @@
     "effect": {
       "type": "ReplaceAlly",
       "powerMultiplier": 0,
-      "target": "ALLIES",
       "trigger": {
         "type": "WhenPlayed"
       },
@@ -1717,7 +1716,6 @@
     "effect": {
       "type": "ReplaceAlly",
       "powerMultiplier": 0,
-      "target": "ALLIES",
       "trigger": {
         "type": "WhenPlayed"
       },
@@ -1776,7 +1774,6 @@
     "effect": {
       "type": "ReplaceAlly",
       "powerMultiplier": 0,
-      "target": "ALLIES",
       "trigger": {
         "type": "WhenPlayed"
       },
@@ -2360,10 +2357,6 @@
       "type": "StatusBonus",
       "enhancedAmount": 4,
       "enfeebledAmount": 4,
-      "trigger": {
-        "type": "WhenFirstStatusChanged",
-        "status": "ENHANCED"
-      },
       "target": "ANY",
       "description": "Enhanced: Raise power of allied and enemy cards on affected tiles by 4. Enfeebled: Lower their power by 4",
       "affected": [

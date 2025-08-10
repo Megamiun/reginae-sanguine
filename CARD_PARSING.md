@@ -31,6 +31,7 @@ This document provides guidance for parsing Queen's Blood card images into struc
 
 ## Effects
 - `RaisePower`: Modifies power of cards (amount: positive/negative integer, target: ALLIES/ENEMIES/ANY/SELF)
+- `RaisePowerByCount`: Modifies power of cards based on numbers of cards in certain status and ownership (amount: positive/negative integer, target: ALLIES/ENEMIES/ANY/SELF, status: ENHANCED/ENFEEBLED/ANY, scope: ALLIES/ENEMIES/ANY - both default to ANY)
 - `RaiseRank`: Modifies rank increment amount for positions (amount: positive integer)
 - `AddCardsToHand`: Adds specific card to player's hand (cardIds: related card IDs)
 - `DestroyCards`: Destroys cards on affected tiles
@@ -50,8 +51,6 @@ Triggers are objects with a `type` field and optional condition fields:
 - `WhenFirstReachesPower`: Effect activates when card's power first reaches threshold (threshold: integer)
 - `WhileActive`: Effect is active while card remains on board
 - `WhenLaneWon`: Effect activates when the player wins the lane
-- `OnStatusChange`: Effect based on count of cards with specific status (status: ENHANCED/ENFEEBLED/ANY, scope: ALLIES/ENEMIES/ANY - both default to ANY)
-- `OnGameEnd`: Effect activates at the end of each round
 - `None`: No trigger (used for FlavourText effects)
 
 ## Status Types (Enum Values)
