@@ -5,7 +5,6 @@ import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
 import br.com.gabryel.reginaesanguine.domain.effect.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.FlavourText
 import br.com.gabryel.reginaesanguine.domain.effect.LoserScoreBonus
-import br.com.gabryel.reginaesanguine.domain.effect.None
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePowerByCount
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
@@ -14,12 +13,6 @@ import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
 import br.com.gabryel.reginaesanguine.domain.effect.SpawnCards
 import br.com.gabryel.reginaesanguine.domain.effect.StatusBonus
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
-import br.com.gabryel.reginaesanguine.domain.effect.WhenDestroyed
-import br.com.gabryel.reginaesanguine.domain.effect.WhenFirstReachesPower
-import br.com.gabryel.reginaesanguine.domain.effect.WhenFirstStatusChanged
-import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
-import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
-import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.SerializersModuleBuilder

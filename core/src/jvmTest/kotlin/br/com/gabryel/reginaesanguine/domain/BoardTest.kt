@@ -59,7 +59,7 @@ class BoardTest {
     }
 
     @Test
-    fun `when playing a card on a position where you have no enough rank, should fail with NotEnoughrank`() {
+    fun `when playing a card on a position where you have no enough rank, should fail with CellRankLowerThanCard`() {
         val nextBoard = Board.default()
             .play(LEFT, Play(B1, RIOT_TROOPER))
 
@@ -169,6 +169,19 @@ class BoardTest {
         }
 
         nextBoard shouldBeSuccessfulAnd haveCellTotalPower(B1, 3)
+    }
+
+    @Test
+    fun `when a card effect gets another with 0 power, should remove card`() {
+        val powerRaise = raisePowerCard(LEFTWARD, -2)
+
+        val nextBoard = buildResult {
+            Board.default()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B2, powerRaise)).orRaiseError()
+        }
+
+        nextBoard shouldBeSuccessfulAnd haveCell(B1, emptyCellOwnedBy(LEFT, 1))
     }
 
     @Test
