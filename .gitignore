@@ -18,6 +18,7 @@ out/
 !**/src/**/out/
 !**/resources/**/out/
 .profileconfig.json
+local.properties
 
 ### Kotlin ###
 .kotlin
