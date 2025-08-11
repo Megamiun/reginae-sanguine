@@ -21,12 +21,13 @@ interface Raisable {
         game: GameSummarizer,
         source: PlayerPosition,
         targeted: PlayerPosition,
-        sourcePosition: Position
-    ): Int = if (target.isTargetable(source, targeted))
-        getDefaultAmount(game, source, sourcePosition)
+        sourcePosition: Position,
+        self: Boolean
+    ): Int = if (target.isTargetable(source, targeted, self))
+        getDefaultAmount(game, source, sourcePosition, self)
     else 0
 
-    fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Int
+    fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position, self: Boolean): Int
 }
 
 interface EffectWithAffected : Effect {
@@ -50,7 +51,7 @@ class RaisePower(
     override val affected: Set<Displacement> = setOf(),
     override val description: String = "Raises $target power by $amount on $trigger",
 ) : EffectWithAffected, Raisable {
-    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Int =
+    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position, self: Boolean): Int =
         amount
 }
 
@@ -66,11 +67,11 @@ class RaisePowerByCount(
     @Transient
     override val trigger = WhileActive
 
-    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Int =
+    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position, self: Boolean): Int =
         game.getOccupiedCells().count { (targetPosition, cell) ->
             val owner = cell.owner ?: return@count false
 
-            if (!scope.isTargetable(sourcePlayer, owner))
+            if (!scope.isTargetable(sourcePlayer, owner, self))
                 return@count false
 
             status.isUnderStatus(game.getExtraPowerAt(targetPosition))
@@ -155,7 +156,7 @@ class StatusBonus(
     @Transient
     override val trigger = WhileActive
 
-    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Int {
+    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position, self: Boolean): Int {
         val netPowerOnSource = game.getExtraPowerAt(sourcePosition)
 
         return when {
@@ -170,5 +171,12 @@ class StatusBonus(
 @SerialName("FlavourText")
 class FlavourText(override val description: String) : Effect {
     @Transient
+    override val trigger = None
+}
+
+@Serializable
+@SerialName("NoEffect")
+object NoEffect : Effect {
+    override val description = "NONE"
     override val trigger = None
 }

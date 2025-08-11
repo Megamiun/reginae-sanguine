@@ -3,9 +3,13 @@ package br.com.gabryel.reginaesanguine.domain
 import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.RIGHTWARD
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginaesanguine.domain.effect.NoEffect
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import br.com.gabryel.reginaesanguine.domain.effect.WhenDestroyed
+import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import br.com.gabryel.reginaesanguine.domain.helpers.A2
@@ -33,7 +37,21 @@ class EffectRegistryTest {
     }
 
     @Test
-    fun `when a card with WhenDestroyed trigger is placed, should only consider deletion is listened`() {
+    fun `when a card with WhenPlayed ALLY trigger is placed, should only consider played after another ally is played`() {
+        val effect = RaisePower(1, SELF, WhenPlayed(ALLIES))
+
+        val initial = EffectRegistry()
+        val beforeDestroyed = initial.onPlaceCard(LEFT, effect, A1, defaultBoard)
+        val afterDestroyed = beforeDestroyed.onPlaceCard(LEFT, NoEffect, A2, defaultBoard)
+
+        assertAll(
+            { beforeDestroyed should havePositionExtraPower(A1, 0, defaultBoard) },
+            { afterDestroyed should havePositionExtraPower(A1, 1, defaultBoard) },
+        )
+    }
+
+    @Test
+    fun `when a card with WhenDestroyed SELF trigger is placed, should only consider deletion is listened`() {
         val effect = RaisePower(1, ANY, WhenDestroyed(), affected = setOf(RIGHTWARD))
 
         val initial = EffectRegistry()
@@ -43,6 +61,20 @@ class EffectRegistryTest {
         assertAll(
             { beforeDestroyed should havePositionExtraPower(A2, 0, defaultBoard) },
             { afterDestroyed should havePositionExtraPower(A2, 1, defaultBoard) },
+        )
+    }
+
+    @Test
+    fun `when a card with WhenDestroyed ALLY trigger is placed, should only consider deletion after another ally is destroyed`() {
+        val effect = RaisePower(1, SELF, WhenDestroyed(ALLIES))
+
+        val initial = EffectRegistry()
+        val beforeDestroyed = initial.onPlaceCard(LEFT, effect, A1, defaultBoard)
+        val afterDestroyed = beforeDestroyed.onDestroy(setOf(A2), defaultBoard)
+
+        assertAll(
+            { beforeDestroyed should havePositionExtraPower(A1, 0, defaultBoard) },
+            { afterDestroyed should havePositionExtraPower(A1, 1, defaultBoard) },
         )
     }
 

@@ -1,6 +1,7 @@
 package br.com.gabryel.reginaesanguine.domain
 
 import br.com.gabryel.reginaesanguine.domain.effect.Effect
+import br.com.gabryel.reginaesanguine.domain.effect.NoEffect
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
 import kotlinx.serialization.Serializable
 
@@ -11,7 +12,7 @@ data class Card(
     val increments: Set<Displacement> = setOf(),
     val power: Int,
     val rank: Int,
-    val effect: Effect? = null
+    val effect: Effect = NoEffect
 ) {
     val incrementValue = (effect as? RaiseRank)?.amount ?: 1
 

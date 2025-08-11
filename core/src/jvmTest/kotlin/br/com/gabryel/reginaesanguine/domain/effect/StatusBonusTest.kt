@@ -22,7 +22,7 @@ class StatusBonusTest {
             every { getExtraPowerAt(A1) } returns 1
         }
 
-        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1)
+        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1, false)
 
         enhancement shouldBe ENHANCED_AMOUNT
     }
@@ -35,7 +35,7 @@ class StatusBonusTest {
             every { getExtraPowerAt(A1) } returns -1
         }
 
-        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1)
+        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1, false)
 
         enhancement shouldBe ENFEEBLED_AMOUNT
     }
@@ -48,7 +48,7 @@ class StatusBonusTest {
             every { getExtraPowerAt(A1) } returns 0
         }
 
-        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1)
+        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1, false)
 
         enhancement shouldBe 0
     }
@@ -61,7 +61,7 @@ class StatusBonusTest {
             every { getExtraPowerAt(A1) } returns 1
         }
 
-        val enhancement = effect.getRaiseBy(summarizer, LEFT, RIGHT, A1)
+        val enhancement = effect.getRaiseBy(summarizer, LEFT, RIGHT, A1, false)
 
         enhancement shouldBe 0
     }

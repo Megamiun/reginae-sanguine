@@ -25,8 +25,7 @@ class RaisePowerByCountTest {
             every { getExtraPowerAt(B1) } returns 5
         }
 
-        val enhancement = effect
-            .getDefaultAmount(summarizer, LEFT, A1)
+        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1, false)
 
         enhancement shouldBe 0
     }
@@ -40,8 +39,7 @@ class RaisePowerByCountTest {
             every { getExtraPowerAt(B1) } returns -5
         }
 
-        val enhancement = effect
-            .getDefaultAmount(summarizer, LEFT, A1)
+        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1, false)
 
         enhancement shouldBe 0
     }
@@ -63,8 +61,7 @@ class RaisePowerByCountTest {
             every { getExtraPowerAt(B3) } returns -5
         }
 
-        val enhancement = effect
-            .getDefaultAmount(summarizer, LEFT, A1)
+        val enhancement = effect.getDefaultAmount(summarizer, LEFT, A1, false)
 
         enhancement shouldBe 2
     }
@@ -78,7 +75,7 @@ class RaisePowerByCountTest {
             every { getExtraPowerAt(A1) } returns 5
         }
 
-        val enhancement = effect.getRaiseBy(summarizer, LEFT, RIGHT, A1)
+        val enhancement = effect.getRaiseBy(summarizer, LEFT, RIGHT, A1, false)
 
         enhancement shouldBe 0
     }

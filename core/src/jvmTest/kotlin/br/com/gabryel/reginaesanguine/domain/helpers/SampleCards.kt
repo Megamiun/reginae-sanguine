@@ -3,6 +3,7 @@ package br.com.gabryel.reginaesanguine.domain.helpers
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.effect.Effect
+import br.com.gabryel.reginaesanguine.domain.effect.NoEffect
 
 object SampleCards {
     val SECURITY_OFFICER =
@@ -40,6 +41,6 @@ object SampleCards {
         increments: Set<Displacement> = emptySet(),
         power: Int = 1,
         rank: Int = 1,
-        effect: Effect? = null,
+        effect: Effect = NoEffect,
     ) = Card(id, name, increments, power, rank, effect)
 }

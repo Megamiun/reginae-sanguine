@@ -1,15 +1,18 @@
 package br.com.gabryel.reginaesanguine.domain
 
+import arrow.core.fold
 import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
 import br.com.gabryel.reginaesanguine.domain.effect.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.EffectWithAffected
 import br.com.gabryel.reginaesanguine.domain.effect.GameSummarizer
 import br.com.gabryel.reginaesanguine.domain.effect.None
 import br.com.gabryel.reginaesanguine.domain.effect.Raisable
+import br.com.gabryel.reginaesanguine.domain.effect.Scoped
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import br.com.gabryel.reginaesanguine.domain.effect.WhenDestroyed
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
+import kotlin.collections.fold
 import kotlin.reflect.KClass
 
 data class EffectSource(val player: PlayerPosition, val effect: Effect, val position: Position)
@@ -20,20 +23,14 @@ data class EffectRegistry(
 ) {
     private val activeEffects = gatherActiveEffects()
 
-    fun onPlaceCard(player: PlayerPosition, effect: Effect?, position: Position, board: CellContainer): EffectRegistry {
-        if (effect == null || effect.trigger == None)
-            return this
-
-        if (effect.trigger is WhenPlayed)
-            return applyEffect(EffectSource(player, effect, position), board)
-
-        return listenToTrigger(effect, position, player)
-    }
+    fun onPlaceCard(player: PlayerPosition, effect: Effect, position: Position, board: CellContainer): EffectRegistry =
+        addTrigger(effect, position, player)
+            .triggerWhenPlayed(board, position)
 
     fun onDestroy(positions: Set<Position>, board: CellContainer): EffectRegistry =
         triggerWhenDestroyed(positions, board)
             .removeTriggered(positions)
-            .removeByTrigger(positions)
+            .removeTrigger(positions)
 
     fun getExtraPowerAt(position: Position, board: CellContainer): Int = activeEffects.getExtraPower(board, position)
 
@@ -42,7 +39,7 @@ data class EffectRegistry(
         val card = cell.card ?: return@filter false
         val owner = cell.owner ?: return@filter false
 
-        if (effects.any { it.effect is DestroyCards && it.effect.target.isTargetable(it.player, owner) })
+        if (effects.any { it.effect is DestroyCards && it.effect.target.isTargetable(it.player, owner, false) })
             return@filter true
 
         card.power - getExtraPowerAt(position, board) > 0
@@ -51,16 +48,38 @@ data class EffectRegistry(
     private fun removeTriggered(positions: Set<Position>): EffectRegistry =
         copy(triggered = triggered - positions)
 
-    private fun removeByTrigger(positions: Set<Position>): EffectRegistry =
+    private fun removeTrigger(positions: Set<Position>): EffectRegistry =
         copy(byTrigger = byTrigger.mapValues { (_, byTriggerTpe) -> byTriggerTpe - positions })
 
+    private fun triggerWhenPlayed(board: CellContainer, position: Position): EffectRegistry {
+        val cells = listOfNotNull(board.getCellAt(position).map { position to it }.orNull())
+        return triggerScoped<WhenPlayed>(cells, board)
+    }
+
     private fun triggerWhenDestroyed(positions: Set<Position>, board: CellContainer): EffectRegistry {
-        val onDestroy = byTrigger[WhenDestroyed::class].orEmpty()
+        val cells = positions.mapNotNull { position ->
+            board.getCellAt(position).map { position to it }.orNull()
+        }
 
-        return positions.fold(this) { accRegistry, position ->
-            val playerEffect = onDestroy[position] ?: return@fold accRegistry
+        return triggerScoped<WhenDestroyed>(cells, board)
+    }
 
-            accRegistry.applyEffect(playerEffect, board)
+    private inline fun <reified T> triggerScoped(cells: List<Pair<Position, Cell>>, board: CellContainer): EffectRegistry
+    where T : Trigger, T : Scoped {
+        val scopedTriggers = byTrigger[T::class].orEmpty()
+
+        return scopedTriggers.fold(this) { accRegistry, (_, sourceEffect) ->
+            val trigger = sourceEffect.effect.trigger as? T ?: return accRegistry
+
+            cells.fold(accRegistry) { accRegistry, (targetPosition, targetCell) ->
+                targetCell.card ?: return@fold accRegistry
+                val targetPlayer = targetCell.owner ?: return@fold accRegistry
+                val self = targetPosition == sourceEffect.position
+                if (!trigger.isInScope(sourceEffect.player, targetPlayer, self))
+                    return@fold accRegistry
+
+                accRegistry.applyEffect(sourceEffect, board)
+            }
         }
     }
 
@@ -75,7 +94,10 @@ data class EffectRegistry(
     private fun List<Position>.filterValidCards(board: CellContainer) =
         filter { board.getCellAt(it).orNull()?.card != null }
 
-    private fun listenToTrigger(effect: Effect, position: Position, player: PlayerPosition): EffectRegistry {
+    private fun addTrigger(effect: Effect, position: Position, player: PlayerPosition): EffectRegistry {
+        if (effect.trigger == None)
+            return this
+
         val triggerType = effect.trigger::class
 
         val newEffect = position to EffectSource(player, effect, position)
@@ -91,8 +113,9 @@ data class EffectRegistry(
             if (sourceEffect.effect !is Raisable) return@sumOf 0
             val targeted = board.getCellAt(position).orNull()?.owner ?: return@sumOf 0
 
+            val self = sourceEffect.position == position
             sourceEffect.effect
-                .getRaiseBy(summarizer, sourceEffect.player, targeted, sourceEffect.position)
+                .getRaiseBy(summarizer, sourceEffect.player, targeted, sourceEffect.position, self)
         }
     }
 

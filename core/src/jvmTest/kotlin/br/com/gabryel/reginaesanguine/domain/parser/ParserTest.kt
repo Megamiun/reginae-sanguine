@@ -8,6 +8,10 @@ class ParserTest {
     @Test
     fun `should be able to parse json file without errors`() {
         val content = ParserTest::class.java.getResourceAsStream("/standard_pack_cards.json")
-        gameJsonParser().decodeFromString<List<Card>>(content.bufferedReader().readText()) shouldHaveSize 166
+        val gameJsonParser = gameJsonParser()
+        val decodeFromString = gameJsonParser.decodeFromString<List<Card>>(content.bufferedReader().readText())
+        val encodeToStrong = gameJsonParser.encodeToString(decodeFromString)
+
+        decodeFromString shouldHaveSize 166
     }
 }

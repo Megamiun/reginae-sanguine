@@ -9,11 +9,11 @@ enum class TargetType {
     SELF,
     NONE;
 
-    fun isTargetable(source: PlayerPosition, target: PlayerPosition) = when (this) {
-        ALLIES -> source == target
+    fun isTargetable(source: PlayerPosition, target: PlayerPosition, self: Boolean) = when (this) {
+        ALLIES -> source == target && !self
         ENEMIES -> source != target
-        ANY -> true
-        SELF -> TODO("SELF not implemented yet")
+        ANY -> !self
+        SELF -> self
         NONE -> false
     }
 }
