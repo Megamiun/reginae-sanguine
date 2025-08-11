@@ -4,48 +4,33 @@ import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface Trigger {
-    val isPermanent: Boolean
-}
+@Serializable
+sealed interface Trigger
 
 @Serializable
 @SerialName("WhenPlayed")
-class WhenPlayed(val scope: TargetType = SELF) : Trigger {
-    override val isPermanent = true
-}
+class WhenPlayed(val scope: TargetType = SELF) : Trigger
 
 @Serializable
 @SerialName("WhenDestroyed")
-class WhenDestroyed(val scope: TargetType = SELF) : Trigger {
-    override val isPermanent = true
-}
+class WhenDestroyed(val scope: TargetType = SELF) : Trigger
 
 @Serializable
 @SerialName("WhenFirstStatusChanged")
-class WhenFirstStatusChanged(val status: StatusType) : Trigger {
-    override val isPermanent = true
-}
+class WhenFirstStatusChanged(val status: StatusType) : Trigger
 
 @Serializable
 @SerialName("WhenFirstReachesPower")
-class WhenFirstReachesPower(val threshold: Int) : Trigger {
-    override val isPermanent = true
-}
+class WhenFirstReachesPower(val threshold: Int) : Trigger
 
 @Serializable
 @SerialName("WhenLaneWon")
-object WhenLaneWon : Trigger {
-    override val isPermanent = false
-}
+object WhenLaneWon : Trigger
 
 @Serializable
 @SerialName("WhileActive")
-object WhileActive : Trigger {
-    override val isPermanent = false
-}
+object WhileActive : Trigger
 
 @Serializable
 @SerialName("None")
-object None : Trigger {
-    override val isPermanent = true
-}
+object None : Trigger

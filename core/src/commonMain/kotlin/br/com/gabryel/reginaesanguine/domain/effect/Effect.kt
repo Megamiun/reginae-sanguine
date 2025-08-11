@@ -1,11 +1,8 @@
 package br.com.gabryel.reginaesanguine.domain.effect
 
-import br.com.gabryel.reginaesanguine.domain.Board
 import br.com.gabryel.reginaesanguine.domain.Displacement
-import br.com.gabryel.reginaesanguine.domain.EffectRegistry
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.atColumn
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.NONE
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import kotlinx.serialization.SerialName
@@ -21,21 +18,15 @@ interface Raisable {
     val target: TargetType
 
     fun getRaiseBy(
-        board: Board,
-        registry: EffectRegistry,
+        game: GameSummarizer,
         source: PlayerPosition,
         targeted: PlayerPosition,
         sourcePosition: Position
     ): Int = if (target.isTargetable(source, targeted))
-        getDefaultAmount(board, registry, source, sourcePosition)
+        getDefaultAmount(game, source, sourcePosition)
     else 0
 
-    fun getDefaultAmount(
-        board: Board,
-        registry: EffectRegistry,
-        sourcePlayer: PlayerPosition,
-        sourcePosition: Position
-    ): Int
+    fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Int
 }
 
 interface EffectWithAffected : Effect {
@@ -56,15 +47,11 @@ class RaisePower(
     val amount: Int = 1,
     override val target: TargetType,
     override val trigger: Trigger,
-    override val description: String = "Raises $target power by $amount on $trigger",
     override val affected: Set<Displacement> = setOf(),
+    override val description: String = "Raises $target power by $amount on $trigger",
 ) : EffectWithAffected, Raisable {
-    override fun getDefaultAmount(
-        board: Board,
-        registry: EffectRegistry,
-        sourcePlayer: PlayerPosition,
-        sourcePosition: Position
-    ): Int = amount
+    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Int =
+        amount
 }
 
 @Serializable
@@ -79,27 +66,15 @@ class RaisePowerByCount(
     @Transient
     override val trigger = WhileActive
 
-    override fun getDefaultAmount(
-        board: Board,
-        registry: EffectRegistry,
-        sourcePlayer: PlayerPosition,
-        sourcePosition: Position
-    ): Int {
-        val size = board.size
+    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Int =
+        game.getOccupiedCells().count { (targetPosition, cell) ->
+            val owner = cell.owner ?: return@count false
 
-        return (0..size.width).sumOf { column ->
-            (0..size.height).count { lane ->
-                val targetPosition = lane atColumn column
-                val owner = board.getCellAt(targetPosition).orNull()?.owner
-                    ?: return@count false
+            if (!scope.isTargetable(sourcePlayer, owner))
+                return@count false
 
-                if (!scope.isTargetable(sourcePlayer, owner))
-                    return@count false
-
-                status.isUnderStatus(registry.getExtraPowerAt(targetPosition, board))
-            }
+            status.isUnderStatus(game.getExtraPowerAt(targetPosition))
         }
-    }
 }
 
 @Serializable
@@ -180,13 +155,8 @@ class StatusBonus(
     @Transient
     override val trigger = WhileActive
 
-    override fun getDefaultAmount(
-        board: Board,
-        registry: EffectRegistry,
-        sourcePlayer: PlayerPosition,
-        sourcePosition: Position
-    ): Int {
-        val netPowerOnSource = registry.getExtraPowerAt(sourcePosition, board)
+    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Int {
+        val netPowerOnSource = game.getExtraPowerAt(sourcePosition)
 
         return when {
             netPowerOnSource > 0 -> enhancedAmount

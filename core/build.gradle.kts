@@ -1,6 +1,8 @@
 plugins {
     kotlin("multiplatform")
     alias(libs.plugins.kotlin.serialization)
+
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"
 }
 
 kotlin {
@@ -18,6 +20,10 @@ kotlin {
             implementation(kotlin("test"))
             implementation(libs.kotest.property)
             implementation(libs.kotest.assertions.core)
+        }
+
+        jvmTest.dependencies {
+            implementation(libs.mockk)
         }
     }
 

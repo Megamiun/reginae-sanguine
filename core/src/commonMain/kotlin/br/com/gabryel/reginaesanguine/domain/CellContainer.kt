@@ -6,4 +6,6 @@ interface CellContainer {
     fun getCellAt(position: Position): Result<Cell>
 
     fun getScoreAt(position: Position): Result<Int>
+
+    fun getOccupiedCells(): Map<Position, Cell>
 }

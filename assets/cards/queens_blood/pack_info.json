@@ -1471,13 +1471,13 @@
       "rank": 2,
       "filename": "queens_blood_blue_046.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
+        "status": "ENFEEBLED",
+        "scope": "ENEMIES",
         "amount": 2,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENFEEBLED",
-          "scope": "ENEMIES"
+          "type": "WhileActive"
         },
         "description": "Raise power by 2 for each enfeebled enemy card"
       },
@@ -2360,10 +2360,6 @@
         "type": "StatusBonus",
         "enhancedAmount": 4,
         "enfeebledAmount": 4,
-        "trigger": {
-          "type": "WhenFirstStatusChanged",
-          "status": "ENHANCED"
-        },
         "target": "ANY",
         "description": "Enhanced: Raise power of allied and enemy cards on affected tiles by 4. Enfeebled: Lower their power by 4",
         "affected": [
@@ -2427,15 +2423,15 @@
       "rank": 2,
       "filename": "queens_blood_blue_068.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 2,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENFEEBLED",
-          "scope": "ALLIES"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 2 for each other enfeebled allied card"
+        "description": "Raise power by 2 for each other enfeebled allied card",
+        "status": "ENFEEBLED",
+        "scope": "ALLIES"
       },
       "increments": [
         {
@@ -2465,9 +2461,6 @@
       "effect": {
         "type": "RaiseRank",
         "amount": 2,
-        "trigger": {
-          "type": "WhenPlayed"
-        },
         "description": "When played, raise position ranks by 2"
       },
       "increments": [
@@ -2534,9 +2527,6 @@
       "effect": {
         "type": "RaiseRank",
         "amount": 2,
-        "trigger": {
-          "type": "WhenPlayed"
-        },
         "description": "When played, raise position ranks by 2"
       },
       "increments": [
@@ -2661,15 +2651,15 @@
       "rank": 1,
       "filename": "queens_blood_blue_074.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 1,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENFEEBLED",
-          "scope": "ANY"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 1 for each other enfeebled allied and enemy card"
+        "description": "Raise power by 1 for each other enfeebled allied and enemy card",
+        "status": "ENFEEBLED",
+        "scope": "ANY"
       },
       "increments": [
         {
@@ -2693,15 +2683,15 @@
       "rank": 2,
       "filename": "queens_blood_blue_075.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 1,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ANY",
-          "scope": "ANY"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 1 for each other enhanced or enfeebled allied and enemy card"
+        "description": "Raise power by 1 for each other enhanced or enfeebled allied and enemy card",
+        "status": "ANY",
+        "scope": "ANY"
       }
     },
     {
@@ -3040,15 +3030,15 @@
       "rank": 3,
       "filename": "queens_blood_blue_084.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 3,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENHANCED",
-          "scope": "ENEMIES"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 3 for each enhanced enemy card"
+        "description": "Raise power by 3 for each enhanced enemy card",
+        "status": "ENHANCED",
+        "scope": "ENEMIES"
       },
       "increments": [
         {
@@ -3070,9 +3060,6 @@
       "effect": {
         "type": "RaiseRank",
         "amount": 3,
-        "trigger": {
-          "type": "WhenPlayed"
-        },
         "description": "When played, raise position ranks by 3"
       },
       "increments": [
@@ -3484,9 +3471,6 @@
       "effect": {
         "type": "RaiseRank",
         "amount": 2,
-        "trigger": {
-          "type": "WhenPlayed"
-        },
         "description": "When played, raise position ranks by 2"
       },
       "increments": [
@@ -3608,15 +3592,15 @@
       "rank": 3,
       "filename": "queens_blood_blue_095.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 2,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENHANCED",
-          "scope": "ALLIES"
+          "type": "WhileActive"
         },
-        "description": "Raise the power by 2 for each other enhanced allied card"
+        "description": "Raise the power by 2 for each other enhanced allied card",
+        "status": "ENHANCED",
+        "scope": "ALLIES"
       },
       "increments": [
         {
@@ -3774,9 +3758,6 @@
       "effect": {
         "type": "RaiseRank",
         "amount": 2,
-        "trigger": {
-          "type": "WhenPlayed"
-        },
         "description": "When played, raise position ranks by 2"
       },
       "increments": [
@@ -3846,15 +3827,15 @@
       "rank": 2,
       "filename": "queens_blood_blue_100.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 2,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENHANCED",
-          "scope": "ENEMIES"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 2 for each enhanced enemy card"
+        "description": "Raise power by 2 for each enhanced enemy card",
+        "status": "ENHANCED",
+        "scope": "ENEMIES"
       },
       "increments": [
         {
@@ -4002,15 +3983,15 @@
       "rank": 3,
       "filename": "queens_blood_blue_103.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 3,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENFEEBLED",
-          "scope": "ALLIES"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 3 for each other enfeebled allied card"
+        "description": "Raise power by 3 for each other enfeebled allied card",
+        "status": "ENFEEBLED",
+        "scope": "ALLIES"
       },
       "increments": [
         {
@@ -4289,15 +4270,15 @@
       "rank": 1,
       "filename": "queens_blood_blue_107.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 1,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENHANCED",
-          "scope": "ALLIES"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 1 for each other enhanced allied card"
+        "description": "Raise power by 1 for each other enhanced allied card",
+        "status": "ENHANCED",
+        "scope": "ALLIES"
       },
       "increments": [
         {
@@ -5856,15 +5837,15 @@
       "rank": 1,
       "filename": "queens_blood_blue_136.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 1,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENHANCED",
-          "scope": "ENEMIES"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 1 for each enhanced enemy card"
+        "description": "Raise power by 1 for each enhanced enemy card",
+        "status": "ENHANCED",
+        "scope": "ENEMIES"
       },
       "increments": [
         {
@@ -6060,15 +6041,15 @@
       "rank": 3,
       "filename": "queens_blood_blue_141.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 1,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENHANCED",
-          "scope": "ANY"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 1 for each other enhanced allied and enemy card"
+        "description": "Raise power by 1 for each other enhanced allied and enemy card",
+        "status": "ENHANCED",
+        "scope": "ANY"
       },
       "increments": [
         {
@@ -6239,15 +6220,15 @@
       "rank": 3,
       "filename": "queens_blood_blue_145.png",
       "effect": {
-        "type": "RaisePower",
+        "type": "RaisePowerByCount",
         "target": "SELF",
         "amount": 3,
         "trigger": {
-          "type": "OnStatusChange",
-          "status": "ENFEEBLED",
-          "scope": "ANY"
+          "type": "WhileActive"
         },
-        "description": "Raise power by 3 for each other enfeebled allied and enemy card"
+        "description": "Raise power by 3 for each other enfeebled allied and enemy card",
+        "status": "ENFEEBLED",
+        "scope": "ANY"
       },
       "increments": [
         {

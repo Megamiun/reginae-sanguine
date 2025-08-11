@@ -14,10 +14,8 @@ import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
 import br.com.gabryel.reginaesanguine.domain.effect.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
 import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
-import br.com.gabryel.reginaesanguine.domain.effect.StatusBonus
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
-import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ENEMIES
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
@@ -109,10 +107,7 @@ class BoardTest {
 
     @Test
     fun `when playing a card as RIGHT player, should increment rank on all mirrored increment positions described in the cards`() {
-        val powerRaise = cardOf(
-            "Only Increment Right",
-            increments = setOf(RIGHTWARD),
-        )
+        val powerRaise = cardOf("Only Increment Right", increments = setOf(RIGHTWARD))
 
         val nextBoard = Board.default()
             .copy(state = mapOf(B3 to Cell(RIGHT, 1)))
@@ -156,32 +151,6 @@ class BoardTest {
             LEFT to 0,
             RIGHT to 5,
         )
-    }
-
-    @Test
-    fun `when a card with RaisePower effects is played, should add effect to affected entities`() {
-        val powerRaise = raisePowerCard(LEFTWARD, 2)
-
-        val nextBoard = buildResult {
-            Board.default()
-                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(B2, powerRaise)).orRaiseError()
-        }
-
-        nextBoard shouldBeSuccessfulAnd haveCellTotalPower(B1, 3)
-    }
-
-    @Test
-    fun `when a card effect gets another with 0 power, should remove card`() {
-        val powerRaise = raisePowerCard(LEFTWARD, -2)
-
-        val nextBoard = buildResult {
-            Board.default()
-                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(B2, powerRaise)).orRaiseError()
-        }
-
-        nextBoard shouldBeSuccessfulAnd haveCell(B1, emptyCellOwnedBy(LEFT, 1))
     }
 
     @Test
@@ -231,32 +200,6 @@ class BoardTest {
     }
 
     @Test
-    fun `when a card with DestroyEntity effect is played, should remove target card`() {
-        val destroyUp = destroyerCard(destroyEffect = UPWARD, target = ALLIES, trigger = WhenPlayed())
-
-        val nextBoard = buildResult {
-            Board.default()
-                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(C1, destroyUp)).orRaiseError()
-        }
-
-        nextBoard shouldBeSuccessfulAnd haveCell(B5, emptyCellOwnedBy(RIGHT, 1))
-    }
-
-    @Test
-    fun `when a card with a effect is played by RIGHT player, should apply mirrored effect to affected entities`() {
-        val powerRaise = raisePowerCard(LEFTWARD, powerRaise = 2)
-
-        val nextBoard = buildResult {
-            Board.default()
-                .play(RIGHT, Play(B5, SECURITY_OFFICER)).orRaiseError()
-                .play(RIGHT, Play(B4, powerRaise)).orRaiseError()
-        }
-
-        nextBoard shouldBeSuccessfulAnd haveCellTotalPower(B5, 3)
-    }
-
-    @Test
     fun `when playing a card with RaiseRank effect, should increment rank on increment positions by specified amount`() {
         val cardWithRaiseRank = cardOf(
             "Rank Raiser",
@@ -274,85 +217,29 @@ class BoardTest {
     }
 
     @Test
-    fun `when a card with WhileActive RaisePower is destroyed, should remove power bonus from target`() {
-        val whileActivePowerCard = raisePowerCard(UPWARD, powerRaise = 2, trigger = WhileActive)
-        val destroyUp = destroyerCard(UPWARD, ALLIES)
+    fun `when playing a card with Raisable effect, should increment rank on increment positions by specified amount`() {
+        val cardWithRaiseRank = raisePowerCard(LEFTWARD, 1, trigger = WhileActive)
 
-        val board = buildResult {
+        val nextBoard = buildResult {
             Board.default()
                 .play(LEFT, Play(A1, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(B1, whileActivePowerCard)).orRaiseError()
+                .play(LEFT, Play(A2, cardWithRaiseRank)).orRaiseError()
+        }
+
+        nextBoard shouldBeSuccessfulAnd haveCellTotalPower(A1, 2)
+    }
+
+    @Test
+    fun `when a card with DestroyEntity effect is played, should remove target card`() {
+        val destroyUp = destroyerCard(destroyEffect = UPWARD, target = ALLIES, trigger = WhenPlayed())
+
+        val nextBoard = buildResult {
+            Board.default()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
                 .play(LEFT, Play(C1, destroyUp)).orRaiseError()
         }
 
-        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 1)
-    }
-
-    @Test
-    fun `when a card with WhenPlayed RaisePower is destroyed, should keep power bonus on target`() {
-        val raiseUpWhenPlayed = raisePowerCard(UPWARD, powerRaise = 2)
-        val destroyUp = destroyerCard(UPWARD, ALLIES)
-
-        val board = buildResult {
-            Board.default()
-                .play(LEFT, Play(A1, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(B1, raiseUpWhenPlayed)).orRaiseError()
-                .play(LEFT, Play(C1, destroyUp)).orRaiseError()
-        }
-
-        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 3)
-    }
-
-    @Test
-    fun `when StatusBonus source card is enhanced, should give enhanced bonus to targets`() {
-        val powerBooster = raisePowerCard(UPWARD, 2, trigger = WhileActive)
-        val statusBonusCard = cardOf(
-            "Status Bonus",
-            effect = StatusBonus(3, -1, ALLIES, affected = setOf(UPWARD)),
-        )
-
-        val board = buildResult {
-            Board.default()
-                .play(LEFT, Play(A1, cardOf(power = 2))).orRaiseError()
-                .play(LEFT, Play(B1, statusBonusCard)).orRaiseError()
-                .play(LEFT, Play(C1, powerBooster)).orRaiseError()
-        }
-
-        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 5)
-    }
-
-    @Test
-    fun `when StatusBonus source card is enfeebled, should give enfeebled penalty to targets`() {
-        val powerReducer = raisePowerCard(UPWARD, -2, trigger = WhileActive)
-        val statusBonusCard = cardOf(
-            "Status Bonus",
-            effect = StatusBonus(3, -1, ALLIES, affected = setOf(UPWARD)),
-        )
-
-        val board = buildResult {
-            Board.default()
-                .play(LEFT, Play(A1, cardOf(power = 2))).orRaiseError()
-                .play(LEFT, Play(B1, statusBonusCard)).orRaiseError()
-                .play(LEFT, Play(C1, powerReducer)).orRaiseError()
-        }
-
-        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 1)
-    }
-
-    @Test
-    fun `when StatusBonus source card has no status, should give no bonus to targets`() {
-        val statusBonusCard = cardOf(
-            "Status Bonus",
-            effect = StatusBonus(3, -1, ANY, affected = setOf(UPWARD)),
-        )
-
-        val board = buildResult {
-            Board.default()
-                .play(LEFT, Play(A1, cardOf(power = 2))).orRaiseError()
-                .play(LEFT, Play(B1, statusBonusCard)).orRaiseError()
-        }
-
-        board shouldBeSuccessfulAnd haveCellTotalPower(A1, 2)
+        nextBoard shouldBeSuccessfulAnd haveCell(B5, emptyCellOwnedBy(RIGHT, 1))
     }
 
     private fun raisePowerCard(

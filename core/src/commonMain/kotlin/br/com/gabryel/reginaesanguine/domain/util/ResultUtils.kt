@@ -1,6 +1,3 @@
-@file:JvmName("ResultUtils")
-@file:JvmMultifileClass
-
 package br.com.gabryel.reginaesanguine.domain.util
 
 import arrow.core.raise.Raise
@@ -10,8 +7,6 @@ import br.com.gabryel.reginaesanguine.domain.Failure.UnknownError
 import br.com.gabryel.reginaesanguine.domain.Result
 import br.com.gabryel.reginaesanguine.domain.Success
 import kotlin.jvm.JvmInline
-import kotlin.jvm.JvmMultifileClass
-import kotlin.jvm.JvmName
 
 @JvmInline
 value class ResultRaise<A>(private val raise: Raise<Failure>) : Raise<Failure> by raise {

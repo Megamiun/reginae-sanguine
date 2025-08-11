@@ -58,6 +58,25 @@ data class Board(
         getTotalPowerAt(position)
     }
 
+    override fun getOccupiedCells() = state.filter { it.value.card != null }
+
+    fun getLaneScores(lane: Int): Map<PlayerPosition, Int> {
+        val basePowers = PlayerPosition.entries.associateWith { player ->
+            getPlayerPositionsInLane(player, lane)
+                .sumOf { position -> getTotalPowerAt(position) }
+        }
+
+        val winner = basePowers.maxBy { it.value }
+
+        if (basePowers.values.all { it == winner.value }) return basePowers
+
+        val laneBonus = getPlayerPositionsInLane(winner.key, lane)
+            .mapNotNull { getCellAt(it).orNull()?.card?.effect as? ScoreBonus }
+            .sumOf { it.amount }
+
+        return basePowers + (winner.key to (winner.value + laneBonus))
+    }
+
     private fun placeCard(position: Position, cell: Cell, player: PlayerPosition, card: Card): Board {
         val incremented = card.increments.mapNotNull { displacement ->
             val newPosition = position + player.correct(displacement)
@@ -81,23 +100,6 @@ data class Board(
         if (newState == this) return this
 
         return newState.resolveEffects()
-    }
-
-    fun getLaneScores(lane: Int): Map<PlayerPosition, Int> {
-        val basePowers = PlayerPosition.entries.associateWith { player ->
-            getPlayerPositionsInLane(player, lane)
-                .sumOf { position -> getTotalPowerAt(position) }
-        }
-
-        val winner = basePowers.maxBy { it.value }
-
-        if (basePowers.values.all { it == winner.value }) return basePowers
-
-        val laneBonus = getPlayerPositionsInLane(winner.key, lane)
-            .mapNotNull { getCellAt(it).orNull()?.card?.effect as? ScoreBonus }
-            .sumOf { it.amount }
-
-        return basePowers + (winner.key to (winner.value + laneBonus))
     }
 
     private fun destroy(): Board {
