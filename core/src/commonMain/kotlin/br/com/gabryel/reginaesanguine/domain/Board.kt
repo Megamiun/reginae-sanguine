@@ -9,10 +9,9 @@ import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.effect.PlayerModification
-import br.com.gabryel.reginaesanguine.domain.effect.ScoreBonus
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
-data class BoardWithPlayerModifications(
+data class BoardWithEffectApplication(
     val board: Board,
     val playerModifications: Map<PlayerPosition, PlayerModification> = emptyMap()
 )
@@ -39,7 +38,7 @@ data class Board(
         )
     }
 
-    fun play(player: PlayerPosition, action: Play<Card>): Result<BoardWithPlayerModifications> =
+    fun play(player: PlayerPosition, action: Play<Card>): Result<BoardWithEffectApplication> =
         buildResult {
             val cell = getCellAt(action.position).orRaiseError()
 
@@ -59,36 +58,29 @@ data class Board(
         state[position] ?: Cell.EMPTY
     }
 
-    override fun getScoreAt(position: Position): Result<Int> = buildResult {
+    override fun getTotalScoreAt(position: Position): Result<Int> = buildResult {
         ensure(position in size) { CellOutOfBoard(position) }
         getTotalPowerAt(position)
     }
 
+    override fun getBaseLaneScoreAt(lane: Int): Map<PlayerPosition, Int> =
+        (0..size.width)
+            .groupBy({ column -> getCellAt(lane atColumn column).orNull()?.owner }) { column ->
+                getTotalPowerAt(lane atColumn column)
+            }.mapValues { (_, values) -> values.sum() }
+            .filterKeys { it != null } as Map<PlayerPosition, Int>
+
+    override fun getExtraLaneScoreAt(lane: Int): Map<PlayerPosition, Int> =
+        effectRegistry.getExtraPowerAtLane(lane, this)
+
     override fun getOccupiedCells() = state.filter { it.value.card != null }
-
-    fun getLaneScores(lane: Int): Map<PlayerPosition, Int> {
-        val basePowers = PlayerPosition.entries.associateWith { player ->
-            getPlayerPositionsInLane(player, lane)
-                .sumOf { position -> getTotalPowerAt(position) }
-        }
-
-        val winner = basePowers.maxBy { it.value }
-
-        if (basePowers.values.all { it == winner.value }) return basePowers
-
-        val laneBonus = getPlayerPositionsInLane(winner.key, lane)
-            .mapNotNull { getCellAt(it).orNull()?.card?.effect as? ScoreBonus }
-            .sumOf { it.amount }
-
-        return basePowers + (winner.key to (winner.value + laneBonus))
-    }
 
     private fun placeCard(
         position: Position,
         cell: Cell,
         player: PlayerPosition,
         card: Card
-    ): BoardWithPlayerModifications {
+    ): BoardWithEffectApplication {
         val incremented = card.increments.mapNotNull { displacement ->
             val newPosition = position + player.correct(displacement)
             getCellAt(newPosition).orNull()
@@ -97,33 +89,27 @@ data class Board(
         }
 
         val newCellCard = (position to cell.copy(card = card))
-        val newState = state + incremented + newCellCard
+        val newBoard = copy(state = state + incremented + newCellCard)
 
-        val effectApplicationResult = effectRegistry.onPlaceCard(player, card.effect, position, this)
+        val effectApplicationResult = effectRegistry.onPlaceCard(player, card.effect, position, newBoard)
 
-        val boardAfterPlacement = copy(state = newState, effectRegistry = effectApplicationResult.effectRegistry)
-
-        // Resolve effects with player modifications from destruction
-        val (finalBoard, destructionModifications) = boardAfterPlacement.resolveEffectsWithPlayerModifications()
-
-        // Merge player modifications from placement and destruction
-        val combinedModifications = mergePlayerModifications(effectApplicationResult.playerModifications, destructionModifications)
-
-        return BoardWithPlayerModifications(finalBoard, combinedModifications)
+        return copy(state = newBoard.state, effectRegistry = effectApplicationResult.effectRegistry)
+            .resolveEffects(effectApplicationResult)
     }
 
-    private fun resolveEffects(): Board {
-        val newState = destroy()
+    private fun resolveEffects(result: EffectApplicationResult): BoardWithEffectApplication {
+        val (newBoard, newResult) = destroy(result)
 
-        if (newState == this) return this
+        if (newBoard == this && result == newResult)
+            return BoardWithEffectApplication(newBoard, newResult.playerModifications)
 
-        return newState.resolveEffects()
+        return newBoard.resolveEffects(newResult)
     }
 
-    private fun destroy(): Board {
-        val destroyable = effectRegistry.getDestroyable(this)
-
-        val newState = destroyable.fold(state) { acc, position ->
+    private fun destroy(result: EffectApplicationResult): Pair<Board, EffectApplicationResult> {
+        val effectRegistry = result.effectRegistry
+        val toDelete = result.toDelete + effectRegistry.getDestroyable(this)
+        val newState = toDelete.fold(state) { acc, position ->
             val originalCell = acc[position] ?: return@fold acc
 
             // TODO Maybe we need to change cell ownership
@@ -131,53 +117,21 @@ data class Board(
         }
 
         val newBoard = copy(state = newState)
-
-        val effectApplicationResult = effectRegistry.onDestroy(destroyable, newBoard)
-
-        return newBoard.copy(effectRegistry = effectApplicationResult.effectRegistry)
+        val afterDestroyResult = effectRegistry
+            .onDestroy(toDelete, newBoard)
+            .addPlayerModificationsFrom(result)
+        return newBoard.copy(effectRegistry = afterDestroyResult.effectRegistry) to afterDestroyResult
     }
 
-    private fun destroyWithEffects(): BoardWithPlayerModifications {
-        val destroyable = effectRegistry.getDestroyable(this)
+    private fun EffectApplicationResult.addPlayerModificationsFrom(previousResult: EffectApplicationResult): EffectApplicationResult {
+        val newPlayerModifications = PlayerPosition.entries.associateWith {
+            val previous = playerModifications[it]?.cardsToAdd.orEmpty()
+            val current = previousResult.playerModifications[it]?.cardsToAdd.orEmpty()
 
-        val newState = destroyable.fold(state) { acc, position ->
-            val originalCell = acc[position] ?: return@fold acc
-
-            // TODO Maybe we need to change cell ownership
-            acc + (position to originalCell.copy(card = null))
+            PlayerModification(previous + current)
         }
 
-        val newBoard = copy(state = newState)
-
-        val effectApplicationResult = effectRegistry.onDestroy(destroyable, newBoard)
-
-        return BoardWithPlayerModifications(
-            newBoard.copy(effectRegistry = effectApplicationResult.effectRegistry),
-            effectApplicationResult.playerModifications,
-        )
-    }
-
-    private fun resolveEffectsWithPlayerModifications(): BoardWithPlayerModifications {
-        val destroyResult = destroyWithEffects()
-
-        if (destroyResult.board == this) return BoardWithPlayerModifications(this)
-
-        val finalResult = destroyResult.board.resolveEffectsWithPlayerModifications()
-        val combinedModifications = mergePlayerModifications(destroyResult.playerModifications, finalResult.playerModifications)
-
-        return BoardWithPlayerModifications(finalResult.board, combinedModifications)
-    }
-
-    private fun mergePlayerModifications(
-        first: Map<PlayerPosition, PlayerModification>,
-        second: Map<PlayerPosition, PlayerModification>
-    ): Map<PlayerPosition, PlayerModification> {
-        val allPlayers = first.keys + second.keys
-        return allPlayers.associateWith { player ->
-            val firstMod = first[player] ?: PlayerModification()
-            val secondMod = second[player] ?: PlayerModification()
-            PlayerModification(cardsToAdd = firstMod.cardsToAdd + secondMod.cardsToAdd)
-        }.filterValues { it.cardsToAdd.isNotEmpty() }
+        return copy(playerModifications = newPlayerModifications)
     }
 
     private fun getTotalPowerAt(position: Position): Int {
@@ -188,18 +142,18 @@ data class Board(
     }
 
     private fun getWinLaneScore(lane: Int): Pair<PlayerPosition, Int>? {
-        val score = getLaneScores(lane)
-        val winner = score.maxBy { it.value }
+        val score = getBaseLaneScoreAt(lane)
 
-        if (score.values.all { it == winner.value }) return null
+        val maxValue = score.maxOf { it.value }
+        val winners = score.filter { it.value == maxValue }.map { it.key }
 
-        return winner.toPair()
+        if (winners.size != 1) return null
+
+        val extra = getExtraLaneScoreAt(lane)
+
+        val winner = winners.first()
+        return winner to ((score[winner] ?: 0) + (extra[winner] ?: 0))
     }
-
-    private fun getPlayerPositionsInLane(player: PlayerPosition, lane: Int): List<Position> =
-        state.entries
-            .filter { it.value.owner == player && it.key.lane == lane }
-            .map { it.key }
 
     private fun accumulateScore(
         acc: Map<PlayerPosition, Int>,

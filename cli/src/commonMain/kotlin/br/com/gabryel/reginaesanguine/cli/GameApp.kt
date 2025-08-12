@@ -90,12 +90,12 @@ fun GameApp(viewModel: GameViewModel) {
 
                 Grid(gridWithSize(IntSize(1, area.height), cellSize).borderless()) { (lane) ->
                     Box(modifier = Modifier.matchParentSize(), contentAlignment = Center) {
-                        Text(game.getLaneScore(lane)[LEFT]?.let { "R $it" }.orEmpty())
+                        Text(game.getBaseLaneScoreAt(lane)[LEFT]?.let { "R $it" }.orEmpty())
                     }
                 }
                 Grid(gridWithSize(IntSize(area.width, area.height), cellSize)) { position ->
                     val cellContent = game.getCellAt(position)
-                    val cellPower = game.getScoreAt(position) as? Success<Int> ?: return@Grid
+                    val cellPower = game.getTotalScoreAt(position) as? Success<Int> ?: return@Grid
 
                     val textStyle = if (state is ChoosePosition && position == selectedPosition) Bold
                     else TextStyle.Unspecified
@@ -108,7 +108,7 @@ fun GameApp(viewModel: GameViewModel) {
                 }
                 Grid(gridWithSize(IntSize(1, area.height), cellSize).borderless()) { (lane) ->
                     Box(modifier = Modifier.matchParentSize(), contentAlignment = Center) {
-                        Text(game.getLaneScore(lane)[RIGHT]?.let { "R $it" }.orEmpty())
+                        Text(game.getBaseLaneScoreAt(lane)[RIGHT]?.let { "R $it" }.orEmpty())
                     }
                 }
             }

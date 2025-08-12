@@ -63,7 +63,7 @@ fun GridPlayableCell(game: Game, position: Position, cardSize: DpSize, putCard: 
 @Composable
 context(player: PlayerContext)
 fun PlayerLanePowerCell(game: Game, position: Position) {
-    val playerPower = game.getLaneScore(position.lane)[player.position] ?: 0
+    val playerPower = game.getBaseLaneScoreAt(position.lane)[player.position] ?: 0
 
     Box(modifier = playerCellInternalModifier, contentAlignment = Center) {
         PlayerPowerIndicator(playerPower, 25.dp, accented = game.getLaneWinner(position.lane) == player.position)

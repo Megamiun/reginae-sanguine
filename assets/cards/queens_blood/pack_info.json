@@ -7,7 +7,6 @@
       "name": "Security Officer",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_001.png",
       "increments": [
         {
           "x": 0,
@@ -32,7 +31,6 @@
       "name": "Riot Trooper",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_002.png",
       "increments": [
         {
           "x": 0,
@@ -61,7 +59,6 @@
       "name": "Grenadier",
       "power": 1,
       "rank": 2,
-      "filename": "queens_blood_blue_003.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -83,7 +80,6 @@
       "name": "J-Unit Sweeper",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_004.png",
       "increments": [
         {
           "x": 1,
@@ -108,7 +104,6 @@
       "name": "Queen Bee",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_005.png",
       "increments": [
         {
           "x": 0,
@@ -125,7 +120,6 @@
       "name": "Toxirat",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_006.png",
       "effect": {
         "type": "RaisePower",
         "amount": -3,
@@ -157,7 +151,6 @@
       "name": "Levrikon",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_007.png",
       "increments": [
         {
           "x": 0,
@@ -174,7 +167,6 @@
       "name": "Grasslands Wolf",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_008.png",
       "increments": [
         {
           "x": 1,
@@ -191,7 +183,6 @@
       "name": "Mu",
       "power": 1,
       "rank": 2,
-      "filename": "queens_blood_blue_009.png",
       "effect": {
         "type": "RaisePower",
         "amount": 1,
@@ -223,7 +214,6 @@
       "name": "Mandragora",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_010.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -250,7 +240,6 @@
       "name": "Mandragora Minion",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_010A.png",
       "increments": [
         {
           "x": 1,
@@ -267,7 +256,6 @@
       "name": "Elphadunk",
       "power": 4,
       "rank": 2,
-      "filename": "queens_blood_blue_011.png",
       "increments": [
         {
           "x": 0,
@@ -288,7 +276,6 @@
       "name": "Cactuar",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_012.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -320,7 +307,6 @@
       "name": "Crystalline Crab",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_013.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -356,7 +342,6 @@
       "name": "Quetzalcoatl",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_014.png",
       "increments": [
         {
           "x": 0,
@@ -381,7 +366,6 @@
       "name": "Zu",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_015.png",
       "increments": [
         {
           "x": 1,
@@ -406,7 +390,6 @@
       "name": "Devil Rider",
       "power": 4,
       "rank": 2,
-      "filename": "queens_blood_blue_016.png",
       "increments": [
         {
           "x": -2,
@@ -431,7 +414,6 @@
       "name": "Screamer",
       "power": 1,
       "rank": 3,
-      "filename": "queens_blood_blue_017.png",
       "increments": [
         {
           "x": 1,
@@ -472,7 +454,6 @@
       "name": "Flan",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_018.png",
       "increments": [
         {
           "x": -1,
@@ -493,7 +474,6 @@
       "name": "Crawler",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_019.png",
       "increments": [
         {
           "x": 0,
@@ -518,7 +498,6 @@
       "name": "Archdragon",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_020.png",
       "effect": {
         "type": "RaisePower",
         "amount": -3,
@@ -554,7 +533,6 @@
       "name": "Ogre",
       "power": 5,
       "rank": 2,
-      "filename": "queens_blood_blue_021.png",
       "increments": [
         {
           "x": 1,
@@ -579,7 +557,6 @@
       "name": "Deathwheel",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_022.png",
       "effect": {
         "type": "RaisePower",
         "amount": -3,
@@ -605,7 +582,6 @@
       "name": "Fleetwing",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_023.png",
       "increments": [
         {
           "x": -2,
@@ -630,7 +606,6 @@
       "name": "Zemzelett",
       "power": 1,
       "rank": 2,
-      "filename": "queens_blood_blue_024.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -666,7 +641,6 @@
       "name": "Ignilisk",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_025.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -702,7 +676,6 @@
       "name": "Capparwire",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_026.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -742,7 +715,6 @@
       "name": "Mindflayer",
       "power": 1,
       "rank": 2,
-      "filename": "queens_blood_blue_027.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -790,7 +762,6 @@
       "name": "Scrutineye",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_028.png",
       "effect": {
         "type": "RaisePower",
         "amount": 1,
@@ -826,7 +797,6 @@
       "name": "Hell Rider II",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_029.png",
       "effect": {
         "type": "RaisePower",
         "amount": -3,
@@ -870,7 +840,6 @@
       "name": "Flametrooper",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_030.png",
       "effect": {
         "type": "RaisePower",
         "amount": -3,
@@ -922,7 +891,6 @@
       "name": "Spearhawk",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_031.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -958,7 +926,6 @@
       "name": "Sea Devil",
       "power": 1,
       "rank": 3,
-      "filename": "queens_blood_blue_032.png",
       "effect": {
         "type": "RaisePower",
         "target": "SELF",
@@ -989,7 +956,6 @@
       "name": "Shoalopod",
       "power": 1,
       "rank": 2,
-      "filename": "queens_blood_blue_033.png",
       "effect": {
         "type": "RaisePower",
         "amount": 4,
@@ -1025,7 +991,6 @@
       "name": "Crown Lance",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_034.png",
       "effect": {
         "type": "RaisePower",
         "amount": -2,
@@ -1065,7 +1030,6 @@
       "name": "Tonberry King",
       "power": 1,
       "rank": 2,
-      "filename": "queens_blood_blue_035.png",
       "effect": {
         "type": "RaisePower",
         "target": "SELF",
@@ -1088,7 +1052,6 @@
       "name": "Sandhog Pie",
       "power": 1,
       "rank": 1,
-      "filename": "036.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -1124,7 +1087,6 @@
       "name": "Bloatfloat",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_037.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -1156,7 +1118,6 @@
       "name": "Bagnadrana",
       "power": 2,
       "rank": 3,
-      "filename": "queens_blood_blue_038.png",
       "effect": {
         "type": "RaisePower",
         "target": "SELF",
@@ -1183,7 +1144,6 @@
       "name": "Cockatrice",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_039.png",
       "effect": {
         "type": "DestroyCards",
         "trigger": {
@@ -1210,7 +1170,6 @@
       "name": "Heatseeker",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_040.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -1245,7 +1204,6 @@
       "name": "Heatseeker Minion",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_040A.png",
       "increments": [
         {
           "x": 0,
@@ -1266,7 +1224,6 @@
       "name": "Bomb",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_041.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -1334,7 +1291,6 @@
       "name": "Thug",
       "power": 4,
       "rank": 2,
-      "filename": "queens_blood_blue_042.png",
       "increments": [
         {
           "x": 1,
@@ -1359,7 +1315,6 @@
       "name": "Death Claw",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_043.png",
       "effect": {
         "type": "RaisePower",
         "target": "SELF",
@@ -1386,7 +1341,6 @@
       "name": "Landworm",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_044.png",
       "effect": {
         "type": "RaisePower",
         "target": "SELF",
@@ -1417,7 +1371,6 @@
       "name": "Sandspitter",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_045.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -1469,7 +1422,6 @@
       "name": "Chimera",
       "power": 4,
       "rank": 2,
-      "filename": "queens_blood_blue_046.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -1501,7 +1453,6 @@
       "name": "Joker",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_047.png",
       "effect": {
         "type": "RaisePower",
         "target": "SELF",
@@ -1536,7 +1487,6 @@
       "name": "Amphidex",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_048.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -1573,7 +1523,6 @@
       "name": "Frightflower",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_049.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -1641,7 +1590,6 @@
       "name": "Gagighandi",
       "power": 4,
       "rank": 2,
-      "filename": "queens_blood_blue_050.png",
       "effect": {
         "type": "RaisePower",
         "amount": -2,
@@ -1682,7 +1630,6 @@
       "name": "Insectoid Chimera",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_051.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": 0,
@@ -1715,7 +1662,6 @@
       "name": "Gigantoad",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_052.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": 0,
@@ -1740,7 +1686,6 @@
       "name": "Maloceros",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_053.png",
       "effect": {
         "type": "ScoreBonus",
         "amount": 10,
@@ -1773,7 +1718,6 @@
       "name": "Grandhorn",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_054.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": 0,
@@ -1798,7 +1742,6 @@
       "name": "Great Malboro",
       "power": 3,
       "rank": 3,
-      "filename": "queens_blood_blue_055.png",
       "effect": {
         "type": "RaisePower",
         "amount": -6,
@@ -1842,7 +1785,6 @@
       "name": "Grangalan",
       "power": 3,
       "rank": 3,
-      "filename": "056.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -1885,7 +1827,6 @@
       "name": "Grangalan Junior",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_056A.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -1920,7 +1861,6 @@
       "name": "Grangalan Baby",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_056B.png",
       "effect": {
         "type": "RaisePower",
         "amount": -5,
@@ -2004,7 +1944,6 @@
       "name": "Amalgam",
       "power": 1,
       "rank": 1,
-      "filename": "057.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -2031,7 +1970,6 @@
       "name": "Resurrected Amalgam",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_057A.png",
       "effect": {
         "type": "RaisePower",
         "amount": -2,
@@ -2067,7 +2005,6 @@
       "name": "Skeeskee",
       "power": 1,
       "rank": 1,
-      "filename": "058.png",
       "effect": {
         "type": "RaisePower",
         "amount": 1,
@@ -2098,7 +2035,6 @@
       "name": "Griffon",
       "power": 1,
       "rank": 1,
-      "filename": "059.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": 1,
@@ -2130,7 +2066,6 @@
       "name": "Basilisk",
       "power": 2,
       "rank": 3,
-      "filename": "060.png",
       "effect": {
         "type": "DestroyCards",
         "trigger": {
@@ -2165,7 +2100,6 @@
       "name": "Reapertail",
       "power": 3,
       "rank": 1,
-      "filename": "061.png",
       "effect": {
         "type": "RaisePower",
         "amount": -2,
@@ -2202,7 +2136,6 @@
       "name": "Jabberwock",
       "power": 6,
       "rank": 2,
-      "filename": "062.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -2250,7 +2183,6 @@
       "name": "Desert Sahagin",
       "power": 3,
       "rank": 1,
-      "filename": "063.png",
       "effect": {
         "type": "RaisePower",
         "amount": 4,
@@ -2283,7 +2215,6 @@
       "name": "Cavestalker",
       "power": 4,
       "rank": 2,
-      "filename": "064.png",
       "effect": {
         "type": "RaisePower",
         "amount": -2,
@@ -2332,7 +2263,6 @@
       "name": "Stone Golem",
       "power": 4,
       "rank": 1,
-      "filename": "065.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -2355,7 +2285,6 @@
       "name": "Two Face",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_066.png",
       "effect": {
         "type": "StatusBonus",
         "enhancedAmount": 4,
@@ -2389,7 +2318,6 @@
       "name": "Gi Specter",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_067.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": -1,
@@ -2421,7 +2349,6 @@
       "name": "Valron",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_068.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -2457,7 +2384,6 @@
       "name": "Disgorgon",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_069.png",
       "effect": {
         "type": "RaiseRank",
         "amount": 2,
@@ -2479,7 +2405,6 @@
       "name": "Dragon",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_070.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -2523,7 +2448,6 @@
       "name": "Twin Brain",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_071.png",
       "effect": {
         "type": "RaiseRank",
         "amount": 2,
@@ -2545,7 +2469,6 @@
       "name": "Black Bat",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_072.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -2597,7 +2520,6 @@
       "name": "Bahba Velamyu",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_073.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -2649,7 +2571,6 @@
       "name": "Rictus",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_074.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -2681,7 +2602,6 @@
       "name": "Adjudicator",
       "power": 1,
       "rank": 2,
-      "filename": "queens_blood_blue_075.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -2699,7 +2619,6 @@
       "name": "Yin & Yang",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_076.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": 1,
@@ -2735,7 +2654,6 @@
       "name": "Diabolic Variant",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_077.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": -1,
@@ -2771,7 +2689,6 @@
       "name": "Special Forces Operator",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_078.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -2811,7 +2728,6 @@
       "name": "2-C SOLDIER Operator",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_079.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -2847,7 +2763,6 @@
       "name": "Kelzmelzer",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_080.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": -1,
@@ -2887,7 +2802,6 @@
       "name": "Panthera Protector",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_081.png",
       "effect": {
         "type": "RaisePower",
         "amount": 4,
@@ -2928,7 +2842,6 @@
       "name": "Hecteyes",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_082.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -2978,7 +2891,6 @@
       "name": "Floating Death",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_083.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -3028,7 +2940,6 @@
       "name": "Ironclad",
       "power": 1,
       "rank": 3,
-      "filename": "queens_blood_blue_084.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -3056,7 +2967,6 @@
       "name": "Moss-Grown Adamantoise",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_085.png",
       "effect": {
         "type": "RaiseRank",
         "amount": 3,
@@ -3094,7 +3004,6 @@
       "name": "Cloud",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_086.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -3151,7 +3060,6 @@
       "name": "Barret",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_087.png",
       "effect": {
         "type": "RaisePower",
         "amount": -8,
@@ -3183,7 +3091,6 @@
       "name": "Tifa",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_088.png",
       "effect": {
         "type": "ScoreBonus",
         "amount": 5,
@@ -3212,7 +3119,6 @@
       "name": "Aerith",
       "power": 1,
       "rank": 2,
-      "filename": "queens_blood_blue_089.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -3248,7 +3154,6 @@
       "name": "Red XIII",
       "power": 3,
       "rank": 1,
-      "filename": "queens_blood_blue_090.png",
       "effect": {
         "type": "RaisePower",
         "amount": -2,
@@ -3309,7 +3214,6 @@
       "name": "Yuffie",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_091.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": -1,
@@ -3377,7 +3281,6 @@
       "name": "Cait Sith",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_092.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -3408,7 +3311,6 @@
       "name": "Moogle",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_092A.png",
       "effect": {
         "type": "RaisePower",
         "amount": 1,
@@ -3440,7 +3342,6 @@
       "name": "Cid",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_093.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -3467,7 +3368,6 @@
       "name": "The Tiny Bronco",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_093A.png",
       "effect": {
         "type": "RaiseRank",
         "amount": 2,
@@ -3493,7 +3393,6 @@
       "name": "Vincent",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_094.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -3524,7 +3423,6 @@
       "name": "Galian Beast",
       "power": 4,
       "rank": 2,
-      "filename": "queens_blood_blue_094A.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -3590,7 +3488,6 @@
       "name": "Ifrit",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_095.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -3618,7 +3515,6 @@
       "name": "Shiva",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_096.png",
       "effect": {
         "type": "SpawnCards",
         "cardIds": [
@@ -3637,7 +3533,6 @@
       "name": "Diamond Dust I",
       "power": 2,
       "rank": 0,
-      "filename": "queens_blood_blue_096A.png",
       "effect": {
         "type": "FlavourText",
         "description": "Spawned on empty position of rank 1"
@@ -3648,7 +3543,6 @@
       "name": "Diamond Dust I",
       "power": 4,
       "rank": 0,
-      "filename": "queens_blood_blue_096B.png",
       "effect": {
         "type": "FlavourText",
         "description": "Spawned on empty position of rank 2"
@@ -3659,7 +3553,6 @@
       "name": "Diamond Dust III",
       "power": 6,
       "rank": 0,
-      "filename": "queens_blood_blue_096C.png",
       "effect": {
         "type": "FlavourText",
         "description": "Spawned on empty position of rank 3"
@@ -3670,7 +3563,6 @@
       "name": "Ramuh",
       "power": 3,
       "rank": 3,
-      "filename": "queens_blood_blue_097.png",
       "effect": {
         "type": "RaisePower",
         "amount": -3,
@@ -3754,7 +3646,6 @@
       "name": "Titan",
       "power": 5,
       "rank": 2,
-      "filename": "queens_blood_blue_098.png",
       "effect": {
         "type": "RaiseRank",
         "amount": 2,
@@ -3780,7 +3671,6 @@
       "name": "Kujata",
       "power": 6,
       "rank": 1,
-      "filename": "queens_blood_blue_099.png",
       "effect": {
         "type": "RaisePower",
         "amount": -5,
@@ -3825,7 +3715,6 @@
       "name": "Odin",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_100.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -3861,7 +3750,6 @@
       "name": "Phoenix",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_101.png",
       "effect": {
         "type": "RaisePower",
         "amount": 5,
@@ -3913,7 +3801,6 @@
       "name": "Leviathan",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_102.png",
       "effect": {
         "type": "RaisePower",
         "amount": -3,
@@ -3981,7 +3868,6 @@
       "name": "Alexander",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_103.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -4017,7 +3903,6 @@
       "name": "Bahamut",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_104.png",
       "effect": {
         "type": "RaisePower",
         "amount": -5,
@@ -4065,7 +3950,6 @@
       "name": "Bahamut Arisen",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_105.png",
       "effect": {
         "type": "SpawnCards",
         "cardIds": [
@@ -4084,7 +3968,6 @@
       "name": "Elemental I",
       "power": 1,
       "rank": 0,
-      "filename": "queens_blood_blue_105A.png",
       "effect": {
         "type": "RaisePower",
         "amount": 1,
@@ -4134,7 +4017,6 @@
       "name": "Elemental II",
       "power": 1,
       "rank": 0,
-      "filename": "queens_blood_blue_105B.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -4184,7 +4066,6 @@
       "name": "Elemental III",
       "power": 1,
       "rank": 0,
-      "filename": "queens_blood_blue_105C.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -4234,7 +4115,6 @@
       "name": "Gilgamesh",
       "power": 3,
       "rank": 3,
-      "filename": "queens_blood_blue_106.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": -1,
@@ -4268,7 +4148,6 @@
       "name": "Chocobo & Moogle",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_107.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -4300,7 +4179,6 @@
       "name": "Fat Chocobo",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_108.png",
       "effect": {
         "type": "FlavourText",
         "description": "Creates a surfeit of positions around it when played"
@@ -4345,7 +4223,6 @@
       "name": "Posh Chocobo",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_109.png",
       "effect": {
         "type": "ScoreBonus",
         "amount": 3,
@@ -4370,7 +4247,6 @@
       "name": "Moogle Trio",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_110.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -4398,7 +4274,6 @@
       "name": "Moogle Bard",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_110A.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -4434,7 +4309,6 @@
       "name": "Moogle Mage",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_110B.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -4462,7 +4336,6 @@
       "name": "Magic Pot",
       "power": 1,
       "rank": 3,
-      "filename": "queens_blood_blue_111.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -4496,7 +4369,6 @@
       "name": "Materia Guardian",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_112.png",
       "effect": {
         "type": "RaisePower",
         "amount": -6,
@@ -4569,7 +4441,6 @@
       "name": "Midgardsormr",
       "power": 5,
       "rank": 2,
-      "filename": "queens_blood_blue_113.png",
       "effect": {
         "type": "RaisePower",
         "target": "SELF",
@@ -4600,7 +4471,6 @@
       "name": "Mythril Golem",
       "power": 8,
       "rank": 1,
-      "filename": "queens_blood_blue_114.png",
       "increments": [
         {
           "x": 0,
@@ -4617,7 +4487,6 @@
       "name": "Terror of the Deep",
       "power": 2,
       "rank": 3,
-      "filename": "queens_blood_blue_115.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -4701,7 +4570,6 @@
       "name": "Grasptropod",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_116.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -4770,7 +4638,6 @@
       "name": "Custom Valkyrie",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_117.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -4822,7 +4689,6 @@
       "name": "Gigatrice",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_118.png",
       "effect": {
         "type": "DestroyCards",
         "trigger": {
@@ -4873,7 +4739,6 @@
       "name": "Dyne",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_119.png",
       "effect": {
         "type": "RaisePower",
         "amount": -5,
@@ -4925,7 +4790,6 @@
       "name": "Anuran Suppressor",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_120.png",
       "effect": {
         "type": "RaisePower",
         "target": "SELF",
@@ -4956,7 +4820,6 @@
       "name": "Specimen H1024",
       "power": 6,
       "rank": 3,
-      "filename": "queens_blood_blue_121.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -5024,7 +4887,6 @@
       "name": "Crimson Mare Mk. II",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_122.png",
       "effect": {
         "type": "RaisePower",
         "amount": -5,
@@ -5077,7 +4939,6 @@
       "name": "Gi Nattak",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_123.png",
       "effect": {
         "type": "ReplaceAlly",
         "powerMultiplier": 1,
@@ -5113,7 +4974,6 @@
       "name": "Forgotten Specimen",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_124.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -5149,7 +5009,6 @@
       "name": "Don Corneo & Abzu",
       "power": 4,
       "rank": 2,
-      "filename": "queens_blood_blue_125.png",
       "effect": {
         "type": "AddCardsToHand",
         "cardIds": [
@@ -5167,7 +5026,6 @@
       "name": "Cacneo",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_125A.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -5207,7 +5065,6 @@
       "name": "Donberry",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_125B.png",
       "effect": {
         "type": "DestroyCards",
         "target": "ENEMIES",
@@ -5234,7 +5091,6 @@
       "name": "Red Dragon",
       "power": 6,
       "rank": 3,
-      "filename": "queens_blood_blue_126.png",
       "effect": {
         "type": "RaisePower",
         "amount": -4,
@@ -5294,7 +5150,6 @@
       "name": "Demon Gate",
       "power": 5,
       "rank": 3,
-      "filename": "queens_blood_blue_127.png",
       "effect": {
         "type": "RaisePower",
         "amount": -9,
@@ -5362,7 +5217,6 @@
       "name": "Reno",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_128.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -5398,7 +5252,6 @@
       "name": "Rude",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_129.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -5434,7 +5287,6 @@
       "name": "Elena",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_130.png",
       "effect": {
         "type": "RaisePower",
         "amount": -99,
@@ -5463,7 +5315,6 @@
       "name": "Tseng",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_131.png",
       "effect": {
         "type": "RaisePower",
         "amount": 4,
@@ -5500,7 +5351,6 @@
       "name": "Rufus",
       "power": 4,
       "rank": 2,
-      "filename": "queens_blood_blue_132.png",
       "effect": {
         "type": "FlavourText",
         "description": "Creates an intimidatingly large number of positions around him when played"
@@ -5545,7 +5395,6 @@
       "name": "Roche",
       "power": 5,
       "rank": 2,
-      "filename": "queens_blood_blue_133.png",
       "effect": {
         "type": "RaisePower",
         "amount": -1,
@@ -5645,7 +5494,6 @@
       "name": "J-Squad",
       "power": 2,
       "rank": 3,
-      "filename": "queens_blood_blue_134.png",
       "effect": {
         "type": "SpawnCards",
         "cardIds": [
@@ -5664,7 +5512,6 @@
       "name": "Hype Johnnys I",
       "power": 1,
       "rank": 0,
-      "filename": "queens_blood_blue_134A.png",
       "effect": {
         "type": "RaisePower",
         "amount": 1,
@@ -5714,7 +5561,6 @@
       "name": "Hype Johnnys II",
       "power": 1,
       "rank": 0,
-      "filename": "queens_blood_blue_134B.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -5764,7 +5610,6 @@
       "name": "Hype Johnnys III",
       "power": 1,
       "rank": 0,
-      "filename": "queens_blood_blue_134C.png",
       "effect": {
         "type": "RaisePower",
         "amount": 3,
@@ -5814,7 +5659,6 @@
       "name": "Chocobo Jockey",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_135.png",
       "effect": {
         "type": "ScoreBonus",
         "amount": 10,
@@ -5835,7 +5679,6 @@
       "name": "Space Ranger",
       "power": 2,
       "rank": 1,
-      "filename": "queens_blood_blue_136.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -5867,7 +5710,6 @@
       "name": "Haunted Hotel",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_137.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -5911,7 +5753,6 @@
       "name": "Skywheel",
       "power": 2,
       "rank": 3,
-      "filename": "queens_blood_blue_138.png",
       "effect": {
         "type": "FlavourText",
         "description": "Adds positions in the shape of a certain Gold Saucer attraction"
@@ -5956,7 +5797,6 @@
       "name": "Loveless",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_139.png",
       "effect": {
         "type": "RaisePower",
         "amount": 1,
@@ -6006,7 +5846,6 @@
       "name": "Saucer Squad",
       "power": 3,
       "rank": 2,
-      "filename": "queens_blood_blue_140.png",
       "effect": {
         "type": "FlavourText",
         "description": "Makes use of its adorable nature to enliven the battlefield"
@@ -6039,7 +5878,6 @@
       "name": "Dio",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_141.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",
@@ -6075,7 +5913,6 @@
       "name": "Ultimate Party Animal",
       "power": 1,
       "rank": 1,
-      "filename": "queens_blood_blue_142.png",
       "effect": {
         "type": "LoserScoreBonus",
         "trigger": {
@@ -6107,7 +5944,6 @@
       "name": "Sephiroth",
       "power": 4,
       "rank": 3,
-      "filename": "queens_blood_blue_143.png",
       "effect": {
         "type": "DestroyCards",
         "trigger": {
@@ -6150,7 +5986,6 @@
       "name": "Emerald Witch",
       "power": 2,
       "rank": 2,
-      "filename": "queens_blood_blue_144.png",
       "effect": {
         "type": "RaisePower",
         "amount": 2,
@@ -6218,7 +6053,6 @@
       "name": "Shadowblood Queen",
       "power": 3,
       "rank": 3,
-      "filename": "queens_blood_blue_145.png",
       "effect": {
         "type": "RaisePowerByCount",
         "target": "SELF",

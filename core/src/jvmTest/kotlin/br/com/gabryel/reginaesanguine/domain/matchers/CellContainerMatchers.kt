@@ -26,7 +26,7 @@ fun haveCellTotalPower(
     position: Position,
     power: Int,
 ) = Matcher<CellContainer> { board ->
-    val cellPower = board.getScoreAt(position).shouldBeSuccess()
+    val cellPower = board.getTotalScoreAt(position).shouldBeSuccess()
 
     val result = beEqual(power).test(cellPower)
     MatcherResult(

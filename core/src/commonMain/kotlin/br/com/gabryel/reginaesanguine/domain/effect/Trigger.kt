@@ -17,28 +17,28 @@ interface Scoped {
 
 @Serializable
 @SerialName("WhenPlayed")
-class WhenPlayed(override val scope: TargetType = SELF) : Trigger, Scoped
+data class WhenPlayed(override val scope: TargetType = SELF) : Trigger, Scoped
 
 @Serializable
 @SerialName("WhenDestroyed")
-class WhenDestroyed(override val scope: TargetType = SELF) : Trigger, Scoped
+data class WhenDestroyed(override val scope: TargetType = SELF) : Trigger, Scoped
 
 @Serializable
 @SerialName("WhenFirstStatusChanged")
-class WhenFirstStatusChanged(val status: StatusType) : Trigger
+data class WhenFirstStatusChanged(val status: StatusType) : Trigger
 
 @Serializable
 @SerialName("WhenFirstReachesPower")
-class WhenFirstReachesPower(val threshold: Int) : Trigger
+data class WhenFirstReachesPower(val threshold: Int) : Trigger
 
 @Serializable
 @SerialName("WhenLaneWon")
-object WhenLaneWon : Trigger
+data object WhenLaneWon : Trigger
 
 @Serializable
 @SerialName("WhileActive")
-object WhileActive : Trigger
+data object WhileActive : Trigger
 
 @Serializable
 @SerialName("None")
-object None : Trigger
+data object None : Trigger

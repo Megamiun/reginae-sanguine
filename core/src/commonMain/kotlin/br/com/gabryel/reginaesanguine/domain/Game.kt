@@ -17,7 +17,8 @@ data class Game(
     val players: Map<PlayerPosition, Player>,
     val action: Action<out String>? = null,
     val previous: Game? = null,
-    val playerTurn: PlayerPosition = LEFT
+    val playerTurn: PlayerPosition = LEFT,
+    val availableCards: Map<String, Card> = emptyMap()
 ) : CellContainer by board {
     val round: Int = 1 + (previous?.round ?: 0)
 
@@ -25,8 +26,13 @@ data class Game(
         ?: throw IllegalStateException("No player on $playerTurn on game")
 
     companion object {
-        fun forPlayers(left: Player, right: Player, drawn: Int = 5) =
-            Game(Board.default(), mapOf(LEFT to left.draw(drawn), RIGHT to right.draw(drawn)), playerTurn = LEFT)
+        fun forPlayers(left: Player, right: Player, drawn: Int = 5, availableCards: List<Card> = emptyList()) =
+            Game(
+                Board.default(),
+                mapOf(LEFT to left.draw(drawn), RIGHT to right.draw(drawn)),
+                playerTurn = LEFT,
+                availableCards = availableCards.associateBy { it.id },
+            )
     }
 
     fun play(player: PlayerPosition, action: Action<out String>): Result<Game> = buildResult {
@@ -47,25 +53,26 @@ data class Game(
                     .orRaiseError()
 
                 val result = board.play(player, Play(action.position, card)).orRaiseError()
-                val newBoard = result.board
-                val playerModifications = result.playerModifications
 
-                val modifiedPlayers = playerModifications.entries.fold(
-                    mapOf(player to playerAfterPlay, player.opponent to otherPlayerAfterDraw),
-                ) { acc, (targetPlayer, modifications) ->
-                    val currentPlayer = acc[targetPlayer] ?: return@fold acc
-                    val updatedPlayer = currentPlayer.addCardsToHand(modifications.cardsToAdd)
-                    acc + (targetPlayer to updatedPlayer)
+                val modifiedPlayers = mapOf(
+                    player to playerAfterPlay,
+                    player.opponent to otherPlayerAfterDraw,
+                ).mapValues { (position, player) ->
+                    val modification = result.playerModifications[position] ?: return@mapValues player
+                    player.addCardsToHand(modification.cardsToAdd.mapNotNull { availableCards[it] })
                 }
 
-                copy(playerTurn = playerTurn.opponent, players = modifiedPlayers, board = newBoard, previous = copy(action = action))
+                copy(
+                    playerTurn = playerTurn.opponent,
+                    players = modifiedPlayers,
+                    board = result.board,
+                    previous = copy(action = action),
+                )
             }
         }
     }
 
     fun getScores(): Map<PlayerPosition, Int> = board.getScores()
-
-    fun getLaneScore(lane: Int): Map<PlayerPosition, Int> = board.getLaneScores(lane)
 
     fun getState(): State =
         if (previous?.action == Skip && previous.previous?.action == Skip)
@@ -73,7 +80,7 @@ data class Game(
         else
             Ongoing
 
-    fun getLaneWinner(lane: Int): PlayerPosition? = getLaneScore(lane).getWinner()
+    fun getLaneWinner(lane: Int): PlayerPosition? = board.getBaseLaneScoreAt(lane).getWinner()
 
     fun getWinner(): PlayerPosition? = getScores().getWinner()
 

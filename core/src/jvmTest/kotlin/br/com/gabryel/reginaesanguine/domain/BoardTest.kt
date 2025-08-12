@@ -22,17 +22,16 @@ import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import br.com.gabryel.reginaesanguine.domain.helpers.A2
+import br.com.gabryel.reginaesanguine.domain.helpers.A5
 import br.com.gabryel.reginaesanguine.domain.helpers.B1
 import br.com.gabryel.reginaesanguine.domain.helpers.B2
 import br.com.gabryel.reginaesanguine.domain.helpers.B3
 import br.com.gabryel.reginaesanguine.domain.helpers.B4
 import br.com.gabryel.reginaesanguine.domain.helpers.B5
 import br.com.gabryel.reginaesanguine.domain.helpers.C1
-import br.com.gabryel.reginaesanguine.domain.helpers.RIGHT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.cardOf
-import br.com.gabryel.reginaesanguine.domain.helpers.TOP_LANE
 import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
 import br.com.gabryel.reginaesanguine.domain.matchers.emptyCellOwnedBy
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCell
@@ -133,7 +132,7 @@ class BoardTest {
         val nextBoard = buildResult {
             Board.default()
                 .play(LEFT, Play(B1, smallCard)).orRaiseError().board
-                .play(RIGHT, Play(TOP_LANE atColumn RIGHT_COLUMN, bigCard)).orRaiseError().board
+                .play(RIGHT, Play(A5, bigCard)).orRaiseError().board
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(

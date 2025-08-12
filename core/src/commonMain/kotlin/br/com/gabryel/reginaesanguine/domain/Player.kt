@@ -18,13 +18,5 @@ data class Player(val hand: List<Card> = listOf(), val deck: List<Card> = listOf
         else -> copy(hand = hand + deck.first(), deck = deck.drop(1)).draw(amount - 1)
     }
 
-    fun addCardsToHand(cardIds: List<String>): Player {
-        val cardsToAdd = cardIds.mapNotNull { cardId ->
-            deck.find { it.id == cardId }
-        }
-        return copy(
-            hand = hand + cardsToAdd,
-            deck = deck.filter { card -> !cardIds.contains(card.id) },
-        )
-    }
+    fun addCardsToHand(cards: List<Card>): Player = copy(hand = hand + cards)
 }

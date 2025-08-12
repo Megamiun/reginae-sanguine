@@ -7,9 +7,11 @@ import br.com.gabryel.reginaesanguine.domain.Failure.NotPlayerTurn
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
+import br.com.gabryel.reginaesanguine.domain.effect.AddCardsToHand
+import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
+import br.com.gabryel.reginaesanguine.domain.helpers.B1
 import br.com.gabryel.reginaesanguine.domain.helpers.LEFT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.MIDDLE_LANE
-import br.com.gabryel.reginaesanguine.domain.helpers.RIGHT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.RIOT_TROOPER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.SECURITY_OFFICER
 import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.cardOf
@@ -109,6 +111,55 @@ class GameTest {
         }
 
         nextTurn.shouldBeSuccess().havePlayerOn(LEFT) should haveCardsAtHand(RIOT_TROOPER)
+    }
+
+    @Test
+    fun `when AddCardsToHand effect is played, should add specified cards to player hand`() {
+        val card1 = cardOf("card1")
+        val card2 = cardOf("card2")
+        val availableCards = listOf(card1, card2)
+
+        val triggerCard = cardOf("trigger_card", effect = AddCardsToHand(listOf(card1.id), WhenPlayed()))
+
+        val player = Player(hand = listOf(triggerCard))
+        val game = Game.forPlayers(player, Player(), 0, availableCards)
+
+        val result = game.play(LEFT, Play(B1, triggerCard.id))
+
+        result.shouldBeSuccess().havePlayerOn(LEFT) should haveCardsAtHand(card1)
+    }
+
+    @Test
+    fun `when AddCardsToHand effect specifies multiple cards, should add all available cards`() {
+        val card1 = cardOf("card1")
+        val card2 = cardOf("card2")
+        val availableCards = listOf(card1, card2)
+
+        val multiCardEffect = cardOf(effect = AddCardsToHand(listOf(card1.id, card2.id), WhenPlayed()))
+
+        val player = Player(hand = listOf(multiCardEffect))
+        val game = Game.forPlayers(player, Player(), 0, availableCards)
+
+        val result = game.play(LEFT, Play(B1, multiCardEffect.id))
+
+        result.shouldBeSuccess().havePlayerOn(LEFT) should haveCardsAtHand(card1, card2)
+    }
+
+    @Test
+    fun `when AddCardsToHand effect specifies non-existent cards, should only add existing cards`() {
+        val card1 = cardOf("card1")
+        val card2 = cardOf("card2")
+        val availableCards = listOf(card1, card2)
+
+        val effect = AddCardsToHand(listOf(card1.id, "missing"), WhenPlayed())
+        val effectWithMissingCard = cardOf("partial", "Partial", effect = effect)
+
+        val player = Player(listOf(effectWithMissingCard))
+        val game = Game.forPlayers(player, Player(), 0, availableCards)
+
+        val result = game.play(LEFT, Play(B1, effectWithMissingCard.id))
+
+        result.shouldBeSuccess().havePlayerOn(LEFT) should haveCardsAtHand(card1)
     }
 
     @Test
