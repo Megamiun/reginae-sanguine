@@ -14,6 +14,18 @@ interface Effect {
     val description: String
 }
 
+interface PlayerEffect : Effect {
+    fun getPlayerModifications(
+        game: GameSummarizer,
+        sourcePlayer: PlayerPosition,
+        sourcePosition: Position
+    ): Map<PlayerPosition, PlayerModification>
+}
+
+data class PlayerModification(
+    val cardsToAdd: List<String> = emptyList()
+)
+
 interface Raisable {
     val target: TargetType
 
@@ -94,7 +106,14 @@ class AddCardsToHand(
     val cardIds: List<String>,
     override val trigger: Trigger,
     override val description: String = "Add cards $cardIds to hand on $trigger"
-) : Effect
+) : PlayerEffect {
+    override fun getPlayerModifications(
+        game: GameSummarizer,
+        sourcePlayer: PlayerPosition,
+        sourcePosition: Position
+    ): Map<PlayerPosition, PlayerModification> =
+        mapOf(sourcePlayer to PlayerModification(cardsToAdd = cardIds))
+}
 
 @Serializable
 @SerialName("SpawnCards")

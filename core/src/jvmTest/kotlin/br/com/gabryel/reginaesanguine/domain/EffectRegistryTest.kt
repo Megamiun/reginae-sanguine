@@ -33,7 +33,7 @@ class EffectRegistryTest {
         val result = EffectRegistry()
             .onPlaceCard(LEFT, effect, A1, defaultBoard)
 
-        result.getExtraPowerAt(A2, defaultBoard) shouldBe 1
+        result.effectRegistry.getExtraPowerAt(A2, defaultBoard) shouldBe 1
     }
 
     @Test
@@ -41,8 +41,8 @@ class EffectRegistryTest {
         val effect = RaisePower(1, SELF, WhenPlayed(ALLIES))
 
         val initial = EffectRegistry()
-        val beforeDestroyed = initial.onPlaceCard(LEFT, effect, A1, defaultBoard)
-        val afterDestroyed = beforeDestroyed.onPlaceCard(LEFT, NoEffect, A2, defaultBoard)
+        val beforeDestroyed = initial.onPlaceCard(LEFT, effect, A1, defaultBoard).effectRegistry
+        val afterDestroyed = beforeDestroyed.onPlaceCard(LEFT, NoEffect, A2, defaultBoard).effectRegistry
 
         assertAll(
             { beforeDestroyed should havePositionExtraPower(A1, 0, defaultBoard) },
@@ -55,8 +55,8 @@ class EffectRegistryTest {
         val effect = RaisePower(1, ANY, WhenDestroyed(), affected = setOf(RIGHTWARD))
 
         val initial = EffectRegistry()
-        val beforeDestroyed = initial.onPlaceCard(LEFT, effect, A1, defaultBoard)
-        val afterDestroyed = beforeDestroyed.onDestroy(setOf(A1), defaultBoard)
+        val beforeDestroyed = initial.onPlaceCard(LEFT, effect, A1, defaultBoard).effectRegistry
+        val afterDestroyed = beforeDestroyed.onDestroy(setOf(A1), defaultBoard).effectRegistry
 
         assertAll(
             { beforeDestroyed should havePositionExtraPower(A2, 0, defaultBoard) },
@@ -69,8 +69,8 @@ class EffectRegistryTest {
         val effect = RaisePower(1, SELF, WhenDestroyed(ALLIES))
 
         val initial = EffectRegistry()
-        val beforeDestroyed = initial.onPlaceCard(LEFT, effect, A1, defaultBoard)
-        val afterDestroyed = beforeDestroyed.onDestroy(setOf(A2), defaultBoard)
+        val beforeDestroyed = initial.onPlaceCard(LEFT, effect, A1, defaultBoard).effectRegistry
+        val afterDestroyed = beforeDestroyed.onDestroy(setOf(A2), defaultBoard).effectRegistry
 
         assertAll(
             { beforeDestroyed should havePositionExtraPower(A1, 0, defaultBoard) },
@@ -83,8 +83,8 @@ class EffectRegistryTest {
         val effect = RaisePower(1, ANY, WhileActive, affected = setOf(RIGHTWARD))
 
         val afterDestroyed = EffectRegistry()
-            .onPlaceCard(LEFT, effect, A1, defaultBoard)
-            .onDestroy(setOf(A1), defaultBoard)
+            .onPlaceCard(LEFT, effect, A1, defaultBoard).effectRegistry
+            .onDestroy(setOf(A1), defaultBoard).effectRegistry
 
         afterDestroyed should havePositionExtraPower(A1, 0, defaultBoard)
     }
@@ -96,7 +96,7 @@ class EffectRegistryTest {
     fun `when a effect is played by RIGHT player, should apply effect to mirrored position`() {
         val effect = RaisePower(1, ANY, WhileActive, affected = setOf(RIGHTWARD))
 
-        val result = EffectRegistry().onPlaceCard(RIGHT, effect, A5, defaultBoard)
+        val result = EffectRegistry().onPlaceCard(RIGHT, effect, A5, defaultBoard).effectRegistry
 
         result should havePositionExtraPower(A4, 1, defaultBoard)
     }
@@ -105,7 +105,7 @@ class EffectRegistryTest {
     fun `when a card power is lesser than negative extra power, should consider destroyable`() {
         val effect = RaisePower(-1, ANY, WhileActive, affected = setOf(RIGHTWARD))
 
-        val result = EffectRegistry().onPlaceCard(LEFT, effect, A1, defaultBoard)
+        val result = EffectRegistry().onPlaceCard(LEFT, effect, A1, defaultBoard).effectRegistry
 
         result.getDestroyable(defaultBoard) should containAll(A2)
     }

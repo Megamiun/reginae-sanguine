@@ -46,10 +46,19 @@ data class Game(
                     .selectCard(action.card)
                     .orRaiseError()
 
-                val newPlayers = mapOf(player to playerAfterPlay, player.opponent to otherPlayerAfterDraw)
+                val result = board.play(player, Play(action.position, card)).orRaiseError()
+                val newBoard = result.board
+                val playerModifications = result.playerModifications
 
-                val newBoard = board.play(player, Play(action.position, card)).orRaiseError()
-                copy(playerTurn = playerTurn.opponent, players = newPlayers, board = newBoard, previous = copy(action = action))
+                val modifiedPlayers = playerModifications.entries.fold(
+                    mapOf(player to playerAfterPlay, player.opponent to otherPlayerAfterDraw),
+                ) { acc, (targetPlayer, modifications) ->
+                    val currentPlayer = acc[targetPlayer] ?: return@fold acc
+                    val updatedPlayer = currentPlayer.addCardsToHand(modifications.cardsToAdd)
+                    acc + (targetPlayer to updatedPlayer)
+                }
+
+                copy(playerTurn = playerTurn.opponent, players = modifiedPlayers, board = newBoard, previous = copy(action = action))
             }
         }
     }

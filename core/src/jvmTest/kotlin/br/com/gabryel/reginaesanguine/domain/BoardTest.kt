@@ -52,6 +52,7 @@ class BoardTest {
     fun `when playing a card on a valid position, should add player card to position`() {
         val nextBoard = Board.default()
             .play(LEFT, Play(B1, SECURITY_OFFICER))
+            .map { it.board }
 
         nextBoard shouldBeSuccessfulAnd haveCell(B1, cardCellWith(LEFT, SECURITY_OFFICER))
     }
@@ -60,6 +61,7 @@ class BoardTest {
     fun `when playing a card on a position where you have no enough rank, should fail with CellRankLowerThanCard`() {
         val nextBoard = Board.default()
             .play(LEFT, Play(B1, RIOT_TROOPER))
+            .map { it.board }
 
         nextBoard.shouldBeFailure<CellRankLowerThanCard>()
     }
@@ -68,6 +70,7 @@ class BoardTest {
     fun `when playing a card on a position you have no control, should fail with CellDoesNotBelongToPlayer`() {
         val nextBoard = Board.default()
             .play(RIGHT, Play(B1, SECURITY_OFFICER))
+            .map { it.board }
 
         nextBoard.shouldBeFailure<CellDoesNotBelongToPlayer>()
     }
@@ -76,6 +79,7 @@ class BoardTest {
     fun `when playing a card on a position outside the board, should fail with OutOfBoard`() {
         val nextBoard = Board.default()
             .play(RIGHT, Play(-1 atColumn -1, SECURITY_OFFICER))
+            .map { it.board }
 
         nextBoard.shouldBeFailure<CellOutOfBoard>()
     }
@@ -84,8 +88,8 @@ class BoardTest {
     fun `when playing a card on a position where you already have a card, should fail with CellOccupied`() {
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError().board
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError().board
         }
 
         nextBoard.shouldBeFailure<CellOccupied>()
@@ -95,6 +99,7 @@ class BoardTest {
     fun `when playing a card, should increment rank on all increment positions described in the cards`() {
         val nextBoard = Board.default()
             .play(LEFT, Play(B1, SECURITY_OFFICER))
+            .map { it.board }
 
         nextBoard shouldBeSuccessfulAnd haveCells(
             C1 to emptyCellOwnedBy(LEFT, 2),
@@ -112,6 +117,7 @@ class BoardTest {
         val nextBoard = Board.default()
             .copy(state = mapOf(B3 to Cell(RIGHT, 1)))
             .play(RIGHT, Play(B3, powerRaise))
+            .map { it.board }
 
         nextBoard shouldBeSuccessfulAnd haveCells(
             B2 to emptyCellOwnedBy(RIGHT, 1),
@@ -126,8 +132,8 @@ class BoardTest {
         val bigCard = cardOf(name = "ADD5", power = 5)
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(B1, smallCard)).orRaiseError()
-                .play(RIGHT, Play(TOP_LANE atColumn RIGHT_COLUMN, bigCard)).orRaiseError()
+                .play(LEFT, Play(B1, smallCard)).orRaiseError().board
+                .play(RIGHT, Play(TOP_LANE atColumn RIGHT_COLUMN, bigCard)).orRaiseError().board
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -143,8 +149,8 @@ class BoardTest {
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(B1, smallCard)).orRaiseError()
-                .play(RIGHT, Play(B5, bigCard)).orRaiseError()
+                .play(LEFT, Play(B1, smallCard)).orRaiseError().board
+                .play(RIGHT, Play(B5, bigCard)).orRaiseError().board
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -159,7 +165,7 @@ class BoardTest {
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(B1, laneBonus)).orRaiseError()
+                .play(LEFT, Play(B1, laneBonus)).orRaiseError().board
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -175,8 +181,8 @@ class BoardTest {
         val strongCard = cardOf(name = "Strong", power = 5)
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(B1, laneBonus)).orRaiseError()
-                .play(RIGHT, Play(B5, strongCard)).orRaiseError()
+                .play(LEFT, Play(B1, laneBonus)).orRaiseError().board
+                .play(RIGHT, Play(B5, strongCard)).orRaiseError().board
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -189,8 +195,8 @@ class BoardTest {
     fun `when two players have equal power in same lane, both should get 0 points`() {
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
-                .play(RIGHT, Play(B5, SECURITY_OFFICER)).orRaiseError()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError().board
+                .play(RIGHT, Play(B5, SECURITY_OFFICER)).orRaiseError().board
         }
 
         nextBoard.shouldBeSuccess().getScores() should containExactly(
@@ -209,6 +215,7 @@ class BoardTest {
 
         val nextBoard = Board.default()
             .play(LEFT, Play(B1, cardWithRaiseRank))
+            .map { it.board }
 
         nextBoard shouldBeSuccessfulAnd haveCells(
             (A1) to emptyCellOwnedBy(LEFT, 3),
@@ -222,8 +229,8 @@ class BoardTest {
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(A1, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(A2, cardWithRaiseRank)).orRaiseError()
+                .play(LEFT, Play(A1, SECURITY_OFFICER)).orRaiseError().board
+                .play(LEFT, Play(A2, cardWithRaiseRank)).orRaiseError().board
         }
 
         nextBoard shouldBeSuccessfulAnd haveCellTotalPower(A1, 2)
@@ -235,8 +242,8 @@ class BoardTest {
 
         val nextBoard = buildResult {
             Board.default()
-                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError()
-                .play(LEFT, Play(C1, destroyUp)).orRaiseError()
+                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError().board
+                .play(LEFT, Play(C1, destroyUp)).orRaiseError().board
         }
 
         nextBoard shouldBeSuccessfulAnd haveCell(B5, emptyCellOwnedBy(RIGHT, 1))
