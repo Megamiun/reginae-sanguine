@@ -9,7 +9,7 @@ import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.maps.shouldHaveSize
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 class RaiseLaneIfWonTest {
     @Test

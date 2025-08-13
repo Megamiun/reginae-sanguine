@@ -15,6 +15,8 @@ import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseLane
 import br.com.gabryel.reginaesanguine.domain.effect.type.Spawn
 import kotlin.reflect.KClass
 
+val DEFAULT_CONDITIONAL_TYPES = listOf<KClass<out Conditional>>(WhenFirstReachesPower::class, WhenFirstStatusChanged::class)
+
 data class EffectSource<T : Effect>(val player: PlayerPosition, val effect: T, val position: Position) {
     inline fun <reified V : T> upcastOrNull(): EffectSource<V>? =
         if (effect is V) EffectSource(player, effect, position) else null
@@ -29,7 +31,8 @@ data class EffectApplicationResult(
 
 data class EffectRegistry(
     private val appliedRaises: Map<Position, List<EffectSource<RaiseCell>>> = emptyMap(),
-    private val byTrigger: Map<KClass<out Trigger>, Map<Position, EffectSource<Effect>>> = emptyMap()
+    private val byTrigger: Map<KClass<out Trigger>, Map<Position, EffectSource<Effect>>> = emptyMap(),
+    private val conditionalTypes: List<KClass<out Conditional>> = DEFAULT_CONDITIONAL_TYPES
 ) {
     private val activeEffects = gatherActiveEffects()
 
@@ -49,6 +52,21 @@ data class EffectRegistry(
 
             result.copy(effectRegistry = cleanRegistry)
         }
+
+    fun checkConditionals(board: CellContainer): EffectApplicationResult {
+        val conditionalTypes = byTrigger.filter { (type) -> conditionalTypes.any { it == type } }.values
+        return conditionalTypes.fold(EffectApplicationResult(this)) { acc, conditionalTriggers ->
+            conditionalTriggers.fold(acc) { accResult, (position, sourceEffect) ->
+                val trigger = sourceEffect.effect.trigger as? Conditional ?: return accResult
+
+                val summarizer = GameSummarizer.forBoard(board, accResult.effectRegistry)
+                if (!trigger.isSatisfied(summarizer, position)) return@fold accResult
+
+                val result = sourceEffect.trigger(listOf(position), board, accResult)
+                result.copy(effectRegistry = result.effectRegistry.removeTrigger(position, trigger::class))
+            }
+        }
+    }
 
     fun getExtraPowerAtLane(lane: Int, board: CellContainer): Map<PlayerPosition, Int> {
         val summarizer = GameSummarizer.forBoard(board, this)
@@ -85,7 +103,16 @@ data class EffectRegistry(
         copy(appliedRaises = appliedRaises - positions)
 
     private fun removeTrigger(positions: Set<Position>): EffectRegistry =
-        copy(byTrigger = byTrigger.mapValues { (_, byTriggerTpe) -> byTriggerTpe - positions })
+        copy(byTrigger = byTrigger.mapValues { (_, byTriggerType) -> byTriggerType - positions })
+
+    private fun removeTrigger(position: Position, type: KClass<*>): EffectRegistry =
+        copy(
+            byTrigger = byTrigger.mapValues { (mapType, byTriggerType) ->
+                if (type != mapType) return@mapValues byTriggerType
+
+                byTriggerType.filterKeys { mapPosition -> position != mapPosition }
+            },
+        )
 
     private fun triggerWhenDestroyed(positions: Set<Position>, board: CellContainer): EffectApplicationResult {
         val cells = positions.mapNotNull { position ->
@@ -103,39 +130,46 @@ data class EffectRegistry(
         val scopedTriggers = byTrigger[T::class].orEmpty()
 
         return scopedTriggers.fold(EffectApplicationResult(this)) { accResult, (_, sourceEffect) ->
-            val effect = sourceEffect.effect
-            val trigger = effect.trigger as? T ?: return accResult
+            val trigger = sourceEffect.effect.trigger as? T ?: return accResult
 
             if (spawned && trigger.scope != SELF) return accResult
 
             val cells = cells.filter { cell -> sourceEffect.isInScope(cell, trigger) }
             if (cells.isEmpty()) return@fold accResult
 
-            val summarizer = GameSummarizer.forBoard(board, accResult.effectRegistry)
+            sourceEffect.trigger(cells.map { it.first }, board, accResult)
+        }
+    }
 
-            when (effect) {
-                is RaiseCell -> {
-                    val newRegistry = cells.fold(accResult.effectRegistry) { accRegistry, _ ->
-                        accRegistry.applyRaise(sourceEffect.upcastOrNull<RaiseCell>()!!, board)
-                    }
-                    accResult.copy(effectRegistry = newRegistry)
+    private fun EffectSource<Effect>.trigger(
+        cells: List<Position>,
+        board: CellContainer,
+        result: EffectApplicationResult
+    ): EffectApplicationResult {
+        val summarizer = GameSummarizer.forBoard(board, result.effectRegistry)
+
+        return when (effect) {
+            is RaiseCell -> {
+                val newRegistry = cells.fold(result.effectRegistry) { accRegistry, _ ->
+                    accRegistry.applyRaise(upcastOrNull<RaiseCell>()!!, board)
                 }
-                is AddCardsToHand -> {
-                    val modifications = cells.fold(accResult.toAddToHand) { accModifications, _ ->
-                        accModifications + effect.getNewCards(summarizer, sourceEffect.player, sourceEffect.position)
-                    }
-                    accResult.copy(toAddToHand = modifications)
-                }
-                is DestroyCards -> {
-                    val toDelete = effect.getAffectedPositions(sourceEffect.position, sourceEffect.player)
-                    accResult.copy(toDelete = accResult.toDelete + toDelete)
-                }
-                is Spawn -> {
-                    val toSpawn = effect.getSpawns(summarizer, sourceEffect.player)
-                    accResult.copy(toAddToBoard = toSpawn)
-                }
-                else -> accResult
+                result.copy(effectRegistry = newRegistry)
             }
+            is AddCardsToHand -> {
+                val modifications = cells.fold(result.toAddToHand) { accModifications, _ ->
+                    accModifications + effect.getNewCards(summarizer, player, position)
+                }
+                result.copy(toAddToHand = modifications)
+            }
+            is DestroyCards -> {
+                val toDelete = effect.getAffectedPositions(position, player)
+                result.copy(toDelete = result.toDelete + toDelete)
+            }
+            is Spawn -> {
+                val toSpawn = effect.getSpawns(summarizer, player)
+                result.copy(toAddToBoard = toSpawn)
+            }
+            else -> result
         }
     }
 
@@ -192,4 +226,23 @@ data class EffectRegistry(
         PlayerPosition.entries.associateWith { position ->
             (acc[position] ?: 0) + (curr[position] ?: 0)
         }
+
+    private fun EffectApplicationResult.includeFrom(previous: EffectApplicationResult): EffectApplicationResult {
+        val newToAddToHand = PlayerPosition.entries.associateWith {
+            val prev = toAddToHand[it].orEmpty()
+            val current = previous.toAddToHand[it].orEmpty()
+
+            prev + current
+        }
+
+        val newToAddToBoard = PlayerPosition.entries.associateWith {
+            val prev = toAddToBoard[it].orEmpty()
+            val current = previous.toAddToBoard[it].orEmpty()
+
+            if (prev == current) prev
+            else prev + current
+        }
+
+        return copy(toAddToHand = newToAddToHand, toAddToBoard = newToAddToBoard, toDelete = toDelete + previous.toDelete)
+    }
 }

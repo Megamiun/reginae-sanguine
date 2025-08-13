@@ -10,8 +10,10 @@ import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.Failure.CellWithNoCardToReplace
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginaesanguine.domain.effect.Conditional
 import br.com.gabryel.reginaesanguine.domain.effect.EffectApplicationResult
 import br.com.gabryel.reginaesanguine.domain.effect.EffectRegistry
+import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAlly
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
@@ -128,8 +130,11 @@ data class Board(
     }
 
     private fun resolveEffects(result: EffectApplicationResult): BoardWithEffectApplication {
-        val (newBoard, newResult) = listOf(Board::destroy, Board::spawn)
-            .fold(this to result) { (board, result), operation -> operation(board, result) }
+        val (newBoard, newResult) = listOf(
+            Board::destroy,
+            Board::spawn,
+            Board::checkConditionals,
+        ).fold(this to result) { (board, result), operation -> operation(board, result) }
 
         if (newBoard == this && result == newResult)
             return BoardWithEffectApplication(this, result.toAddToHand)
@@ -170,6 +175,9 @@ data class Board(
             .includeFrom(result)
         return newBoard.copy(effectRegistry = afterDestroyResult.effectRegistry) to afterDestroyResult
     }
+
+    private fun checkConditionals(result: EffectApplicationResult): Pair<Board, EffectApplicationResult> =
+        this to effectRegistry.checkConditionals(this).includeFrom(result)
 
     private fun EffectApplicationResult.includeFrom(previous: EffectApplicationResult): EffectApplicationResult {
         val newToAddToHand = PlayerPosition.entries.associateWith {

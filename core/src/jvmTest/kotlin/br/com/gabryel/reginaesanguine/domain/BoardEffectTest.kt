@@ -8,12 +8,14 @@ import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.UPWARD
 import br.com.gabryel.reginaesanguine.domain.Failure.CellWithNoCardToReplace
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginaesanguine.domain.effect.StatusType.ENHANCED
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ENEMIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
+import br.com.gabryel.reginaesanguine.domain.effect.WhenFirstStatusChanged
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import br.com.gabryel.reginaesanguine.domain.effect.type.DestroyCardsDefault
@@ -192,6 +194,50 @@ class BoardEffectTest {
         }
 
         result shouldBeSuccessfulAnd haveCellsTotalPower(A1 to 3, B1 to 2, C1 to 1)
+    }
+
+    @Test
+    fun `when a card with trigger WhenFirstStatusChanged is played, should not give it bonus`() {
+        val trigger = WhenFirstStatusChanged(ENHANCED)
+        val cardConditional = cardOf(power = 1, effect = RaisePower(10, SELF, trigger))
+
+        val result = buildResult {
+            Board.default()
+                .play(LEFT, Play(A1, cardConditional)).orRaiseError().board
+        }
+
+        result shouldBeSuccessfulAnd haveCellsTotalPower(A1 to 1)
+    }
+
+    @Test
+    fun `when a card with trigger WhenFirstStatusChanged changes status, should give it bonus`() {
+        val trigger = WhenFirstStatusChanged(ENHANCED)
+        val cardConditional = cardOf(power = 1, effect = RaisePower(10, SELF, trigger))
+        val cardRaise = cardOf(effect = RaisePower(1, ANY, WhenPlayed(), setOf(DOWNWARD, UPWARD)))
+
+        val result = buildResult {
+            Board.default()
+                .play(LEFT, Play(B1, cardConditional)).orRaiseError().board
+                .play(LEFT, Play(A1, cardRaise)).orRaiseError().board
+        }
+
+        result shouldBeSuccessfulAnd haveCellsTotalPower(B1 to 12)
+    }
+
+    @Test
+    fun `when a card with trigger WhenFirstStatusChanged changes status again, should not give it a second bonus`() {
+        val trigger = WhenFirstStatusChanged(ENHANCED)
+        val cardConditional = cardOf(power = 1, effect = RaisePower(10, SELF, trigger))
+        val cardRaise = cardOf(effect = RaisePower(1, ANY, WhenPlayed(), setOf(DOWNWARD, UPWARD)))
+
+        val result = buildResult {
+            Board.default()
+                .play(LEFT, Play(B1, cardConditional)).orRaiseError().board
+                .play(LEFT, Play(A1, cardRaise)).orRaiseError().board
+                .play(LEFT, Play(C1, cardRaise)).orRaiseError().board
+        }
+
+        result shouldBeSuccessfulAnd haveCellsTotalPower(B1 to 13)
     }
 
     private fun raisePowerCard(
