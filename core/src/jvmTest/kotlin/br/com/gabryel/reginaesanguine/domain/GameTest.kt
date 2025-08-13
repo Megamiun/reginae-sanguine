@@ -7,6 +7,7 @@ import br.com.gabryel.reginaesanguine.domain.Failure.NotPlayerTurn
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
+import br.com.gabryel.reginaesanguine.domain.State.Ended.Won
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHandDefault
 import br.com.gabryel.reginaesanguine.domain.helpers.B1
@@ -28,6 +29,7 @@ import br.com.gabryel.reginaesanguine.domain.matchers.shouldFailWith
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlin.test.Test
 
@@ -70,7 +72,7 @@ class GameTest {
     }
 
     @Test
-    fun `when making two consecutive skips, should end game`() {
+    fun `when making two consecutive skips with same score, should have state Tie`() {
         val nextTurn = buildResult {
             defaultGame()
                 .play(LEFT, Skip).orRaiseError()
@@ -80,6 +82,21 @@ class GameTest {
         nextTurn
             .shouldBeSuccess()
             .getState().shouldBeInstanceOf<Ended>()
+    }
+
+    @Test
+    fun `when making two consecutive skips with same score, should have state Won(Winner)`() {
+        val nextTurn = buildResult {
+            defaultGame()
+                .play(LEFT, Play(B1, SECURITY_OFFICER.id)).orRaiseError()
+                .play(RIGHT, Skip).orRaiseError()
+                .play(LEFT, Skip).orRaiseError()
+        }
+
+        nextTurn
+            .shouldBeSuccess()
+            .getState().shouldBeInstanceOf<Won>()
+            .player shouldBe LEFT
     }
 
     @Test

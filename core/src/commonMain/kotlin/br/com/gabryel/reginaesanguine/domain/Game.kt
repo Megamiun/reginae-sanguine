@@ -9,6 +9,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
 import br.com.gabryel.reginaesanguine.domain.State.Ended.Tie
+import br.com.gabryel.reginaesanguine.domain.State.Ended.Won
 import br.com.gabryel.reginaesanguine.domain.State.Ongoing
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
@@ -76,7 +77,10 @@ data class Game(
 
     fun getState(): State =
         if (previous?.action == Skip && previous.previous?.action == Skip)
-            Tie
+            when (val winner = getWinner()) {
+                null -> Tie
+                else -> Won(winner)
+            }
         else
             Ongoing
 
