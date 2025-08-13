@@ -71,22 +71,6 @@ class RaisePowerByCount(
 }
 
 @Serializable
-@SerialName("ReplaceAlly")
-class ReplaceAlly(
-    val powerMultiplier: Int = 0,
-    override val target: TargetType = NONE,
-    override val affected: Set<Displacement> = setOf(),
-    val replacedPower: Int = 0,
-    override val description: String = "Replace ally and raises $target power per $powerMultiplier",
-) : Raisable {
-    @Transient
-    override val trigger = WhenPlayed(SELF)
-
-    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position, self: Boolean) =
-        replacedPower * powerMultiplier
-}
-
-@Serializable
 @SerialName("StatusBonus")
 class StatusBonus(
     val enhancedAmount: Int,
