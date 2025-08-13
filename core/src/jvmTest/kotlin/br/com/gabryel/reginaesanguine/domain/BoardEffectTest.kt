@@ -12,6 +12,7 @@ import br.com.gabryel.reginaesanguine.domain.effect.TargetType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ENEMIES
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
@@ -20,6 +21,7 @@ import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseRankDefault
 import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseWinnerLanesByLoserScore
 import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAllyRaise
+import br.com.gabryel.reginaesanguine.domain.effect.type.SpawnCardsPerRank
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import br.com.gabryel.reginaesanguine.domain.helpers.A2
 import br.com.gabryel.reginaesanguine.domain.helpers.A5
@@ -34,6 +36,7 @@ import br.com.gabryel.reginaesanguine.domain.matchers.emptyCellOwnedBy
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCell
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCellTotalPower
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCells
+import br.com.gabryel.reginaesanguine.domain.matchers.haveCellsTotalPower
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeFailure
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccess
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccessfulAnd
@@ -74,8 +77,8 @@ class BoardEffectTest {
             .map { it.board }
 
         nextBoard shouldBeSuccessfulAnd haveCells(
-            (A1) to emptyCellOwnedBy(LEFT, 3),
-            (B2) to emptyCellOwnedBy(LEFT, 2),
+            A1 to emptyCellOwnedBy(LEFT, 3),
+            B2 to emptyCellOwnedBy(LEFT, 2),
         )
     }
 
@@ -145,6 +148,50 @@ class BoardEffectTest {
             .play(LEFT, Play(A1, replaceCard))
 
         result.shouldBeFailure<CellWithNoCardToReplace>()
+    }
+
+    @Test
+    fun `when playing a card with a Spawn Effect, should spawn the cards on the right cells`() {
+        val card = cardOf("rank1")
+        val spawnCard = cardOf("spawn", effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
+
+        val result = buildResult {
+            Board.default(mapOf("rank1" to card))
+                .play(LEFT, Play(A1, spawnCard)).orRaiseError().board
+        }
+
+        result shouldBeSuccessfulAnd haveCells(
+            B1 to cardCellWith(LEFT, card),
+            C1 to cardCellWith(LEFT, card),
+        )
+    }
+
+    @Test
+    fun `when playing a card with a Spawn Effect that spawns a When Played card, should apply effect`() {
+        val card = cardOf("rank1", power = 1, effect = RaisePower(3, SELF, WhenPlayed(SELF)))
+        val spawnCard = cardOf(effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
+
+        val result = buildResult {
+            Board.default(mapOf("rank1" to card))
+                .play(LEFT, Play(A1, spawnCard)).orRaiseError().board
+        }
+
+        result shouldBeSuccessfulAnd haveCellsTotalPower(B1 to 4, C1 to 4)
+    }
+
+    @Test
+    fun `when playing a card with a Spawn Effect, should not trigger other non SELF WhenPlayed`() {
+        val cardWhenPlayedAllies = cardOf(power = 1, effect = RaisePower(2, SELF, WhenPlayed(ALLIES)))
+        val cardSpawnable = cardOf("rank1", power = 2)
+        val spawnCard = cardOf(power = 1, effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
+
+        val result = buildResult {
+            Board.default(mapOf("rank1" to cardSpawnable))
+                .play(LEFT, Play(A1, cardWhenPlayedAllies)).orRaiseError().board
+                .play(LEFT, Play(C1, spawnCard)).orRaiseError().board
+        }
+
+        result shouldBeSuccessfulAnd haveCellsTotalPower(A1 to 3, B1 to 2, C1 to 1)
     }
 
     private fun raisePowerCard(

@@ -7,6 +7,7 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.compose.all
 import io.kotest.matchers.equals.beEqual
+import io.kotest.matchers.maps.matchAll
 
 fun haveCell(
     position: Position,
@@ -22,10 +23,7 @@ fun haveCell(
     )
 }
 
-fun haveCellTotalPower(
-    position: Position,
-    power: Int,
-) = Matcher<CellContainer> { board ->
+fun haveCellTotalPower(position: Position, power: Int) = Matcher<CellContainer> { board ->
     val cellPower = board.getTotalScoreAt(position).shouldBeSuccess()
 
     val result = beEqual(power).test(cellPower)
@@ -35,6 +33,10 @@ fun haveCellTotalPower(
         { "Cell at [${position.lane}, ${position.column}]: " + result.negatedFailureMessage() },
     )
 }
+
+fun haveCellsTotalPower(vararg cell: Pair<Position, Int>): Matcher<CellContainer> = Matcher.all(
+    *cell.map { (position, power) -> haveCellTotalPower(position, power) }.toTypedArray(),
+)
 
 fun haveCells(vararg cellDescriptors: Pair<Position, Matcher<Cell>>) =
     Matcher<CellContainer> { board ->

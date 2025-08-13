@@ -12,4 +12,6 @@ interface CellContainer {
     fun getExtraLaneScoreAt(lane: Int): Map<PlayerPosition, Int>
 
     fun getOccupiedCells(): Map<Position, Cell>
+
+    fun getOwnedCells(): Map<Position, Cell>
 }

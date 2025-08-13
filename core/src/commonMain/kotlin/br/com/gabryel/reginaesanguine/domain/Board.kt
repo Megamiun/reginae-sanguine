@@ -1,5 +1,6 @@
 package br.com.gabryel.reginaesanguine.domain
 
+import arrow.core.fold
 import arrow.core.raise.ensure
 import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Failure.CellDoesNotBelongToPlayer
@@ -25,10 +26,11 @@ val DEFAULT_BOARD_SIZE = Size(5, 3)
 data class Board(
     private val state: Map<Position, Cell> = createInitialState(),
     private val effectRegistry: EffectRegistry = EffectRegistry(),
+    private val availableCards: Map<String, Card> = emptyMap(),
     override val size: Size = DEFAULT_BOARD_SIZE
 ) : CellContainer {
     companion object {
-        fun default() = Board()
+        fun default(availableCards: Map<String, Card> = emptyMap()) = Board(availableCards = availableCards)
 
         private fun createInitialState(): Map<Position, Cell> = mapOf(
             // Left player starting positions
@@ -89,6 +91,8 @@ data class Board(
 
     override fun getOccupiedCells() = state.filter { it.value.card != null }
 
+    override fun getOwnedCells() = state.filter { it.value.owner != null }
+
     private fun destroyCard(position: Position, cell: Cell): BoardWithEffectApplication {
         val newCellCard = (position to cell.copy(card = null))
         val newBoard = copy(state = state + newCellCard)
@@ -124,12 +128,30 @@ data class Board(
     }
 
     private fun resolveEffects(result: EffectApplicationResult): BoardWithEffectApplication {
-        val (newBoard, newResult) = destroy(result)
+        val (newBoard, newResult) = listOf(Board::destroy, Board::spawn)
+            .fold(this to result) { (board, result), operation -> operation(board, result) }
 
         if (newBoard == this && result == newResult)
-            return BoardWithEffectApplication(newBoard, newResult.toAddToHand)
+            return BoardWithEffectApplication(this, result.toAddToHand)
 
         return newBoard.resolveEffects(newResult)
+    }
+
+    private fun spawn(result: EffectApplicationResult): Pair<Board, EffectApplicationResult> {
+        val toSpawn = result.toAddToBoard
+
+        return toSpawn.fold(this to result.copy(toAddToBoard = emptyMap())) { acc, (player, positionCard) ->
+            positionCard.fold(acc) { (board, result), (position, cardId) ->
+                val originalCell = board.state[position] ?: return@fold acc
+                val card = availableCards[cardId] ?: return@fold acc
+
+                val newCard = position to originalCell.copy(owner = player, card = card)
+                val newBoard = copy(state = board.state + newCard)
+                val newResult = board.effectRegistry.onSpawnCard(player, card.effect, position, newBoard)
+
+                newBoard.copy(effectRegistry = newResult.effectRegistry) to newResult.includeFrom(result)
+            }
+        }
     }
 
     private fun destroy(result: EffectApplicationResult): Pair<Board, EffectApplicationResult> {
@@ -145,19 +167,27 @@ data class Board(
         val newBoard = copy(state = newState)
         val afterDestroyResult = effectRegistry
             .onDestroy(toDelete, newBoard)
-            .addPlayerModificationsFrom(result)
+            .includeFrom(result)
         return newBoard.copy(effectRegistry = afterDestroyResult.effectRegistry) to afterDestroyResult
     }
 
-    private fun EffectApplicationResult.addPlayerModificationsFrom(previousResult: EffectApplicationResult): EffectApplicationResult {
-        val newPlayerModifications = PlayerPosition.entries.associateWith {
-            val previous = toAddToHand[it].orEmpty()
-            val current = previousResult.toAddToHand[it].orEmpty()
+    private fun EffectApplicationResult.includeFrom(previous: EffectApplicationResult): EffectApplicationResult {
+        val newToAddToHand = PlayerPosition.entries.associateWith {
+            val prev = toAddToHand[it].orEmpty()
+            val current = previous.toAddToHand[it].orEmpty()
 
-            previous + current
+            prev + current
         }
 
-        return copy(toAddToHand = newPlayerModifications)
+        val newToAddToBoard = PlayerPosition.entries.associateWith {
+            val prev = toAddToBoard[it].orEmpty()
+            val current = previous.toAddToBoard[it].orEmpty()
+
+            if (prev == current) prev
+            else prev + current
+        }
+
+        return copy(toAddToHand = newToAddToHand, toAddToBoard = newToAddToBoard, toDelete = toDelete + previous.toDelete)
     }
 
     private fun getTotalPowerAt(position: Position): Int {
