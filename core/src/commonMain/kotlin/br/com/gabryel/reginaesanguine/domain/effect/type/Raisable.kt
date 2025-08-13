@@ -1,8 +1,17 @@
-package br.com.gabryel.reginaesanguine.domain.effect
+package br.com.gabryel.reginaesanguine.domain.effect.type
 
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.effect.GameSummarizer
+import br.com.gabryel.reginaesanguine.domain.effect.None
+import br.com.gabryel.reginaesanguine.domain.effect.StatusType
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.NONE
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
+import br.com.gabryel.reginaesanguine.domain.effect.Trigger
+import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
+import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -59,6 +68,22 @@ class RaisePowerByCount(
 
             status.isUnderStatus(game.getExtraPowerAt(targetPosition))
         }
+}
+
+@Serializable
+@SerialName("ReplaceAlly")
+class ReplaceAlly(
+    val powerMultiplier: Int = 0,
+    override val target: TargetType = NONE,
+    override val affected: Set<Displacement> = setOf(),
+    val replacedPower: Int = 0,
+    override val description: String = "Replace ally and raises $target power per $powerMultiplier",
+) : Raisable {
+    @Transient
+    override val trigger = WhenPlayed(SELF)
+
+    override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position, self: Boolean) =
+        replacedPower * powerMultiplier
 }
 
 @Serializable

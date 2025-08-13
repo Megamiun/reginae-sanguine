@@ -7,8 +7,8 @@ import br.com.gabryel.reginaesanguine.domain.Failure.NotPlayerTurn
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
-import br.com.gabryel.reginaesanguine.domain.effect.AddCardsToHand
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
+import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHand
 import br.com.gabryel.reginaesanguine.domain.helpers.B1
 import br.com.gabryel.reginaesanguine.domain.helpers.LEFT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.MIDDLE_LANE

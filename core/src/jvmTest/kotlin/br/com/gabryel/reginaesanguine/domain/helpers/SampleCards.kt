@@ -2,8 +2,8 @@ package br.com.gabryel.reginaesanguine.domain.helpers
 
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Displacement
-import br.com.gabryel.reginaesanguine.domain.effect.Effect
-import br.com.gabryel.reginaesanguine.domain.effect.NoEffect
+import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
+import br.com.gabryel.reginaesanguine.domain.effect.type.NoEffect
 
 object SampleCards {
     val SECURITY_OFFICER =

@@ -2,6 +2,8 @@ package br.com.gabryel.reginaesanguine.domain.effect
 
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHand
+import br.com.gabryel.reginaesanguine.domain.effect.type.PlayerModification
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import io.kotest.matchers.maps.shouldContainExactly
 import io.mockk.mockk

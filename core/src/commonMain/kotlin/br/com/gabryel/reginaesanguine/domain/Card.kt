@@ -1,8 +1,8 @@
 package br.com.gabryel.reginaesanguine.domain
 
-import br.com.gabryel.reginaesanguine.domain.effect.Effect
-import br.com.gabryel.reginaesanguine.domain.effect.NoEffect
-import br.com.gabryel.reginaesanguine.domain.effect.RaiseRank
+import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
+import br.com.gabryel.reginaesanguine.domain.effect.type.NoEffect
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseRank
 import kotlinx.serialization.Serializable
 
 @Serializable

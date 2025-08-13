@@ -1,7 +1,6 @@
 package br.com.gabryel.reginaesanguine.domain.effect
 
 import br.com.gabryel.reginaesanguine.domain.CellContainer
-import br.com.gabryel.reginaesanguine.domain.EffectRegistry
 import br.com.gabryel.reginaesanguine.domain.Position
 
 interface GameSummarizer : CellContainer {

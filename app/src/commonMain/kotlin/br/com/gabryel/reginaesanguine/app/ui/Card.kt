@@ -54,7 +54,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.effect.EffectWithAffected
+import br.com.gabryel.reginaesanguine.domain.effect.type.EffectWithAffected
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

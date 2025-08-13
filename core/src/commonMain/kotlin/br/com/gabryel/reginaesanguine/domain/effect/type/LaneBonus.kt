@@ -1,7 +1,9 @@
-package br.com.gabryel.reginaesanguine.domain.effect
+package br.com.gabryel.reginaesanguine.domain.effect.type
 
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.effect.GameSummarizer
+import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

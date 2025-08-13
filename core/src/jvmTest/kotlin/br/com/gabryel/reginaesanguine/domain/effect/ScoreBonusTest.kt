@@ -2,6 +2,7 @@ package br.com.gabryel.reginaesanguine.domain.effect
 
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginaesanguine.domain.effect.type.ScoreBonus
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import br.com.gabryel.reginaesanguine.domain.helpers.TOP_LANE
 import io.kotest.matchers.maps.shouldContainExactly

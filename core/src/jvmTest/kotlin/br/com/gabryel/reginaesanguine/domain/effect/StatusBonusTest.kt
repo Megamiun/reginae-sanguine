@@ -4,6 +4,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
+import br.com.gabryel.reginaesanguine.domain.effect.type.StatusBonus
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import io.kotest.matchers.shouldBe
 import io.mockk.every

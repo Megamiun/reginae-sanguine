@@ -5,6 +5,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePowerByCount
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import br.com.gabryel.reginaesanguine.domain.helpers.B1
 import br.com.gabryel.reginaesanguine.domain.helpers.B2

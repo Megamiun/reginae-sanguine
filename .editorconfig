@@ -9,7 +9,7 @@
     ktlint_standard_chain-method-continuation = disabled
     ktlint_standard_trailing-comma-on-declaration-site = disabled
 
-    ktlint_function_naming_ignore_when_annotated_with=Composable
+    ktlint_function_naming_ignore_when_annotated_with=Composable,Kotest
 
     ij_kotlin_packages_to_use_import_on_demand=br.com.gabryel.reginarsanguine.domain.Failure.*,br.com.gabryel.reginarsanguine.domain.matchers.*
     ij_kotlin_name_count_to_use_star_import_for_members = 99

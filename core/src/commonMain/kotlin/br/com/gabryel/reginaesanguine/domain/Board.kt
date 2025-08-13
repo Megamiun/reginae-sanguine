@@ -8,7 +8,9 @@ import br.com.gabryel.reginaesanguine.domain.Failure.CellOutOfBoard
 import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.domain.effect.PlayerModification
+import br.com.gabryel.reginaesanguine.domain.effect.EffectApplicationResult
+import br.com.gabryel.reginaesanguine.domain.effect.EffectRegistry
+import br.com.gabryel.reginaesanguine.domain.effect.type.PlayerModification
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class BoardWithEffectApplication(

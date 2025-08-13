@@ -1,8 +1,8 @@
 package br.com.gabryel.reginaesanguine.domain.matchers
 
 import br.com.gabryel.reginaesanguine.domain.CellContainer
-import br.com.gabryel.reginaesanguine.domain.EffectRegistry
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.effect.EffectRegistry
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.equals.beEqual

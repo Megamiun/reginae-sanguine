@@ -1,6 +1,8 @@
-package br.com.gabryel.reginaesanguine.domain.effect
+package br.com.gabryel.reginaesanguine.domain.effect.type
 
 import br.com.gabryel.reginaesanguine.domain.Displacement
+import br.com.gabryel.reginaesanguine.domain.effect.TargetType
+import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -1,21 +1,20 @@
-package br.com.gabryel.reginaesanguine.domain
+package br.com.gabryel.reginaesanguine.domain.effect
 
 import arrow.core.fold
-import br.com.gabryel.reginaesanguine.domain.effect.DestroyCards
-import br.com.gabryel.reginaesanguine.domain.effect.Effect
-import br.com.gabryel.reginaesanguine.domain.effect.EffectWithAffected
-import br.com.gabryel.reginaesanguine.domain.effect.GameSummarizer
-import br.com.gabryel.reginaesanguine.domain.effect.LaneBonus
-import br.com.gabryel.reginaesanguine.domain.effect.None
-import br.com.gabryel.reginaesanguine.domain.effect.PlayerEffect
-import br.com.gabryel.reginaesanguine.domain.effect.PlayerModification
-import br.com.gabryel.reginaesanguine.domain.effect.Raisable
-import br.com.gabryel.reginaesanguine.domain.effect.Scoped
-import br.com.gabryel.reginaesanguine.domain.effect.Trigger
-import br.com.gabryel.reginaesanguine.domain.effect.WhenDestroyed
-import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
-import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
-import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
+import br.com.gabryel.reginaesanguine.domain.Cell
+import br.com.gabryel.reginaesanguine.domain.CellContainer
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition
+import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.effect.type.DestroyCards
+import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
+import br.com.gabryel.reginaesanguine.domain.effect.type.EffectWithAffected
+import br.com.gabryel.reginaesanguine.domain.effect.type.LaneBonus
+import br.com.gabryel.reginaesanguine.domain.effect.type.PlayerEffect
+import br.com.gabryel.reginaesanguine.domain.effect.type.PlayerModification
+import br.com.gabryel.reginaesanguine.domain.effect.type.Raisable
+import kotlin.collections.fold
+import kotlin.collections.orEmpty
+import kotlin.collections.plus
 import kotlin.reflect.KClass
 
 data class EffectSource<T : Effect>(val player: PlayerPosition, val effect: T, val position: Position) {

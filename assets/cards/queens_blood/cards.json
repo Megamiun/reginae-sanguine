@@ -1629,10 +1629,6 @@
     "rank": 1,
     "effect": {
       "type": "ReplaceAlly",
-      "powerMultiplier": 0,
-      "trigger": {
-        "type": "WhenPlayed"
-      },
       "description": "Destroy an allied card and replace it"
     },
     "increments": [
@@ -1661,10 +1657,6 @@
     "rank": 1,
     "effect": {
       "type": "ReplaceAlly",
-      "powerMultiplier": 0,
-      "trigger": {
-        "type": "WhenPlayed"
-      },
       "description": "Destroy an allied card and replace it"
     },
     "increments": [
@@ -1718,9 +1710,6 @@
     "effect": {
       "type": "ReplaceAlly",
       "powerMultiplier": 0,
-      "trigger": {
-        "type": "WhenPlayed"
-      },
       "description": "Destroy an allied card and replace it"
     },
     "increments": [
