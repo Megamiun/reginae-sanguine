@@ -1,25 +1,13 @@
 package br.com.gabryel.reginaesanguine.domain
 
 import br.com.gabryel.reginaesanguine.domain.Action.Play
-import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.LEFTWARD
 import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.RIGHTWARD
-import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.UPWARD
 import br.com.gabryel.reginaesanguine.domain.Failure.CellDoesNotBelongToPlayer
 import br.com.gabryel.reginaesanguine.domain.Failure.CellOccupied
 import br.com.gabryel.reginaesanguine.domain.Failure.CellOutOfBoard
 import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.domain.effect.TargetType
-import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
-import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ENEMIES
-import br.com.gabryel.reginaesanguine.domain.effect.Trigger
-import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
-import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
-import br.com.gabryel.reginaesanguine.domain.effect.type.DestroyCards
-import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePower
-import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseRank
-import br.com.gabryel.reginaesanguine.domain.effect.type.ScoreBonus
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import br.com.gabryel.reginaesanguine.domain.helpers.A2
 import br.com.gabryel.reginaesanguine.domain.helpers.A5
@@ -35,7 +23,6 @@ import br.com.gabryel.reginaesanguine.domain.helpers.SampleCards.cardOf
 import br.com.gabryel.reginaesanguine.domain.matchers.cardCellWith
 import br.com.gabryel.reginaesanguine.domain.matchers.emptyCellOwnedBy
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCell
-import br.com.gabryel.reginaesanguine.domain.matchers.haveCellTotalPower
 import br.com.gabryel.reginaesanguine.domain.matchers.haveCells
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeFailure
 import br.com.gabryel.reginaesanguine.domain.matchers.shouldBeSuccess
@@ -159,38 +146,6 @@ class BoardTest {
     }
 
     @Test
-    fun `when a player wins a lane with a ScoreBonus card, should receive bonus points`() {
-        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5))
-
-        val nextBoard = buildResult {
-            Board.default()
-                .play(LEFT, Play(B1, laneBonus)).orRaiseError().board
-        }
-
-        nextBoard.shouldBeSuccess().getScores() should containExactly(
-            LEFT to 6,
-            RIGHT to 0,
-        )
-    }
-
-    @Test
-    fun `when a player loses a lane with a ScoreBonus card, should not receive bonus points`() {
-        val laneBonus = cardOf("Lane Bonus", effect = ScoreBonus(5))
-
-        val strongCard = cardOf(name = "Strong", power = 5)
-        val nextBoard = buildResult {
-            Board.default()
-                .play(LEFT, Play(B1, laneBonus)).orRaiseError().board
-                .play(RIGHT, Play(B5, strongCard)).orRaiseError().board
-        }
-
-        nextBoard.shouldBeSuccess().getScores() should containExactly(
-            LEFT to 0,
-            RIGHT to 5,
-        )
-    }
-
-    @Test
     fun `when two players have equal power in same lane, both should get 0 points`() {
         val nextBoard = buildResult {
             Board.default()
@@ -203,67 +158,4 @@ class BoardTest {
             RIGHT to 0,
         )
     }
-
-    @Test
-    fun `when playing a card with RaiseRank effect, should increment rank on increment positions by specified amount`() {
-        val cardWithRaiseRank = cardOf(
-            "Rank Raiser",
-            increments = setOf(RIGHTWARD, UPWARD),
-            effect = RaiseRank(2),
-        )
-
-        val nextBoard = Board.default()
-            .play(LEFT, Play(B1, cardWithRaiseRank))
-            .map { it.board }
-
-        nextBoard shouldBeSuccessfulAnd haveCells(
-            (A1) to emptyCellOwnedBy(LEFT, 3),
-            (B2) to emptyCellOwnedBy(LEFT, 2),
-        )
-    }
-
-    @Test
-    fun `when playing a card with Raisable effect, should increment rank on increment positions by specified amount`() {
-        val cardWithRaiseRank = raisePowerCard(LEFTWARD, 1, trigger = WhileActive)
-
-        val nextBoard = buildResult {
-            Board.default()
-                .play(LEFT, Play(A1, SECURITY_OFFICER)).orRaiseError().board
-                .play(LEFT, Play(A2, cardWithRaiseRank)).orRaiseError().board
-        }
-
-        nextBoard shouldBeSuccessfulAnd haveCellTotalPower(A1, 2)
-    }
-
-    @Test
-    fun `when a card with DestroyEntity effect is played, should remove target card`() {
-        val destroyUp = destroyerCard(destroyEffect = UPWARD, target = ALLIES, trigger = WhenPlayed())
-
-        val nextBoard = buildResult {
-            Board.default()
-                .play(LEFT, Play(B1, SECURITY_OFFICER)).orRaiseError().board
-                .play(LEFT, Play(C1, destroyUp)).orRaiseError().board
-        }
-
-        nextBoard shouldBeSuccessfulAnd haveCell(B5, emptyCellOwnedBy(RIGHT, 1))
-    }
-
-    private fun raisePowerCard(
-        raiseEffect: Displacement,
-        powerRaise: Int,
-        target: TargetType = ALLIES,
-        trigger: Trigger = WhenPlayed()
-    ): Card = cardOf(
-        "Raise Power ($target at $raiseEffect $trigger)",
-        effect = RaisePower(powerRaise, target, trigger, affected = setOf(raiseEffect)),
-    )
-
-    private fun destroyerCard(
-        destroyEffect: Displacement,
-        target: TargetType = ENEMIES,
-        trigger: Trigger = WhenPlayed()
-    ): Card = cardOf(
-        "Card Destroyer ($target at $destroyEffect $trigger)",
-        effect = DestroyCards(target, trigger, affected = setOf(destroyEffect)),
-    )
 }

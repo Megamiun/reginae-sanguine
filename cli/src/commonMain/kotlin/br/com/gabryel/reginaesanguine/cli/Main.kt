@@ -34,8 +34,8 @@ private fun createRandomDeckOfSize(cards: Int): List<Card> = (1..cards).map {
     Card(
         "$it",
         "Test Card $it",
-        increments,
         nextInt(1, 4),
         3 - floor(log(nextDouble(1.0, 250.0), 10.0)).toInt(),
+        increments,
     )
 }

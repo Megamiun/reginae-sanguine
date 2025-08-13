@@ -25,7 +25,7 @@ The **Core module** provides the pure game engine implementation with domain log
 ./gradlew :core:clean
 
 # When validating changes, run:
-./gradle check :cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
+./gradlew check :cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
 ```
 
 ## Architecture & Structure
@@ -61,6 +61,22 @@ core/
 - `Player` - Hand/deck management with rank system
 - `Card` - Cost, power, position-based increments, and effects
 - `Cell` - Board cells with owner, ranks, and applied effects
+- `Effect` - Effects that run over a certain trigger. They need to always implement one, and only one, of the following interfaces:
+  - `AddCardsToHand` - Spawn cards on players hand
+  - `DestroyCards` - Destroys cards at the affect cells
+  - `RaiseCell` - Raise cards power at the affected cells
+  - `RaiseLane` - Raise all lanes power
+  - `RaiseRank` - Modifies rank raise on affected cells
+  - `ReplaceAlly` - Replaces card and create modified effect based on base card
+  - `Spawn` - Spawn cards on owned cells
+- `Trigger` - A trigger that says when an action should be considered
+  - `WhenPlayed`: Effect activates when card is played (scope: ALLIES/ENEMIES/ANY - for counting triggers, defaults to SELF)
+  - `WhenDestroyed`: Effect activates when card is destroyed (scope: ALLIES/ENEMIES/ANY - for counting triggers, defaults to SELF)
+  - `WhenFirstStatusChanged`: Effect activates when card status first changes (status: ENHANCED/ENFEEBLED)
+  - `WhenFirstReachesPower`: Effect activates when card's power first reaches threshold (threshold: integer)
+  - `WhileActive`: Effect is active while card remains on board
+  - `WhenLaneWon`: Effect activates when the player wins the lane
+  - `None`: No trigger (used for FlavourText effects)
 
 **Key Types:**
 - `Position` - Type alias for `Pair<Int, Int>` coordinates
@@ -73,12 +89,63 @@ core/
 - All domain methods return `Result<T>` instead of throwing exceptions
 - Integration with Arrow-kt's `Raise` for functional composition
 
-**Testing Patterns:**
+### Status Types (Enum Values)
+- `ENHANCED`: Card is in enhanced state
+- `ENFEEBLED`: Card is in enfeebled state
+- `ANY`: Cards is in any affected state
+
+### Target Types (Enum Values)
+- `ALLIES`: Effect only applies to allied cards
+- `ENEMIES`: Effect only applies to enemy cards
+- `ANY`: Effect applies to both allied and enemy cards
+- `SELF`: Effect applies to the card itself or its player
+
+### Effects
+
+Effects are extensible and should always implement one of the given interfaces. If the category of Effect has the same name as a Effect, then the Effect class will have an `Default` added to the end.
+
+The needed effects to run a base Queen's Blood game are:
+
+#### RaiseCell
+- `RaisePower`: Modifies power of cards (amount: positive/negative integer, target: ALLIES/ENEMIES/ANY/SELF)
+- `RaisePowerByCount`: Modifies power of cards based on numbers of cards in certain status and ownership (amount: positive/negative integer, target: ALLIES/ENEMIES/ANY/SELF, status: ENHANCED/ENFEEBLED/ANY, scope: ALLIES/ENEMIES/ANY - both default to ANY)
+- `RaisePowerOnStatus`: Power modification based on card state (enhancedAmount/enfeebledAmount: integers)
+
+#### RaiseLane
+- `RaiseLaneIfWon`: Provides score bonus (amount: positive integer)
+- `RaiseWinnerLanesByLoserScore`: Provides score bonus equal to loser's score (no additional fields)
+
+#### DestroyCards
+- `DestroyCards`: Destroys cards on affected tiles
+
+#### RaiseRank
+- `RaiseRank` - Modifies rank raise on affected cells
+
+#### ReplaceAlly
+- `ReplaceAlly`: Replaces an allied card
+- `ReplaceAllyRaise`: Replaces an allied card with optional power modification (powerMultiplier: 1=raise by replaced power, -1=lower by replaced power; target: ALLIES/ANY for power modification target)
+
+#### Spawn
+- `SpawnCardsPerRank`: Spawns specific cards in empty positions (cardIds: array of card IDs to spawn depending on rank)
+
+#### AddCardsToHand
+- `AddCardsToHand`: Adds specific card to player's hand (cardIds: related card IDs)
+
+#### Others
+- `NoEffect`: No effect
+- `FlavourText`: Only a description
+
+## Testing Patterns
 - Result-based assertions: `result shouldBeSuccessfulAnd haveState(Won(LEFT))`
 - Property-based testing with Kotest
 - Custom DSL for domain-specific assertions
 - Comprehensive test coverage of game rules and edge cases
 - When starting new features, should always create tests for relevant scenarios first
+- Testing Effects(can be more than one):
+  - Effect: Should test the Effect implementation, without creating a new game or board
+  - Effect Triggering/Management/Notification: Should test the EffectRegistry implementation, without creating a new game
+  - Effect that change the board state: Should test the Board implementation, without creating a new game
+  - Effect that change the player state: Should test the Game implementation
 
 ## Game Rules Implementation
 - **Board**: 5 columns × 3 rows, players start controlling 3 cells each

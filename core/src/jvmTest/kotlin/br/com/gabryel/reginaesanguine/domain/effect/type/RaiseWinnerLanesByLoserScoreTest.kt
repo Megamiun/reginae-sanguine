@@ -1,8 +1,8 @@
-package br.com.gabryel.reginaesanguine.domain.effect
+package br.com.gabryel.reginaesanguine.domain.effect.type
 
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.domain.effect.type.LoserScoreBonus
+import br.com.gabryel.reginaesanguine.domain.effect.GameSummarizer
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import br.com.gabryel.reginaesanguine.domain.helpers.BOTTOM_LANE
 import br.com.gabryel.reginaesanguine.domain.helpers.MIDDLE_LANE
@@ -12,7 +12,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 
-class LoserBonusTest {
+class RaiseWinnerLanesByLoserScoreTest {
     @Test
     fun `given player wins any lane, when fetching Lane Raise amounts, should return extra amount on lane`() {
         val summarizer = mockk<GameSummarizer> {
@@ -21,7 +21,7 @@ class LoserBonusTest {
             every { getBaseLaneScoreAt(BOTTOM_LANE) } returns mapOf(LEFT to 6, RIGHT to 6)
         }
 
-        val raiseLaneAmounts = LoserScoreBonus()
+        val raiseLaneAmounts = RaiseWinnerLanesByLoserScore()
             .getRaiseLaneAmounts(summarizer, LEFT, A1)
 
         raiseLaneAmounts shouldContainExactly mapOf(

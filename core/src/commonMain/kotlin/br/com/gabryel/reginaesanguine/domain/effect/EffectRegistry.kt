@@ -5,16 +5,12 @@ import br.com.gabryel.reginaesanguine.domain.Cell
 import br.com.gabryel.reginaesanguine.domain.CellContainer
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHand
 import br.com.gabryel.reginaesanguine.domain.effect.type.DestroyCards
 import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.type.EffectWithAffected
-import br.com.gabryel.reginaesanguine.domain.effect.type.LaneBonus
-import br.com.gabryel.reginaesanguine.domain.effect.type.PlayerEffect
-import br.com.gabryel.reginaesanguine.domain.effect.type.PlayerModification
-import br.com.gabryel.reginaesanguine.domain.effect.type.Raisable
-import kotlin.collections.fold
-import kotlin.collections.orEmpty
-import kotlin.collections.plus
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseCell
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseLane
 import kotlin.reflect.KClass
 
 data class EffectSource<T : Effect>(val player: PlayerPosition, val effect: T, val position: Position) {
@@ -24,12 +20,12 @@ data class EffectSource<T : Effect>(val player: PlayerPosition, val effect: T, v
 
 data class EffectApplicationResult(
     val effectRegistry: EffectRegistry,
-    val playerModifications: Map<PlayerPosition, PlayerModification> = emptyMap(),
+    val toAddToHand: Map<PlayerPosition, List<String>> = emptyMap(),
     val toDelete: Set<Position> = emptySet()
 )
 
 data class EffectRegistry(
-    private val appliedRaises: Map<Position, List<EffectSource<Raisable>>> = emptyMap(),
+    private val appliedRaises: Map<Position, List<EffectSource<RaiseCell>>> = emptyMap(),
     private val byTrigger: Map<KClass<out Trigger>, Map<Position, EffectSource<Effect>>> = emptyMap()
 ) {
     private val activeEffects = gatherActiveEffects()
@@ -52,7 +48,7 @@ data class EffectRegistry(
 
         return byTrigger[WhenLaneWon::class].orEmpty().map { (position, sourceEffect) ->
             when (val effect = sourceEffect.effect) {
-                is LaneBonus ->
+                is RaiseLane ->
                     effect.getRaiseLaneAmounts(summarizer, sourceEffect.player, position)[lane]
                         ?: emptyMap()
                 else -> emptyMap()
@@ -71,12 +67,12 @@ data class EffectRegistry(
         }
     }
 
-    fun getDestroyable(board: CellContainer): Set<Position> = activeEffects.filter { (position, effects) ->
+    fun getDestroyable(board: CellContainer): Set<Position> = activeEffects.keys.filter { position ->
         val cell = board.getCellAt(position).orNull() ?: return@filter false
         val card = cell.card ?: return@filter false
 
         card.power - getExtraPowerAt(position, board) > 0
-    }.keys
+    }.toSet()
 
     private fun removeTriggered(positions: Set<Position>): EffectRegistry =
         copy(appliedRaises = appliedRaises - positions)
@@ -104,18 +100,18 @@ data class EffectRegistry(
             if (cells.isEmpty()) return@fold accResult
 
             when (effect) {
-                is Raisable -> {
+                is RaiseCell -> {
                     val newRegistry = cells.fold(accResult.effectRegistry) { accRegistry, _ ->
-                        accRegistry.applyRaise(sourceEffect.upcastOrNull<Raisable>()!!, board)
+                        accRegistry.applyRaise(sourceEffect.upcastOrNull<RaiseCell>()!!, board)
                     }
                     accResult.copy(effectRegistry = newRegistry)
                 }
-                is PlayerEffect -> {
+                is AddCardsToHand -> {
                     val summarizer = GameSummarizer.forBoard(board, accResult.effectRegistry)
-                    val modifications = cells.fold(accResult.playerModifications) { accModifications, _ ->
-                        accModifications + effect.getPlayerModifications(summarizer, sourceEffect.player, sourceEffect.position)
+                    val modifications = cells.fold(accResult.toAddToHand) { accModifications, _ ->
+                        accModifications + effect.getNewCards(summarizer, sourceEffect.player, sourceEffect.position)
                     }
-                    accResult.copy(playerModifications = modifications)
+                    accResult.copy(toAddToHand = modifications)
                 }
                 is DestroyCards -> {
                     val toDelete = effect.getAffectedPositions(sourceEffect.position, sourceEffect.player)
@@ -133,7 +129,7 @@ data class EffectRegistry(
         return trigger.isInScope(player, targetPlayer, cell.first == position)
     }
 
-    private fun applyRaise(sourceEffect: EffectSource<Raisable>, board: CellContainer): EffectRegistry {
+    private fun applyRaise(sourceEffect: EffectSource<RaiseCell>, board: CellContainer): EffectRegistry {
         val newTriggered = sourceEffect.getAffected()
             .filterValidCards(board)
             .fold(appliedRaises) { acc, position -> acc + (position to (acc[position].orEmpty() + sourceEffect)) }
@@ -156,13 +152,13 @@ data class EffectRegistry(
         return copy(byTrigger = byTrigger + (triggerType to effectsOnTrigger))
     }
 
-    private fun gatherActiveEffects(): Map<Position, List<EffectSource<Raisable>>> {
+    private fun gatherActiveEffects(): Map<Position, List<EffectSource<RaiseCell>>> {
         val triggered = appliedRaises.flatMap { (_, effectSources) ->
             effectSources.flatMap { effectSource -> effectSource.getAffected().map { it to effectSource } }
         }
 
         val whileActive = byTrigger[WhileActive::class].orEmpty()
-            .mapNotNull { (l, r) -> r.upcastOrNull<Raisable>()?.let { l to it } }
+            .mapNotNull { (l, r) -> r.upcastOrNull<RaiseCell>()?.let { l to it } }
             .flatMap { (_, effectSource) -> effectSource.getAffected().map { it to effectSource } }
 
         return (triggered + whileActive).groupBy({ it.first }) { it.second }

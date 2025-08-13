@@ -4,23 +4,19 @@ import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.effect.GameSummarizer
-import br.com.gabryel.reginaesanguine.domain.effect.None
 import br.com.gabryel.reginaesanguine.domain.effect.StatusType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType
-import br.com.gabryel.reginaesanguine.domain.effect.TargetType.NONE
-import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
-import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
 import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 /**
- * This file contains all effects that implement the Raisable interface.
- * Raisable effects modify card power values on the board.
+ * This file contains all effects that implement the RaiseCell interface.
+ * RaiseCell effects modify card power values on the board.
  */
-interface Raisable : EffectWithAffected {
+interface RaiseCell : EffectWithAffected {
     fun getRaiseBy(
         game: GameSummarizer,
         source: PlayerPosition,
@@ -37,12 +33,12 @@ interface Raisable : EffectWithAffected {
 @Serializable
 @SerialName("RaisePower")
 class RaisePower(
-    val amount: Int = 1,
+    val amount: Int,
     override val target: TargetType,
     override val trigger: Trigger,
     override val affected: Set<Displacement> = setOf(),
     override val description: String = "Raises $target power by $amount on $trigger",
-) : EffectWithAffected, Raisable {
+) : RaiseCell {
     override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position, self: Boolean): Int =
         amount
 }
@@ -50,12 +46,13 @@ class RaisePower(
 @Serializable
 @SerialName("RaisePowerByCount")
 class RaisePowerByCount(
-    val status: StatusType = StatusType.ANY,
-    val scope: TargetType = TargetType.ANY,
+    val amount: Int,
+    val status: StatusType,
+    val scope: TargetType,
     override val target: TargetType,
-    override val description: String = "Raises $target power by count of cards with status $status owned by $scope",
     override val affected: Set<Displacement> = setOf(),
-) : EffectWithAffected, Raisable {
+    override val description: String = "Raises $target power by count of cards with status $status owned by $scope",
+) : RaiseCell {
     @Transient
     override val trigger = WhileActive
 
@@ -67,18 +64,18 @@ class RaisePowerByCount(
                 return@count false
 
             status.isUnderStatus(game.getExtraPowerAt(targetPosition))
-        }
+        } * amount
 }
 
 @Serializable
-@SerialName("StatusBonus")
-class StatusBonus(
+@SerialName("RaisePowerOnStatus")
+class RaisePowerOnStatus(
     val enhancedAmount: Int,
     val enfeebledAmount: Int,
     override val target: TargetType,
-    override val description: String = "Raises $enhancedAmount power on enhanced and $enfeebledAmount power on enfeebled",
     override val affected: Set<Displacement> = setOf(),
-) : EffectWithAffected, Raisable {
+    override val description: String = "Raises $enhancedAmount power on enhanced and $enfeebledAmount power on enfeebled",
+) : RaiseCell {
     @Transient
     override val trigger = WhileActive
 

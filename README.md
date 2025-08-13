@@ -1,6 +1,6 @@
 # Reginae Sanguine
 
-Study project for learning Domain Driven Design and Kotlin Multiplatform inspired on Final Fantasy VII Rebirth's Queens Blood.
+Study project for learning Domain Driven Design and Kotlin Multiplatform inspired by Final Fantasy VII Rebirth's Queen's Blood.
 
 ## Running
 

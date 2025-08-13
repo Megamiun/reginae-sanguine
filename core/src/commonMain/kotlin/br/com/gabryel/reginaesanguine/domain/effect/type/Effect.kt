@@ -3,10 +3,8 @@ package br.com.gabryel.reginaesanguine.domain.effect.type
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.effect.GameSummarizer
 import br.com.gabryel.reginaesanguine.domain.effect.None
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType
-import br.com.gabryel.reginaesanguine.domain.effect.TargetType.NONE
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import kotlinx.serialization.SerialName
@@ -31,24 +29,6 @@ sealed interface EffectWithAffected : Effect {
 }
 
 @Serializable
-@SerialName("RaiseRank")
-class RaiseRank(
-    val amount: Int = 1,
-    override val description: String = "Raises rank by $amount"
-) : Effect {
-    @Transient
-    override val trigger = None
-}
-
-@Serializable
-@SerialName("SpawnCards")
-class SpawnCards(
-    val cardIds: List<String>,
-    override val trigger: Trigger,
-    override val description: String = "Add cards $cardIds to field on $trigger"
-) : Effect
-
-@Serializable
 @SerialName("FlavourText")
 class FlavourText(override val description: String) : Effect {
     @Transient
@@ -58,6 +38,6 @@ class FlavourText(override val description: String) : Effect {
 @Serializable
 @SerialName("NoEffect")
 object NoEffect : Effect {
-    override val description = "NONE"
+    override val description = "This card has no abilities"
     override val trigger = None
 }

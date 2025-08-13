@@ -35,8 +35,8 @@ class GameActivity : ComponentActivity() {
 
         val deck = createTestDeck(AssetsResourceLoader(this))
 
-        val knownCard = Card("001", "Security Officer", setOf(), 1, 1)
-        val unknownCard = Card("Custom", "Custom", setOf(), 3, 3)
+        val knownCard = Card("001", "Security Officer", 1, 1, setOf())
+        val unknownCard = Card("Custom", "Custom", 3, 3, setOf())
 
         val game = Game.forPlayers(
             Player(deck = deck.shuffled()),

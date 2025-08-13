@@ -8,7 +8,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.State.Ended
 import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
-import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHand
+import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHandDefault
 import br.com.gabryel.reginaesanguine.domain.helpers.B1
 import br.com.gabryel.reginaesanguine.domain.helpers.LEFT_COLUMN
 import br.com.gabryel.reginaesanguine.domain.helpers.MIDDLE_LANE
@@ -119,7 +119,7 @@ class GameTest {
         val card2 = cardOf("card2")
         val availableCards = listOf(card1, card2)
 
-        val triggerCard = cardOf("trigger_card", effect = AddCardsToHand(listOf(card1.id), WhenPlayed()))
+        val triggerCard = cardOf("trigger_card", effect = AddCardsToHandDefault(listOf(card1.id), WhenPlayed()))
 
         val player = Player(hand = listOf(triggerCard))
         val game = Game.forPlayers(player, Player(), 0, availableCards)
@@ -135,7 +135,7 @@ class GameTest {
         val card2 = cardOf("card2")
         val availableCards = listOf(card1, card2)
 
-        val multiCardEffect = cardOf(effect = AddCardsToHand(listOf(card1.id, card2.id), WhenPlayed()))
+        val multiCardEffect = cardOf(effect = AddCardsToHandDefault(listOf(card1.id, card2.id), WhenPlayed()))
 
         val player = Player(hand = listOf(multiCardEffect))
         val game = Game.forPlayers(player, Player(), 0, availableCards)
@@ -151,7 +151,7 @@ class GameTest {
         val card2 = cardOf("card2")
         val availableCards = listOf(card1, card2)
 
-        val effect = AddCardsToHand(listOf(card1.id, "missing"), WhenPlayed())
+        val effect = AddCardsToHandDefault(listOf(card1.id, "missing"), WhenPlayed())
         val effectWithMissingCard = cardOf("partial", "Partial", effect = effect)
 
         val player = Player(listOf(effectWithMissingCard))

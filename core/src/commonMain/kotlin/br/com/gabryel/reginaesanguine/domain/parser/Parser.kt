@@ -1,18 +1,19 @@
 package br.com.gabryel.reginaesanguine.domain.parser
 
-import br.com.gabryel.reginaesanguine.domain.effect.Trigger
-import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHand
-import br.com.gabryel.reginaesanguine.domain.effect.type.DestroyCards
+import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHandDefault
+import br.com.gabryel.reginaesanguine.domain.effect.type.DestroyCardsDefault
 import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.type.FlavourText
-import br.com.gabryel.reginaesanguine.domain.effect.type.LoserScoreBonus
+import br.com.gabryel.reginaesanguine.domain.effect.type.NoEffect
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseLaneIfWon
 import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePowerByCount
-import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseRank
-import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAlly
-import br.com.gabryel.reginaesanguine.domain.effect.type.ScoreBonus
-import br.com.gabryel.reginaesanguine.domain.effect.type.SpawnCards
-import br.com.gabryel.reginaesanguine.domain.effect.type.StatusBonus
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePowerOnStatus
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseRankDefault
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseWinnerLanesByLoserScore
+import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAllyDefault
+import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAllyRaise
+import br.com.gabryel.reginaesanguine.domain.effect.type.SpawnCardsPerRank
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.SerializersModuleBuilder
@@ -29,7 +30,6 @@ import kotlin.reflect.KClass
  */
 fun gameJsonParser(
     extraEffects: Set<KClass<Effect>> = emptySet(),
-    extraTriggers: Set<KClass<Trigger>> = emptySet(),
     configure: SerializersModuleBuilder.() -> Unit = {}
 ) = Json {
     ignoreUnknownKeys = true
@@ -37,17 +37,26 @@ fun gameJsonParser(
 
     serializersModule = SerializersModule {
         polymorphic(Effect::class) {
+            subclass(AddCardsToHandDefault::class)
+
+            subclass(DestroyCardsDefault::class)
+
             subclass(RaisePower::class)
             subclass(RaisePowerByCount::class)
-            subclass(RaiseRank::class)
-            subclass(AddCardsToHand::class)
-            subclass(SpawnCards::class)
-            subclass(ScoreBonus::class)
-            subclass(LoserScoreBonus::class)
-            subclass(DestroyCards::class)
-            subclass(ReplaceAlly::class)
-            subclass(StatusBonus::class)
+            subclass(RaisePowerOnStatus::class)
+
+            subclass(RaiseRankDefault::class)
+
+            subclass(RaiseLaneIfWon::class)
+            subclass(RaiseWinnerLanesByLoserScore::class)
+
+            subclass(ReplaceAllyDefault::class)
+            subclass(ReplaceAllyRaise::class)
+
+            subclass(SpawnCardsPerRank::class)
+
             subclass(FlavourText::class)
+            subclass(NoEffect::class)
 
             extraEffects.forEach(::subclass)
         }

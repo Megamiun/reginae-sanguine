@@ -58,8 +58,8 @@ data class Game(
                     player to playerAfterPlay,
                     player.opponent to otherPlayerAfterDraw,
                 ).mapValues { (position, player) ->
-                    val modification = result.playerModifications[position] ?: return@mapValues player
-                    player.addCardsToHand(modification.cardsToAdd.mapNotNull { availableCards[it] })
+                    val toAddToHand = result.toAddToHand[position] ?: return@mapValues player
+                    player.addCardsToHand(toAddToHand.mapNotNull { availableCards[it] })
                 }
 
                 copy(

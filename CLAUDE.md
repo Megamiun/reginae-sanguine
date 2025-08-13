@@ -120,6 +120,13 @@ reginae-sanguine/
 - **GitHub Actions CI** runs full build on every push
 - **Domain-specific matchers** for expressive test assertions
 
+## Coding Rules
+- Never use !!. Always use error(), ensure() or throw explicit exceptions when something that shouldn't be null is null
+- Test names should follow pattern: `[given setup], when doing action, should expect result`
+
+## AI Coding Rules
+- Tests for debugging should be cleaned after debugging is done
+
 ## Getting Started
 1. **New Features**: Start with core module tests and domain implementation
 2. **Client Development**: Depend on core module and implement platform-specific UI

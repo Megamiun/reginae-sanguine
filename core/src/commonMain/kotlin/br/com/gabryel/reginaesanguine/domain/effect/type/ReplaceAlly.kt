@@ -14,18 +14,29 @@ import kotlinx.serialization.Transient
  * Replace effects handle card replacement and power modification based on the replaced card.
  * These effects replace a card at the source position and apply power bonuses to target positions.
  */
-interface Replace : Effect {
+interface ReplaceAlly : Effect {
     fun getReplaceEffect(replacedCard: Card): Effect
 }
 
 @Serializable
 @SerialName("ReplaceAlly")
-class ReplaceAlly(
-    val powerMultiplier: Int = 0,
-    val target: TargetType = SELF,
+class ReplaceAllyDefault(
+    override val description: String = "Destroy ally and put this card in place",
+) : ReplaceAlly {
+    @Transient
+    override val trigger = None
+
+    override fun getReplaceEffect(replacedCard: Card) = NoEffect
+}
+
+@Serializable
+@SerialName("ReplaceAllyRaise")
+class ReplaceAllyRaise(
+    val powerMultiplier: Int,
+    val target: TargetType,
     val affected: Set<Displacement> = setOf(),
     override val description: String = "Replace ally and raise $target power by replaced card's power × $powerMultiplier",
-) : Replace {
+) : ReplaceAlly {
     @Transient
     override val trigger = None
 

@@ -41,6 +41,8 @@ sealed interface Failure : Result<Nothing> {
 
     data class CellDoesNotBelongToPlayer(val cell: Cell) : Failure
 
+    data class CellWithNoCardToReplace(val cell: Cell) : Failure
+
     data class CellOccupied(val cell: Cell) : Failure
 
     class UnknownError(val error: Throwable) : Failure {

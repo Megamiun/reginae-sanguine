@@ -1,15 +1,14 @@
-package br.com.gabryel.reginaesanguine.domain
+package br.com.gabryel.reginaesanguine.domain.effect
 
+import br.com.gabryel.reginaesanguine.domain.Board
+import br.com.gabryel.reginaesanguine.domain.Cell
 import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.RIGHTWARD
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.domain.effect.EffectRegistry
+import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
-import br.com.gabryel.reginaesanguine.domain.effect.WhenDestroyed
-import br.com.gabryel.reginaesanguine.domain.effect.WhenPlayed
-import br.com.gabryel.reginaesanguine.domain.effect.WhileActive
 import br.com.gabryel.reginaesanguine.domain.effect.type.NoEffect
 import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePower
 import br.com.gabryel.reginaesanguine.domain.helpers.A1

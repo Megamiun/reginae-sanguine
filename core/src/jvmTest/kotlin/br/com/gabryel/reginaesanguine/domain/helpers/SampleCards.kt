@@ -10,20 +10,22 @@ object SampleCards {
         Card(
             "001",
             "Security Officer",
+            1,
+            1,
             setOf(
                 Displacement(1, 0),
                 Displacement(0, 1),
                 Displacement(-1, 0),
                 Displacement(0, -1),
             ),
-            1,
-            1,
         )
 
     val RIOT_TROOPER =
         Card(
             "002",
             "Riot Trooper",
+            3,
+            2,
             setOf(
                 Displacement(1, 0),
                 Displacement(2, 0),
@@ -31,8 +33,6 @@ object SampleCards {
                 Displacement(-1, 0),
                 Displacement(-2, 0),
             ),
-            3,
-            2,
         )
 
     fun cardOf(
@@ -42,5 +42,5 @@ object SampleCards {
         power: Int = 1,
         rank: Int = 1,
         effect: Effect = NoEffect,
-    ) = Card(id, name, increments, power, rank, effect)
+    ) = Card(id, name, power, rank, increments, effect)
 }

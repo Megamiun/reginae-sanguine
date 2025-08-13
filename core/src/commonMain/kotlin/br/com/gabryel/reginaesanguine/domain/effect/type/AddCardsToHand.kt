@@ -7,33 +7,24 @@ import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-data class PlayerModification(
-    val cardsToAdd: List<String> = emptyList()
-)
-
 /**
- * This file contains all effects that implement the PlayerEffect interface.
- * PlayerEffect effects modify player state (like adding cards to hand) rather than board state.
+ * This file contains all effects that implement the AddCardsToHand interface.
+ * AddCardsToHand effects modify player state (like adding cards to hand) rather than board state.
  */
-interface PlayerEffect : Effect {
-    fun getPlayerModifications(
-        game: GameSummarizer,
-        sourcePlayer: PlayerPosition,
-        sourcePosition: Position
-    ): Map<PlayerPosition, PlayerModification>
+interface AddCardsToHand : Effect {
+    fun getNewCards(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position): Map<PlayerPosition, List<String>>
 }
 
 @Serializable
 @SerialName("AddCardsToHand")
-class AddCardsToHand(
+class AddCardsToHandDefault(
     val cardIds: List<String>,
     override val trigger: Trigger,
     override val description: String = "Add cards $cardIds to hand on $trigger"
-) : PlayerEffect {
-    override fun getPlayerModifications(
+) : AddCardsToHand {
+    override fun getNewCards(
         game: GameSummarizer,
         sourcePlayer: PlayerPosition,
         sourcePosition: Position
-    ): Map<PlayerPosition, PlayerModification> =
-        mapOf(sourcePlayer to PlayerModification(cardsToAdd = cardIds))
+    ) = mapOf(sourcePlayer to cardIds)
 }

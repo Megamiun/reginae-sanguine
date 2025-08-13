@@ -10,19 +10,19 @@ import kotlinx.serialization.Transient
 import kotlin.collections.emptyMap
 
 /**
- * This file contains all effects that implement the LaneBonus interface.
- * LaneBonus effects modify lane power values on the board.
+ * This file contains all effects that implement the RaiseLane interface.
+ * RaiseLane effects modify lane power values on the board.
  */
-interface LaneBonus : Effect {
+interface RaiseLane : Effect {
     fun getRaiseLaneAmounts(game: GameSummarizer, source: PlayerPosition, sourcePosition: Position): Map<Int, Map<PlayerPosition, Int>>
 }
 
 @Serializable
-@SerialName("ScoreBonus")
-class ScoreBonus(
+@SerialName("RaiseLaneIfWon")
+class RaiseLaneIfWon(
     val amount: Int,
     override val description: String = "Add $amount score to lane if you wins lane",
-) : LaneBonus {
+) : RaiseLane {
     @Transient
     override val trigger = WhenLaneWon
 
@@ -44,10 +44,10 @@ class ScoreBonus(
 }
 
 @Serializable
-@SerialName("LoserScoreBonus")
-class LoserScoreBonus(
+@SerialName("RaiseWinnerLanesByLoserScore")
+class RaiseWinnerLanesByLoserScore(
     override val description: String = "Add points from every lane loser score to winner score",
-) : LaneBonus {
+) : RaiseLane {
     @Transient
     override val trigger = WhenLaneWon
 

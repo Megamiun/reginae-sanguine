@@ -6,16 +6,18 @@ import br.com.gabryel.reginaesanguine.domain.Failure.CellDoesNotBelongToPlayer
 import br.com.gabryel.reginaesanguine.domain.Failure.CellOccupied
 import br.com.gabryel.reginaesanguine.domain.Failure.CellOutOfBoard
 import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
+import br.com.gabryel.reginaesanguine.domain.Failure.CellWithNoCardToReplace
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.effect.EffectApplicationResult
 import br.com.gabryel.reginaesanguine.domain.effect.EffectRegistry
-import br.com.gabryel.reginaesanguine.domain.effect.type.PlayerModification
+import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
+import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAlly
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 
 data class BoardWithEffectApplication(
     val board: Board,
-    val playerModifications: Map<PlayerPosition, PlayerModification> = emptyMap()
+    val toAddToHand: Map<PlayerPosition, List<String>> = emptyMap()
 )
 
 val DEFAULT_BOARD_SIZE = Size(5, 3)
@@ -43,12 +45,22 @@ data class Board(
     fun play(player: PlayerPosition, action: Play<Card>): Result<BoardWithEffectApplication> =
         buildResult {
             val cell = getCellAt(action.position).orRaiseError()
+            val actionCard = action.card
 
             ensure(cell.owner == player) { CellDoesNotBelongToPlayer(cell) }
-            ensure(cell.rank >= action.card.rank) { CellRankLowerThanCard(cell) }
-            ensure(cell.card == null) { CellOccupied(cell) }
 
-            placeCard(action.position, cell, player, action.card)
+            val cardOnBoard = cell.card
+            if (actionCard.effect is ReplaceAlly) {
+                ensure(cardOnBoard != null) { CellWithNoCardToReplace(cell) }
+
+                destroyCard(action.position, cell)
+                val effect = actionCard.effect.getReplaceEffect(cardOnBoard)
+                placeCard(action.position, cell, player, actionCard, effect)
+            } else {
+                ensure(cardOnBoard == null) { CellOccupied(cell) }
+                ensure(cell.rank >= actionCard.rank) { CellRankLowerThanCard(cell) }
+                placeCard(action.position, cell, player, actionCard)
+            }
         }
 
     fun getScores(): Map<PlayerPosition, Int> = (0..2)
@@ -77,11 +89,22 @@ data class Board(
 
     override fun getOccupiedCells() = state.filter { it.value.card != null }
 
+    private fun destroyCard(position: Position, cell: Cell): BoardWithEffectApplication {
+        val newCellCard = (position to cell.copy(card = null))
+        val newBoard = copy(state = state + newCellCard)
+
+        val effectApplicationResult = effectRegistry.onDestroy(setOf(position), newBoard)
+
+        return copy(state = newBoard.state, effectRegistry = effectApplicationResult.effectRegistry)
+            .resolveEffects(effectApplicationResult)
+    }
+
     private fun placeCard(
         position: Position,
         cell: Cell,
         player: PlayerPosition,
-        card: Card
+        card: Card,
+        overrideEffect: Effect? = null
     ): BoardWithEffectApplication {
         val incremented = card.increments.mapNotNull { displacement ->
             val newPosition = position + player.correct(displacement)
@@ -93,7 +116,8 @@ data class Board(
         val newCellCard = (position to cell.copy(card = card))
         val newBoard = copy(state = state + incremented + newCellCard)
 
-        val effectApplicationResult = effectRegistry.onPlaceCard(player, card.effect, position, newBoard)
+        val effect = overrideEffect ?: card.effect
+        val effectApplicationResult = effectRegistry.onPlaceCard(player, effect, position, newBoard)
 
         return copy(state = newBoard.state, effectRegistry = effectApplicationResult.effectRegistry)
             .resolveEffects(effectApplicationResult)
@@ -103,7 +127,7 @@ data class Board(
         val (newBoard, newResult) = destroy(result)
 
         if (newBoard == this && result == newResult)
-            return BoardWithEffectApplication(newBoard, newResult.playerModifications)
+            return BoardWithEffectApplication(newBoard, newResult.toAddToHand)
 
         return newBoard.resolveEffects(newResult)
     }
@@ -127,13 +151,13 @@ data class Board(
 
     private fun EffectApplicationResult.addPlayerModificationsFrom(previousResult: EffectApplicationResult): EffectApplicationResult {
         val newPlayerModifications = PlayerPosition.entries.associateWith {
-            val previous = playerModifications[it]?.cardsToAdd.orEmpty()
-            val current = previousResult.playerModifications[it]?.cardsToAdd.orEmpty()
+            val previous = toAddToHand[it].orEmpty()
+            val current = previousResult.toAddToHand[it].orEmpty()
 
-            PlayerModification(previous + current)
+            previous + current
         }
 
-        return copy(playerModifications = newPlayerModifications)
+        return copy(toAddToHand = newPlayerModifications)
     }
 
     private fun getTotalPowerAt(position: Position): Int {
