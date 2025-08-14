@@ -9,12 +9,11 @@ plugins {
 
 dependencies {
     implementation(kotlin("reflect"))
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter)
     implementation(libs.spring.boot.starter.web)
-
-    implementation(project(":core"))
 
     testImplementation(libs.spring.boot.starter.test)
 }
