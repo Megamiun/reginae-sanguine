@@ -1,3 +1,4 @@
+import br.com.gabryel.reginaesanguine.task.PrepareAssetsTask
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
@@ -36,5 +37,21 @@ allprojects {
     configure<KtlintExtension> {
         version = "1.7.1"
         verbose = true
+    }
+
+    tasks {
+        whenTaskAdded {
+            if ("Process.*Resources".toRegex() in javaClass.simpleName)
+                dependsOn(rootProject.tasks.getByName("prepareAssets"))
+        }
+    }
+}
+
+tasks {
+    register("prepareAssets", PrepareAssetsTask::class) {
+        group = "assets"
+
+        assetsDir = rootProject.layout.projectDirectory.dir("assets")
+        generatedDir = rootProject.layout.buildDirectory.dir("generated")
     }
 }

@@ -25,7 +25,6 @@ import kotlin.reflect.KClass
  * Generates a parser that can be used for SerDe for the core library.
  *
  * @param extraEffects List of extra effects to add to Serialization. New classes should be annotated with [kotlinx.serialization.Serializable] and [kotlinx.serialization.SerialName]
- * @param extraTriggers List of extra triggers to add to Serialization. New classes should be annotated with [kotlinx.serialization.Serializable] and [kotlinx.serialization.SerialName]
  * @return A Json Parser
  */
 fun gameJsonParser(

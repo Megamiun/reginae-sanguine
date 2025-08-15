@@ -14,19 +14,19 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
 
 ```bash
 # Linux x64
-./gradlew :cli:linkDebugExecutableLinuxX64 && ./cli/build/bin/linuxX64/debugExecutable/cli.kexe
+./gradlew :app:cli:linkDebugExecutableLinuxX64 && ./app/cli/build/bin/linuxX64/debugExecutable/cli.kexe
 
 # Linux ARM64
-./gradlew :cli:linkDebugExecutableLinuxArm64 && ./cli/build/bin/linuxArm64/debugExecutable/cli.kexe
+./gradlew :app:cli:linkDebugExecutableLinuxArm64 && ./app/cli/build/bin/linuxArm64/debugExecutable/cli.kexe
 
 # Windows x64
-./gradlew :cli:linkDebugExecutableMingwX64 && ./cli/build/bin/mingwX64/debugExecutable/cli.exe
+./gradlew :app:cli:linkDebugExecutableMingwX64 && ./app/cli/build/bin/mingwX64/debugExecutable/cli.exe
 
 # macOS x64 (macOS systems only)
-./gradlew :cli:linkDebugExecutableMacosX64 && ./cli/build/bin/macosX64/debugExecutable/cli.kexe
+./gradlew :app:cli:linkDebugExecutableMacosX64 && ./app/cli/build/bin/macosX64/debugExecutable/cli.kexe
 
 # macOS ARM64 (macOS systems only)
-./gradlew :cli:linkDebugExecutableMacosArm64 && ./cli/build/bin/macosArm64/debugExecutable/cli.kexe
+./gradlew :app:cli:linkDebugExecutableMacosArm64 && ./app/cli/build/bin/macosArm64/debugExecutable/cli.kexe
 ```
 
 ## Goals

@@ -24,24 +24,19 @@ When using assets, place them in the following structure:
 
 ```
 assets/
-├── queens_blood/
-│   ├── red/
-│   │   ├── QB_001.png
-│   │   ├── QB_002.png
-│   │   └── ...
-│   └── blue/
-│       ├── QB_001.png
-│       ├── QB_002.png
-│       └── ...
-└── custom/
-    ├── red/
-    │   ├── CUSTOM_001.png
-    │   ├── CUSTOM_002.png
-    │   └── ...
-    └── blue/
-        ├── CUSTOM_001.png
-        ├── CUSTOM_002.png
-        └── ...
+├──packs/
+├──── queens_blood/
+│     ├── base/
+│     │   ├── 001.png
+│     │   ├── 002.png
+│     │   └── ...
+│     └── pack_info.json
+└──── custom/
+      └── base/
+      │   ├── 001.png
+      │   ├── 002.png
+      │   └── ...
+      └── pack_info.json
 ```
 
 ## Legal Considerations
