@@ -7,15 +7,21 @@ plugins {
     alias(libs.plugins.spring.dependency.management)
 }
 
+repositories {
+    maven(url = "https://repo.spring.io/artifactory/snapshot")
+}
+
 dependencies {
     implementation(kotlin("reflect"))
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter)
-    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.web) {
+        exclude(module = "org.springframework:spring-web")
+    }
 
-    testImplementation(libs.spring.boot.starter.test)
+    implementation(libs.spring.web)
 }
 
 springBoot {
