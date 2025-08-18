@@ -1,16 +1,17 @@
 [versions]
-kotlin = "2.2.0"
+kotlin = "2.2.10"
 android = "8.11.1"
 compose = "1.8.2"
 arrow = "2.1.2"
-kotest = "6.0.0.M12"
+kotest = "6.0.0.M17"
 kotlinx-serialization = "1.9.0"
 mockk = "1.14.5"
 mosaic = "0.17.0"
-compose-bom = "2025.07.00"
+compose-bom = "2025.08.00"
 coil = "3.3.0"
 spring-boot = "4.0.0-M1"
 spring-dependency-management = "1.1.7"
+spring-webmvc = "7.0.0-SNAPSHOT"
 
 # Android dependencies
 appcompat = "1.7.1"
@@ -58,6 +59,7 @@ spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" 
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-webmvc = { module = "org.springframework:spring-webmvc", version.ref = "spring-webmvc" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

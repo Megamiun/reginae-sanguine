@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.server.configuration
+package br.com.gabryel.reginaesanguine.server
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
