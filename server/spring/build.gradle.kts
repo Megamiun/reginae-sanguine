@@ -29,8 +29,7 @@ dependencies {
 
 sourceSets {
     main {
-        val generatedResources = rootProject.layout.buildDirectory.dir("generated/resources")
-        resources.srcDirs(generatedResources, "src/main/resources")
+        resources.srcDirs(rootProject.layout.buildDirectory.dir("generated/resources"))
     }
 }
 

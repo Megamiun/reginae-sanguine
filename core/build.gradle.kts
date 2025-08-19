@@ -48,8 +48,7 @@ kotlin {
 
     sourceSets {
         commonTest {
-            val generatedResources = rootProject.layout.buildDirectory.dir("generated/resources")
-            resources.srcDirs(generatedResources, "src/commonMain/resources")
+            resources.srcDirs(rootProject.layout.buildDirectory.dir("generated/resources"))
         }
     }
 }
