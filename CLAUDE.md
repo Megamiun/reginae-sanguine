@@ -58,13 +58,13 @@ reginae-sanguine/
 - Human-readable output formatting
 
 ### Compose App Module (`app/compose/`)
-**Purpose**: Multiplatform UI application (Android, Desktop, iOS)  
+**Purpose**: Multiplatform UI application (Android, Desktop, iOS, Web)  
 **Technology**: Kotlin Multiplatform with Jetpack Compose  
 **Responsibilities**:
 - Cross-platform game interface with touch/mouse interactions
 - Custom navigation system with animated transitions
 - Dynamic asset loading and resource management
-- Platform-specific implementations for Android, JVM, and iOS
+- Platform-specific implementations for Android, JVM, iOS, and WASM
 - Integration with core game engine and viewmodel
 
 ### Server Module (`server/spring/`)
@@ -129,6 +129,7 @@ reginae-sanguine/
 - **Native targets**: linuxX64, linuxArm64, mingwX64, macosX64, macosArm64
 - **Mobile targets**: Android, iOS (iosArm64, iosX64, iosSimulatorArm64)
 - **JVM target**: Desktop applications and server components
+- **WASM target**: Web browser applications with Kotlin/WASM
 
 ## Code Quality Standards
 - **KtLint** enforces official Kotlin code style
