@@ -23,25 +23,6 @@ jobs:
       - name: Check :core
         run: ./gradlew :core:check
 
-  build-cli:
-    name: Build cli
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Check :cli
-        run: ./gradlew :cli:check
-
   build-app:
     name: Build app
     runs-on: ubuntu-latest
