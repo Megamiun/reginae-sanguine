@@ -41,3 +41,22 @@ jobs:
 
       - name: Check :app
         run: ./gradlew :app:check -Dorg.gradle.jvmargs=-Xmx4g
+
+  build-server:
+    name: Build server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Check :server
+        run: ./gradlew :server:check -Dorg.gradle.jvmargs=-Xmx4g
