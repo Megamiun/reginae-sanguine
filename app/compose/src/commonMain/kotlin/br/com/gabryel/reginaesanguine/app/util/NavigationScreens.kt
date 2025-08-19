@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.app.ui
+package br.com.gabryel.reginaesanguine.app.util
 
 enum class NavigationScreens {
     HOME,

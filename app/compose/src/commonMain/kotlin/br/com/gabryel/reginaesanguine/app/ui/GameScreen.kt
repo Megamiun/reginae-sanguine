@@ -33,13 +33,15 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
-import br.com.gabryel.reginaesanguine.app.ui.NavigationManager
-import br.com.gabryel.reginaesanguine.app.ui.NavigationScreens
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
+import br.com.gabryel.reginaesanguine.app.ui.fragments.DetailCard
+import br.com.gabryel.reginaesanguine.app.ui.fragments.GridPlayableCell
+import br.com.gabryel.reginaesanguine.app.ui.fragments.PlayerLanePowerCell
+import br.com.gabryel.reginaesanguine.app.ui.fragments.ResultOverlay
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
-import br.com.gabryel.reginaesanguine.domain.Card
+import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
@@ -49,7 +51,7 @@ private const val DEFAULT_RATIO = 0.83f
 
 @Composable
 context(cardImageLoader: CardImageLoader, nav: NavigationManager<NavigationScreens>)
-fun BoxScope.GameBoard(gameViewModel: GameViewModel) {
+fun BoxScope.GameScreen(gameViewModel: GameViewModel) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
     val lateralSize = IntSize(1, game.size.height)

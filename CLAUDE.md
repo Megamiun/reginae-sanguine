@@ -14,18 +14,26 @@ reginae-sanguine/
 ├── core/                 # Game engine module
 │   ├── CLAUDE.md         # Core module documentation
 │   └── src/              # Domain logic and game rules
-├── cli/                  # Command-line interface module
-│   ├── CLAUDE.md         # CLI module documentation
-│   └── src/              # CLI implementation
-├── app/                  # Android application module
-│   ├── CLAUDE.md         # Android module documentation
-│   └── src/              # Android UI implementation
+├── app/                  # Application modules directory
+│   ├── cli/              # Command-line interface module
+│   │   ├── CLAUDE.md     # CLI module documentation
+│   │   └── src/          # CLI implementation
+│   ├── compose/          # Multiplatform UI application
+│   │   ├── CLAUDE.md     # Compose app documentation
+│   │   └── src/          # Compose UI implementation
+│   └── viewmodel/        # Shared UI state management
+│       ├── CLAUDE.md     # ViewModel module documentation
+│       └── src/          # ViewModels for UI components
 ├── server/spring/        # Spring Boot server module
 │   ├── CLAUDE.md         # Server module documentation
 │   └── src/              # REST API and web server
-├── viewmodel/            # Shared UI state management
-│   └── src/              # ViewModels for UI components
-└── [future modules]      # Desktop GUI, etc.
+├── assets/               # Game assets and resources
+│   ├── packs/            # Card pack definitions and assets
+│   ├── fonts/            # Font resources
+│   └── static/           # Static UI assets
+├── buildSrc/             # Custom Gradle build logic
+│   └── src/              # Asset preparation tasks
+└── [future modules]      # Additional platforms
 ```
 
 ## Module Division & Responsibilities
@@ -40,7 +48,7 @@ reginae-sanguine/
 - Win condition evaluation
 - Immutable domain model with functional error handling
 
-### CLI Module (`cli/`)
+### CLI Module (`app/cli/`)
 **Purpose**: Command-line interface for human players  
 **Technology**: Kotlin Multiplatform (Native)  
 **Responsibilities**:
@@ -49,14 +57,15 @@ reginae-sanguine/
 - Game session management
 - Human-readable output formatting
 
-### App Module (`app/`)
-**Purpose**: Android mobile client application  
-**Technology**: Kotlin for Android with Jetpack Compose  
+### Compose App Module (`app/compose/`)
+**Purpose**: Multiplatform UI application (Android, Desktop, iOS)  
+**Technology**: Kotlin Multiplatform with Jetpack Compose  
 **Responsibilities**:
-- Mobile game interface with touch interactions
-- Jetpack Compose UI with Material 3 design
-- Android-specific features and optimizations
-- Integration with core game engine
+- Cross-platform game interface with touch/mouse interactions
+- Custom navigation system with animated transitions
+- Dynamic asset loading and resource management
+- Platform-specific implementations for Android, JVM, and iOS
+- Integration with core game engine and viewmodel
 
 ### Server Module (`server/spring/`)
 **Purpose**: Spring Boot web server for online multiplayer  
@@ -67,16 +76,21 @@ reginae-sanguine/
 - Card pack management and serving
 - Game state persistence and synchronization
 
-### ViewModel Module (`viewmodel/`)
+### ViewModel Module (`app/viewmodel/`)
 **Purpose**: Shared UI state management across client platforms  
 **Technology**: Kotlin Multiplatform (Common)  
 **Responsibilities**:
 - Shared ViewModels for UI components
-- State management patterns
+- State management patterns with coroutines
 - UI logic abstraction for multiple platforms
 
-### Future Modules (Planned)
-- **Desktop GUI**: Native desktop application with graphical interface
+### Asset Management (`assets/`, `buildSrc/`)
+**Purpose**: Dynamic asset preparation and resource management  
+**Technology**: Gradle build logic with custom tasks  
+**Responsibilities**:
+- Asset preparation tasks for fonts, images, and card packs
+- Dynamic resource generation for Compose multiplatform
+- Build-time asset processing and organization
 
 ## Development Commands
 
@@ -112,7 +126,9 @@ reginae-sanguine/
 - **Common code** in core module for maximum reusability
 - **Platform-specific implementations** in application modules
 - Consistent API across all platforms and clients
-- Targets for Native projects: linuxX64, linuxArm64, mingwX64, macosX64, macosArm64
+- **Native targets**: linuxX64, linuxArm64, mingwX64, macosX64, macosArm64
+- **Mobile targets**: Android, iOS (iosArm64, iosX64, iosSimulatorArm64)
+- **JVM target**: Desktop applications and server components
 
 ## Code Quality Standards
 - **KtLint** enforces official Kotlin code style
@@ -144,7 +160,7 @@ reginae-sanguine/
 
 For detailed module-specific guidance, refer to:
 - [Core Module Documentation](core/CLAUDE.md)
-- [CLI Module Documentation](cli/CLAUDE.md)
-- [App Module Documentation](app/CLAUDE.md)
+- [CLI Module Documentation](app/cli/CLAUDE.md)
+- [Compose App Documentation](app/compose/CLAUDE.md)
+- [ViewModel Module Documentation](app/viewmodel/CLAUDE.md)
 - [Server Module Documentation](server/spring/CLAUDE.md)
-- [ViewModel Module Documentation](viewmodel/CLAUDE.md)

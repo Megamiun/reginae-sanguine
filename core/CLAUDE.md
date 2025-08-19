@@ -1,10 +1,14 @@
-# CLAUDE.md
+# CLAUDE.md - Core Module
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with the Core module of the Reginae Sanguine project.
 
 ## Module Overview
 
-The **Core module** provides the pure game engine implementation with domain logic, game rules, and state management. This module contains minimal external dependencies and serves as the foundation for all client applications.
+**Purpose**: Pure game engine with domain logic  
+**Technology**: Kotlin Multiplatform (Common)  
+**Targets**: JVM, Native (Linux, Windows, macOS), iOS
+
+The **Core module** provides the pure game engine implementation with domain logic, game rules, and state management. This module contains minimal external dependencies and serves as the foundation for all client applications including the Compose UI, CLI, and server implementations.
 
 ## Development Commands
 
@@ -25,7 +29,7 @@ The **Core module** provides the pure game engine implementation with domain log
 ./gradlew :core:clean
 
 # When validating changes, run:
-./gradlew check :cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
+./gradlew check :app:cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
 ```
 
 ## Architecture & Structure
@@ -40,18 +44,24 @@ The **Core module** provides the pure game engine implementation with domain log
 ### Core Module Structure
 ```
 core/
+├── CLAUDE.md                           # This file - Core module documentation  
 ├── build.gradle.kts                    # Module build configuration
 └── src/
     ├── commonMain/kotlin/              # Shared domain logic
     │   └── br/com/gabryel/reginaesanguine/
-    │       └── domain/                 # Domain model and game engine
-    │           ├── util/               # Domain utilities
-    │           └── [impl files]        # Code implementation
-    └── commonTest/kotlin/              # Domain tests
-        └── br/com/gabryel/reginaesanguine/domain/
-            ├── matchers/               # Custom test matchers
-            ├── helpers/                # Test utilities and sample data
-            └── [test files]            # Domain tests
+    │       ├── domain/                 # Domain model and game engine
+    │       │   ├── util/               # Domain utilities
+    │       │   ├── parser/             # JSON serialization support
+    │       │   ├── Pack.kt             # Card pack domain model
+    │       │   └── [game entities]     # Core game implementation
+    │       └── [other packages]        # Additional domain packages
+    ├── commonTest/kotlin/              # Domain tests
+    │   └── br/com/gabryel/reginaesanguine/domain/
+    │       ├── matchers/               # Custom test matchers
+    │       ├── helpers/                # Test utilities and sample data
+    │       └── [test files]            # Comprehensive domain tests
+    └── jvmTest/                        # JVM-specific tests
+        └── resources/                  # Test resources (card packs, etc.)
 ```
 
 ### Domain Model (`br.com.gabryel.reginaesanguine.domain`)
@@ -61,6 +71,7 @@ core/
 - `Player` - Hand/deck management with rank system
 - `Card` - Cost, power, position-based increments, and effects
 - `Cell` - Board cells with owner, ranks, and applied effects
+- `Pack` - Card pack definition with metadata and card collection
 - `Effect` - Effects that run over a certain trigger. They need to always implement one, and only one, of the following interfaces:
   - `AddCardsToHand` - Spawn cards on players hand
   - `DestroyCards` - Destroys cards at the affect cells

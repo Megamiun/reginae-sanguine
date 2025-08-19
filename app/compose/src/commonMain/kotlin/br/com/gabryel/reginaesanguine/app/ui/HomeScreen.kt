@@ -6,7 +6,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.com.gabryel.reginaesanguine.app.ui.NavigationScreens.GAME
+import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
+import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
 
 @Composable
 context(nav: NavigationManager<NavigationScreens>)

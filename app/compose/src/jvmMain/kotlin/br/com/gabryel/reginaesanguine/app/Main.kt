@@ -11,18 +11,7 @@ import androidx.compose.ui.window.application
 import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.ResourcesResourceLoader
 import br.com.gabryel.reginaesanguine.app.ui.App
-import br.com.gabryel.reginaesanguine.app.ui.GameBoard
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
-import br.com.gabryel.reginaesanguine.app.util.createTestDeck
-import br.com.gabryel.reginaesanguine.domain.Board
-import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.Cell
-import br.com.gabryel.reginaesanguine.domain.Game
-import br.com.gabryel.reginaesanguine.domain.Player
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.domain.atColumn
-import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 import kotlin.system.exitProcess
 
 fun main() = application {

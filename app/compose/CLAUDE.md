@@ -1,119 +1,194 @@
-# CLAUDE.md - App Module (Android)
+# CLAUDE.md - Compose App Module
 
-This file provides guidance for working with the Android application module of the Reginae Sanguine project.
+This file provides guidance for working with the multiplatform Compose application module of the Reginae Sanguine project.
 
 ## Module Overview
 
-**Purpose**: Android mobile client application  
-**Technology**: Kotlin for Android with Jetpack Compose  
-**Target**: Android devices (minSdk 28, compileSdk 36)
+**Purpose**: Multiplatform UI application (Android, Desktop, iOS)  
+**Technology**: Kotlin Multiplatform with Jetpack Compose  
+**Targets**: Android, JVM (Desktop), iOS (iosArm64, iosX64, iosSimulatorArm64)
 
 ## Module Structure
 
 ```
-app/
-├── CLAUDE.md                     # This file - Android module documentation
-├── build.gradle.kts              # Android build configuration
-└── src/main/
-    ├── AndroidManifest.xml       # App manifest and permissions
-    ├── kotlin/br/com/gabryel/reginaesanguine/
-    │   ├── GameActivity.kt       # Main activity with game board UI
-    │   └── ui/theme/             # Compose UI theme definitions
-    └── res/
-        ├── font/                 # Font assets
-        └── values/               # String resources and themes
+app/compose/
+├── CLAUDE.md                           # This file - Compose module documentation
+├── build.gradle.kts                    # Multiplatform build configuration
+└── src/
+    ├── androidMain/
+    │   ├── AndroidManifest.xml         # Android app manifest
+    │   ├── kotlin/                     # Android-specific implementations
+    │   └── res/                        # Android resources
+    ├── commonMain/
+    │   ├── kotlin/br/com/gabryel/reginaesanguine/app/
+    │   │   ├── App.kt                  # Main application entry point
+    │   │   ├── services/               # Resource loading and card image services
+    │   │   ├── ui/                     # UI components and screens
+    │   │   │   ├── components/         # Reusable UI components
+    │   │   │   ├── theme/             # Compose theme definitions
+    │   │   │   ├── GameBoard.kt       # Main game board UI
+    │   │   │   ├── HomeScreen.kt      # Main menu screen
+    │   │   │   └── Navigation.kt      # Custom navigation system
+    │   │   └── util/                  # Utility functions
+    │   └── composeResources/          # Generated compose resources
+    ├── jvmMain/
+    │   ├── kotlin/                    # JVM/Desktop-specific implementations
+    │   └── Main.kt                    # Desktop application entry point
+    ├── nativeMain/
+    │   └── kotlin/                    # Native platform implementations
+    └── iosMain/ (generated)
+        └── kotlin/                    # iOS-specific implementations
 ```
 
 ## Architecture & Design
+
 ### UI Framework
-- **Jetpack Compose** with Material 3 design system
-- **Landscape orientation** enforced for optimal game board viewing
+- **Jetpack Compose Multiplatform** with Material design system
+- **Custom navigation system** with animated screen transitions
+- **Context receivers** for dependency injection (experimental Kotlin feature)
+- **Dynamic resource loading** system for assets and fonts
 
-### Dependencies on Core Module
-- Direct dependency on `core` module for game logic
-- Uses domain entities: `Game`, `Player`, `Card`, `Cell`, `Position`
-- Leverages functional `Result<T>` type for error handling
-- No business logic duplication - pure presentation layer
+### Navigation System
+- **Custom NavigationStack** with type-safe screen enum
+- **Animated transitions** with slide animations between screens
+- **Stack-based navigation** supporting push/pop operations
+- **Composable-scoped navigation** using context receivers
 
-### Current Implementation Status
-- **Static game board display** showing initial game state
-- **Grid-based layout** with lane scoring visualization
-- **Minimal interactivity** - currently displays random generated game
-- **Placeholder UI** for card information and game state
+### Asset Management
+- **Dynamic asset preparation** via Gradle build tasks
+- **Build-time resource generation** for images and fonts
+- **Multiplatform resource access** through generated Res classes
+- **Platform-agnostic resource loading** interfaces
+
+### Dependencies on Other Modules
+- **Core module**: Game logic, domain entities, and business rules
+- **ViewModel module**: Shared state management and UI logic
+- **Generated resources**: Dynamic asset loading from build directory
+
+## Current Implementation Status
+
+### Completed Features
+- **Home screen** with basic navigation to game
+- **Interactive game board** with drag-and-drop card placement
+- **Custom navigation system** with animated transitions
+- **Multiplatform resource loading** for fonts and images
+- **Platform-specific implementations** for Android, Desktop, and iOS
+
+### UI Components
+- **GameBoard**: Main interactive game interface with grid layout
+- **HomeScreen**: Entry point with game launch button
+- **Card**: Detailed card display with art and stats
+- **Cell**: Game board cell with positioning and state
+- **Navigation**: Custom stack-based navigation with animations
 
 ## Technical Specifications
 
-### Android Configuration
-- **Namespace**: `br.com.gabryel.reginaesanguine`
-- **Min SDK**: 28 (Android 9.0)
+### Platform Targets
+- **Android**: API 28+ with Compose UI
+- **JVM/Desktop**: Desktop application with Compose Desktop
+- **iOS**: Native iOS app (iosArm64, iosX64, iosSimulatorArm64)
+
+### Build Configuration
+- **Namespace**: `br.com.gabryel.reginaesanguine.app`
 - **Kotlin JVM Target**: 11
+- **Context receivers**: Enabled for dependency injection
+- **When guards**: Enabled for advanced pattern matching
 
 ## Development Guidelines
-### UI Components
-- Follow **Material 3 design principles**
-- Use **Jetpack Compose** best practices for state management
-- Implement **responsive layouts** that work across different screen sizes
-- Maintain **accessibility standards** for inclusive design
 
-### Game Integration
-- **Read-only access** to core domain models
-- Use **immutable state** patterns from core module
-- Handle **Result<T>** types properly in UI layer
-- Avoid duplicating business logic - delegate to core module
+### UI Architecture
+- **Context receivers** for implicit dependency passing
+- **Compose state management** with StateFlow and collectAsState
+- **Immutable state** patterns following functional programming principles
+- **Platform-specific implementations** using expect/actual declarations
 
-### Code Style
-- Follow **official Android Kotlin style guide**
-- Use **Compose naming conventions** for composable functions
-- Maintain **separation of concerns** between UI and domain logic
-- Apply **single responsibility principle** to composable functions
+### Resource Management
+- **Dynamic asset loading** from build-generated directories
+- **Type-safe resource access** through generated Res classes
+- **Platform-agnostic interfaces** for resource loading abstraction
+- **Build-time asset preparation** for optimal runtime performance
+
+### Navigation Patterns
+- **Type-safe navigation** using enum-based screen definitions
+- **Composable-scoped navigation** through context receivers
+- **Animated transitions** for polished user experience
+- **Stack-based navigation** for predictable back navigation
 
 ## Development Commands
+
 ```bash
-# Build Android module only
-./gradlew :app:build
+# Build all platforms
+./gradlew :app:compose:build
 
-# Install debug APK to connected device
-./gradlew :app:installDebug
+# Run desktop application
+./gradlew :app:compose:run
 
-# Run Android-specific tests
-./gradlew :app:test
+# Build Android APK
+./gradlew :app:compose:assembleDebug
 
-# Check code style for Android module
-./gradlew :app:ktlintCheck
+# Install Android debug build
+./gradlew :app:compose:installDebug
 
-# Format code for Android module
-./gradlew :app:ktlintFormat
+# Prepare assets (runs automatically during build)
+./gradlew prepareAssets
+
+# Check code style
+./gradlew :app:compose:ktlintCheck
+
+# Format code
+./gradlew :app:compose:ktlintFormat
 ```
 
 ## Future Development Areas
+
 ### Immediate Priorities
-1. **Interactive game board** - allow card placement and moves
-2. **Game state management** - proper state handling with ViewModel
-3. **Turn-based gameplay** - implement player interactions
-4. **Card hand display** - show available cards to play
+1. **Card selection screen** for deck building
+2. **Game settings and preferences** management
+3. **Enhanced game state management** with proper persistence
+4. **Multiplayer lobby** integration with server module
 
 ### Advanced Features
-1. **Animations and transitions** for card placement and effects
-2. **Multiplayer support** integration with future server module
-3. **Settings and preferences** for customizable experience
-4. **Game history and statistics** tracking
+1. **Custom card animations** during gameplay
+2. **Audio and haptic feedback** integration
+3. **Accessibility improvements** for inclusive design
+4. **Performance optimizations** for smooth gameplay
 
-### Technical Improvements
-1. **ViewModel architecture** for proper state management
-2. **Navigation component** for multi-screen flows
-3. **Comprehensive testing** strategy for UI components
+### Platform-Specific Features
+1. **Android**: Integration with Android-specific APIs
+2. **Desktop**: Keyboard shortcuts and menu bar integration
+3. **iOS**: Native iOS design patterns and gestures
 
 ## Integration Points
-### With Core Module
-- **Game engine**: All game logic handled by core
-- **Domain models**: Direct usage of core entities
-- **Error handling**: Consistent Result<T> pattern
-- **Immutable state**: Following functional programming principles
 
-### With Future Modules
-- **Server integration**: HTTP client for online multiplayer
-- **Local persistence**: Room database for game history
+### With Core Module
+- **Game engine**: All business logic delegated to core
+- **Domain models**: Direct usage of Game, Player, Card entities
+- **Functional patterns**: Result<T> for error handling
+- **Immutable state**: Following core module principles
+
+### With ViewModel Module
+- **Shared state management**: GameViewModel for UI state
+- **Coroutines integration**: StateFlow for reactive UI updates
+- **Platform-agnostic logic**: Business logic shared across platforms
+
+### With Asset System
+- **Build-time preparation**: Assets processed during compilation
+- **Dynamic loading**: Resources loaded at runtime from generated directories
+- **Type-safe access**: Generated resource classes for compile-time safety
 
 ## Notes for Development
-- **UI-first approach**: Focus on user experience and visual polish
-- **Offline-first**: Ensure core gameplay works without network connectivity
+
+### Experimental Features
+- **Context receivers** are experimental but provide clean dependency injection
+- **When guards** enable advanced pattern matching in UI logic
+- Monitor Kotlin evolution for stability of experimental features
+
+### Performance Considerations
+- **Asset loading** happens at build time for optimal runtime performance
+- **Navigation animations** use hardware acceleration when available
+- **Resource caching** minimizes redundant loading operations
+
+### Cross-Platform Compatibility
+- **Platform-specific implementations** handle differences in drag-and-drop, file access
+- **Consistent UI** maintained across all target platforms
+- **Feature parity** ensured through expect/actual declarations

@@ -11,9 +11,9 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
-import br.com.gabryel.reginaesanguine.app.ui.NavigationScreens.GAME
-import br.com.gabryel.reginaesanguine.app.ui.NavigationScreens.HOME
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
+import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
+import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.HOME
 import br.com.gabryel.reginaesanguine.app.util.createTestDeck
 import br.com.gabryel.reginaesanguine.domain.Board
 import br.com.gabryel.reginaesanguine.domain.Card
@@ -37,7 +37,7 @@ fun App(resourceLoader: ResourceLoader) {
             }
             addRoute(GAME) {
                 Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Center) {
-                    GameBoard(gameViewModel)
+                    GameScreen(gameViewModel)
                 }
             }
         }

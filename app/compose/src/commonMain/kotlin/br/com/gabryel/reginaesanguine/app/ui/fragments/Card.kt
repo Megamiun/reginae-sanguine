@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.app.ui
+package br.com.gabryel.reginaesanguine.app.ui.fragments
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

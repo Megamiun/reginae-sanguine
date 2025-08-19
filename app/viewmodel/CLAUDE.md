@@ -5,8 +5,9 @@ This file provides specific guidance for working with the ViewModel module of th
 ## Module Overview
 
 **Purpose**: Shared UI state management across client platforms  
-**Technology**: Kotlin Multiplatform (Common)  
-**Module Path**: `viewmodel/`
+**Technology**: Kotlin Multiplatform (Common) with Coroutines  
+**Module Path**: `app/viewmodel/` (moved from root `viewmodel/` directory)  
+**Targets**: JVM, Native (Linux, Windows, macOS), iOS
 
 ## Responsibilities
 
@@ -18,18 +19,20 @@ This file provides specific guidance for working with the ViewModel module of th
 
 ### Integration Points
 - **Core Module Dependency**: Uses domain logic and game state from `core` module
-- **Client Integration**: Consumed by `app` module and other UI implementations
-- **Reactive Updates**: State flow patterns for real-time UI updates
+- **Client Integration**: Consumed by `app/compose` and `app/cli` modules
+- **Reactive Updates**: StateFlow patterns for real-time UI updates across platforms
+- **Cross-Platform Compatibility**: Shared ViewModels work on Android, Desktop, and CLI
 
 ## Architecture
 
 ### Module Structure
 ```
-viewmodel/
-├── src/commonMain/kotlin/br/com/gabryel/reginaesanguine/viewmodel/
-│   ├── GameViewModel.kt    # Main game state management
-│   └── State.kt           # UI state definitions and transitions
-└── build.gradle.kts       # Kotlin Multiplatform configuration
+app/viewmodel/
+├── CLAUDE.md              # This file - ViewModel module documentation
+├── build.gradle.kts       # Kotlin Multiplatform configuration
+└── src/commonMain/kotlin/br/com/gabryel/reginaesanguine/viewmodel/
+    ├── GameViewModel.kt   # Main game state management
+    └── State.kt          # UI state definitions and transitions
 ```
 
 ### Key Components
@@ -81,18 +84,17 @@ ChooseAction -> ChooseCard -> ChoosePosition -> ChooseAction
 ### Kotlin Multiplatform Setup
 ```kotlin
 kotlin {
-    jvm()                    // For Android and CLI usage
-    linuxX64(), linuxArm64() // Native desktop targets
-    mingwX64()               // Windows native
-    macosX64(), macosArm64() // macOS native (conditional)
+    jvm()                                          // For Android and desktop usage
+    linuxX64(), linuxArm64(), mingwX64()          // Native desktop targets
+    macosX64(), macosArm64()                      // macOS native (conditional)
+    iosArm64(), iosX64(), iosSimulatorArm64()     // iOS targets
 }
 ```
 
 ### Dependencies
 - **Core Module**: Game domain logic and state
-- **Arrow-kt**: Functional programming utilities
-- **Mosaic Runtime**: Terminal UI support for CLI clients
-- **Kotlin Coroutines**: StateFlow and reactive patterns
+- **Arrow-kt**: Functional programming utilities and Result<T> handling
+- **Kotlin Coroutines**: StateFlow and reactive state management patterns
 
 ## Testing Strategy
 
@@ -105,16 +107,16 @@ kotlin {
 ### Test Organization
 ```bash
 # Run viewmodel module tests
-./gradlew :viewmodel:test
+./gradlew :app:viewmodel:test
 
 # Platform-specific tests
-./gradlew :viewmodel:jvmTest
-./gradlew :viewmodel:linuxX64Test
+./gradlew :app:viewmodel:jvmTest
+./gradlew :app:viewmodel:linuxX64Test
 ```
 
 ## Integration Examples
 
-### Android Integration
+### Compose Integration (Android/Desktop)
 ```kotlin
 // In Compose UI
 val viewModel = remember { GameViewModel.forGame(game) }
