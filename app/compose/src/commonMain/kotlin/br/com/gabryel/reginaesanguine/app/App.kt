@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.LocalRippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -28,7 +30,11 @@ import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 @Composable
 context(_: CardImageLoader)
 fun App(resourceLoader: ResourceLoader) {
-    val gameViewModel = remember { createViewModel(resourceLoader) }
+    val gameViewModel = remember { mutableStateOf<GameViewModel?>(null) }
+
+    LaunchedEffect("viewmodel") {
+        gameViewModel.value = createViewModel(resourceLoader)
+    }
 
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
         NavigationStack(HOME) {
@@ -36,15 +42,17 @@ fun App(resourceLoader: ResourceLoader) {
                 HomeScreen()
             }
             addRoute(GAME) {
-                Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Center) {
-                    GameScreen(gameViewModel)
+                gameViewModel.value?.let {
+                    Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Center) {
+                        GameScreen(it)
+                    }
                 }
             }
         }
     }
 }
 
-private fun createViewModel(resourceLoader: ResourceLoader): GameViewModel {
+private suspend fun createViewModel(resourceLoader: ResourceLoader): GameViewModel {
     val deck = createTestDeck(resourceLoader)
     val knownCard = Card("001", "Security Officer", 1, 1, setOf())
     val unknownCard = Card("Custom", "Custom", 3, 3, setOf())

@@ -22,9 +22,6 @@ import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draganddrop.DragAndDropEvent
-import androidx.compose.ui.draganddrop.DragAndDropTransferData
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.unit.Dp
@@ -42,6 +39,7 @@ import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
+import br.com.gabryel.reginaesanguine.app.util.getTransferData
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
@@ -118,10 +116,6 @@ fun BoxScope.GameScreen(gameViewModel: GameViewModel) {
     if (game.getState() is State.Ended)
         ResultOverlay(gameViewModel, middleWidth)
 }
-
-expect fun drop(event: DragAndDropEvent, drop: (String) -> Boolean): Boolean
-
-expect fun getTransferData(offset: Offset, data: String): DragAndDropTransferData
 
 private fun Modifier.boardCell(position: Position): Modifier =
     if ((position.lane + position.column) % 2 == 0)

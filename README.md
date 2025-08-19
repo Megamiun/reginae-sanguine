@@ -32,10 +32,11 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
 ## Goals
 ### Base
 
-- [ ] Create a multiplatform core as the game engine
-  - [ ] Should be able to support the game with all the original rules
+- [x] Create a multiplatform core as the game engine
+  - [x] Should be able to support the game with all the original rules
   - [x] Should allow for custom cards
   - [x] Should allow for configuring different board initial size and configuration
+  - [ ] Test all scenarios for Costa del Sol Queen's Blood challenges
 - [ ] Create a Spring/Node.js webserver which allows people to play online
   - [ ] Should allow users to register in server
   - [ ] Should allow users to create custom decks
@@ -50,6 +51,7 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
   - [ ] Should allow for local play on same device
   - [ ] Should allow signup/login to server
   - [ ] Should allow for remote play via server
+  - [ ] Make sure that all versions sizes are relative to user monitor size/responsive
 
 ### Stretch
 

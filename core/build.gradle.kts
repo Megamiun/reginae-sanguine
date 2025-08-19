@@ -1,12 +1,28 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     kotlin("multiplatform")
     alias(libs.plugins.kotlin.serialization)
 
-    id("org.jetbrains.kotlinx.kover") version "0.9.1"
+    alias(libs.plugins.kover)
 }
 
 kotlin {
     jvm()
+    linuxArm64()
+    linuxX64()
+    mingwX64()
+    macosX64()
+    macosArm64()
+    iosArm64()
+    iosX64()
+    iosSimulatorArm64()
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.library()
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -35,12 +51,6 @@ kotlin {
             val generatedResources = rootProject.layout.buildDirectory.dir("generated/resources")
             resources.srcDirs(generatedResources, "src/commonMain/resources")
         }
-    }
-
-    listOf(linuxArm64(), linuxX64(), mingwX64(), iosArm64(), iosX64(), iosSimulatorArm64())
-
-    if (System.getProperty("os.name").startsWith("Mac OS X")) {
-        listOf(macosX64(), macosArm64())
     }
 }
 

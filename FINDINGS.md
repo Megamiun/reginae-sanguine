@@ -43,6 +43,12 @@
     - [Issue on Github](https://github.com/mockative/mockative/issues/148)
   - KSP version warnings
 
+## WASM/JS
+- As JS is single threaded, to do requests we need to use fetch(), which needs a coroutine to be executed.
+  - This demands a different way of thought for requests
+- Need to call js code from Kotlin files sometimes to instantiate known types
+  - [Example](app/compose/src/wasmJsMain/kotlin/br/com/gabryel/reginaesanguine/app/util/DragAndDrop.wasmjs.kt)
+
 ## Serialization
 - Bugs recognized:
   - [Spring-35281](https://github.com/spring-projects/spring-framework/issues/35281) ResponseEntity doesn't work with serialization

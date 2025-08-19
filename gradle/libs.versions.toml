@@ -9,7 +9,6 @@ kotlinx-coroutines = "1.10.2"
 mockk = "1.14.5"
 mosaic = "0.17.0"
 compose-bom = "2025.08.00"
-coil = "3.3.0"
 spring-boot = "4.0.0-M1"
 spring-dependency-management = "1.1.7"
 spring-webmvc = "7.0.0-SNAPSHOT"
@@ -21,6 +20,7 @@ activity-compose = "1.10.1"
 
 # Build plugins
 ktlint = "13.0.0"
+kover = "0.9.1"
 download = "5.6.0"
 task-tree = "4.0.1"
 
@@ -54,7 +54,6 @@ lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtim
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 
 # Third-party
-coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mosaic-runtime = { group = "com.jakewharton.mosaic", name = "mosaic-runtime", version.ref = "mosaic" }
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
@@ -64,10 +63,9 @@ spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-start
 spring-webmvc = { module = "org.springframework:spring-webmvc", version.ref = "spring-webmvc" }
 
 [plugins]
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 
@@ -75,10 +73,10 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
 
 android-application = { id = "com.android.application", version.ref = "android" }
-android-library = { id = "com.android.library", version.ref = "android" }
 
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 download = { id = "de.undercouch.download", version.ref = "download" }
 task-tree = { id = "com.dorongold.task-tree", version.ref = "task-tree" }

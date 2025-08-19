@@ -1,0 +1,6012 @@
+package br.com.gabryel.reginaesanguine.app.service
+
+import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
+
+class WebResourceLoader : ResourceLoader {
+    override suspend fun load(path: String): ByteArray = content.encodeToByteArray()
+}
+
+// TODO Temporary using while discovering how to get resources for WASM/JS
+private val content =
+    """
+    {
+      "id": "queens_blood",
+      "name": "Standard",
+      "cards": [
+        {
+          "id": "001",
+          "name": "Security Officer",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1
+        },
+        {
+          "id": "002",
+          "name": "Riot Trooper",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 3,
+          "rank": 2
+        },
+        {
+          "id": "003",
+          "name": "Grenadier",
+          "power": 1,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 0
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "004",
+          "name": "J-Unit Sweeper",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 2
+        },
+        {
+          "id": "005",
+          "name": "Queen Bee",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 1,
+          "rank": 1
+        },
+        {
+          "id": "006",
+          "name": "Toxirat",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -3,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "007",
+          "name": "Levrikon",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 1
+        },
+        {
+          "id": "008",
+          "name": "Grasslands Wolf",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1
+        },
+        {
+          "id": "009",
+          "name": "Mu",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play"
+          }
+        },
+        {
+          "id": "010",
+          "name": "Mandragora",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "010A"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, add Mandragora Minion to your hand"
+          }
+        },
+        {
+          "id": "010A",
+          "name": "Mandragora Minion",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1
+        },
+        {
+          "id": "011",
+          "name": "Elphadunk",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 2
+        },
+        {
+          "id": "012",
+          "name": "Cactuar",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "013",
+          "name": "Crystalline Crab",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "014",
+          "name": "Quetzalcoatl",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 3,
+          "rank": 2
+        },
+        {
+          "id": "015",
+          "name": "Zu",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 2
+        },
+        {
+          "id": "016",
+          "name": "Devil Rider",
+          "increments": [
+            {
+              "x": -2,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": -2,
+              "y": 0
+            },
+            {
+              "x": -2,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 2
+        },
+        {
+          "id": "017",
+          "name": "Screamer",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 3
+        },
+        {
+          "id": "018",
+          "name": "Flan",
+          "increments": [
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1
+        },
+        {
+          "id": "019",
+          "name": "Crawler",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1
+        },
+        {
+          "id": "020",
+          "name": "Archdragon",
+          "increments": [
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -3,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "When played, lower the power of enemy cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "021",
+          "name": "Ogre",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": -2
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 5,
+          "rank": 2
+        },
+        {
+          "id": "022",
+          "name": "Deathwheel",
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -3,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": -2
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "023",
+          "name": "Fleetwing",
+          "increments": [
+            {
+              "x": -2,
+              "y": 2
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": -1
+            },
+            {
+              "x": -2,
+              "y": -2
+            }
+          ],
+          "power": 3,
+          "rank": 1
+        },
+        {
+          "id": "024",
+          "name": "Zemzelett",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": -1,
+                "y": 0
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "025",
+          "name": "Ignilisk",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "026",
+          "name": "Capparwire",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "027",
+          "name": "Mindflayer",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+          }
+        },
+        {
+          "id": "028",
+          "name": "Scrutineye",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Raise the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+          }
+        },
+        {
+          "id": "029",
+          "name": "Hell Rider II",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -3,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "When played, lower the power of enemy cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "030",
+          "name": "Flametrooper",
+          "increments": [
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -3,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "031",
+          "name": "Spearhawk",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "032",
+          "name": "Sea Devil",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenPlayed",
+              "scope": "ALLIES"
+            },
+            "description": "When allied cards are played from hand, raise this card's power by 1"
+          }
+        },
+        {
+          "id": "033",
+          "name": "Shoalopod",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 4,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 4 while this card is in play"
+          }
+        },
+        {
+          "id": "034",
+          "name": "Crown Lance",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -2,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 2"
+          }
+        },
+        {
+          "id": "035",
+          "name": "Tonberry King",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenDestroyed",
+              "scope": "ALLIES"
+            },
+            "description": "When allied cards are destroyed, raise this card's power by 2"
+          }
+        },
+        {
+          "id": "036",
+          "name": "Sandhog Pie",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "When destroyed, raise the power of allied cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "037",
+          "name": "Bloatfloat",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 0
+              }
+            ],
+            "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "038",
+          "name": "Bagnadrana",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenPlayed",
+              "scope": "ENEMIES"
+            },
+            "description": "When enemy cards are played from hand, raise this card's power by 1"
+          }
+        },
+        {
+          "id": "039",
+          "name": "Cockatrice",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "DestroyCards",
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "When played, destroy allied and enemy cards on affected tiles"
+          }
+        },
+        {
+          "id": "040",
+          "name": "Heatseeker",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "040A"
+            ],
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "description": "When destroyed, add Heatseeker Minion to your hand"
+          }
+        },
+        {
+          "id": "040A",
+          "name": "Heatseeker Minion",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1
+        },
+        {
+          "id": "041",
+          "name": "Bomb",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "042",
+          "name": "Thug",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -2
+            }
+          ],
+          "power": 4,
+          "rank": 2
+        },
+        {
+          "id": "043",
+          "name": "Death Claw",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenDestroyed",
+              "scope": "ENEMIES"
+            },
+            "description": "When enemy cards are destroyed, raise this card's power by 1"
+          }
+        },
+        {
+          "id": "044",
+          "name": "Landworm",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenDestroyed",
+              "scope": "ENEMIES"
+            },
+            "description": "When enemy cards are destroyed, raise this card's power by 2"
+          }
+        },
+        {
+          "id": "045",
+          "name": "Sandspitter",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": -2
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "046",
+          "name": "Chimera",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 2,
+            "status": "ENFEEBLED",
+            "scope": "ENEMIES",
+            "target": "SELF",
+            "description": "Raise power by 2 for each enfeebled enemy card"
+          }
+        },
+        {
+          "id": "047",
+          "name": "Joker",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": -2
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenDestroyed",
+              "scope": "ANY"
+            },
+            "description": "When allied and enemy cards are destroyed, raise this card's power by 1"
+          }
+        },
+        {
+          "id": "048",
+          "name": "Amphidex",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENHANCED"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -2
+              }
+            ],
+            "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "049",
+          "name": "Frightflower",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "When destroyed, raise the power of allied and enemy cards on affected tiles by 2"
+          }
+        },
+        {
+          "id": "050",
+          "name": "Gagighandi",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 4,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -2,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENHANCED"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "description": "When first enhanced, lower the power of enemy cards on affected tiles by 2"
+          }
+        },
+        {
+          "id": "051",
+          "name": "Insectoid Chimera",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAlly",
+            "description": "Destroy an allied card and replace it"
+          }
+        },
+        {
+          "id": "052",
+          "name": "Gigantoad",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAlly",
+            "description": "Destroy an allied card and replace it"
+          }
+        },
+        {
+          "id": "053",
+          "name": "Maloceros",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -2
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaiseLaneIfWon",
+            "amount": 10,
+            "description": "When you win the lane, receive a score bonus of 10"
+          }
+        },
+        {
+          "id": "054",
+          "name": "Grandhorn",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 3,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAlly",
+            "description": "Destroy an allied card and replace it"
+          }
+        },
+        {
+          "id": "055",
+          "name": "Great Malboro",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -6,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 6"
+          }
+        },
+        {
+          "id": "056",
+          "name": "Grangalan",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 3,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "056A"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, add Grangalan Junior to your hand"
+          }
+        },
+        {
+          "id": "056A",
+          "name": "Grangalan Junior",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "056B"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, add Grangalan Baby to your hand"
+          }
+        },
+        {
+          "id": "056B",
+          "name": "Grangalan Baby",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -5,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When destroyed, lower the power of allied and enemy cards on affected tiles by 5"
+          }
+        },
+        {
+          "id": "057",
+          "name": "Amalgam",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "057A"
+            ],
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "description": "When destroyed, add Resurrected Amalgam to your hand"
+          }
+        },
+        {
+          "id": "057A",
+          "name": "Resurrected Amalgam",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -2,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Lower the power of allied and enemy cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "058",
+          "name": "Skeeskee",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenDestroyed",
+              "scope": "ALLIES"
+            },
+            "description": "When allied cards are destroyed, raise this card's power by 1"
+          }
+        },
+        {
+          "id": "059",
+          "name": "Griffon",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAllyRaise",
+            "powerMultiplier": 1,
+            "target": "ALLIES",
+            "affected": [
+              {
+                "x": 1,
+                "y": -1
+              }
+            ],
+            "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+          }
+        },
+        {
+          "id": "060",
+          "name": "Basilisk",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 3,
+          "effect": {
+            "type": "DestroyCards",
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "description": "When played, destroy enemy cards on affected tiles"
+          }
+        },
+        {
+          "id": "061",
+          "name": "Reapertail",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -2,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENFEEBLED"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 1,
+                "y": -2
+              }
+            ],
+            "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+          }
+        },
+        {
+          "id": "062",
+          "name": "Jabberwock",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 6,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "063",
+          "name": "Desert Sahagin",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 3,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 4,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENFEEBLED"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              }
+            ],
+            "description": "When first enfeebled, raise the power of allied cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "064",
+          "name": "Cavestalker",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 4,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -2,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENFEEBLED"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              }
+            ],
+            "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+          }
+        },
+        {
+          "id": "065",
+          "name": "Stone Golem",
+          "power": 4,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENHANCED"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "When first enhanced, lower the power of enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "066",
+          "name": "Two Face",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePowerOnStatus",
+            "enhancedAmount": 4,
+            "enfeebledAmount": -4,
+            "target": "ANY",
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Enhanced: Raise power of allied and enemy cards on affected tiles by 4. Enfeebled: Lower their power by 4"
+          }
+        },
+        {
+          "id": "067",
+          "name": "Gi Specter",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            }
+          ],
+          "power": 2,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAllyRaise",
+            "powerMultiplier": -1,
+            "target": "ANY",
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+          }
+        },
+        {
+          "id": "068",
+          "name": "Valron",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 2,
+            "status": "ENFEEBLED",
+            "scope": "ALLIES",
+            "target": "SELF",
+            "description": "Raise power by 2 for each other enfeebled allied card"
+          }
+        },
+        {
+          "id": "069",
+          "name": "Disgorgon",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "RaiseRank",
+            "amount": 2,
+            "description": "When played, raise position ranks by 2"
+          }
+        },
+        {
+          "id": "070",
+          "name": "Dragon",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "When played, lower the power of enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "071",
+          "name": "Twin Brain",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaiseRank",
+            "amount": 2,
+            "description": "When played, raise position ranks by 2"
+          }
+        },
+        {
+          "id": "072",
+          "name": "Black Bat",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "073",
+          "name": "Bahba Velamyu",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 1,
+                "y": -2
+              }
+            ],
+            "description": "When destroyed, lower the power of enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "074",
+          "name": "Rictus",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 1,
+            "status": "ENFEEBLED",
+            "scope": "ANY",
+            "target": "SELF",
+            "description": "Raise power by 1 for each other enfeebled allied and enemy card"
+          }
+        },
+        {
+          "id": "075",
+          "name": "Adjudicator",
+          "power": 1,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 1,
+            "status": "ANY",
+            "scope": "ANY",
+            "target": "SELF",
+            "description": "Raise power by 1 for each other enhanced or enfeebled allied and enemy card"
+          }
+        },
+        {
+          "id": "076",
+          "name": "Yin & Yang",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            }
+          ],
+          "power": 3,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAllyRaise",
+            "powerMultiplier": 1,
+            "target": "ALLIES",
+            "affected": [
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": -2
+              }
+            ],
+            "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+          }
+        },
+        {
+          "id": "077",
+          "name": "Diabolic Variant",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAllyRaise",
+            "powerMultiplier": -1,
+            "target": "ANY",
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+          }
+        },
+        {
+          "id": "078",
+          "name": "Special Forces Operator",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": -2
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "079",
+          "name": "2-C SOLDIER Operator",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -2
+            },
+            {
+              "x": 1,
+              "y": -2
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": -2
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "080",
+          "name": "Kelzmelzer",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAllyRaise",
+            "powerMultiplier": -1,
+            "target": "ANY",
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": -2
+              }
+            ],
+            "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+          }
+        },
+        {
+          "id": "081",
+          "name": "Panthera Protector",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 4,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENHANCED"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "082",
+          "name": "Hecteyes",
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "When destroyed, raise the power of allied cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "083",
+          "name": "Floating Death",
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "084",
+          "name": "Ironclad",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 3,
+            "status": "ENHANCED",
+            "scope": "ENEMIES",
+            "target": "SELF",
+            "description": "Raise power by 3 for each enhanced enemy card"
+          }
+        },
+        {
+          "id": "085",
+          "name": "Moss-Grown Adamantoise",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaiseRank",
+            "amount": 3,
+            "description": "When played, raise position ranks by 3"
+          }
+        },
+        {
+          "id": "086",
+          "name": "Cloud",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenFirstReachesPower",
+              "threshold": 7
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When this card's power first reaches 7, raise the power of allied cards on affected tiles by 2"
+          }
+        },
+        {
+          "id": "087",
+          "name": "Barret",
+          "increments": [
+            {
+              "x": 2,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -8,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 0
+              }
+            ],
+            "description": "When played, lower the power of enemy cards on affected tiles by 8"
+          }
+        },
+        {
+          "id": "088",
+          "name": "Tifa",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaiseLaneIfWon",
+            "amount": 5,
+            "description": "When you win the lane, receive a score bonus of 5"
+          }
+        },
+        {
+          "id": "089",
+          "name": "Aerith",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "090",
+          "name": "Red XIII",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -2,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENFEEBLED"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 2"
+          }
+        },
+        {
+          "id": "091",
+          "name": "Yuffie",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAllyRaise",
+            "powerMultiplier": -1,
+            "target": "ANY",
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+          }
+        },
+        {
+          "id": "092",
+          "name": "Cait Sith",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "092A"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, add Moogle to your hand"
+          }
+        },
+        {
+          "id": "092A",
+          "name": "Moogle",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 1 while this card is in play"
+          }
+        },
+        {
+          "id": "093",
+          "name": "Cid",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "093A"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, add The Tiny Bronco to your hand"
+          }
+        },
+        {
+          "id": "093A",
+          "name": "The Tiny Bronco",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaiseRank",
+            "amount": 2,
+            "description": "When played, raise position ranks by 2"
+          }
+        },
+        {
+          "id": "094",
+          "name": "Vincent",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "094A"
+            ],
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "description": "When destroyed, add Galian Beast to your hand"
+          }
+        },
+        {
+          "id": "094A",
+          "name": "Galian Beast",
+          "power": 4,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -1,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 1
+              },
+              {
+                "x": -2,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -1
+              },
+              {
+                "x": -2,
+                "y": -1
+              },
+              {
+                "x": 1,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -1,
+                "y": -2
+              }
+            ],
+            "description": "When played, lower power of allied and enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "095",
+          "name": "Ifrit",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 2,
+            "status": "ENHANCED",
+            "scope": "ALLIES",
+            "target": "SELF",
+            "description": "Raise the power by 2 for each other enhanced allied card"
+          }
+        },
+        {
+          "id": "096",
+          "name": "Shiva",
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "SpawnCardsPerRank",
+            "cardIds": [
+              "096A",
+              "096B",
+              "096C"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, spawn Diamond Dust of power 2, 4, or 6 in empty positions"
+          }
+        },
+        {
+          "id": "096A",
+          "name": "Diamond Dust I",
+          "power": 2,
+          "rank": 0,
+          "effect": {
+            "type": "FlavourText",
+            "description": "Spawned on empty position of rank 1"
+          }
+        },
+        {
+          "id": "096B",
+          "name": "Diamond Dust I",
+          "power": 4,
+          "rank": 0,
+          "effect": {
+            "type": "FlavourText",
+            "description": "Spawned on empty position of rank 2"
+          }
+        },
+        {
+          "id": "096C",
+          "name": "Diamond Dust III",
+          "power": 6,
+          "rank": 0,
+          "effect": {
+            "type": "FlavourText",
+            "description": "Spawned on empty position of rank 3"
+          }
+        },
+        {
+          "id": "097",
+          "name": "Ramuh",
+          "increments": [
+            {
+              "x": 2,
+              "y": 2
+            },
+            {
+              "x": -2,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            },
+            {
+              "x": 2,
+              "y": -2
+            },
+            {
+              "x": -2,
+              "y": -2
+            }
+          ],
+          "power": 3,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -3,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "098",
+          "name": "Titan",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 2,
+          "effect": {
+            "type": "RaiseRank",
+            "amount": 2,
+            "description": "When played, raise position ranks by 2"
+          }
+        },
+        {
+          "id": "099",
+          "name": "Kujata",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 6,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -5,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENHANCED"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              }
+            ],
+            "description": "When first enhanced, lower the power of enemy cards on affected tiles by 5"
+          }
+        },
+        {
+          "id": "100",
+          "name": "Odin",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 2,
+            "status": "ENHANCED",
+            "scope": "ENEMIES",
+            "target": "SELF",
+            "description": "Raise power by 2 for each enhanced enemy card"
+          }
+        },
+        {
+          "id": "101",
+          "name": "Phoenix",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 5,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When destroyed, raise the power of allied cards on affected tiles by 5"
+          }
+        },
+        {
+          "id": "102",
+          "name": "Leviathan",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 2,
+              "y": 0
+            },
+            {
+              "x": -2,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -3,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "Lower the power of enemy cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "103",
+          "name": "Alexander",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 3,
+            "status": "ENFEEBLED",
+            "scope": "ALLIES",
+            "target": "SELF",
+            "description": "Raise power by 3 for each other enfeebled allied card"
+          }
+        },
+        {
+          "id": "104",
+          "name": "Bahamut",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 2,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -5,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "When played, lower the power of enemy cards on affected tiles by 5"
+          }
+        },
+        {
+          "id": "105",
+          "name": "Bahamut Arisen",
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "SpawnCardsPerRank",
+            "cardIds": [
+              "105A",
+              "105B",
+              "105C"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, spawn Elementals - cards that enhance when destroyed - in your empty positions"
+          }
+        },
+        {
+          "id": "105A",
+          "name": "Elemental I",
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "Spawned on empty positions of rank 1. When destroyed, raise the power of allied and enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "105B",
+          "name": "Elemental II",
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "Spawned on empty positions of rank 2. When destroyed, raise the power of allied and enemy cards on affected tiles by 2"
+          }
+        },
+        {
+          "id": "105C",
+          "name": "Elemental III",
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "Spawned on empty positions of rank 3. When destroyed, raise the power of allied and enemy cards on affected tiles by 3"
+          }
+        },
+        {
+          "id": "106",
+          "name": "Gilgamesh",
+          "power": 3,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAllyRaise",
+            "powerMultiplier": -1,
+            "target": "ANY",
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "Replace an ally and lower the power of allied and enemy cards on affected tiles by the replaced ally's power"
+          }
+        },
+        {
+          "id": "107",
+          "name": "Chocobo & Moogle",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 1,
+            "status": "ENHANCED",
+            "scope": "ALLIES",
+            "target": "SELF",
+            "description": "Raise power by 1 for each other enhanced allied card"
+          }
+        },
+        {
+          "id": "108",
+          "name": "Fat Chocobo",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 2,
+              "y": 0
+            },
+            {
+              "x": -2,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "FlavourText",
+            "description": "Creates a surfeit of positions around it when played"
+          }
+        },
+        {
+          "id": "109",
+          "name": "Posh Chocobo",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaiseLaneIfWon",
+            "amount": 3,
+            "description": "When you win the lane, receive a score bonus of 3"
+          }
+        },
+        {
+          "id": "110",
+          "name": "Moogle Trio",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "110A",
+              "110B"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, add both Moogle Mage and Moogle Bard to your hand"
+          }
+        },
+        {
+          "id": "110A",
+          "name": "Moogle Bard",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "description": "Raise power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "110B",
+          "name": "Moogle Mage",
+          "increments": [
+            {
+              "x": 2,
+              "y": -2
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": -2
+              }
+            ],
+            "description": "When played, lower the power of enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "111",
+          "name": "Magic Pot",
+          "power": 1,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "112",
+          "name": "Materia Guardian",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -6,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENFEEBLED"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": -1,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 1,
+                "y": -2
+              },
+              {
+                "x": -1,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "When first enfeebled, lower the power of enemy cards on affected tiles by 6"
+          }
+        },
+        {
+          "id": "113",
+          "name": "Midgardsormr",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenDestroyed",
+              "scope": "ANY"
+            },
+            "description": "When allied and enemy cards are destroyed, raise this card's power by 1"
+          }
+        },
+        {
+          "id": "114",
+          "name": "Mythril Golem",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 8,
+          "rank": 1
+        },
+        {
+          "id": "115",
+          "name": "Terror of the Deep",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "Lower the power of allied and enemy cards on affected tiles by 1 while this card is in play"
+          }
+        },
+        {
+          "id": "116",
+          "name": "Grasptropod",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENHANCED"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 1
+              },
+              {
+                "x": -2,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": -1
+              },
+              {
+                "x": -2,
+                "y": -1
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "117",
+          "name": "Custom Valkyrie",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "118",
+          "name": "Gigatrice",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -2
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "DestroyCards",
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": -2
+              }
+            ],
+            "description": "When played, destroy allied and enemy cards on affected tiles"
+          }
+        },
+        {
+          "id": "119",
+          "name": "Dyne",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 2,
+              "y": 1
+            },
+            {
+              "x": 2,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -2
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -5,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": -1
+              },
+              {
+                "x": 1,
+                "y": -2
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 5"
+          }
+        },
+        {
+          "id": "120",
+          "name": "Anuran Suppressor",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "SELF",
+            "trigger": {
+              "type": "WhenDestroyed",
+              "scope": "ENEMIES"
+            },
+            "description": "When enemy cards are destroyed, raise this card's power by 2"
+          }
+        },
+        {
+          "id": "121",
+          "name": "Specimen H1024",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 6,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "Raise the power of allied and enemy cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "122",
+          "name": "Crimson Mare Mk. II",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -5,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENFEEBLED"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "When first enfeebled, lower the power of allied and enemy cards on affected tiles by 5"
+          }
+        },
+        {
+          "id": "123",
+          "name": "Gi Nattak",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "ReplaceAllyRaise",
+            "powerMultiplier": 1,
+            "target": "ALLIES",
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "Replace an ally and raise the power of allied cards on affected tiles by the replaced ally's power"
+          }
+        },
+        {
+          "id": "124",
+          "name": "Forgotten Specimen",
+          "increments": [
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -2
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": -1,
+                "y": 2
+              },
+              {
+                "x": -1,
+                "y": 1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "125",
+          "name": "Don Corneo & Abzu",
+          "power": 4,
+          "rank": 2,
+          "effect": {
+            "type": "AddCardsToHand",
+            "cardIds": [
+              "125A",
+              "125B"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, add both Cacneo and Donberry to your hand"
+          }
+        },
+        {
+          "id": "125A",
+          "name": "Cacneo",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": -2
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "125B",
+          "name": "Donberry",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "DestroyCards",
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "When played, destroy enemy cards on affected tiles"
+          }
+        },
+        {
+          "id": "126",
+          "name": "Red Dragon",
+          "increments": [
+            {
+              "x": 0,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 2,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 6,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -4,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -2
+              }
+            ],
+            "description": "When played, lower the power of allied and enemy cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "127",
+          "name": "Demon Gate",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -9,
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenDestroyed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When destroyed, lower the power of enemy cards on affected tiles by 9"
+          }
+        },
+        {
+          "id": "128",
+          "name": "Reno",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -1,
+                "y": 1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "129",
+          "name": "Rude",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": -1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -2
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "130",
+          "name": "Elena",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -99,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENHANCED"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 0
+              }
+            ],
+            "description": "When first enhanced, lower the power of allied and enemy cards on affected tiles by 99"
+          }
+        },
+        {
+          "id": "131",
+          "name": "Tseng",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 4,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenFirstStatusChanged",
+              "status": "ENHANCED"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 0
+              }
+            ],
+            "description": "The first time this card is enhanced, raise the power of allied cards on affected tiles by 4"
+          }
+        },
+        {
+          "id": "132",
+          "name": "Rufus",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": -1,
+              "y": 2
+            },
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": -1,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": -1,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -2
+            },
+            {
+              "x": -1,
+              "y": -2
+            }
+          ],
+          "power": 4,
+          "rank": 2,
+          "effect": {
+            "type": "FlavourText",
+            "description": "Creates an intimidatingly large number of positions around him when played"
+          }
+        },
+        {
+          "id": "133",
+          "name": "Roche",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 5,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": -1,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "When played, lower the power of allied cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "134",
+          "name": "J-Squad",
+          "power": 2,
+          "rank": 3,
+          "effect": {
+            "type": "SpawnCardsPerRank",
+            "cardIds": [
+              "134A",
+              "134B",
+              "134C"
+            ],
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "description": "When played, spawn Hype Johnnys - cards that enhance while in play - in your empty positions"
+          }
+        },
+        {
+          "id": "134A",
+          "name": "Hype Johnnys I",
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "Spawned on empty position of rank 1. Raise power of allied and enemy cards on affected tiles by 1 while this card is in play"
+          }
+        },
+        {
+          "id": "134B",
+          "name": "Hype Johnnys II",
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "Spawned on empty position of rank 2. Raise power of allied and enemy cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "134C",
+          "name": "Hype Johnnys III",
+          "power": 1,
+          "rank": 0,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 3,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 2
+              },
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": -2,
+                "y": 2
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 2,
+                "y": -2
+              },
+              {
+                "x": 0,
+                "y": -2
+              },
+              {
+                "x": -2,
+                "y": -2
+              }
+            ],
+            "description": "Spawned on empty position of rank 3. Raise power of allied and enemy cards on affected tiles by 3 while this card is in play"
+          }
+        },
+        {
+          "id": "135",
+          "name": "Chocobo Jockey",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaiseLaneIfWon",
+            "amount": 10,
+            "description": "When you win the lane, receive a score bonus of 10"
+          }
+        },
+        {
+          "id": "136",
+          "name": "Space Ranger",
+          "increments": [
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -2
+            }
+          ],
+          "power": 2,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 1,
+            "status": "ENHANCED",
+            "scope": "ENEMIES",
+            "target": "SELF",
+            "description": "Raise power by 1 for each enhanced enemy card"
+          }
+        },
+        {
+          "id": "137",
+          "name": "Haunted Hotel",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ALLIES",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 2,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": -1
+              },
+              {
+                "x": 1,
+                "y": -1
+              }
+            ],
+            "description": "Raise the power of allied cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "138",
+          "name": "Skywheel",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": -1,
+              "y": 2
+            },
+            {
+              "x": 2,
+              "y": 1
+            },
+            {
+              "x": -2,
+              "y": 1
+            },
+            {
+              "x": 2,
+              "y": -1
+            },
+            {
+              "x": -2,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -2
+            },
+            {
+              "x": -1,
+              "y": -2
+            }
+          ],
+          "power": 2,
+          "rank": 3,
+          "effect": {
+            "type": "FlavourText",
+            "description": "Adds positions in the shape of a certain Gold Saucer attraction"
+          }
+        },
+        {
+          "id": "139",
+          "name": "Loveless",
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 1,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 1,
+                "y": 0
+              },
+              {
+                "x": -1,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              }
+            ],
+            "description": "When played, raise the power of allied and enemy cards on affected tiles by 1"
+          }
+        },
+        {
+          "id": "140",
+          "name": "Saucer Squad",
+          "increments": [
+            {
+              "x": 1,
+              "y": 2
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            },
+            {
+              "x": 1,
+              "y": -2
+            }
+          ],
+          "power": 3,
+          "rank": 2,
+          "effect": {
+            "type": "FlavourText",
+            "description": "Makes use of its adorable nature to enliven the battlefield"
+          }
+        },
+        {
+          "id": "141",
+          "name": "Dio",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 1,
+            "status": "ENHANCED",
+            "scope": "ANY",
+            "target": "SELF",
+            "description": "Raise power by 1 for each other enhanced allied and enemy card"
+          }
+        },
+        {
+          "id": "142",
+          "name": "Ultimate Party Animal",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 1,
+          "rank": 1,
+          "effect": {
+            "type": "RaiseWinnerLanesByLoserScore",
+            "description": "If this card is in play when the round ends, the loser of each lane's score is added to the victor's"
+          }
+        },
+        {
+          "id": "143",
+          "name": "Sephiroth",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 4,
+          "rank": 3,
+          "effect": {
+            "type": "DestroyCards",
+            "target": "ENEMIES",
+            "trigger": {
+              "type": "WhenPlayed"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 1
+              },
+              {
+                "x": 0,
+                "y": -1
+              }
+            ],
+            "description": "When played, destroy enemy cards on affected tiles"
+          }
+        },
+        {
+          "id": "144",
+          "name": "Emerald Witch",
+          "increments": [
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": 0
+            },
+            {
+              "x": -1,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 2,
+          "rank": 2,
+          "effect": {
+            "type": "RaisePower",
+            "amount": 2,
+            "target": "ANY",
+            "trigger": {
+              "type": "WhileActive"
+            },
+            "affected": [
+              {
+                "x": 0,
+                "y": 2
+              },
+              {
+                "x": 1,
+                "y": 1
+              },
+              {
+                "x": -1,
+                "y": 1
+              },
+              {
+                "x": 2,
+                "y": 0
+              },
+              {
+                "x": -2,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": -1
+              },
+              {
+                "x": -1,
+                "y": -1
+              },
+              {
+                "x": 0,
+                "y": -2
+              }
+            ],
+            "description": "Raise the power of allied and enemy cards on affected tiles by 2 while this card is in play"
+          }
+        },
+        {
+          "id": "145",
+          "name": "Shadowblood Queen",
+          "increments": [
+            {
+              "x": 1,
+              "y": 1
+            },
+            {
+              "x": 0,
+              "y": 1
+            },
+            {
+              "x": 1,
+              "y": -1
+            },
+            {
+              "x": 0,
+              "y": -1
+            }
+          ],
+          "power": 3,
+          "rank": 3,
+          "effect": {
+            "type": "RaisePowerByCount",
+            "amount": 3,
+            "status": "ENFEEBLED",
+            "scope": "ANY",
+            "target": "SELF",
+            "description": "Raise power by 3 for each other enfeebled allied and enemy card"
+          }
+        }
+      ]
+    }
+    """.trimIndent()

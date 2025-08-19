@@ -2,7 +2,9 @@ import org.gradle.api.JavaVersion.VERSION_11
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -21,7 +23,6 @@ kotlin {
     }
 
     androidTarget()
-
     jvm {
         mainRun {
             mainClass = "br.com.gabryel.reginaesanguine.app.MainKt"
@@ -31,7 +32,28 @@ kotlin {
         }
     }
 
-    listOf(iosArm64(), iosX64(), iosSimulatorArm64())
+    iosArm64()
+    iosX64()
+    iosSimulatorArm64()
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser {
+            val rootDirPath = project.rootDir.path
+            val projectDirPath = project.projectDir.path
+            commonWebpackConfig {
+                outputFileName = "reginae-sanguine-app-compose.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        add(rootDirPath)
+                        add(projectDirPath)
+                    }
+                }
+            }
+        }
+
+        binaries.executable()
+    }
 
     sourceSets {
         all {
@@ -46,8 +68,6 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material)
                 implementation(compose.ui)
-
-                implementation(libs.coil.compose)
             }
         }
 
@@ -127,17 +147,5 @@ android {
 
         debugImplementation(libs.compose.ui.tooling)
         debugImplementation(libs.compose.ui.test.manifest)
-    }
-}
-
-tasks {
-    withType<KotlinCompile> {
-        compilerOptions {
-            freeCompilerArgs.add("-Xcontext-parameters")
-        }
-    }
-
-    named("copyNonXmlValueResourcesForCommonMain") {
-        dependsOn(rootProject.tasks.named("prepareAssets"))
     }
 }

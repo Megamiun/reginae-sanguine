@@ -1,7 +1,7 @@
 package br.com.gabryel.reginaesanguine.app.services
 
 class NativeResourceLoader : ResourceLoader {
-    override fun load(path: String): ByteArray {
+    override suspend fun load(path: String): ByteArray {
         TODO("Not yet implemented")
     }
 }
