@@ -41,7 +41,7 @@ allprojects {
 
     tasks {
         whenTaskAdded {
-            if ("Process.*Resources".toRegex() in javaClass.simpleName)
+            if ("Resources" in name)
                 dependsOn(rootProject.tasks.getByName("prepareAssets"))
         }
     }

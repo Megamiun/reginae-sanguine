@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Alignment.Companion.TopCenter
+import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
@@ -32,6 +33,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
+import br.com.gabryel.reginaesanguine.app.ui.NavigationManager
+import br.com.gabryel.reginaesanguine.app.ui.NavigationScreens
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
@@ -42,10 +45,10 @@ import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 
 private val DEFAULT_CARD_SIZE = 90.dp
-private val DEFAULT_RATIO = 0.83f
+private const val DEFAULT_RATIO = 0.83f
 
 @Composable
-context(cardImageLoader: CardImageLoader)
+context(cardImageLoader: CardImageLoader, nav: NavigationManager<NavigationScreens>)
 fun BoxScope.GameBoard(gameViewModel: GameViewModel) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
@@ -85,7 +88,7 @@ fun BoxScope.GameBoard(gameViewModel: GameViewModel) {
     Row(Modifier.align(BottomCenter), horizontalArrangement = Center) {
         context(PlayerContext.getDefaultFor(game.playerTurn)) {
             game.currentPlayer.hand.forEach { card ->
-                val dragAndDrop = Modifier.dragAndDropSource { offset -> getTransferData(offset, card) }
+                val dragAndDrop = Modifier.dragAndDropSource { offset -> getTransferData(offset, card.id) }
 
                 Box(Modifier.padding(1.dp)) {
                     DetailCard(card, cardSize, dragAndDrop)
@@ -95,8 +98,15 @@ fun BoxScope.GameBoard(gameViewModel: GameViewModel) {
     }
 
     Button(
+        nav::pop,
+        Modifier.align(TopStart).size(100.dp, 30.dp).offset(15.dp, 15.dp),
+    ) {
+        Text("RETURN")
+    }
+
+    Button(
         gameViewModel::skip,
-        Modifier.align(BottomStart).size(70.dp, 30.dp).offset(15.dp, (-15).dp),
+        Modifier.align(BottomStart).size(100.dp, 30.dp).offset(15.dp, (-15).dp),
     ) {
         Text("SKIP")
     }
@@ -109,7 +119,7 @@ fun BoxScope.GameBoard(gameViewModel: GameViewModel) {
 
 expect fun drop(event: DragAndDropEvent, drop: (String) -> Boolean): Boolean
 
-expect fun getTransferData(offset: Offset, card: Card): DragAndDropTransferData
+expect fun getTransferData(offset: Offset, data: String): DragAndDropTransferData
 
 private fun Modifier.boardCell(position: Position): Modifier =
     if ((position.lane + position.column) % 2 == 0)

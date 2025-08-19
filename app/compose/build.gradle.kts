@@ -17,42 +17,38 @@ val generatedResources = rootProject.layout.buildDirectory.dir("generated/resour
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs = listOf("-Xcontext-parameters", "-Xexpect-actual-classes")
+        freeCompilerArgs.addAll(listOf("-Xcontext-parameters", "-Xexpect-actual-classes", "-XXLanguage:+WhenGuards"))
     }
 
     androidTarget()
-    jvm("desktop") {
+
+    jvm {
         mainRun {
             mainClass = "br.com.gabryel.reginaesanguine.app.MainKt"
         }
         compilerOptions {
             jvmTarget = JVM_11
-            freeCompilerArgs = listOf("-XXLanguage:+WhenGuards")
         }
     }
 
-    if (System.getProperty("os.name").startsWith("Mac OS X")) {
-        listOf(iosX64(), iosArm64(), iosSimulatorArm64())
-    }
+    listOf(iosArm64(), iosX64(), iosSimulatorArm64())
 
     sourceSets {
         all {
             dependencies {
+                implementation(project(":core"))
+                implementation(project(":app:viewmodel"))
+
                 implementation(project.dependencies.platform(libs.compose.bom))
+                runtimeOnly(compose.runtime)
+
+                implementation(compose.components.resources)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.ui)
+
+                implementation(libs.coil.compose)
             }
-        }
-
-        commonMain.dependencies {
-            implementation(project(":core"))
-            implementation(project(":app:viewmodel"))
-            runtimeOnly(compose.runtime)
-
-            implementation(compose.components.resources)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-
-            implementation(libs.coil.compose)
         }
 
         androidMain.dependencies {
@@ -64,7 +60,7 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
         }
 
-        get("desktopMain").dependencies {
+        jvmMain.dependencies {
             runtimeOnly(compose.desktop.currentOs)
             implementation(compose.desktop.common)
         }

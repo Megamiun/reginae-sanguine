@@ -10,6 +10,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.ResourcesResourceLoader
+import br.com.gabryel.reginaesanguine.app.ui.App
 import br.com.gabryel.reginaesanguine.app.ui.GameBoard
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
 import br.com.gabryel.reginaesanguine.app.util.createTestDeck
@@ -25,33 +26,12 @@ import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
 import kotlin.system.exitProcess
 
 fun main() = application {
-    val deck = createTestDeck(ResourcesResourceLoader())
-
-    val knownCard = Card("001", "Security Officer", 1, 1)
-    val unknownCard = Card("Custom", "Custom", 3, 3)
-
-    val game = Game.forPlayers(
-        Player(deck = deck.shuffled()),
-        Player(deck = deck.shuffled()),
-    ).copy(
-        board = Board(
-            mapOf(
-                (0 atColumn 0) to Cell(LEFT, 1, knownCard),
-                (1 atColumn 0) to Cell(LEFT, 2),
-                (2 atColumn 0) to Cell(LEFT, 3, unknownCard),
-                (0 atColumn 4) to Cell(RIGHT, 1, knownCard),
-                (1 atColumn 4) to Cell(RIGHT, 2),
-                (2 atColumn 4) to Cell(RIGHT, 3),
-            ),
-        ),
-    )
-
     context(ResCardImageLoader()) {
         Window(title = "Reginae Sanguine", onCloseRequest = { exitProcess(0) }) {
             ReginaeSanguineTheme {
                 Scaffold { paddingValues ->
                     Box(Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Center) {
-                        GameBoard(GameViewModel.forGame(game))
+                        App(ResourcesResourceLoader())
                     }
                 }
             }
