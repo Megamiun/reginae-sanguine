@@ -114,7 +114,7 @@ class BoardEffectTest {
     fun `when playing a card with a Replace Effect over a card, should replace current card`() {
         val originalAlly = cardOf(power = 2)
 
-        val replaceCard = cardOf(power = 1, effect = ReplaceAllyRaise(1, ANY))
+        val replaceCard = cardOf(effect = ReplaceAllyRaise(1, ANY))
 
         val game = buildResult {
             Board.default()
@@ -130,7 +130,7 @@ class BoardEffectTest {
         val originalAlly = cardOf(power = 2)
 
         val replaceEffect = ReplaceAllyRaise(powerMultiplier = 1, ANY, affected = setOf(DOWNWARD))
-        val replaceCard = cardOf(power = 1, effect = replaceEffect)
+        val replaceCard = cardOf(effect = replaceEffect)
 
         val game = buildResult {
             Board.default()
@@ -170,7 +170,7 @@ class BoardEffectTest {
 
     @Test
     fun `when playing a card with a Spawn Effect that spawns a When Played card, should apply effect`() {
-        val card = cardOf("rank1", power = 1, effect = RaisePower(3, SELF, WhenPlayed(SELF)))
+        val card = cardOf("rank1", effect = RaisePower(3, SELF, WhenPlayed(SELF)))
         val spawnCard = cardOf(effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
 
         val result = buildResult {
@@ -183,9 +183,9 @@ class BoardEffectTest {
 
     @Test
     fun `when playing a card with a Spawn Effect, should not trigger other non SELF WhenPlayed`() {
-        val cardWhenPlayedAllies = cardOf(power = 1, effect = RaisePower(2, SELF, WhenPlayed(ALLIES)))
+        val cardWhenPlayedAllies = cardOf(effect = RaisePower(2, SELF, WhenPlayed(ALLIES)))
         val cardSpawnable = cardOf("rank1", power = 2)
-        val spawnCard = cardOf(power = 1, effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
+        val spawnCard = cardOf(effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
 
         val result = buildResult {
             Board.default(mapOf("rank1" to cardSpawnable))
@@ -199,7 +199,7 @@ class BoardEffectTest {
     @Test
     fun `when a card with trigger WhenFirstStatusChanged is played, should not give it bonus`() {
         val trigger = WhenFirstStatusChanged(ENHANCED)
-        val cardConditional = cardOf(power = 1, effect = RaisePower(10, SELF, trigger))
+        val cardConditional = cardOf(effect = RaisePower(10, SELF, trigger))
 
         val result = buildResult {
             Board.default()
@@ -212,7 +212,7 @@ class BoardEffectTest {
     @Test
     fun `when a card with trigger WhenFirstStatusChanged changes status, should give it bonus`() {
         val trigger = WhenFirstStatusChanged(ENHANCED)
-        val cardConditional = cardOf(power = 1, effect = RaisePower(10, SELF, trigger))
+        val cardConditional = cardOf(effect = RaisePower(10, SELF, trigger))
         val cardRaise = cardOf(effect = RaisePower(1, ANY, WhenPlayed(), setOf(DOWNWARD, UPWARD)))
 
         val result = buildResult {
@@ -227,7 +227,7 @@ class BoardEffectTest {
     @Test
     fun `when a card with trigger WhenFirstStatusChanged changes status again, should not give it a second bonus`() {
         val trigger = WhenFirstStatusChanged(ENHANCED)
-        val cardConditional = cardOf(power = 1, effect = RaisePower(10, SELF, trigger))
+        val cardConditional = cardOf(effect = RaisePower(10, SELF, trigger))
         val cardRaise = cardOf(effect = RaisePower(1, ANY, WhenPlayed(), setOf(DOWNWARD, UPWARD)))
 
         val result = buildResult {

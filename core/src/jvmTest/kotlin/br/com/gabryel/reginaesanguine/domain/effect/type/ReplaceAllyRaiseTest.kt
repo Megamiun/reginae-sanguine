@@ -5,7 +5,6 @@ import br.com.gabryel.reginaesanguine.domain.Board
 import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.DOWNWARD
 import br.com.gabryel.reginaesanguine.domain.Failure.CellWithNoCardToReplace
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
-import br.com.gabryel.reginaesanguine.domain.effect.TargetType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
 import br.com.gabryel.reginaesanguine.domain.helpers.A1
 import br.com.gabryel.reginaesanguine.domain.helpers.B1
@@ -23,7 +22,7 @@ class ReplaceAllyRaiseTest {
     fun `when playing a card with a Replace Effect over a card, should replace current card`() {
         val originalAlly = cardOf(power = 2)
 
-        val replaceCard = cardOf(power = 1, effect = ReplaceAllyRaise(1, ANY))
+        val replaceCard = cardOf(effect = ReplaceAllyRaise(1, ANY))
 
         val game = buildResult {
             Board.default()
@@ -39,7 +38,7 @@ class ReplaceAllyRaiseTest {
         val originalAlly = cardOf(power = 2)
 
         val replaceEffect = ReplaceAllyRaise(1, ANY, affected = setOf(DOWNWARD))
-        val replaceCard = cardOf(power = 1, effect = replaceEffect)
+        val replaceCard = cardOf(effect = replaceEffect)
 
         val game = buildResult {
             Board.default()

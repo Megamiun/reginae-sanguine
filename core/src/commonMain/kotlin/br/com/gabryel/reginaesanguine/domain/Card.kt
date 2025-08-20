@@ -9,8 +9,10 @@ import kotlinx.serialization.Serializable
 data class Card(
     val id: String,
     val name: String,
+    val tier: CardTier,
     val power: Int,
-    val rank: Int,
+    val rank: Int = 0,
+    val spawnOnly: Boolean = false,
     val increments: Set<Displacement> = setOf(),
     val effect: Effect = NoEffect
 ) {
