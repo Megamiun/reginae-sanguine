@@ -30,7 +30,7 @@ import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 
 @Composable
 fun ResultOverlay(gameViewModel: GameViewModel, boardSize: DpSize) {

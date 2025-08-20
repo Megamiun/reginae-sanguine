@@ -53,7 +53,7 @@ fun GridPlayableCell(game: Game, position: Position, cardSize: DpSize, putCard: 
                     )
                 }
             } else {
-                GridCard(owner, card, cardSize)
+                SimpleCard(owner, card, cardSize)
             }
         }
     }

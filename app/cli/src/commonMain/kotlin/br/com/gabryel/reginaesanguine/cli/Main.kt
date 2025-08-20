@@ -5,7 +5,7 @@ import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Player
-import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 import com.jakewharton.mosaic.runMosaicMain
 import kotlinx.coroutines.awaitCancellation
 import kotlin.math.floor

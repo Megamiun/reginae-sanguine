@@ -6,67 +6,56 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.LocalRippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
+import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.DECK_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.HOME
-import br.com.gabryel.reginaesanguine.app.util.createTestDeck
-import br.com.gabryel.reginaesanguine.domain.Board
-import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.Cell
+import br.com.gabryel.reginaesanguine.app.util.getStandardPack
 import br.com.gabryel.reginaesanguine.domain.Game
+import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.Player
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.domain.atColumn
-import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 
 @Composable
 context(_: CardImageLoader)
 fun App(resourceLoader: ResourceLoader) {
-    val gameViewModel = remember { mutableStateOf<GameViewModel?>(null) }
-
-    LaunchedEffect("viewmodel") {
-        gameViewModel.value = createViewModel(resourceLoader)
+    val packState by produceState<Pack?>(null) {
+        value = getStandardPack(resourceLoader)
     }
 
+    val pack = packState ?: return
+
+    val player = Player(emptyList(), pack.cards)
+    val gameViewModel = createViewModel(player, player)
+    val deckViewModel = DeckViewModel(pack)
+
     CompositionLocalProvider(LocalRippleConfiguration provides null) {
-        NavigationStack(HOME) {
+        NavigationStack(DECK_SELECTION) {
             addRoute(HOME) {
                 HomeScreen()
             }
+            addRoute(DECK_SELECTION) {
+                Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Center) {
+                    DeckSelectionScreen(deckViewModel)
+                }
+            }
             addRoute(GAME) {
-                gameViewModel.value?.let {
-                    Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Center) {
-                        GameScreen(it)
-                    }
+                Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Center) {
+                    GameScreen(gameViewModel)
                 }
             }
         }
     }
 }
 
-private suspend fun createViewModel(resourceLoader: ResourceLoader): GameViewModel {
-    val deck = createTestDeck(resourceLoader)
-    val knownCard = Card("001", "Security Officer", 1, 1, setOf())
-    val unknownCard = Card("Custom", "Custom", 3, 3, setOf())
-    val board = Board(
-        mapOf(
-            (0 atColumn 0) to Cell(LEFT, 1, knownCard),
-            (1 atColumn 0) to Cell(LEFT, 2),
-            (2 atColumn 0) to Cell(LEFT, 3, unknownCard),
-            (0 atColumn 4) to Cell(RIGHT, 1, knownCard),
-            (1 atColumn 4) to Cell(RIGHT, 2),
-            (2 atColumn 4) to Cell(RIGHT, 3),
-        ),
-    )
-
-    val game = Game.forPlayers(Player(deck = deck.shuffled()), Player(deck = deck.shuffled()))
-    return GameViewModel.forGame(game.copy(board = board))
+private fun createViewModel(left: Player, right: Player): GameViewModel {
+    val game = Game.forPlayers(left, right)
+    return GameViewModel.forGame(game)
 }

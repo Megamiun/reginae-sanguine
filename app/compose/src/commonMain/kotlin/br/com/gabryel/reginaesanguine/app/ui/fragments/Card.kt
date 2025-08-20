@@ -59,7 +59,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 context(cardImageLoader: CardImageLoader)
-fun GridCard(playerPosition: PlayerPosition, card: Card, size: DpSize, modifier: Modifier = Modifier) {
+fun SimpleCard(playerPosition: PlayerPosition, card: Card, size: DpSize, modifier: Modifier = Modifier) {
     Card(playerPosition, card, size, modifier, false)
 }
 

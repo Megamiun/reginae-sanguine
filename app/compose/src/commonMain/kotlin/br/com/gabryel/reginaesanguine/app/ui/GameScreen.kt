@@ -38,14 +38,12 @@ import br.com.gabryel.reginaesanguine.app.ui.fragments.ResultOverlay
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
+import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
 import br.com.gabryel.reginaesanguine.app.util.getTransferData
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.State
-import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
-
-private val DEFAULT_CARD_SIZE = 90.dp
-private const val DEFAULT_RATIO = 0.83f
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 
 @Composable
 context(cardImageLoader: CardImageLoader, nav: NavigationManager<NavigationScreens>)
@@ -127,6 +125,3 @@ private fun Modifier.playerCell(position: Position): Modifier =
     cell().background(PurpleDark).padding(2.dp)
 
 private fun Modifier.cell(): Modifier = size(getCardSize() + DpSize(1.dp, 1.dp))
-
-private fun getCardSize(height: Dp = DEFAULT_CARD_SIZE, ratio: Float = DEFAULT_RATIO) =
-    DpSize(height * ratio, height)

@@ -24,10 +24,10 @@ import br.com.gabryel.reginaesanguine.domain.State.Ended.Won
 import br.com.gabryel.reginaesanguine.domain.State.Ongoing
 import br.com.gabryel.reginaesanguine.domain.Success
 import br.com.gabryel.reginaesanguine.domain.atColumn
-import br.com.gabryel.reginaesanguine.viewmodel.GameViewModel
-import br.com.gabryel.reginaesanguine.viewmodel.State
-import br.com.gabryel.reginaesanguine.viewmodel.State.ChooseAction
-import br.com.gabryel.reginaesanguine.viewmodel.State.ChoosePosition
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameState
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameState.ChooseAction
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameState.ChoosePosition
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 import com.jakewharton.mosaic.LocalTerminalState
 import com.jakewharton.mosaic.layout.KeyEvent
 import com.jakewharton.mosaic.layout.height
@@ -154,7 +154,7 @@ fun GameApp(viewModel: GameViewModel) {
                     }
                 }
 
-                is State.ChooseCard -> {
+                is GameState.ChooseCard -> {
                     OptionChooser(
                         "Choose card:",
                         player.hand,
