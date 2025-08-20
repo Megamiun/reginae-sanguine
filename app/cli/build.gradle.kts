@@ -22,11 +22,8 @@ kotlin {
         }
     }
 
-    listOf(linuxArm64(), linuxX64(), mingwX64()).forEach(::configureNative)
-
-    if (System.getProperty("os.name").startsWith("Mac OS X")) {
-        listOf(macosX64(), macosArm64()).forEach(::configureNative)
-    }
+    listOf(linuxArm64(), linuxX64(), mingwX64(), macosX64(), macosArm64())
+        .forEach(::configureNative)
 
     sourceSets {
         commonMain {

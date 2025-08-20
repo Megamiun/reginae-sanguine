@@ -2,10 +2,8 @@ import org.gradle.api.JavaVersion.VERSION_11
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
@@ -36,8 +34,7 @@ kotlin {
     iosX64()
     iosSimulatorArm64()
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
+    js {
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
@@ -49,6 +46,8 @@ kotlin {
                         add(projectDirPath)
                     }
                 }
+
+                watchOptions = KotlinWebpackConfig.WatchOptions(ignored = listOf("**/node_modules"))
             }
         }
 

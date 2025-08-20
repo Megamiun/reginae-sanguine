@@ -15,17 +15,18 @@ import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
 import br.com.gabryel.reginaesanguine.app.ui.App
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
-import kotlinx.browser.document
+import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    val documentBody = requireNotNull(document.body) { "No Document Body available" }
-    ComposeViewport(documentBody) {
-        context(ResCardImageLoader()) {
-            ReginaeSanguineTheme {
-                Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = TopCenter) {
-                    Box(Modifier.size(1000.dp, 500.dp), contentAlignment = Center) {
-                        App(WebResourceLoader())
+    onWasmReady {
+        ComposeViewport("content") {
+            context(ResCardImageLoader()) {
+                ReginaeSanguineTheme {
+                    Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = TopCenter) {
+                        Box(Modifier.size(1000.dp, 500.dp), contentAlignment = Center) {
+                            App(WebResourceLoader())
+                        }
                     }
                 }
             }
