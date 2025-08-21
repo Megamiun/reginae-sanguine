@@ -5,9 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -17,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Alignment.Companion.TopCenter
@@ -24,7 +25,6 @@ import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Red
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -36,6 +36,7 @@ import br.com.gabryel.reginaesanguine.app.ui.fragments.GridPlayableCell
 import br.com.gabryel.reginaesanguine.app.ui.fragments.PlayerLanePowerCell
 import br.com.gabryel.reginaesanguine.app.ui.fragments.ResultOverlay
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
+import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
@@ -47,72 +48,74 @@ import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 
 @Composable
 context(cardImageLoader: CardImageLoader, nav: NavigationManager<NavigationScreens>)
-fun BoxScope.GameScreen(gameViewModel: GameViewModel) {
+fun GameScreen(gameViewModel: GameViewModel) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
     val lateralSize = IntSize(1, game.size.height)
     val gridSize = IntSize(game.size.width, game.size.height)
     val cardSize = getCardSize()
 
-    if (state.error != null)
-        Box(Modifier.fillMaxWidth().align(TopCenter).background(Black), contentAlignment = TopCenter) {
-            Text(state.error.toString(), color = Red)
-        }
+    Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Alignment.Center) {
+        if (state.error != null)
+            Box(Modifier.fillMaxWidth().align(TopCenter).background(Black), contentAlignment = TopCenter) {
+                Text(state.error.toString(), color = Red)
+            }
 
-    Column(Modifier.align(TopCenter).offset(y = 20.dp).background(WhiteDark).padding(4.dp)) {
-        Row(Modifier.border(1.dp, Black)) {
-            context(PlayerContext.left) {
-                Grid(lateralSize) { position ->
-                    Box(Modifier.playerCell(position)) {
-                        PlayerLanePowerCell(game, position)
+        Column(Modifier.align(TopCenter).offset(y = 20.dp).background(WhiteDark).padding(4.dp)) {
+            Row(Modifier.border(1.dp, Black)) {
+                context(PlayerContext.left) {
+                    Grid(lateralSize) { position ->
+                        Box(Modifier.playerCell(position)) {
+                            PlayerLanePowerCell(game, position)
+                        }
+                    }
+                }
+                Grid(gridSize, modifier = Modifier.border(0.1.dp, WhiteDark)) { position ->
+                    Box(Modifier.boardCell(position)) {
+                        GridPlayableCell(game, position, cardSize) { cardId -> gameViewModel.play(position, cardId) }
+                    }
+                }
+                context(PlayerContext.right) {
+                    Grid(lateralSize) { position ->
+                        Box(Modifier.playerCell(position)) {
+                            PlayerLanePowerCell(game, position)
+                        }
                     }
                 }
             }
-            Grid(gridSize, modifier = Modifier.border(0.1.dp, WhiteDark)) { position ->
-                Box(Modifier.boardCell(position)) {
-                    GridPlayableCell(game, position, cardSize) { cardId -> gameViewModel.play(position, cardId) }
-                }
-            }
-            context(PlayerContext.right) {
-                Grid(lateralSize) { position ->
-                    Box(Modifier.playerCell(position)) {
-                        PlayerLanePowerCell(game, position)
+        }
+
+        Row(Modifier.align(BottomCenter), horizontalArrangement = Center) {
+            context(PlayerContext.getDefaultFor(game.playerTurn)) {
+                game.currentPlayer.hand.forEach { card ->
+                    val dragAndDrop = Modifier.dragAndDropSource { offset -> getTransferData(offset, card.id) }
+
+                    Box(Modifier.padding(1.dp)) {
+                        DetailCard(card, cardSize, dragAndDrop)
                     }
                 }
             }
         }
-    }
 
-    Row(Modifier.align(BottomCenter), horizontalArrangement = Center) {
-        context(PlayerContext.getDefaultFor(game.playerTurn)) {
-            game.currentPlayer.hand.forEach { card ->
-                val dragAndDrop = Modifier.dragAndDropSource { offset -> getTransferData(offset, card.id) }
-
-                Box(Modifier.padding(1.dp)) {
-                    DetailCard(card, cardSize, dragAndDrop)
-                }
-            }
+        Button(
+            nav::pop,
+            Modifier.align(TopStart).size(100.dp, 30.dp).offset(15.dp, 15.dp),
+        ) {
+            Text("RETURN")
         }
+
+        Button(
+            gameViewModel::skip,
+            Modifier.align(BottomStart).size(100.dp, 30.dp).offset(15.dp, (-15).dp),
+        ) {
+            Text("SKIP")
+        }
+
+        val middleWidth = DpSize(cardSize.width * 8, cardSize.height * 3.1f)
+
+        if (game.getState() is State.Ended)
+            ResultOverlay(gameViewModel, middleWidth)
     }
-
-    Button(
-        nav::pop,
-        Modifier.align(TopStart).size(100.dp, 30.dp).offset(15.dp, 15.dp),
-    ) {
-        Text("RETURN")
-    }
-
-    Button(
-        gameViewModel::skip,
-        Modifier.align(BottomStart).size(100.dp, 30.dp).offset(15.dp, (-15).dp),
-    ) {
-        Text("SKIP")
-    }
-
-    val middleWidth = DpSize(cardSize.width * 8, cardSize.height * 3.1f)
-
-    if (game.getState() is State.Ended)
-        ResultOverlay(gameViewModel, middleWidth)
 }
 
 private fun Modifier.boardCell(position: Position): Modifier =

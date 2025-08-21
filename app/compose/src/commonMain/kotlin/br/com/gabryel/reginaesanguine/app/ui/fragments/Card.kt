@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -84,39 +85,41 @@ private fun Card(owner: PlayerPosition, card: Card, size: DpSize, modifier: Modi
     val cardShape = RoundedCornerShape(5)
     val totalWidth = size.width
 
-    Box(modifier.size(size).background(borderBrush, cardShape), Center) {
-        Box(Modifier.padding(2.5.dp).clip(cardShape), Center) {
-            Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
-            Box(Modifier.fillMaxSize().padding(1.dp).border(borderStroke, cardShape), Center) {
-                if (cardArt != null)
-                    Image(cardArt, "TODO", Modifier.fillMaxSize(), TopCenter, FillWidth)
+    Box(modifier) {
+        Box(Modifier.requiredSize(size).background(borderBrush, cardShape), Center) {
+            Box(Modifier.padding(2.5.dp).clip(cardShape), Center) {
+                Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
+                Box(Modifier.fillMaxSize().padding(1.dp).border(borderStroke, cardShape), Center) {
+                    if (cardArt != null)
+                        Image(cardArt, "TODO", Modifier.fillMaxSize(), TopCenter, FillWidth)
 
-                if (detailed) {
-                    Column(Modifier.align(BottomCenter), verticalArrangement = Arrangement.Center) {
-                        Box(Modifier.fillMaxWidth(), Center) {
-                            DisplacementGrid(owner, card)
+                    if (detailed) {
+                        Column(Modifier.align(BottomCenter), verticalArrangement = Arrangement.Center) {
+                            Box(Modifier.fillMaxWidth(), Center) {
+                                DisplacementGrid(owner, card, totalWidth / 2.5f)
+                            }
+
+                            Text(
+                                card.name,
+                                Modifier.fillMaxWidth().background(Black).padding(3.dp),
+                                Yellow,
+                                defineFontSize(totalWidth, card),
+                                textAlign = TextAlign.Center,
+                            )
                         }
-
-                        Text(
-                            card.name,
-                            Modifier.fillMaxWidth().background(Black).padding(3.dp),
-                            Yellow,
-                            defineFontSize(totalWidth, card),
-                            textAlign = TextAlign.Center,
-                        )
+                        val pinSize = size.width / 11
+                        RowRankGroup(card.rank, pinSize, Modifier.align(TopStart).offset(3.dp, 3.dp))
                     }
-                    val pinSize = size.width / 11
-                    RowRankGroup(card.rank, pinSize, Modifier.align(TopStart).offset(3.dp, 3.dp))
                 }
-            }
 
-            CardPowerIndicator(card.power, totalWidth / 4.5f, Modifier.align(TopEnd))
+                CardPowerIndicator(card.power, totalWidth / 4.5f, Modifier.align(TopEnd))
+            }
         }
     }
 }
 
 @Composable
-private fun DisplacementGrid(owner: PlayerPosition, card: Card, modifier: Modifier = Modifier) {
+private fun DisplacementGrid(owner: PlayerPosition, card: Card, totalWidth: Dp, modifier: Modifier = Modifier) {
     val shape = RoundedCornerShape(10)
     val modifier = modifier
         .border(0.5.dp, GreyDark, shape)
@@ -125,15 +128,15 @@ private fun DisplacementGrid(owner: PlayerPosition, card: Card, modifier: Modifi
 
     Box(modifier) {
         Grid(IntSize(5, 5)) { position ->
-            Spacer(Modifier.gridCell(position, owner, card))
+            Spacer(Modifier.gridCell(position, owner, card, totalWidth / 6f))
         }
     }
 }
 
-private fun Modifier.gridCell(position: Position, owner: PlayerPosition, card: Card): Modifier {
+private fun Modifier.gridCell(position: Position, owner: PlayerPosition, card: Card, width: Dp): Modifier {
     val displacement = owner.correct(position.asDisplacement() + Displacement(-2, -2))
 
-    return size(3.5.dp)
+    return size(width)
         .padding(0.4.dp)
         .setCellBackground(displacement, card)
         .setCellBorder(displacement, card)

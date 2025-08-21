@@ -12,6 +12,7 @@ class DeckViewModel(
     private val viewFlow: MutableStateFlow<ViewDecks> = MutableStateFlow(ViewDecks(Array(6) { emptyList<Card>() }.toList())),
     private val editFlow: MutableStateFlow<EditDeck?> = MutableStateFlow(null)
 ) {
+    val deckLimit = 15
     val viewDecks = viewFlow.asStateFlow()
     val editDeck = editFlow.asStateFlow()
 
@@ -23,10 +24,29 @@ class DeckViewModel(
         editFlow.update { EditDeck(viewDecks.value.selectedDeck) }
     }
 
+    fun cancelEditMode() {
+        editFlow.update { null }
+    }
+
     fun addToDeck(card: Card) {
         editFlow.update {
-            requireNotNull(it)
+            requireNotNull(it) { "Not on edit flow, should not be able to add cards" }
             it.addToDeck(card)
         }
     }
+
+    fun saveDeck() {
+        viewFlow.update {
+            val editDeck = requireNotNull(editDeck.value) { "No deck being edited, not possible to save deck" }
+            viewDecks.value.replaceCurrent(editDeck.deck)
+        }
+
+        editFlow.update { null }
+    }
+}
+
+fun <T> List<T>.replace(index: Int, item: T): List<T> {
+    val mutable = toMutableList()
+    mutable[index] = item
+    return mutable
 }

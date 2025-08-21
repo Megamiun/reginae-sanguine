@@ -11,7 +11,7 @@ import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
 @Composable
 context(cardImageLoader: CardImageLoader, nav: NavigationManager<NavigationScreens>)
 fun DeckSelectionScreen(deckViewModel: DeckViewModel) {
-    context(PlayerContext.right) {
+    context(PlayerContext.left) {
         ViewDecks(deckViewModel)
         EditDeck(deckViewModel)
     }

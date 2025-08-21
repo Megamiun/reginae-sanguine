@@ -67,6 +67,9 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material)
                 implementation(compose.ui)
+
+                implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+                runtimeOnly("io.coil-kt.coil3:coil-network-ktor:3.0.0-alpha08")
             }
         }
 
@@ -75,13 +78,14 @@ kotlin {
             implementation(libs.lifecycle.runtime.ktx)
             implementation(libs.activity.compose)
 
-            implementation(libs.compose.ui.graphics)
-            implementation(libs.compose.ui.tooling.preview)
+            runtimeOnly(libs.compose.ui.graphics)
+            runtimeOnly(libs.compose.ui.tooling.preview)
         }
 
         jvmMain.dependencies {
             runtimeOnly(compose.desktop.currentOs)
-            implementation(compose.desktop.common)
+            runtimeOnly(compose.desktop.common)
+            runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-swing")
         }
 
         commonMain {
