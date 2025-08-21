@@ -1,7 +1,8 @@
 package br.com.gabryel.reginaesanguine.app.ui.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -28,6 +29,7 @@ fun createNumbersTextStyle(fontSize: TextUnit) = TextStyle(
     fontFamily = createNumbersFontFamily(),
     fontWeight = Bold,
     fontSize = fontSize,
+    lineHeight = fontSize,
     color = WhiteLight,
 )
 
@@ -40,15 +42,16 @@ private fun createFontFamily() = FontFamily(
 )
 
 @Composable
-fun createTypography() = Typography(body1 = createTextStyle())
+fun createTypography() = Typography(bodyMedium = createTextStyle())
 
 @Composable
-fun createTextStyle(multiplier: Float = 1f) = TextStyle(
+fun createTextStyle(multiplier: Float = 1f, extraLineHeight: TextUnit = 0.sp, color: Color = WhiteLight) = TextStyle(
     fontFamily = createFontFamily(),
     fontWeight = Normal,
     fontSize = defaultTextSize(multiplier),
+    lineHeight = (defaultTextSize(multiplier).value + extraLineHeight.value).sp,
     letterSpacing = 0.5.sp,
-    color = WhiteLight,
+    color = color,
 )
 
 fun defaultTextSize(multiplier: Float = 1f) = 16.sp * multiplier

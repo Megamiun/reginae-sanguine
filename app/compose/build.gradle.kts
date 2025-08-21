@@ -65,7 +65,7 @@ kotlin {
 
                 implementation(compose.components.resources)
                 implementation(compose.foundation)
-                implementation(compose.material)
+                implementation(compose.material3)
                 implementation(compose.ui)
 
                 implementation("io.coil-kt.coil3:coil-compose:3.3.0")

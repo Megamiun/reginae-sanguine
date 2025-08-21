@@ -1,9 +1,9 @@
-package br.com.gabryel.reginaesanguine.app.ui
+package br.com.gabryel.reginaesanguine.app
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.LocalRippleConfiguration
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -11,10 +11,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
-import br.com.gabryel.reginaesanguine.app.Res
-import br.com.gabryel.reginaesanguine.app.allDrawableResources
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
+import br.com.gabryel.reginaesanguine.app.ui.DeckSelectionScreen
+import br.com.gabryel.reginaesanguine.app.ui.GameScreen
+import br.com.gabryel.reginaesanguine.app.ui.HomeScreen
+import br.com.gabryel.reginaesanguine.app.ui.NavigationStack
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.DECK_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
@@ -53,17 +55,15 @@ fun App(resourceLoader: ResourceLoader) {
     val deckViewModel = DeckViewModel(pack)
 
     Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Center) {
-        CompositionLocalProvider(LocalRippleConfiguration provides null) {
-            NavigationStack(HOME) {
-                addRoute(HOME) {
-                    HomeScreen()
-                }
-                addRoute(DECK_SELECTION) {
-                    DeckSelectionScreen(deckViewModel)
-                }
-                addRoute(GAME) {
-                    GameScreen(gameViewModel)
-                }
+        NavigationStack(HOME) {
+            addRoute(HOME) {
+                HomeScreen()
+            }
+            addRoute(DECK_SELECTION) {
+                DeckSelectionScreen(deckViewModel)
+            }
+            addRoute(GAME) {
+                GameScreen(gameViewModel)
             }
         }
     }

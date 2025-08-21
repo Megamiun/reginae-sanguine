@@ -2,7 +2,7 @@ package br.com.gabryel.reginaesanguine.cli
 
 import androidx.compose.runtime.LaunchedEffect
 import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.CardTier.COMMON
+import br.com.gabryel.reginaesanguine.domain.CardTier.STANDARD
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Player
@@ -35,7 +35,7 @@ private fun createRandomDeckOfSize(cards: Int): List<Card> = (1..cards).map {
     Card(
         "$it",
         "Test Card $it",
-        COMMON,
+        STANDARD,
         nextInt(1, 4),
         3 - floor(log(nextDouble(1.0, 250.0), 10.0)).toInt(),
         false,

@@ -2,7 +2,7 @@ package br.com.gabryel.reginaesanguine.domain.helpers
 
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.CardTier
-import br.com.gabryel.reginaesanguine.domain.CardTier.COMMON
+import br.com.gabryel.reginaesanguine.domain.CardTier.STANDARD
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.type.NoEffect
@@ -12,7 +12,7 @@ object SampleCards {
         Card(
             "001",
             "Security Officer",
-            COMMON,
+            STANDARD,
             1,
             1,
             false,
@@ -28,7 +28,7 @@ object SampleCards {
         Card(
             "002",
             "Riot Trooper",
-            COMMON,
+            STANDARD,
             3,
             2,
             false,
@@ -48,6 +48,6 @@ object SampleCards {
         power: Int = 1,
         rank: Int = 1,
         effect: Effect = NoEffect,
-        tier: CardTier = COMMON,
+        tier: CardTier = STANDARD,
     ) = Card(id, name, tier, power, rank, false, increments, effect)
 }

@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeViewport
 import br.com.gabryel.reginaesanguine.app.service.WebResourceLoader
 import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
-import br.com.gabryel.reginaesanguine.app.ui.App
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
 import org.jetbrains.skiko.wasm.onWasmReady

@@ -9,7 +9,6 @@ import androidx.core.view.WindowCompat.getInsetsController
 import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import br.com.gabryel.reginaesanguine.app.services.AssetsResourceLoader
 import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
-import br.com.gabryel.reginaesanguine.app.ui.App
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
 
 class GameActivity : ComponentActivity() {

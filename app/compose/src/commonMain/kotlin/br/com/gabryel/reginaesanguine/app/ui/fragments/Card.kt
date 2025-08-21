@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
@@ -99,11 +99,13 @@ private fun Card(owner: PlayerPosition, card: Card, size: DpSize, modifier: Modi
                                 DisplacementGrid(owner, card, totalWidth / 2.5f)
                             }
 
+                            val fontSize = defineFontSize(totalWidth, card)
                             Text(
                                 card.name,
                                 Modifier.fillMaxWidth().background(Black).padding(3.dp),
                                 Yellow,
-                                defineFontSize(totalWidth, card),
+                                fontSize,
+                                lineHeight = fontSize,
                                 textAlign = TextAlign.Center,
                             )
                         }

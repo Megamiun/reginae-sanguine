@@ -1,17 +1,21 @@
 package br.com.gabryel.reginaesanguine.app.ui.theme
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
-private val ColorScheme = darkColors(
+private val ColorScheme = darkColorScheme(
     background = PurpleLight,
 )
 
 @Composable
 fun ReginaeSanguineTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colors = ColorScheme,
+        colorScheme = ColorScheme,
         typography = createTypography(),
         content = content,
     )

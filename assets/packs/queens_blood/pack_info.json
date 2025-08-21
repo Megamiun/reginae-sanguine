@@ -5,7 +5,7 @@
     {
       "id": "001",
       "name": "Security Officer",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -30,7 +30,7 @@
     {
       "id": "002",
       "name": "Riot Trooper",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -59,7 +59,7 @@
     {
       "id": "003",
       "name": "Grenadier",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 2,
       "effect": {
@@ -81,7 +81,7 @@
     {
       "id": "004",
       "name": "J-Unit Sweeper",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 2,
       "increments": [
@@ -106,7 +106,7 @@
     {
       "id": "005",
       "name": "Queen Bee",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -123,7 +123,7 @@
     {
       "id": "006",
       "name": "Toxirat",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 2,
       "increments": [
@@ -155,7 +155,7 @@
     {
       "id": "007",
       "name": "Levrikon",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -172,7 +172,7 @@
     {
       "id": "008",
       "name": "Grasslands Wolf",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -189,7 +189,7 @@
     {
       "id": "009",
       "name": "Mu",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 2,
       "increments": [
@@ -221,7 +221,7 @@
     {
       "id": "010",
       "name": "Mandragora",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -248,7 +248,7 @@
     {
       "id": "010A",
       "name": "Mandragora Minion",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "spawnOnly": true,
@@ -266,7 +266,7 @@
     {
       "id": "011",
       "name": "Elphadunk",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 4,
       "rank": 2,
       "increments": [
@@ -287,7 +287,7 @@
     {
       "id": "012",
       "name": "Cactuar",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -319,7 +319,7 @@
     {
       "id": "013",
       "name": "Crystalline Crab",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -355,7 +355,7 @@
     {
       "id": "014",
       "name": "Quetzalcoatl",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -380,7 +380,7 @@
     {
       "id": "015",
       "name": "Zu",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 2,
       "increments": [
@@ -405,7 +405,7 @@
     {
       "id": "016",
       "name": "Devil Rider",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 4,
       "rank": 2,
       "increments": [
@@ -430,7 +430,7 @@
     {
       "id": "017",
       "name": "Screamer",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 3,
       "increments": [
@@ -471,7 +471,7 @@
     {
       "id": "018",
       "name": "Flan",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -492,7 +492,7 @@
     {
       "id": "019",
       "name": "Crawler",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -517,7 +517,7 @@
     {
       "id": "020",
       "name": "Archdragon",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 1,
       "increments": [
@@ -553,7 +553,7 @@
     {
       "id": "021",
       "name": "Ogre",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 5,
       "rank": 2,
       "increments": [
@@ -578,7 +578,7 @@
     {
       "id": "022",
       "name": "Deathwheel",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "effect": {
@@ -604,7 +604,7 @@
     {
       "id": "023",
       "name": "Fleetwing",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 1,
       "increments": [
@@ -629,7 +629,7 @@
     {
       "id": "024",
       "name": "Zemzelett",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 2,
       "increments": [
@@ -665,7 +665,7 @@
     {
       "id": "025",
       "name": "Ignilisk",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -701,7 +701,7 @@
     {
       "id": "026",
       "name": "Capparwire",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 1,
       "increments": [
@@ -741,7 +741,7 @@
     {
       "id": "027",
       "name": "Mindflayer",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 2,
       "increments": [
@@ -789,7 +789,7 @@
     {
       "id": "028",
       "name": "Scrutineye",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -825,7 +825,7 @@
     {
       "id": "029",
       "name": "Hell Rider II",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 5,
       "rank": 3,
       "increments": [
@@ -869,7 +869,7 @@
     {
       "id": "030",
       "name": "Flametrooper",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 1,
       "increments": [
@@ -921,7 +921,7 @@
     {
       "id": "031",
       "name": "Spearhawk",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -957,7 +957,7 @@
     {
       "id": "032",
       "name": "Sea Devil",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 3,
       "increments": [
@@ -988,7 +988,7 @@
     {
       "id": "033",
       "name": "Shoalopod",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 2,
       "increments": [
@@ -1024,7 +1024,7 @@
     {
       "id": "034",
       "name": "Crown Lance",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 2,
       "increments": [
@@ -1064,7 +1064,7 @@
     {
       "id": "035",
       "name": "Tonberry King",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 2,
       "increments": [
@@ -1087,7 +1087,7 @@
     {
       "id": "036",
       "name": "Sandhog Pie",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -1123,7 +1123,7 @@
     {
       "id": "037",
       "name": "Bloatfloat",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -1155,7 +1155,7 @@
     {
       "id": "038",
       "name": "Bagnadrana",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 3,
       "increments": [
@@ -1182,7 +1182,7 @@
     {
       "id": "039",
       "name": "Cockatrice",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -1209,7 +1209,7 @@
     {
       "id": "040",
       "name": "Heatseeker",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -1244,7 +1244,7 @@
     {
       "id": "040A",
       "name": "Heatseeker Minion",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "spawnOnly": true,
@@ -1266,7 +1266,7 @@
     {
       "id": "041",
       "name": "Bomb",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 2,
       "increments": [
@@ -1334,7 +1334,7 @@
     {
       "id": "042",
       "name": "Thug",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 4,
       "rank": 2,
       "increments": [
@@ -1359,7 +1359,7 @@
     {
       "id": "043",
       "name": "Death Claw",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -1386,7 +1386,7 @@
     {
       "id": "044",
       "name": "Landworm",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 5,
       "rank": 3,
       "increments": [
@@ -1417,7 +1417,7 @@
     {
       "id": "045",
       "name": "Sandspitter",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -1469,7 +1469,7 @@
     {
       "id": "046",
       "name": "Chimera",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 4,
       "rank": 2,
       "increments": [
@@ -1498,7 +1498,7 @@
     {
       "id": "047",
       "name": "Joker",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 2,
       "increments": [
@@ -1533,7 +1533,7 @@
     {
       "id": "048",
       "name": "Amphidex",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -1570,7 +1570,7 @@
     {
       "id": "049",
       "name": "Frightflower",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -1638,7 +1638,7 @@
     {
       "id": "050",
       "name": "Gagighandi",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 4,
       "rank": 2,
       "increments": [
@@ -1679,7 +1679,7 @@
     {
       "id": "051",
       "name": "Insectoid Chimera",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "increments": [
         {
@@ -1707,7 +1707,7 @@
     {
       "id": "052",
       "name": "Gigantoad",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "increments": [
         {
@@ -1727,7 +1727,7 @@
     {
       "id": "053",
       "name": "Maloceros",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 5,
       "rank": 3,
       "increments": [
@@ -1757,7 +1757,7 @@
     {
       "id": "054",
       "name": "Grandhorn",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "increments": [
         {
@@ -1777,7 +1777,7 @@
     {
       "id": "055",
       "name": "Great Malboro",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 3,
       "increments": [
@@ -1821,7 +1821,7 @@
     {
       "id": "056",
       "name": "Grangalan",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 3,
       "increments": [
@@ -1864,7 +1864,7 @@
     {
       "id": "056A",
       "name": "Grangalan Junior",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 2,
       "spawnOnly": true,
@@ -1900,7 +1900,7 @@
     {
       "id": "056B",
       "name": "Grangalan Baby",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "spawnOnly": true,
@@ -1985,7 +1985,7 @@
     {
       "id": "057",
       "name": "Amalgam",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -2012,7 +2012,7 @@
     {
       "id": "057A",
       "name": "Resurrected Amalgam",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "spawnOnly": true,
@@ -2049,7 +2049,7 @@
     {
       "id": "058",
       "name": "Skeeskee",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -2080,7 +2080,7 @@
     {
       "id": "059",
       "name": "Griffon",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "increments": [
         {
@@ -2108,7 +2108,7 @@
     {
       "id": "060",
       "name": "Basilisk",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 3,
       "increments": [
@@ -2143,7 +2143,7 @@
     {
       "id": "061",
       "name": "Reapertail",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 1,
       "increments": [
@@ -2180,7 +2180,7 @@
     {
       "id": "062",
       "name": "Jabberwock",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 6,
       "rank": 2,
       "increments": [
@@ -2228,7 +2228,7 @@
     {
       "id": "063",
       "name": "Desert Sahagin",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 1,
       "increments": [
@@ -2261,7 +2261,7 @@
     {
       "id": "064",
       "name": "Cavestalker",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 4,
       "rank": 2,
       "increments": [
@@ -2310,7 +2310,7 @@
     {
       "id": "065",
       "name": "Stone Golem",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 4,
       "rank": 1,
       "effect": {
@@ -2333,7 +2333,7 @@
     {
       "id": "066",
       "name": "Two Face",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -2367,7 +2367,7 @@
     {
       "id": "067",
       "name": "Gi Specter",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "increments": [
         {
@@ -2395,7 +2395,7 @@
     {
       "id": "068",
       "name": "Valron",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -2428,7 +2428,7 @@
     {
       "id": "069",
       "name": "Disgorgon",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -2450,7 +2450,7 @@
     {
       "id": "070",
       "name": "Dragon",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 5,
       "rank": 3,
       "increments": [
@@ -2494,7 +2494,7 @@
     {
       "id": "071",
       "name": "Twin Brain",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "increments": [
@@ -2516,7 +2516,7 @@
     {
       "id": "072",
       "name": "Black Bat",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -2568,7 +2568,7 @@
     {
       "id": "073",
       "name": "Bahba Velamyu",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -2620,7 +2620,7 @@
     {
       "id": "074",
       "name": "Rictus",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -2649,7 +2649,7 @@
     {
       "id": "075",
       "name": "Adjudicator",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 2,
       "effect": {
@@ -2664,7 +2664,7 @@
     {
       "id": "076",
       "name": "Yin & Yang",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "increments": [
         {
@@ -2696,7 +2696,7 @@
     {
       "id": "077",
       "name": "Diabolic Variant",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "increments": [
         {
@@ -2728,7 +2728,7 @@
     {
       "id": "078",
       "name": "Special Forces Operator",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 2,
       "rank": 1,
       "increments": [
@@ -2768,7 +2768,7 @@
     {
       "id": "079",
       "name": "2-C SOLDIER Operator",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -2804,7 +2804,7 @@
     {
       "id": "080",
       "name": "Kelzmelzer",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "increments": [
         {
@@ -2840,7 +2840,7 @@
     {
       "id": "081",
       "name": "Panthera Protector",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 3,
       "rank": 2,
       "increments": [
@@ -2881,7 +2881,7 @@
     {
       "id": "082",
       "name": "Hecteyes",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "effect": {
@@ -2931,7 +2931,7 @@
     {
       "id": "083",
       "name": "Floating Death",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 1,
       "effect": {
@@ -2981,7 +2981,7 @@
     {
       "id": "084",
       "name": "Ironclad",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 1,
       "rank": 3,
       "increments": [
@@ -3006,7 +3006,7 @@
     {
       "id": "085",
       "name": "Moss-Grown Adamantoise",
-      "tier": "COMMON",
+      "tier": "STANDARD",
       "power": 4,
       "rank": 3,
       "increments": [
