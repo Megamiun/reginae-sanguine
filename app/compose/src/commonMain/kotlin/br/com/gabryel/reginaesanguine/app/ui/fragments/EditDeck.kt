@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -40,17 +41,18 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
+import br.com.gabryel.reginaesanguine.app.ui.components.Grid
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.theme.createTextStyle
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
+import br.com.gabryel.reginaesanguine.app.ui.util.getCardSizeByWidth
 import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.CardTier.COMMON
-import br.com.gabryel.reginaesanguine.domain.CardTier.LEGENDARY
 import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.EditDeck
 
@@ -79,16 +81,18 @@ fun EditDeck(deckViewModel: DeckViewModel) {
                 )
             }
 
-            Column(Modifier.height(100.dp).background(backgroundColor), verticalArrangement = Arrangement.SpaceBetween) {
+            Column(Modifier.padding(vertical = 10.dp).background(backgroundColor)) {
                 Spacer(Modifier.height(1.dp).fillMaxWidth().background(WhiteLight))
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = CenterVertically,
-                ) {
-                    editDeck.deck.forEach { card ->
+
+                BoxWithConstraints(Modifier.padding(15.dp), contentAlignment = Center) {
+                    val cardSize = getCardSizeByWidth(maxWidth / 16)
+                    Grid(IntSize(15, 1), Modifier.fillMaxWidth(), horizontalArrangement = SpaceBetween) { position ->
                         Column {
-                            DetailCard(card, getCardSize(70.dp), Modifier.padding(2.dp, 5.dp))
+                            val card = editDeck.deck.getOrNull(position.x) ?: run {
+                                Box(Modifier.size(cardSize))
+                                return@Column
+                            }
+                            DetailCard(card, cardSize)
                         }
                     }
                 }
@@ -117,7 +121,7 @@ fun EditDeck(deckViewModel: DeckViewModel) {
                 CompositionLocalProvider(LocalTextStyle provides createTextStyle(0.5f)) {
                     Row(
                         baseModifier.height(buttonsHeight).align(BottomCenter),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = SpaceBetween,
                     ) {
                         Button({ deckViewModel.cancelEditMode() }) {
                             Text("RETURN")

@@ -7,7 +7,6 @@ import br.com.gabryel.reginaesanguine.domain.util.ResultRaise
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.beInstanceOf
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 fun <T> Result<T>.shouldBeSuccess() = shouldBeInstanceOf<Success<T>>().value

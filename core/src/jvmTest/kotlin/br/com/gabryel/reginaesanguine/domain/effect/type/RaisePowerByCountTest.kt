@@ -4,7 +4,6 @@ import br.com.gabryel.reginaesanguine.domain.Cell
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.effect.GameSummarizer
-import br.com.gabryel.reginaesanguine.domain.effect.StatusType
 import br.com.gabryel.reginaesanguine.domain.effect.StatusType.ENHANCED
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ALLIES
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY

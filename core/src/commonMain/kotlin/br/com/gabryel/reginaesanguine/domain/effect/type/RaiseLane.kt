@@ -7,7 +7,6 @@ import br.com.gabryel.reginaesanguine.domain.effect.WhenLaneWon
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlin.collections.emptyMap
 
 /**
  * This file contains all effects that implement the RaiseLane interface.

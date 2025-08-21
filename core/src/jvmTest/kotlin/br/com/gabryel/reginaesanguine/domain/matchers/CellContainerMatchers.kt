@@ -7,7 +7,6 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.compose.all
 import io.kotest.matchers.equals.beEqual
-import io.kotest.matchers.maps.matchAll
 
 fun haveCell(
     position: Position,

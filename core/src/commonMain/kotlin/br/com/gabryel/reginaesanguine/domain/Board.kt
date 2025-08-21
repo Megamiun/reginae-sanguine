@@ -10,10 +10,8 @@ import br.com.gabryel.reginaesanguine.domain.Failure.CellRankLowerThanCard
 import br.com.gabryel.reginaesanguine.domain.Failure.CellWithNoCardToReplace
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.domain.effect.Conditional
 import br.com.gabryel.reginaesanguine.domain.effect.EffectApplicationResult
 import br.com.gabryel.reginaesanguine.domain.effect.EffectRegistry
-import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import br.com.gabryel.reginaesanguine.domain.effect.type.Effect
 import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAlly
 import br.com.gabryel.reginaesanguine.domain.util.buildResult
