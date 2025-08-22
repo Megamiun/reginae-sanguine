@@ -1,14 +1,13 @@
 [versions]
 kotlin = "2.2.10"
 android = "8.11.1"
-compose = "1.8.2"
+compose = "1.9.0-beta03"
 arrow = "2.1.2"
 kotest = "6.0.0"
 kotlinx-serialization = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 mockk = "1.14.5"
-mosaic = "0.17.0"
-compose-bom = "2025.08.00"
+mosaic = "0.18.0"
 coil = "3.3.0"
 spring-boot = "4.0.0-M1"
 spring-dependency-management = "1.1.7"
@@ -20,16 +19,16 @@ lifecycle = "2.9.2"
 activity-compose = "1.10.1"
 
 # Build plugins
-ktlint = "13.0.0"
+ktlint = "13.1.0"
 kover = "0.9.1"
 download = "5.6.0"
 task-tree = "4.0.1"
 
 [libraries]
 # Kotlinx
-kotlinx-serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines"}
 
 # Arrow-kt
 arrow-stack = { group = "io.arrow-kt", name = "arrow-stack", version.ref = "arrow" }
@@ -42,12 +41,8 @@ kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", ver
 kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
 
 # Jetpack Compose
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test" }
-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "compose" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
 
 # Coil
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }

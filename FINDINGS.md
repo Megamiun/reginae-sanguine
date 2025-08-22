@@ -27,8 +27,13 @@
   - [CMP-8685](https://youtrack.jetbrains.com/issue/CMP-8685/Scaffold-Padding-is-Lost-on-Monitor-Change) - Scaffold padding lost on monitor change
 - androidx.compose prefix is confusing, as both androidx.compose and org.jetbrains.compose exist 
   - Multiple androidx.compose packages work at all targets, but not *all*
+  - Same libraries have different version numbers depending on if they are androidx.compose or jetbrains.compose.
+    - For example, at development time, androidx material3 lib version is 1.3.2, but for jetbrains it is 1.8.2:
+      - ![Androidx x Jetbrains Compose](findings/androidx-x-jetbrains-compose.png)
 
-### WASM/JS
+### Web (WASM/JS)
+- WASM was harder to debug than JS/JVM
+- Remember, it is still in Alpha!
 - As JS is single threaded, to do requests we need to use fetch(), which needs a coroutine to be executed.
     - This demands a different way of thought for requests
 - Need to call js code from Kotlin files sometimes to instantiate known types

@@ -103,8 +103,8 @@ private fun Card(owner: PlayerPosition, card: Card, size: DpSize, modifier: Modi
                             Text(
                                 card.name,
                                 Modifier.fillMaxWidth().background(Black).padding(3.dp),
-                                Yellow,
-                                fontSize,
+                                color = Yellow,
+                                fontSize = fontSize,
                                 lineHeight = fontSize,
                                 textAlign = TextAlign.Center,
                             )

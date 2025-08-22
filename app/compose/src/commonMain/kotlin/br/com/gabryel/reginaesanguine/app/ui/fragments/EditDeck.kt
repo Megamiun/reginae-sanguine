@@ -25,6 +25,8 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipAnchorPosition.Companion.Right
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
@@ -156,14 +158,25 @@ private fun GridCell(
         .padding(8.dp, 1.dp)
 
     TooltipBox(
-        TooltipDefaults.rememberRichTooltipPositionProvider(16.dp),
-        tooltip = { RichTooltip(shape = RectangleShape) { CardDescription(card) } },
+        TooltipDefaults.rememberTooltipPositionProvider(Right),
+        tooltip = {
+            RichTooltip(shape = RectangleShape, action = { AddCardButton(deckViewModel, card) }) {
+                CardDescription(card)
+            }
+        },
         state = rememberTooltipState(isPersistent = true),
     ) {
         Column(Modifier.padding(5.dp, 7.dp), horizontalAlignment = CenterHorizontally) {
             DetailCard(card, cardSize)
             Text("$available/$max", counterModifier, fontSize = 8.sp, lineHeight = 8.sp, color = YellowAccent, textAlign = TextAlign.Center)
         }
+    }
+}
+
+@Composable
+private fun AddCardButton(deckViewModel: DeckViewModel, card: Card) {
+    Button({ deckViewModel.addToDeck(card) }) {
+        Text("Add Card")
     }
 }
 

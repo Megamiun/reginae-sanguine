@@ -1,4 +1,5 @@
 import org.gradle.api.JavaVersion.VERSION_11
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
@@ -60,12 +61,12 @@ kotlin {
                 implementation(project(":core"))
                 implementation(project(":app:viewmodel"))
 
-                implementation(project.dependencies.platform(libs.compose.bom))
                 runtimeOnly(compose.runtime)
 
                 implementation(compose.components.resources)
                 implementation(compose.foundation)
-                implementation(compose.material3)
+                // TODO Change back to compose.material3 after material3 1.9.0 leaves beta
+                implementation(libs.compose.material3)
                 implementation(compose.ui)
 
                 implementation(libs.coil.compose)
@@ -78,14 +79,13 @@ kotlin {
             implementation(libs.lifecycle.runtime.ktx)
             implementation(libs.activity.compose)
 
-            runtimeOnly(libs.compose.ui.graphics)
-            runtimeOnly(libs.compose.ui.tooling.preview)
+            runtimeOnly(compose.preview)
         }
 
         jvmMain.dependencies {
             runtimeOnly(compose.desktop.currentOs)
             runtimeOnly(compose.desktop.common)
-            runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-swing")
+            runtimeOnly(libs.kotlinx.coroutines.swing)
         }
 
         commonMain {
@@ -146,9 +146,10 @@ android {
     }
 
     dependencies {
-        androidTestImplementation(libs.compose.ui.test)
+        @OptIn(ExperimentalComposeLibrary::class)
+        androidTestImplementation(compose.uiTest)
 
-        debugImplementation(libs.compose.ui.tooling)
+        debugImplementation(compose.uiTooling)
         debugImplementation(libs.compose.ui.test.manifest)
     }
 }
