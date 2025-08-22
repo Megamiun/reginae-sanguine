@@ -13,6 +13,15 @@
   - Already said that tests were passing once, when they clearly weren't
 
 ## Jetpack Compose
+
+### General
+- Behaviour can change between platforms
+  - Tooltip on Desktop occurs on Hover, and is closed as soon as mouse leaves element 
+  - Commit #6eaafac2
+  - ![Tooltip Behaviour](findings/tooltip-problems.gif)
+- Sizing between platforms can be messy
+  - For now solved by using LocalDensity with Density(2) to scale out the size of elements
+
 ### Desktop
 - Took quite some time to replicate the same behaviour as in the Android impl
   - Not as many resources as Android, lost a lot of time:
@@ -40,7 +49,7 @@
     - [Example](app/compose/src/jsMain/kotlin/br/com/gabryel/reginaesanguine/app/util/DragAndDrop.js.kt)
 - Performance and consistent processing are not guaranteed
 - wasmJs failed for a long time because a single call to `whenTaskAdded` with no decent error message
-  - This was caused because `whenTaskAdded` is an [eager API](https://docs.gradle.org/current/userguide/task_configuration_avoidance.html#eager_apis_to_avoid), which can cause problems.
+  - This was caused because `whenTaskAdded` is an [eager API](https://docs.gradle.org/current/userguide/task_configuration_avoidance.html#eager_apis_to_avoid), which can cause problems
 
 ## Multiplatform
 - Potentially more slow to build than other targets, even more with multiple targets

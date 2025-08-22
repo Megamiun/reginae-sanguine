@@ -4,10 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeViewport
 import br.com.gabryel.reginaesanguine.app.service.WebResourceLoader
@@ -20,11 +23,13 @@ import org.jetbrains.skiko.wasm.onWasmReady
 fun main() {
     onWasmReady {
         ComposeViewport("content") {
-            context(ResCardImageLoader()) {
-                ReginaeSanguineTheme {
+            ReginaeSanguineTheme {
+                CompositionLocalProvider(LocalDensity provides Density(2f)) {
                     Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = TopCenter) {
                         Box(Modifier.size(1000.dp, 500.dp), contentAlignment = Center) {
-                            App(WebResourceLoader())
+                            context(ResCardImageLoader()) {
+                                App(WebResourceLoader())
+                            }
                         }
                     }
                 }
