@@ -3,12 +3,13 @@ kotlin = "2.2.10"
 android = "8.11.1"
 compose = "1.8.2"
 arrow = "2.1.2"
-kotest = "6.0.0.M17"
+kotest = "6.0.0"
 kotlinx-serialization = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 mockk = "1.14.5"
 mosaic = "0.17.0"
 compose-bom = "2025.08.00"
+coil = "3.3.0"
 spring-boot = "4.0.0-M1"
 spring-dependency-management = "1.1.7"
 spring-webmvc = "7.0.0-SNAPSHOT"
@@ -47,6 +48,10 @@ compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling
 compose-ui-test = { group = "androidx.compose.ui", name = "ui-test" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+
+# Coil
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-network-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil" }
 
 # Android
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
