@@ -34,6 +34,13 @@ class DeckViewModel(
         }
     }
 
+    fun removeFromDeck(card: Card) {
+        editFlow.update {
+            requireNotNull(it) { "Not on edit flow, should not be able to add cards" }
+            it.removeFromDeck(card)
+        }
+    }
+
     fun saveDeck() {
         viewFlow.update {
             val editDeck = requireNotNull(editDeck.value) { "No deck being edited, not possible to save deck" }

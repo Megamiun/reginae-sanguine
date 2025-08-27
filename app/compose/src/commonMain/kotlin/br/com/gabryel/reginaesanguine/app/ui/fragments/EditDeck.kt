@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
-import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -21,17 +20,9 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipAnchorPosition
-import androidx.compose.material3.TooltipAnchorPosition.Companion.Right
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.BottomCenter
@@ -42,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
@@ -50,11 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
+import br.com.gabryel.reginaesanguine.app.ui.components.ActionableTooltip
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
-import br.com.gabryel.reginaesanguine.app.ui.theme.GoldLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
-import br.com.gabryel.reginaesanguine.app.ui.theme.createTextStyle
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSizeByWidth
 import br.com.gabryel.reginaesanguine.domain.Card
@@ -96,7 +85,14 @@ fun EditDeck(deckViewModel: DeckViewModel) {
                                 Box(Modifier.size(cardSize))
                                 return@Column
                             }
-                            DetailCard(card, cardSize)
+
+                            ActionableTooltip(
+                                "Remove Card",
+                                action = { deckViewModel.removeFromDeck(card) },
+                                tooltip = { CardDescription(card) },
+                            ) {
+                                DetailCard(card, cardSize)
+                            }
                         }
                     }
                 }
@@ -157,49 +153,14 @@ private fun GridCell(
         .border(1.dp, WhiteLight, shape)
         .padding(8.dp, 1.dp)
 
-    TooltipBox(
-        TooltipDefaults.rememberTooltipPositionProvider(Right),
-        tooltip = {
-            RichTooltip(shape = RectangleShape, action = { AddCardButton(deckViewModel, card) }) {
-                CardDescription(card)
-            }
-        },
-        state = rememberTooltipState(isPersistent = true),
+    ActionableTooltip(
+        "Add Card",
+        action = { deckViewModel.addToDeck(card) },
+        tooltip = { CardDescription(card) },
     ) {
         Column(Modifier.padding(5.dp, 7.dp), horizontalAlignment = CenterHorizontally) {
             DetailCard(card, cardSize)
             Text("$available/$max", counterModifier, fontSize = 8.sp, lineHeight = 8.sp, color = YellowAccent, textAlign = TextAlign.Center)
-        }
-    }
-}
-
-@Composable
-private fun AddCardButton(deckViewModel: DeckViewModel, card: Card) {
-    Button({ deckViewModel.addToDeck(card) }) {
-        Text("Add Card")
-    }
-}
-
-@Composable
-private fun CardDescription(card: Card) {
-    val shape = RoundedCornerShape(10.dp)
-    val modifier = Modifier
-        .fillMaxWidth()
-        .clip(shape)
-        .background(GoldLight)
-        .border(1.dp, YellowAccent, shape)
-        .padding(3.dp, 3.dp)
-
-    CompositionLocalProvider(LocalTextStyle provides createTextStyle(color = YellowAccent)) {
-        Column(verticalArrangement = spacedBy(6.dp)) {
-            Row(modifier, horizontalArrangement = SpaceBetween) {
-                Text("Card #${card.id}")
-                Text(card.tier.name)
-            }
-            Text(card.name)
-            Spacer(Modifier.height(1.dp).fillMaxWidth().background(GoldLight))
-
-            Text(card.effect.description, lineHeight = LocalTextStyle.current.lineHeight * 1.5)
         }
     }
 }

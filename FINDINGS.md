@@ -21,6 +21,11 @@
   - ![Tooltip Behaviour](findings/tooltip-problems.gif)
 - Sizing between platforms can be messy
   - For now solved by using LocalDensity with Density(2) to scale out the size of elements
+- Bugs recognized:
+  - TODO Create bug - Tooltip has no way to block dismissal, which causes Desktop/Web to close tooltip before there is chance to click on it
+  - TODO Create bug - Tooltip has no way to block dismissal, which causes Desktop/Web to close tooltip if I click on the hover area
+- Talking about CompositionLocal can be interesting
+  - See [LocalContexts](app/compose/src/commonMain/kotlin/br/com/gabryel/reginaesanguine/app/services/LocalContexts.kt) for example
 
 ### Desktop
 - Took quite some time to replicate the same behaviour as in the Android impl
@@ -58,6 +63,11 @@
   - Drag and drop
   - Logging
   - Resources loading
+  - Tooltip
+- Different ways of interacting cause different implementations per type of interaction
+  - See [ActionableTooltip](app/compose/src/commonMain/kotlin/br/com/gabryel/reginaesanguine/app/ui/components/ActionableTooltip.kt)
+    - For mouse based devices, clicking add cards
+    - For touch based devices, button is kept as an Tooltip action
 - Multiplatform mock libs are less convenient. 
   - ~~Choose mockative:~~
     - Had to add a plugin
@@ -82,3 +92,6 @@
   - Kotlin/Native has no auto bundled resources and a classLoader
   - Features disappear when you add more targets
     - i.e., I only lost access to Java libs in the :app common sourceSet when I added iOS as a target
+
+# Presentation
+- Remember that I am a backender

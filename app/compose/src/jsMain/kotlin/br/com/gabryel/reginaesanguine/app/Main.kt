@@ -14,9 +14,11 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeViewport
 import br.com.gabryel.reginaesanguine.app.service.WebResourceLoader
+import br.com.gabryel.reginaesanguine.app.services.LocalInteractionType
 import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
+import br.com.gabryel.reginaesanguine.app.util.InteractionType.MOUSE
 import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -24,7 +26,7 @@ fun main() {
     onWasmReady {
         ComposeViewport("content") {
             ReginaeSanguineTheme {
-                CompositionLocalProvider(LocalDensity provides Density(2f)) {
+                CompositionLocalProvider(LocalDensity provides Density(2f), LocalInteractionType provides MOUSE) {
                     Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = TopCenter) {
                         Box(Modifier.size(1000.dp, 500.dp), contentAlignment = Center) {
                             context(ResCardImageLoader()) {

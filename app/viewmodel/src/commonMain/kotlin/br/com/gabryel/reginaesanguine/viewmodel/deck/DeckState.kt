@@ -16,6 +16,9 @@ data class EditDeck(val deck: List<Card>, val error: String? = null) {
         if (getAvailable(card) == 0) this
         else copy(deck = deck + card)
 
+    fun removeFromDeck(card: Card) =
+        copy(deck = deck - card)
+
     fun getAvailable(card: Card): Int = getMax(card) - deck.count { it.id == card.id }
 
     fun getMax(card: Card): Int = when (card.tier) {

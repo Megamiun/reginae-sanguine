@@ -14,9 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import br.com.gabryel.reginaesanguine.app.services.LocalInteractionType
 import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
 import br.com.gabryel.reginaesanguine.app.services.ResourcesResourceLoader
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
+import br.com.gabryel.reginaesanguine.app.util.InteractionType.MOUSE
 import java.awt.Toolkit
 import kotlin.system.exitProcess
 
@@ -27,7 +29,7 @@ fun main() = application {
     context(ResCardImageLoader()) {
         Window(title = "Reginae Sanguine", state = windowState, onCloseRequest = { exitProcess(0) }) {
             ReginaeSanguineTheme {
-                CompositionLocalProvider(LocalDensity provides Density(2f)) {
+                CompositionLocalProvider(LocalDensity provides Density(2f), LocalInteractionType provides MOUSE) {
                     Scaffold { paddingValues ->
                         Box(Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Center) {
                             App(ResourcesResourceLoader())
