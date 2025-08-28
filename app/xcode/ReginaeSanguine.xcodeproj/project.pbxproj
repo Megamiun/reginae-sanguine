@@ -10,9 +10,22 @@
 		292101652E609B0700D73907 /* ReginaeSanguine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReginaeSanguine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		29BA90D52E6116850054D29C /* Exceptions for "ReginaeSanguine" folder in "ReginaeSanguine" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 292101642E609B0700D73907 /* ReginaeSanguine */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		292101672E609B0700D73907 /* ReginaeSanguine */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				29BA90D52E6116850054D29C /* Exceptions for "ReginaeSanguine" folder in "ReginaeSanguine" target */,
+			);
 			path = ReginaeSanguine;
 			sourceTree = "<group>";
 		};
@@ -132,7 +145,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/../..\"\n./gradlew :app:compose:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "cd \"$SRCROOT/../..\"\n./gradlew :app:compose:embedAndSignAppleFrameworkForXcode\n\n# Copy generated resources to iOS bundle\nif [ -d \"build/generated/resources\" ]; then\n  echo \"Copying resources to iOS bundle...\"\n  cp -r build/generated/resources/* \"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -274,6 +287,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ReginaeSanguine/Info.plist;
+				INFOPLIST_KEY_CADisableMinimumFrameDurationOnPhone = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -315,7 +330,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ReginaeSanguine/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
