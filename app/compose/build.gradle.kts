@@ -31,9 +31,12 @@ kotlin {
         }
     }
 
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
+    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ReginaeSanguineCompose"
+            isStatic = true
+        }
+    }
 
     js {
         browser {
