@@ -91,6 +91,16 @@ kotlin {
         commonMain {
             resources.srcDir(generatedResources)
         }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+
+        jvmTest.dependencies {
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+            implementation(libs.mockk)
+        }
     }
 }
 
@@ -146,10 +156,12 @@ android {
     }
 
     dependencies {
-        @OptIn(ExperimentalComposeLibrary::class)
-        androidTestImplementation(compose.uiTest)
-
         debugImplementation(compose.uiTooling)
-        debugImplementation(libs.compose.ui.test.manifest)
+    }
+}
+
+tasks {
+    withType<Test> {
+        useJUnitPlatform()
     }
 }

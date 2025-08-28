@@ -10,7 +10,7 @@ import br.com.gabryel.reginaesanguine.domain.helpers.TOP_LANE
 import io.kotest.matchers.maps.shouldContainExactly
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 class RaiseWinnerLanesByLoserScoreTest {
     @Test
