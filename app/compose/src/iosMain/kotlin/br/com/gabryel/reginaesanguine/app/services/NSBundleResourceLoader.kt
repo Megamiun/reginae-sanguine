@@ -13,7 +13,7 @@ class NSBundleResourceLoader : ResourceLoader {
     override suspend fun load(path: String): ByteArray {
         val resourcePath = NSBundle.mainBundle.pathForResource(
             name = path.substringBeforeLast("."),
-            ofType = path.substringAfterLast(".")
+            ofType = path.substringAfterLast("."),
         ) ?: error("Resource not found: $path")
 
         val data = NSData.dataWithContentsOfFile(resourcePath)

@@ -21,5 +21,4 @@ actual class Logger actual constructor(private val loggerName: String) {
 
         NSLog("$level [$loggerName]: $message")
     }
-
 }
