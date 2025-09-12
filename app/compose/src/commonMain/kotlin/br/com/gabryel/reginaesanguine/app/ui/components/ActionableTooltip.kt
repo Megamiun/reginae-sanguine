@@ -22,12 +22,13 @@ import br.com.gabryel.reginaesanguine.app.util.InteractionType.TOUCH
 fun ActionableTooltip(
     actionTitle: String,
     action: () -> Unit,
+    enabled: Boolean = true,
     tooltip: @Composable () -> Unit,
     content: @Composable () -> Unit,
 ) {
     val interactionType = LocalInteractionType.current
 
-    val actionButton = createActionButton(interactionType, actionTitle, action)
+    val actionButton = createActionButton(interactionType, actionTitle, enabled, action)
 
     TooltipBox(
         TooltipDefaults.rememberTooltipPositionProvider(Right),
@@ -38,17 +39,10 @@ fun ActionableTooltip(
     )
 }
 
-private fun createActionButton(interactionType: InteractionType, actionTitle: String, action: () -> Unit): @Composable (() -> Unit)? =
+private fun createActionButton(interactionType: InteractionType, actionTitle: String, enabled: Boolean, action: () -> Unit): @Composable (() -> Unit)? =
     when (interactionType) {
         TOUCH -> {
-            { ActionButton(actionTitle, action) }
+            { RButton(actionTitle, enabled = enabled, onClick = action) }
         }
         else -> null
     }
-
-@Composable
-private fun ActionButton(actionTitle: String, action: () -> Unit) {
-    Button(action) {
-        Text(actionTitle)
-    }
-}

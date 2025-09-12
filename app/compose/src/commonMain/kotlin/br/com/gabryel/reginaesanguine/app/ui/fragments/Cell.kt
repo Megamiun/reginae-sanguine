@@ -6,17 +6,24 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTarget
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
+import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
-import br.com.gabryel.reginaesanguine.app.util.drop
+import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
+import br.com.gabryel.reginaesanguine.app.util.getContent
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Success
@@ -24,8 +31,14 @@ import br.com.gabryel.reginaesanguine.domain.Success
 private val playerCellInternalModifier = Modifier.fillMaxSize().border(1.dp, Black)
 
 @Composable
-context(_: CardImageLoader)
-fun GridPlayableCell(game: Game, position: Position, cardSize: DpSize, putCard: (String) -> Boolean) {
+context(_: PainterLoader)
+fun GridPlayableCell(
+    game: Game,
+    position: Position,
+    cardSize: DpSize,
+    isPlayable: (String) -> Boolean,
+    putCard: (String) -> Boolean
+) {
     val cellContent = game.getCellAt(position)
 
     if (cellContent !is Success || cellContent.value.owner == null)
@@ -37,25 +50,58 @@ fun GridPlayableCell(game: Game, position: Position, cardSize: DpSize, putCard: 
     val owner = cell.owner ?: return
 
     context(PlayerContext.getDefaultFor(owner)) {
-        Box(Modifier, contentAlignment = Center) {
+        Box(Modifier.dragAndDrop(isPlayable, putCard), contentAlignment = Center) {
             if (card == null) {
-                val dropCallback = remember {
-                    object : DragAndDropTarget {
-                        override fun onDrop(event: DragAndDropEvent) = drop(event) { putCard(it) }
-                    }
-                }
-
                 Box(Modifier.size(cardSize), contentAlignment = Center) {
                     CellRankGroup(
                         cell.rank,
-                        Modifier.dragAndDropTarget({ _ -> true }, dropCallback),
-                        cardSize.width / 2,
+                        size = cardSize.width / 2,
                     )
                 }
             } else {
                 SimpleCard(owner, card, cardSize)
             }
         }
+    }
+}
+
+@Composable
+private fun Modifier.dragAndDrop(isPlayable: (String) -> Boolean, putCard: (String) -> Boolean): Modifier {
+    var isDroppable by remember { mutableStateOf(false) }
+
+    // TODO Check about using app events instead of drag and drop events.
+    //  Drag and Drop events are pretty workaroundy, as the clipdata is only available on DROP events.
+    val dropCallback = remember {
+        object : DragAndDropTarget {
+            override fun onDrop(event: DragAndDropEvent) = getContent(event)?.let(putCard) ?: false
+
+            override fun onStarted(event: DragAndDropEvent) {
+                isDroppable = getContent(event)?.let(isPlayable) ?: false
+            }
+
+            override fun onEnded(event: DragAndDropEvent) {
+                isDroppable = false
+            }
+        }
+    }
+
+    return Modifier.dragAndDropTarget({ true }, dropCallback).drawBehind {
+        if (!isDroppable)
+            return@drawBehind
+
+        repeat(3) { i ->
+            drawRoundRect(
+                color = YellowAccent.copy(alpha = 0.3f / (i + 1)),
+                style = Stroke(width = (8 + i * 4).dp.toPx()),
+                cornerRadius = CornerRadius(8.dp.toPx()),
+            )
+        }
+
+        drawRoundRect(
+            color = YellowAccent,
+            style = Stroke(width = 4.dp.toPx()),
+            cornerRadius = CornerRadius(8.dp.toPx()),
+        )
     }
 }
 

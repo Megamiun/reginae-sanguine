@@ -86,7 +86,7 @@ class ActionableTooltipTest {
     private fun ComposeUiTest.createComponent(type: InteractionType, action: () -> Unit = {}) {
         setContent {
             CompositionLocalProvider(LocalInteractionType provides type) {
-                ActionableTooltip("Act", action, { Text("Tooltip") }) {
+                ActionableTooltip("Act", action, true, { Text("Tooltip") }) {
                     Text("Content")
                 }
             }

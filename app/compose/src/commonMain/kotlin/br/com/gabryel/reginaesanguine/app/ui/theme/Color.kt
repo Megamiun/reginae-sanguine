@@ -27,4 +27,6 @@ val GreyDark = Color(101, 101, 101)
 
 val GoldLight = Color(241, 225, 157)
 
+val GoldLightDisabled = Color(232, 225, 197)
+
 val GoldDark = Color(166, 126, 25)

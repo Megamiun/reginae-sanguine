@@ -29,6 +29,13 @@ class GameViewModel(private val stateFlow: MutableStateFlow<GameState>) {
         state.play(position, cardId)
     }
 
+    fun isPlayable(position: Position, cardId: String): Boolean {
+        val playableState = state.value as? Playable ?: return false
+
+        // TODO Do something simpler later
+        return playableState.play(position, cardId).error == null
+    }
+
     private inline fun <reified T> update(execute: (T) -> GameState): Boolean {
         val previousState = state.value
         require<T>(previousState)

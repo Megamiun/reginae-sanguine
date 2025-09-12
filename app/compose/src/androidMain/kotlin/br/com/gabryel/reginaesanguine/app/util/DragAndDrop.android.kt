@@ -7,7 +7,7 @@ import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.geometry.Offset
 
 actual fun getTransferData(offset: Offset, data: String) =
-    DragAndDropTransferData(ClipData.newPlainText("cardId", data))
+    DragAndDropTransferData(ClipData.newPlainText("CARD:$data", data))
 
-actual fun drop(event: DragAndDropEvent, drop: (String) -> Boolean) =
-    drop(event.toAndroidDragEvent().clipData.getItemAt(0).text.toString())
+actual fun getContent(event: DragAndDropEvent) =
+    event.toAndroidDragEvent().clipDescription?.label?.split(":")?.last()

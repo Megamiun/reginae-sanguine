@@ -10,7 +10,7 @@ import androidx.core.view.WindowCompat.getInsetsController
 import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import br.com.gabryel.reginaesanguine.app.services.AssetsResourceLoader
 import br.com.gabryel.reginaesanguine.app.services.LocalInteractionType
-import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
+import br.com.gabryel.reginaesanguine.app.services.ResPainterLoader
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
 import br.com.gabryel.reginaesanguine.app.util.InteractionType.TOUCH
 
@@ -24,7 +24,7 @@ class GameActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CompositionLocalProvider(LocalInteractionType provides TOUCH) {
-                context(ResCardImageLoader()) {
+                context(ResPainterLoader()) {
                     ReginaeSanguineTheme {
                         App(AssetsResourceLoader(this))
                     }

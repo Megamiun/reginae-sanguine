@@ -30,7 +30,6 @@ fun createNumbersTextStyle(fontSize: TextUnit) = TextStyle(
     fontWeight = Bold,
     fontSize = fontSize,
     lineHeight = fontSize,
-    color = WhiteLight,
 )
 
 @Composable
@@ -43,6 +42,13 @@ private fun createFontFamily() = FontFamily(
 
 @Composable
 fun createTypography() = Typography(bodyMedium = createTextStyle())
+
+@Composable
+fun buttonStyle() = TextStyle(
+    fontFamily = createFontFamily(),
+    fontWeight = Normal,
+    fontSize = 16.sp,
+)
 
 @Composable
 fun createTextStyle(multiplier: Float = 1f, extraLineHeight: TextUnit = 0.sp, color: Color = WhiteLight) = TextStyle(

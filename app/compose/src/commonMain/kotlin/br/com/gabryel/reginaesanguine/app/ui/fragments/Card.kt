@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush.Companion.verticalGradient
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale.Companion.FillWidth
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +37,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.Res
-import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
+import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.static_bg_blue
 import br.com.gabryel.reginaesanguine.app.static_bg_red
@@ -56,29 +57,24 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.effect.type.EffectWithAffected
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
-context(cardImageLoader: CardImageLoader)
+context(painterLoader: PainterLoader)
 fun SimpleCard(playerPosition: PlayerPosition, card: Card, size: DpSize, modifier: Modifier = Modifier) {
     Card(playerPosition, card, size, modifier, false)
 }
 
 @Composable
-context(cardImageLoader: CardImageLoader, player: PlayerContext)
+context(painterLoader: PainterLoader, player: PlayerContext)
 fun DetailCard(card: Card, size: DpSize, modifier: Modifier = Modifier) {
     Card(player.position, card, size, modifier, true)
 }
 
 @Composable
-context(cardImageLoader: CardImageLoader)
+context(painterLoader: PainterLoader)
 private fun Card(owner: PlayerPosition, card: Card, size: DpSize, modifier: Modifier, detailed: Boolean) {
-    val background = when (owner) {
-        LEFT -> painterResource(Res.drawable.static_bg_blue)
-        RIGHT -> painterResource(Res.drawable.static_bg_red)
-    }
-
-    val cardArt = cardImageLoader.loadCardImage("queens_blood", card.id)
+    val background = loadBackgroundForPlayer(owner)
+    val cardArt = painterLoader.loadCardImage("queens_blood", card.id)
 
     val borderBrush = verticalGradient(listOf(GreyDark, GreyLight, GreyDark))
     val borderStroke = BorderStroke(1.5.dp, borderBrush)
@@ -156,6 +152,17 @@ private fun Modifier.setCellBorder(displacement: Displacement, card: Card): Modi
         border(0.4.dp, RubyAccent)
     else
         this
+
+@Composable
+context(painterLoader: PainterLoader)
+private fun loadBackgroundForPlayer(owner: PlayerPosition): Painter {
+    val backgroundId = when (owner) {
+        LEFT -> Res.drawable.static_bg_blue
+        RIGHT -> Res.drawable.static_bg_red
+    }
+
+    return painterLoader.loadStaticImage(backgroundId)
+}
 
 @Composable
 private fun defineFontSize(totalWidth: Dp, card: Card): TextUnit =

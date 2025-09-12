@@ -11,6 +11,6 @@ actual fun getTransferData(offset: Offset, data: String): DragAndDropTransferDat
     TODO()
 }
 
-actual fun drop(event: DragAndDropEvent, drop: (String) -> Boolean): Boolean {
+actual fun getContent(event: DragAndDropEvent): String? {
     TODO()
 }

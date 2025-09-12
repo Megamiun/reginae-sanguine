@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,15 +27,15 @@ import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
+import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
+import br.com.gabryel.reginaesanguine.app.ui.components.RButton
 import br.com.gabryel.reginaesanguine.app.ui.fragments.DetailCard
 import br.com.gabryel.reginaesanguine.app.ui.fragments.GridPlayableCell
 import br.com.gabryel.reginaesanguine.app.ui.fragments.PlayerLanePowerCell
 import br.com.gabryel.reginaesanguine.app.ui.fragments.ResultOverlay
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
-import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
@@ -47,7 +46,7 @@ import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 
 @Composable
-context(cardImageLoader: CardImageLoader, nav: NavigationManager<NavigationScreens>)
+context(painterLoader: PainterLoader, nav: NavigationManager<NavigationScreens>)
 fun GameScreen(gameViewModel: GameViewModel) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
@@ -55,7 +54,7 @@ fun GameScreen(gameViewModel: GameViewModel) {
     val gridSize = IntSize(game.size.width, game.size.height)
     val cardSize = getCardSize()
 
-    Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         if (state.error != null)
             Box(Modifier.fillMaxWidth().align(TopCenter).background(Black), contentAlignment = TopCenter) {
                 Text(state.error.toString(), color = Red)
@@ -72,7 +71,9 @@ fun GameScreen(gameViewModel: GameViewModel) {
                 }
                 Grid(gridSize, modifier = Modifier.border(0.1.dp, WhiteDark)) { position ->
                     Box(Modifier.boardCell(position)) {
-                        GridPlayableCell(game, position, cardSize) { cardId -> gameViewModel.play(position, cardId) }
+                        GridPlayableCell(game, position, cardSize, { gameViewModel.isPlayable(position, it) }) { cardId ->
+                            gameViewModel.play(position, cardId)
+                        }
                     }
                 }
                 context(PlayerContext.right) {
@@ -88,7 +89,9 @@ fun GameScreen(gameViewModel: GameViewModel) {
         Row(Modifier.align(BottomCenter), horizontalArrangement = Center) {
             context(PlayerContext.getDefaultFor(game.playerTurn)) {
                 game.currentPlayer.hand.forEach { card ->
-                    val dragAndDrop = Modifier.dragAndDropSource { offset -> getTransferData(offset, card.id) }
+                    val dragAndDrop = Modifier.dragAndDropSource { offset ->
+                        getTransferData(offset, card.id)
+                    }
 
                     Box(Modifier.padding(1.dp)) {
                         DetailCard(card, cardSize, dragAndDrop)
@@ -97,19 +100,8 @@ fun GameScreen(gameViewModel: GameViewModel) {
             }
         }
 
-        Button(
-            nav::pop,
-            Modifier.align(TopStart).size(100.dp, 30.dp).offset(15.dp, 15.dp),
-        ) {
-            Text("RETURN")
-        }
-
-        Button(
-            gameViewModel::skip,
-            Modifier.align(BottomStart).size(100.dp, 30.dp).offset(15.dp, (-15).dp),
-        ) {
-            Text("SKIP")
-        }
+        RButton("Return", Modifier.align(TopStart).offset(15.dp, 15.dp)) { nav.pop() }
+        RButton("Skip", Modifier.align(BottomStart).offset(15.dp, (-15).dp)) { gameViewModel.skip() }
 
         val middleWidth = DpSize(cardSize.width * 8, cardSize.height * 3.1f)
 

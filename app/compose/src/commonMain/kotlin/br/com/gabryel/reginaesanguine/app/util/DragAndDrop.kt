@@ -4,6 +4,6 @@ import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.geometry.Offset
 
-expect fun drop(event: DragAndDropEvent, drop: (String) -> Boolean): Boolean
+expect fun getContent(event: DragAndDropEvent): String?
 
 expect fun getTransferData(offset: Offset, data: String): DragAndDropTransferData

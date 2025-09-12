@@ -38,14 +38,14 @@ fun RowRankGroup(rank: Int, pinWidth: Dp, modifier: Modifier = Modifier) {
 
 @Composable
 context(player: PlayerContext)
-fun CellRankGroup(rank: Int, modifier: Modifier = Modifier, size: Dp) {
+fun CellRankGroup(rank: Int, size: Dp) {
     val rankModifier = Modifier
         .size(size / 4)
         .clip(CircleShape)
         .background(player.color)
         .border(1.dp, WhiteLight, CircleShape)
 
-    Box(modifier.size(size)) {
+    Box(Modifier.size(size)) {
         when (rank) {
             1 -> Rank(rankModifier)
             2 -> {

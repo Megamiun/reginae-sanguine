@@ -11,7 +11,7 @@ data class ViewDecks(val decks: List<List<Card>>, val selectedDeckIndex: Int = 0
     fun replaceCurrent(deck: List<Card>) = copy(decks = decks.replace(selectedDeckIndex, deck))
 }
 
-data class EditDeck(val deck: List<Card>, val error: String? = null) {
+data class EditDeck(val deck: List<Card>, val deckLimit: Int = 15, val error: String? = null) {
     fun addToDeck(card: Card) =
         if (getAvailable(card) == 0) this
         else copy(deck = deck + card)

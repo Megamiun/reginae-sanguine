@@ -59,7 +59,22 @@ kotlin {
     }
 
     sourceSets {
+        val nonAndroidMain by creating {
+            kotlin.srcDir("src/nonAndroidMain/kotlin")
+
+            dependsOn(commonMain.get())
+
+            dependencies {
+                implementation(libs.coil.compose)
+                implementation(compose.ui)
+            }
+        }
+
         all {
+            if ("android" !in name && "common" !in name && "Main" in name) {
+                dependsOn(nonAndroidMain)
+            }
+
             dependencies {
                 implementation(project(":core"))
                 implementation(project(":app:viewmodel"))
@@ -140,7 +155,7 @@ android {
 
     defaultConfig {
         applicationId = "br.com.gabryel.reginaesanguine"
-        minSdk = 28
+        minSdk = 29
     }
 
     compileOptions {

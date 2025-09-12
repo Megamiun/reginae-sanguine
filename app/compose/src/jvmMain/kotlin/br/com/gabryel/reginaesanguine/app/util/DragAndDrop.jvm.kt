@@ -18,9 +18,5 @@ actual fun getTransferData(offset: Offset, data: String): DragAndDropTransferDat
     return DragAndDropTransferData(transferable, listOf(Move), offset)
 }
 
-actual fun drop(event: DragAndDropEvent, drop: (String) -> Boolean): Boolean {
-    val data = event.nativeEvent as? DropTargetDropEvent
-        ?: return false
-
-    return drop(data.transferable.getTransferData(DataFlavor.stringFlavor).toString())
-}
+actual fun getContent(event: DragAndDropEvent) =
+    (event.nativeEvent as? DropTargetDropEvent)?.transferable?.getTransferData(DataFlavor.stringFlavor)?.toString()

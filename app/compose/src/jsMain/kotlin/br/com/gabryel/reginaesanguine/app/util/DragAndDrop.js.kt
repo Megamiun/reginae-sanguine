@@ -15,11 +15,8 @@ actual fun getTransferData(offset: Offset, data: String): DragAndDropTransferDat
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
-actual fun drop(event: DragAndDropEvent, drop: (String) -> Boolean): Boolean {
-    val transfer = event.transferData?.domDataTransferOrNull ?: return false
-
-    return drop(transfer.getData("text"))
-}
+actual fun getContent(event: DragAndDropEvent) =
+    event.transferData?.domDataTransferOrNull?.getData("text")
 
 fun createDataTransfer(): DataTransfer =
     js("new DataTransfer()")

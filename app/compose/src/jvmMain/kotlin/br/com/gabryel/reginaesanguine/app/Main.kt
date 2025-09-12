@@ -15,7 +15,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import br.com.gabryel.reginaesanguine.app.services.LocalInteractionType
-import br.com.gabryel.reginaesanguine.app.services.ResCardImageLoader
+import br.com.gabryel.reginaesanguine.app.services.ResPainterLoader
 import br.com.gabryel.reginaesanguine.app.services.ResourcesResourceLoader
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
 import br.com.gabryel.reginaesanguine.app.util.InteractionType.MOUSE
@@ -26,7 +26,7 @@ fun main() = application {
     val screenSize = Toolkit.getDefaultToolkit().screenSize
     val windowState = rememberWindowState(size = DpSize(screenSize.width.dp, screenSize.height.dp))
 
-    context(ResCardImageLoader()) {
+    context(ResPainterLoader()) {
         Window(title = "Reginae Sanguine", state = windowState, onCloseRequest = { exitProcess(0) }) {
             ReginaeSanguineTheme {
                 CompositionLocalProvider(LocalDensity provides Density(2f), LocalInteractionType provides MOUSE) {

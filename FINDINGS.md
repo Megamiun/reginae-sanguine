@@ -78,6 +78,9 @@
       - [Issue on Github](https://github.com/mockative/mockative/issues/148)
     - KSP version warnings
   - Went back to mockk, as tests are jvm based at the moment
+- [BlurTransformation](app/compose/src/commonMain/kotlin/br/com/gabryel/reginaesanguine/app/services/BlurTransformation.kt) algo somehow is super slow on Android
+  - Also, decided that would not impl Bitmap and Color extensions on nonAndroid, as it would take some time I don't have to understand skiko.
+  - Will pre-blur the logo for now
 
 ## Serialization
 - Bugs recognized:

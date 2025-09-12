@@ -11,7 +11,6 @@ class DeckViewModel(
     private val viewFlow: MutableStateFlow<ViewDecks> = MutableStateFlow(ViewDecks(Array(6) { emptyList<Card>() }.toList())),
     private val editFlow: MutableStateFlow<EditDeck?> = MutableStateFlow(null)
 ) {
-    val deckLimit = 15
     val viewDecks = viewFlow.asStateFlow()
     val editDeck = editFlow.asStateFlow()
 

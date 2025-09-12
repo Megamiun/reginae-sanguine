@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.grid.GridCells.FixedSize
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,10 +37,11 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.gabryel.reginaesanguine.app.services.CardImageLoader
+import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.ActionableTooltip
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
+import br.com.gabryel.reginaesanguine.app.ui.components.RButton
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
@@ -53,12 +53,13 @@ import br.com.gabryel.reginaesanguine.viewmodel.deck.EditDeck
 val backgroundColor = Color(16, 25, 25)
 
 @Composable
-context(_: CardImageLoader, _: PlayerContext)
+context(_: PainterLoader, _: PlayerContext)
 fun EditDeck(deckViewModel: DeckViewModel) {
     val editDeckState by deckViewModel.editDeck.collectAsState()
     val viewDecksState by deckViewModel.viewDecks.collectAsState()
 
     val editDeck = editDeckState ?: return
+    val isFull = editDeck.deck.size == editDeck.deckLimit
 
     Surface(Modifier.fillMaxSize(), color = Black.copy(alpha = 0.7f)) {
         Column(
@@ -69,7 +70,7 @@ fun EditDeck(deckViewModel: DeckViewModel) {
 
             Row(baseModifier, horizontalArrangement = Arrangement.Start) {
                 Text(
-                    "Deck #${viewDecksState.selectedDeckIndex + 1} (${editDeck.deck.size}/${deckViewModel.deckLimit})",
+                    "Deck #${viewDecksState.selectedDeckIndex + 1} (${editDeck.deck.size}/${editDeck.deckLimit})",
                     color = YellowAccent,
                 )
             }
@@ -114,7 +115,7 @@ fun EditDeck(deckViewModel: DeckViewModel) {
                     horizontalArrangement = Arrangement.SpaceAround,
                 ) {
                     items(deckViewModel.pack.cards.filterNot { it.spawnOnly }) { card ->
-                        GridCell(card, editDeck, deckViewModel, cardSize)
+                        GridCell(card, actionable = !isFull, editDeck, deckViewModel, cardSize)
                     }
                 }
 
@@ -122,12 +123,8 @@ fun EditDeck(deckViewModel: DeckViewModel) {
                     baseModifier.height(buttonsHeight).align(BottomCenter),
                     horizontalArrangement = SpaceBetween,
                 ) {
-                    Button({ deckViewModel.cancelEditMode() }) {
-                        Text("RETURN")
-                    }
-                    Button({ deckViewModel.saveDeck() }) {
-                        Text("SAVE")
-                    }
+                    RButton("Return") { deckViewModel.cancelEditMode() }
+                    RButton("Save", enabled = isFull) { deckViewModel.saveDeck() }
                 }
             }
         }
@@ -136,9 +133,10 @@ fun EditDeck(deckViewModel: DeckViewModel) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-context(_: CardImageLoader, _: PlayerContext)
+context(_: PainterLoader, _: PlayerContext)
 private fun GridCell(
     card: Card,
+    actionable: Boolean,
     editDeck: EditDeck,
     deckViewModel: DeckViewModel,
     cardSize: DpSize
@@ -155,6 +153,7 @@ private fun GridCell(
 
     ActionableTooltip(
         "Add Card",
+        enabled = actionable,
         action = { deckViewModel.addToDeck(card) },
         tooltip = { CardDescription(card) },
     ) {
