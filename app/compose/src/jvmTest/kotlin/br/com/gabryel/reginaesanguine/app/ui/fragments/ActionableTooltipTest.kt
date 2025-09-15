@@ -29,7 +29,7 @@ class ActionableTooltipTest {
         onNodeWithText("Content").assertExists()
 
         onNodeWithText("Tooltip").assertDoesNotExist()
-        onNodeWithText("Act").assertDoesNotExist()
+        onNodeWithText("ACT").assertDoesNotExist()
     }
 
     @Test
@@ -39,7 +39,7 @@ class ActionableTooltipTest {
         onNodeWithText("Content").assertExists()
 
         onNodeWithText("Tooltip").assertDoesNotExist()
-        onNodeWithText("Act").assertDoesNotExist()
+        onNodeWithText("ACT").assertDoesNotExist()
     }
 
     @Test
@@ -48,7 +48,7 @@ class ActionableTooltipTest {
 
         onNodeWithText("Content").performMouseInput { moveTo(Offset(0f, 0f)) }
 
-        onNodeWithText("Act").assertDoesNotExist()
+        onNodeWithText("ACT").assertDoesNotExist()
         onNodeWithText("Tooltip").assertExists()
     }
 
@@ -69,7 +69,7 @@ class ActionableTooltipTest {
         onNodeWithText("Content").performMouseInput { longClick() }
 
         onNodeWithText("Tooltip").assertExists()
-        onNodeWithText("Act").assertExists()
+        onNodeWithText("ACT").assertExists()
     }
 
     @Test
@@ -78,7 +78,7 @@ class ActionableTooltipTest {
         createComponent(TOUCH, mock)
 
         onNodeWithText("Content").performMouseInput { longClick() }
-        onNodeWithText("Act").performMouseInput { click() }
+        onNodeWithText("ACT").performMouseInput { click() }
 
         verify(exactly = 1) { mock() }
     }

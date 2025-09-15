@@ -59,6 +59,7 @@
 ## Multiplatform
 - Potentially more slow to build than other targets, even more with multiple targets
 - Tests with space in the name fail on native targets
+- [Hierarchy](https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-hierarchy.html#default-hierarchy-template)
 - Multiple implementations can be very bothersome to implement per platform, as:
   - Drag and drop
   - Logging

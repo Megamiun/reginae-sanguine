@@ -158,7 +158,7 @@ class BoardEffectTest {
         val spawnCard = cardOf("spawn", effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
 
         val result = buildResult {
-            Board.default(mapOf("rank1" to card))
+            Board.default(availableCards = mapOf("rank1" to card))
                 .play(LEFT, Play(A1, spawnCard)).orRaiseError().board
         }
 
@@ -174,7 +174,7 @@ class BoardEffectTest {
         val spawnCard = cardOf(effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
 
         val result = buildResult {
-            Board.default(mapOf("rank1" to card))
+            Board.default(availableCards = mapOf("rank1" to card))
                 .play(LEFT, Play(A1, spawnCard)).orRaiseError().board
         }
 
@@ -188,7 +188,7 @@ class BoardEffectTest {
         val spawnCard = cardOf(effect = SpawnCardsPerRank(listOf("rank1", "rank2", "rank3"), WhenPlayed()))
 
         val result = buildResult {
-            Board.default(mapOf("rank1" to cardSpawnable))
+            Board.default(availableCards = mapOf("rank1" to cardSpawnable))
                 .play(LEFT, Play(A1, cardWhenPlayedAllies)).orRaiseError().board
                 .play(LEFT, Play(C1, spawnCard)).orRaiseError().board
         }

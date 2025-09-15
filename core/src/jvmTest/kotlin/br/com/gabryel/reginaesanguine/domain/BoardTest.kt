@@ -97,6 +97,19 @@ class BoardTest {
     }
 
     @Test
+    fun `when playing a card, should steal enemy cells where there are no cards`() {
+        val nextBoard = buildResult {
+            Board.default(state = mapOf(A1 to Cell(LEFT, rank = 1), A2 to Cell(RIGHT, rank = 1)))
+                .play(LEFT, Play(A1, SECURITY_OFFICER)).orRaiseError().board
+        }
+
+        nextBoard shouldBeSuccessfulAnd haveCells(
+            A1 to cardCellWith(LEFT, SECURITY_OFFICER),
+            A2 to emptyCellOwnedBy(LEFT, 1),
+        )
+    }
+
+    @Test
     fun `when playing a card as RIGHT player, should increment rank on all mirrored increment positions described in the cards`() {
         val powerRaise = cardOf("Only Increment Right", increments = setOf(RIGHTWARD))
 

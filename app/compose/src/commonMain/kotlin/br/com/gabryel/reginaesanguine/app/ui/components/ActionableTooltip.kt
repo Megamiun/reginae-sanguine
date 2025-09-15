@@ -39,7 +39,12 @@ fun ActionableTooltip(
     )
 }
 
-private fun createActionButton(interactionType: InteractionType, actionTitle: String, enabled: Boolean, action: () -> Unit): @Composable (() -> Unit)? =
+private fun createActionButton(
+    interactionType: InteractionType,
+    actionTitle: String,
+    enabled: Boolean,
+    action: () -> Unit
+): @Composable (() -> Unit)? =
     when (interactionType) {
         TOUCH -> {
             { RButton(actionTitle, enabled = enabled, onClick = action) }

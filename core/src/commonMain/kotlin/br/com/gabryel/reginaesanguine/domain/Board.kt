@@ -30,7 +30,8 @@ data class Board(
     override val size: Size = DEFAULT_BOARD_SIZE
 ) : CellContainer {
     companion object {
-        fun default(availableCards: Map<String, Card> = emptyMap()) = Board(availableCards = availableCards)
+        fun default(state: Map<Position, Cell> = createInitialState(), availableCards: Map<String, Card> = emptyMap()) =
+            Board(state = state, availableCards = availableCards)
 
         private fun createInitialState(): Map<Position, Cell> = mapOf(
             // Left player starting positions
@@ -113,7 +114,6 @@ data class Board(
         val incremented = card.increments.mapNotNull { displacement ->
             val newPosition = position + player.correct(displacement)
             getCellAt(newPosition).orNull()
-                ?.takeIf { it.owner != player.opponent && it.card == null }
                 ?.let { cell -> newPosition to cell.increment(player, card.incrementValue) }
         }
 
