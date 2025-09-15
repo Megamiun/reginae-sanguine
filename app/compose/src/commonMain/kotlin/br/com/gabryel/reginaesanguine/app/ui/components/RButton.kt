@@ -1,19 +1,21 @@
 package br.com.gabryel.reginaesanguine.app.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment.Companion.CenterVertically
-import androidx.compose.ui.CombinedModifier
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Shape
@@ -31,7 +33,6 @@ fun RButton(
     enabled: Boolean = true,
     shape: Shape = RoundedCornerShape(20.dp),
     colors: ButtonColors = ButtonColors(GoldLight, Black, GoldLightDisabled, Black),
-    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(16.dp, 5.dp),
     interactionSource: MutableInteractionSource? = null,
@@ -39,17 +40,21 @@ fun RButton(
     textOffset: Dp = 2.dp,
     onClick: () -> Unit,
 ) {
-    Button(
-        onClick,
-        CombinedModifier(Modifier.defaultMinSize(1.dp, 1.dp), modifier),
-        enabled,
-        shape,
-        colors,
-        elevation,
-        border,
-        contentPadding,
-        interactionSource,
+    val source = remember { interactionSource ?: MutableInteractionSource() }
+
+    Surface(
+        modifier = modifier.clickable(source, null, enabled, onClick = onClick),
+        shape = shape,
+        color = if (enabled) colors.containerColor else colors.disabledContainerColor,
+        border = border,
     ) {
-        Text(text.uppercase(), Modifier.offset(y = textOffset).align(CenterVertically), style = textStyle)
+        Box(modifier = Modifier.padding(contentPadding), contentAlignment = Center) {
+            Text(
+                text = text.uppercase(),
+                modifier = Modifier.offset(y = textOffset),
+                style = textStyle,
+                color = if (enabled) colors.contentColor else colors.disabledContentColor,
+            )
+        }
     }
 }

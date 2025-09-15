@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
+import br.com.gabryel.reginaesanguine.app.ui.components.NavigationManager
 import br.com.gabryel.reginaesanguine.app.ui.components.RButton
 import br.com.gabryel.reginaesanguine.app.ui.fragments.DetailCard
 import br.com.gabryel.reginaesanguine.app.ui.fragments.GridPlayableCell

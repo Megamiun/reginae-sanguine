@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.app.ui
+package br.com.gabryel.reginaesanguine.app.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -12,8 +12,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import br.com.gabryel.reginaesanguine.app.ui.TransitionType.ENTER
-import br.com.gabryel.reginaesanguine.app.ui.TransitionType.EXIT
+import br.com.gabryel.reginaesanguine.app.ui.components.TransitionType.ENTER
+import br.com.gabryel.reginaesanguine.app.ui.components.TransitionType.EXIT
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -27,8 +27,8 @@ enum class TransitionType {
 }
 
 @Composable
-fun <T> NavigationStack(start: T, durationMillis: Int = 150, build: GraphBuilder<T>.() -> Unit) {
-    val graph = remember { GraphBuilder<T>().also(build) }
+fun <T> InstanceNavigationStack(start: T, durationMillis: Int = 150, build: InstanceGraphBuilder<T>.() -> Unit) {
+    val graph = remember { InstanceGraphBuilder<T>().also(build) }
     val navigationManager = remember { NavigationManager(start) }
     val current by navigationManager.current.collectAsState()
     val transitionType by navigationManager.transitionType.collectAsState()
@@ -51,7 +51,7 @@ fun <T> NavigationStack(start: T, durationMillis: Int = 150, build: GraphBuilder
     }
 }
 
-class GraphBuilder<T>(val routes: MutableMap<T, NavComposable<T>> = mutableMapOf()) {
+class InstanceGraphBuilder<T>(val routes: MutableMap<T, NavComposable<T>> = mutableMapOf()) {
     fun addRoute(target: T, screen: NavComposable<T>) {
         routes[target] = screen
     }

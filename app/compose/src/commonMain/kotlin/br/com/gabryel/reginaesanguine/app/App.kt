@@ -23,11 +23,14 @@ import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
 import br.com.gabryel.reginaesanguine.app.ui.DeckSelectionScreen
 import br.com.gabryel.reginaesanguine.app.ui.GameScreen
 import br.com.gabryel.reginaesanguine.app.ui.HomeScreen
-import br.com.gabryel.reginaesanguine.app.ui.NavigationStack
+import br.com.gabryel.reginaesanguine.app.ui.ModeScreen
+import br.com.gabryel.reginaesanguine.app.ui.components.InstanceNavigationStack
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
+import br.com.gabryel.reginaesanguine.app.util.Mode.LOCAL
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.DECK_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.HOME
+import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.MODE_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.getStandardPack
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
@@ -76,19 +79,26 @@ fun App(resourceLoader: ResourceLoader) {
 
     val background = painterLoader.loadStaticImage(Res.drawable.static_temp_fandom_bgblur)
 
-    Box(Modifier.fillMaxSize(), contentAlignment = Center) {
-        Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
+    var mode by remember { mutableStateOf(LOCAL) }
 
-        Surface(color = PurpleDark.copy(alpha = 0.6f)) {
-            NavigationStack(HOME) {
-                addRoute(HOME) {
-                    HomeScreen()
-                }
-                addRoute(DECK_SELECTION) {
-                    DeckSelectionScreen(deckViewModel)
-                }
-                addRoute(GAME) {
-                    GameScreen(gameViewModel)
+    context(mode) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Center) {
+            Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
+
+            Surface(color = PurpleDark.copy(alpha = 0.6f)) {
+                InstanceNavigationStack(MODE_SELECTION) {
+                    addRoute(MODE_SELECTION) {
+                        ModeScreen { mode = it }
+                    }
+                    addRoute(HOME) {
+                        HomeScreen()
+                    }
+                    addRoute(DECK_SELECTION) {
+                        DeckSelectionScreen(deckViewModel)
+                    }
+                    addRoute(GAME) {
+                        GameScreen(gameViewModel)
+                    }
                 }
             }
         }

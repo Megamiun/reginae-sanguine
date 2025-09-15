@@ -14,13 +14,15 @@ import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.Res
 import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.static_temp_boardgamegeek_logo
+import br.com.gabryel.reginaesanguine.app.ui.components.NavigationManager
 import br.com.gabryel.reginaesanguine.app.ui.components.RButton
+import br.com.gabryel.reginaesanguine.app.util.Mode
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.DECK_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
 
 @Composable
-context(nav: NavigationManager<NavigationScreens>, painterLoader: PainterLoader)
+context(nav: NavigationManager<NavigationScreens>, painterLoader: PainterLoader, mode: Mode)
 fun HomeScreen() {
     Box(Modifier.fillMaxSize().padding(25.dp)) {
         val logo = painterLoader.loadStaticImage(Res.drawable.static_temp_boardgamegeek_logo)

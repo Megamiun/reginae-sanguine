@@ -1,17 +1,16 @@
 package br.com.gabryel.reginaesanguine.app.ui.fragments
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.IntrinsicSize.Min
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,8 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
-import br.com.gabryel.reginaesanguine.app.ui.NavigationManager
+import br.com.gabryel.reginaesanguine.app.ui.components.FancyBox
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
+import br.com.gabryel.reginaesanguine.app.ui.components.NavigationManager
 import br.com.gabryel.reginaesanguine.app.ui.components.RButton
 import br.com.gabryel.reginaesanguine.app.ui.theme.Emerald
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
@@ -53,29 +53,28 @@ fun ViewDecks(deckViewModel: DeckViewModel) {
     Box(Modifier.fillMaxSize().padding(15.dp), contentAlignment = Center) {
         RButton("Return", Modifier.align(TopStart)) { nav.pop() }
 
-        Box(Modifier.width(cardSize.width * 5.8f), contentAlignment = TopCenter) {
-            Column(Modifier.padding(top = 10.dp)) {
-                val deck = viewDecksState.selectedDeck
+        val deck = viewDecksState.selectedDeck
+
+        FancyBox {
+            header {
                 Row(
-                    Modifier.fillMaxWidth().background(Emerald).border(1.dp, WhiteLight).padding(24.dp, 0.dp),
+                    Modifier.fillMaxWidth().padding(24.dp, 8.dp),
                     SpaceBetween,
                     CenterVertically,
                 ) {
                     Text("Deck #${viewDecksState.selectedDeckIndex + 1}", color = YellowAccent)
                     RButton("Edit") { deckViewModel.enterEditMode() }
                 }
+            }
 
-                val gridModifier = Modifier.fillMaxWidth()
-                    .height(cardSize.height * 3.8f)
-                    .background(backgroundColor)
-                    .border(1.dp, WhiteLight)
-
+            body {
                 Grid(
                     IntSize(5, 3),
-                    gridModifier,
-                    horizontalArrangement = spacedBy(3.dp, CenterHorizontally),
-                ) { position ->
-                    val card = deck.getOrNull(position.x + position.y * 5) ?: run {
+                    Modifier.padding(vertical = 5.dp, horizontal = 0.dp),
+                    horizontalArrangement = spacedBy(6.dp),
+                    verticalArrangement = spacedBy(3.dp),
+                ) { (x, y) ->
+                    val card = deck.getOrNull(x + (y * 5)) ?: run {
                         Box(Modifier.size(cardSize))
                         return@Grid
                     }
@@ -86,21 +85,23 @@ fun ViewDecks(deckViewModel: DeckViewModel) {
                 }
             }
 
-            Row {
-                val colors = ButtonColors(Emerald, WhiteLight, YellowAccent, Black)
+            decorate {
+                Row(Modifier.align(TopCenter).offset(y = (-10).dp)) {
+                    val colors = ButtonColors(Emerald, WhiteLight, YellowAccent, Black)
 
-                repeat(viewDecksState.deckAmount) { index ->
-                    RButton(
-                        "${index + 1}",
-                        Modifier.size(20.dp),
-                        shape = CircleShape,
-                        border = BorderStroke(1.dp, WhiteLight),
-                        colors = colors,
-                        enabled = viewDecksState.selectedDeckIndex != index,
-                        contentPadding = PaddingValues(0.dp),
-                        textStyle = createNumbersTextStyle(16.sp),
-                        textOffset = 0.dp,
-                    ) { deckViewModel.changeDeckView(index) }
+                    repeat(viewDecksState.deckAmount) { index ->
+                        RButton(
+                            "${index + 1}",
+                            Modifier.size(20.dp),
+                            shape = CircleShape,
+                            border = BorderStroke(1.dp, WhiteLight),
+                            colors = colors,
+                            enabled = viewDecksState.selectedDeckIndex != index,
+                            contentPadding = PaddingValues(0.dp),
+                            textStyle = createNumbersTextStyle(16.sp),
+                            textOffset = 0.dp,
+                        ) { deckViewModel.changeDeckView(index) }
+                    }
                 }
             }
         }

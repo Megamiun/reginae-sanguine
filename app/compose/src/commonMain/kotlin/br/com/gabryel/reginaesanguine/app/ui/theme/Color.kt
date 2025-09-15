@@ -30,3 +30,5 @@ val GoldLight = Color(241, 225, 157)
 val GoldLightDisabled = Color(232, 225, 197)
 
 val GoldDark = Color(166, 126, 25)
+
+val FancyBoxBg = Color(16, 25, 25)

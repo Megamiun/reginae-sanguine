@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
@@ -42,6 +41,7 @@ import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.ActionableTooltip
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
 import br.com.gabryel.reginaesanguine.app.ui.components.RButton
+import br.com.gabryel.reginaesanguine.app.ui.theme.FancyBoxBg
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
@@ -49,8 +49,6 @@ import br.com.gabryel.reginaesanguine.app.ui.util.getCardSizeByWidth
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.EditDeck
-
-val backgroundColor = Color(16, 25, 25)
 
 @Composable
 context(_: PainterLoader, _: PlayerContext)
@@ -72,7 +70,7 @@ fun EditDeck(deckViewModel: DeckViewModel) {
                 )
             }
 
-            Column(Modifier.padding(vertical = 10.dp).background(backgroundColor)) {
+            Column(Modifier.padding(vertical = 10.dp).background(FancyBoxBg)) {
                 Spacer(Modifier.height(1.dp).fillMaxWidth().background(WhiteLight))
 
                 BoxWithConstraints(Modifier.padding(15.dp), contentAlignment = Center) {
@@ -108,7 +106,7 @@ fun EditDeck(deckViewModel: DeckViewModel) {
 
                 LazyVerticalGrid(
                     FixedSize(cardSize.width + 10.dp),
-                    baseModifier.height(gridHeight).background(backgroundColor).border(1.dp, WhiteLight),
+                    baseModifier.height(gridHeight).background(FancyBoxBg).border(1.dp, WhiteLight),
                     horizontalArrangement = Arrangement.SpaceAround,
                 ) {
                     items(deckViewModel.pack.cards.filterNot { it.spawnOnly }) { card ->
