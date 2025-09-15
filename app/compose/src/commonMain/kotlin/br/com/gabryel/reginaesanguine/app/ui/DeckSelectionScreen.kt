@@ -1,6 +1,11 @@
 package br.com.gabryel.reginaesanguine.app.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.fragments.EditDeck
@@ -11,8 +16,10 @@ import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
 @Composable
 context(painterLoader: PainterLoader, nav: NavigationManager<NavigationScreens>)
 fun DeckSelectionScreen(deckViewModel: DeckViewModel) {
-    context(PlayerContext.left) {
-        ViewDecks(deckViewModel)
-        EditDeck(deckViewModel)
+    Box(Modifier.fillMaxSize()) {
+        context(PlayerContext.left) {
+            ViewDecks(deckViewModel)
+            EditDeck(deckViewModel)
+        }
     }
 }

@@ -50,7 +50,7 @@ fun ViewDecks(deckViewModel: DeckViewModel) {
     val viewDecksState by deckViewModel.viewDecks.collectAsState()
     val cardSize = getCardSize(80.dp)
 
-    Box(Modifier.fillMaxSize(), contentAlignment = Center) {
+    Box(Modifier.fillMaxSize().padding(15.dp), contentAlignment = Center) {
         RButton("Return", Modifier.align(TopStart)) { nav.pop() }
 
         Box(Modifier.width(cardSize.width * 5.8f), contentAlignment = TopCenter) {

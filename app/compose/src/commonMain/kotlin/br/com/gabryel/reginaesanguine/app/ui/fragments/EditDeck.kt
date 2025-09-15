@@ -62,10 +62,7 @@ fun EditDeck(deckViewModel: DeckViewModel) {
     val isFull = editDeck.deck.size == editDeck.deckLimit
 
     Surface(Modifier.fillMaxSize(), color = Black.copy(alpha = 0.7f)) {
-        Column(
-            Modifier.fillMaxSize().padding(vertical = 10.dp),
-            horizontalAlignment = CenterHorizontally,
-        ) {
+        Column(Modifier.fillMaxSize().padding(vertical = 15.dp), horizontalAlignment = CenterHorizontally) {
             val baseModifier = Modifier.fillMaxWidth(0.9f)
 
             Row(baseModifier, horizontalArrangement = Arrangement.Start) {
@@ -115,7 +112,7 @@ fun EditDeck(deckViewModel: DeckViewModel) {
                     horizontalArrangement = Arrangement.SpaceAround,
                 ) {
                     items(deckViewModel.pack.cards.filterNot { it.spawnOnly }) { card ->
-                        GridCell(card, actionable = !isFull, editDeck, deckViewModel, cardSize)
+                        GridCell(card, isDeckFull = !isFull, editDeck, deckViewModel, cardSize)
                     }
                 }
 
@@ -136,7 +133,7 @@ fun EditDeck(deckViewModel: DeckViewModel) {
 context(_: PainterLoader, _: PlayerContext)
 private fun GridCell(
     card: Card,
-    actionable: Boolean,
+    isDeckFull: Boolean,
     editDeck: EditDeck,
     deckViewModel: DeckViewModel,
     cardSize: DpSize
@@ -153,7 +150,7 @@ private fun GridCell(
 
     ActionableTooltip(
         "Add Card",
-        enabled = actionable,
+        enabled = isDeckFull && available > 0,
         action = { deckViewModel.addToDeck(card) },
         tooltip = { CardDescription(card) },
     ) {

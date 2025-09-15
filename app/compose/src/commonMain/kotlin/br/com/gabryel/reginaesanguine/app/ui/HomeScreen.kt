@@ -2,13 +2,13 @@ package br.com.gabryel.reginaesanguine.app.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement.spacedBy
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment.Companion.Bottom
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.Res
@@ -22,12 +22,12 @@ import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
 @Composable
 context(nav: NavigationManager<NavigationScreens>, painterLoader: PainterLoader)
 fun HomeScreen() {
-    Column(Modifier.fillMaxSize(), spacedBy(8.dp, Bottom), CenterHorizontally) {
+    Box(Modifier.fillMaxSize().padding(25.dp)) {
         val logo = painterLoader.loadStaticImage(Res.drawable.static_temp_boardgamegeek_logo)
 
-        Image(logo, null)
+        Image(logo, null, Modifier.align(Center))
 
-        Row(Modifier.padding(24.dp), horizontalArrangement = spacedBy(4.dp)) {
+        Row(Modifier.align(BottomCenter), horizontalArrangement = spacedBy(4.dp)) {
             RButton("Deck") { nav.push(DECK_SELECTION) }
             RButton("Play") { nav.push(GAME) }
         }
