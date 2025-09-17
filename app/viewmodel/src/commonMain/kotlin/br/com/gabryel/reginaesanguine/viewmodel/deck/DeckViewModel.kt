@@ -1,57 +1,48 @@
 package br.com.gabryel.reginaesanguine.viewmodel.deck
 
-import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.Pack
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
+import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckEditState.DeckEdit
+import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckEditState.DeckView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
-class DeckViewModel(
-    val pack: Pack,
-    private val viewFlow: MutableStateFlow<ViewDecks> = MutableStateFlow(ViewDecks(Array(6) { emptyList<Card>() }.toList())),
-    private val editFlow: MutableStateFlow<EditDeck?> = MutableStateFlow(null)
-) {
-    val viewDecks = viewFlow.asStateFlow()
-    val editDeck = editFlow.asStateFlow()
+sealed interface DeckEditState {
+    object DeckView : DeckEditState
 
-    fun changeDeckView(index: Int) {
-        viewFlow.update { it.copy(selectedDeckIndex = index) }
-    }
-
-    fun enterEditMode() {
-        editFlow.update { EditDeck(viewDecks.value.selectedDeck) }
-    }
-
-    fun cancelEditMode() {
-        editFlow.update { null }
-    }
-
-    fun addToDeck(card: Card) {
-        editFlow.update {
-            requireNotNull(it) { "Not on edit flow, should not be able to add cards" }
-            it.addToDeck(card)
-        }
-    }
-
-    fun removeFromDeck(card: Card) {
-        editFlow.update {
-            requireNotNull(it) { "Not on edit flow, should not be able to add cards" }
-            it.removeFromDeck(card)
-        }
-    }
-
-    fun saveDeck() {
-        viewFlow.update {
-            val editDeck = requireNotNull(editDeck.value) { "No deck being edited, not possible to save deck" }
-            viewDecks.value.replaceCurrent(editDeck.deck)
-        }
-
-        editFlow.update { null }
-    }
+    data class DeckEdit(val player: PlayerPosition, val editDeck: EditDeck, val playerViewModel: SingleDeckViewModel) : DeckEditState
 }
 
-fun <T> List<T>.replace(index: Int, item: T): List<T> {
-    val mutable = toMutableList()
-    mutable[index] = item
-    return mutable
+sealed interface DeckEditViewModel {
+    val leftPlayer: SingleDeckViewModel
+    val editState: StateFlow<DeckEditState>
+}
+
+class RemoteDeckViewModel(override val leftPlayer: SingleDeckViewModel) : DeckEditViewModel {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    override val editState: StateFlow<DeckEditState> = leftPlayer.editDeck.map { editDeck ->
+        editDeck ?: return@map DeckView
+
+        DeckEdit(LEFT, editDeck, leftPlayer)
+    }.stateIn(scope, Eagerly, DeckView)
+}
+
+class LocalDeckViewModel(override val leftPlayer: SingleDeckViewModel, val rightPlayer: SingleDeckViewModel) : DeckEditViewModel {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    override val editState: StateFlow<DeckEditState> = combine(leftPlayer.editDeck, rightPlayer.editDeck) { left, right ->
+        when {
+            left != null -> DeckEdit(LEFT, left, leftPlayer)
+            right != null -> DeckEdit(RIGHT, right, rightPlayer)
+            else -> DeckView
+        }
+    }.stateIn(scope, Eagerly, DeckView)
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -44,11 +45,11 @@ import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
 import br.com.gabryel.reginaesanguine.app.util.getTransferData
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.State
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
 
 @Composable
 context(painterLoader: PainterLoader, nav: NavigationManager<NavigationScreens>)
-fun GameScreen(gameViewModel: GameViewModel) {
+fun GameScreen(gameViewModel: LocalGameViewModel) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
     val lateralSize = IntSize(1, game.size.height)
@@ -57,9 +58,12 @@ fun GameScreen(gameViewModel: GameViewModel) {
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         if (state.error != null)
-            Box(Modifier.fillMaxWidth().align(TopCenter).background(Black), contentAlignment = TopCenter) {
-                Text(state.error.toString(), color = Red)
-            }
+            Text(
+                state.error.toString(),
+                Modifier.fillMaxWidth().align(TopCenter).background(Black),
+                textAlign = TextAlign.Center,
+                color = Red,
+            )
 
         Column(Modifier.align(TopCenter).offset(y = 20.dp).background(WhiteDark).padding(4.dp)) {
             Row(Modifier.border(1.dp, Black)) {

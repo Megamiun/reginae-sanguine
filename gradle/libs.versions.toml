@@ -1,8 +1,8 @@
 [versions]
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 compose = "1.9.0-beta03"
 arrow = "2.1.2"
-kotest = "6.0.1"
+kotest = "6.0.3"
 kotlinx-serialization = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 mockk = "1.14.5"
@@ -16,11 +16,11 @@ spring-webmvc = "7.0.0-SNAPSHOT"
 android = "8.11.1"
 appcompat = "1.7.1"
 lifecycle = "2.9.3"
-activity-compose = "1.10.1"
+activity-compose = "1.11.0"
 
 # Build plugins
 ktlint = "13.1.0"
-kover = "0.9.1"
+kover = "0.9.2"
 download = "5.6.0"
 task-tree = "4.0.1"
 

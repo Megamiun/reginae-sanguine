@@ -30,10 +30,10 @@ import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
 
 @Composable
-fun ResultOverlay(gameViewModel: GameViewModel, boardSize: DpSize) {
+fun ResultOverlay(gameViewModel: LocalGameViewModel, boardSize: DpSize) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
 

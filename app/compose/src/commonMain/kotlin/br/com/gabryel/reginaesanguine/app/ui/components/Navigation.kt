@@ -28,7 +28,7 @@ enum class TransitionType {
 
 @Composable
 fun <T> InstanceNavigationStack(start: T, durationMillis: Int = 150, build: InstanceGraphBuilder<T>.() -> Unit) {
-    val graph = remember { InstanceGraphBuilder<T>().also(build) }
+    val graph = InstanceGraphBuilder<T>().also(build)
     val navigationManager = remember { NavigationManager(start) }
     val current by navigationManager.current.collectAsState()
     val transitionType by navigationManager.transitionType.collectAsState()

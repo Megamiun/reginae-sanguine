@@ -6,7 +6,7 @@ import br.com.gabryel.reginaesanguine.domain.CardTier.STANDARD
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Player
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
 import com.jakewharton.mosaic.runMosaicMain
 import kotlinx.coroutines.awaitCancellation
 import kotlin.math.floor
@@ -21,7 +21,7 @@ fun main() = runMosaicMain {
         Player(deck = deck.shuffled()),
     )
 
-    GameApp(GameViewModel.forGame(startGame))
+    GameApp(LocalGameViewModel.forGame(startGame))
     LaunchedEffect(Unit) {
         awaitCancellation()
     }

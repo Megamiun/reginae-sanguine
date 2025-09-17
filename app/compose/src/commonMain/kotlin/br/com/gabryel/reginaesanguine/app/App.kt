@@ -26,7 +26,9 @@ import br.com.gabryel.reginaesanguine.app.ui.HomeScreen
 import br.com.gabryel.reginaesanguine.app.ui.ModeScreen
 import br.com.gabryel.reginaesanguine.app.ui.components.InstanceNavigationStack
 import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
+import br.com.gabryel.reginaesanguine.app.util.Mode
 import br.com.gabryel.reginaesanguine.app.util.Mode.LOCAL
+import br.com.gabryel.reginaesanguine.app.util.Mode.REMOTE
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.DECK_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.HOME
@@ -35,8 +37,11 @@ import br.com.gabryel.reginaesanguine.app.util.getStandardPack
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.Player
-import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckEditViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.LocalDeckViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.RemoteDeckViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
 import coil3.SingletonImageLoader
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
@@ -72,40 +77,42 @@ fun App(resourceLoader: ResourceLoader) {
     }
 
     val pack = packState ?: return
-
-    val player = Player(emptyList(), pack.cards)
-    val gameViewModel = createViewModel(player, player)
-    val deckViewModel = DeckViewModel(pack)
-
-    val background = painterLoader.loadStaticImage(Res.drawable.static_temp_fandom_bgblur)
-
     var mode by remember { mutableStateOf(LOCAL) }
 
     context(mode) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Center) {
-            Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
+        val deckViewModel = createDeckViewModel(pack)
+        val background = painterLoader.loadStaticImage(Res.drawable.static_temp_fandom_bgblur)
 
-            Surface(color = PurpleDark.copy(alpha = 0.6f)) {
-                InstanceNavigationStack(MODE_SELECTION) {
-                    addRoute(MODE_SELECTION) {
-                        ModeScreen { mode = it }
-                    }
-                    addRoute(HOME) {
-                        HomeScreen()
-                    }
-                    addRoute(DECK_SELECTION) {
-                        DeckSelectionScreen(deckViewModel)
-                    }
-                    addRoute(GAME) {
-                        GameScreen(gameViewModel)
-                    }
+        Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
+
+        Surface(Modifier.fillMaxSize(), color = PurpleDark.copy(alpha = 0.6f)) {
+            InstanceNavigationStack(MODE_SELECTION) {
+                addRoute(MODE_SELECTION) {
+                    ModeScreen { mode = it }
+                }
+                addRoute(HOME) {
+                    HomeScreen()
+                }
+                addRoute(DECK_SELECTION) {
+                    DeckSelectionScreen(deckViewModel)
+                }
+                addRoute(GAME) {
+                    val player = Player(emptyList(), pack.cards)
+                    val gameViewModel = remember { createViewModel(player, player) }
+                    GameScreen(gameViewModel)
                 }
             }
         }
     }
 }
 
-private fun createViewModel(left: Player, right: Player): GameViewModel {
+context(mode: Mode)
+private fun createDeckViewModel(pack: Pack): DeckEditViewModel = when (mode) {
+    LOCAL -> LocalDeckViewModel(SingleDeckViewModel(pack), SingleDeckViewModel(pack))
+    REMOTE -> RemoteDeckViewModel(SingleDeckViewModel(pack))
+}
+
+private fun createViewModel(left: Player, right: Player): LocalGameViewModel {
     val game = Game.forPlayers(left, right)
-    return GameViewModel.forGame(game)
+    return LocalGameViewModel.forGame(game)
 }

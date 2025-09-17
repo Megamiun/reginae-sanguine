@@ -27,7 +27,7 @@ import br.com.gabryel.reginaesanguine.domain.atColumn
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameState
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameState.ChooseAction
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameState.ChoosePosition
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
 import com.jakewharton.mosaic.LocalTerminalState
 import com.jakewharton.mosaic.layout.KeyEvent
 import com.jakewharton.mosaic.layout.height
@@ -48,7 +48,7 @@ import com.jakewharton.mosaic.ui.unit.IntSize
 import kotlin.test.fail
 
 @Composable
-fun GameApp(viewModel: GameViewModel) {
+fun GameApp(viewModel: LocalGameViewModel) {
     val cellWidth = 9
     val terminal = LocalTerminalState.current
 

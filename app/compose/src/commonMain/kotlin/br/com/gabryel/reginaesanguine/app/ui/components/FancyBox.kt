@@ -19,10 +19,7 @@ import br.com.gabryel.reginaesanguine.app.ui.theme.FancyBoxBg
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 
 @Composable
-fun FancyBox(
-    modifier: Modifier = Modifier,
-    setup: FancyBoxScope.() -> Unit
-) {
+fun FancyBox(modifier: Modifier = Modifier, setup: FancyBoxScope.() -> Unit) {
     val scope = FancyBoxScope().also(setup)
 
     Box(Modifier.width(Max).then(modifier)) {

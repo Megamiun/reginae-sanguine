@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.app.ui.fragments
+package br.com.gabryel.reginaesanguine.app.ui.fragments.deck
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,18 +41,20 @@ import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.ActionableTooltip
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
 import br.com.gabryel.reginaesanguine.app.ui.components.RButton
+import br.com.gabryel.reginaesanguine.app.ui.fragments.CardDescription
+import br.com.gabryel.reginaesanguine.app.ui.fragments.DetailCard
 import br.com.gabryel.reginaesanguine.app.ui.theme.FancyBoxBg
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSizeByWidth
 import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.EditDeck
+import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
 
 @Composable
 context(_: PainterLoader, _: PlayerContext)
-fun EditDeck(deckViewModel: DeckViewModel) {
+fun EditDeck(deckViewModel: SingleDeckViewModel) {
     val editDeckState by deckViewModel.editDeck.collectAsState()
     val viewDecksState by deckViewModel.viewDecks.collectAsState()
 
@@ -133,7 +135,7 @@ private fun GridCell(
     card: Card,
     isDeckFull: Boolean,
     editDeck: EditDeck,
-    deckViewModel: DeckViewModel,
+    deckViewModel: SingleDeckViewModel,
     cardSize: DpSize
 ) {
     val max = editDeck.getMax(card)

@@ -6,11 +6,11 @@ import br.com.gabryel.reginaesanguine.viewmodel.require
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class GameViewModel(private val stateFlow: MutableStateFlow<GameState>) {
+class LocalGameViewModel(private val stateFlow: MutableStateFlow<GameState>) {
     val state = stateFlow.asStateFlow()
 
     companion object {
-        fun forGame(game: Game) = GameViewModel(MutableStateFlow(GameState.ChooseAction(game)))
+        fun forGame(game: Game) = LocalGameViewModel(MutableStateFlow(GameState.ChooseAction(game)))
     }
 
     fun skip() = update(GameState.ChooseAction::skip)

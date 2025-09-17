@@ -59,9 +59,9 @@ import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.effect.type.EffectWithAffected
 
 @Composable
-context(painterLoader: PainterLoader)
-fun SimpleCard(playerPosition: PlayerPosition, card: Card, size: DpSize, modifier: Modifier = Modifier) {
-    Card(playerPosition, card, size, modifier, false)
+context(painterLoader: PainterLoader, player: PlayerContext)
+fun SimpleCard(card: Card, size: DpSize, modifier: Modifier = Modifier) {
+    Card(player.position, card, size, modifier, false)
 }
 
 @Composable
