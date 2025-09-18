@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopCenter
@@ -37,14 +38,16 @@ import br.com.gabryel.reginaesanguine.app.util.getStandardPack
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.Player
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckEditViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.LocalDeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.RemoteDeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
-import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 import coil3.SingletonImageLoader
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 context(painterLoader: PainterLoader)
@@ -98,7 +101,8 @@ fun App(resourceLoader: ResourceLoader) {
                 }
                 addRoute(GAME) {
                     val player = Player(emptyList(), pack.cards)
-                    val gameViewModel = remember { createViewModel(player, player) }
+                    val coroutineScope = rememberCoroutineScope()
+                    val gameViewModel = remember { createViewModel(player, player, coroutineScope) }
                     GameScreen(gameViewModel)
                 }
             }
@@ -112,7 +116,14 @@ private fun createDeckViewModel(pack: Pack): DeckEditViewModel = when (mode) {
     REMOTE -> RemoteDeckViewModel(SingleDeckViewModel(pack))
 }
 
-private fun createViewModel(left: Player, right: Player): LocalGameViewModel {
-    val game = Game.forPlayers(left, right)
-    return LocalGameViewModel.forGame(game)
+context(mode: Mode)
+private fun createViewModel(left: Player, right: Player, coroutineScope: CoroutineScope): GameViewModel = when (mode) {
+    LOCAL -> {
+        val game = Game.forPlayers(left, right)
+        GameViewModel.forLocalGame(game, coroutineScope)
+    }
+    REMOTE -> {
+        val game = Game.forPlayers(left, right)
+        GameViewModel.forRemoteGame(game, coroutineScope, LEFT)
+    }
 }

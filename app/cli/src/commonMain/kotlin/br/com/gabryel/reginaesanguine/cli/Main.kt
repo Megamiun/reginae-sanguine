@@ -1,12 +1,13 @@
 package br.com.gabryel.reginaesanguine.cli
 
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.CardTier.STANDARD
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Player
-import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 import com.jakewharton.mosaic.runMosaicMain
 import kotlinx.coroutines.awaitCancellation
 import kotlin.math.floor
@@ -21,7 +22,7 @@ fun main() = runMosaicMain {
         Player(deck = deck.shuffled()),
     )
 
-    GameApp(LocalGameViewModel.forGame(startGame))
+    GameApp(GameViewModel.forLocalGame(startGame, rememberCoroutineScope()))
     LaunchedEffect(Unit) {
         awaitCancellation()
     }

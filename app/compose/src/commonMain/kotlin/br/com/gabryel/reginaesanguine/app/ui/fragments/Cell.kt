@@ -24,30 +24,24 @@ import br.com.gabryel.reginaesanguine.app.services.PainterLoader
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.util.getContent
-import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.Success
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameStateData
 
 private val playerCellInternalModifier = Modifier.fillMaxSize().border(1.dp, Black)
 
 @Composable
 context(_: PainterLoader)
 fun GridPlayableCell(
-    game: Game,
+    game: GameStateData,
     position: Position,
     cardSize: DpSize,
     isPlayable: (String) -> Boolean,
     putCard: (String) -> Boolean
 ) {
-    val cellContent = game.getCellAt(position)
+    val cell = game.getCellAt(position)
 
-    if (cellContent !is Success || cellContent.value.owner == null)
-        return
-
-    val cell = cellContent.value
-
+    val owner = cell?.owner ?: return
     val card = cell.card
-    val owner = cell.owner ?: return
 
     context(PlayerContext.getDefaultFor(owner)) {
         Box(Modifier.dragAndDrop(isPlayable, putCard), contentAlignment = Center) {
@@ -107,7 +101,7 @@ private fun Modifier.dragAndDrop(isPlayable: (String) -> Boolean, putCard: (Stri
 
 @Composable
 context(player: PlayerContext)
-fun PlayerLanePowerCell(game: Game, position: Position) {
+fun PlayerLanePowerCell(game: GameStateData, position: Position) {
     val playerPower = game.getBaseLaneScoreAt(position.lane)[player.position] ?: 0
 
     Box(modifier = playerCellInternalModifier, contentAlignment = Center) {

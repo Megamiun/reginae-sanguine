@@ -27,13 +27,13 @@ import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.theme.Yellow
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
-import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameStateData
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 
 @Composable
-fun ResultOverlay(gameViewModel: LocalGameViewModel, boardSize: DpSize) {
+fun ResultOverlay(gameViewModel: GameViewModel, boardSize: DpSize) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
 
@@ -66,7 +66,7 @@ fun ResultOverlay(gameViewModel: LocalGameViewModel, boardSize: DpSize) {
 }
 
 @Composable
-private fun ResultText(game: Game) {
+private fun ResultText(game: GameStateData) {
     val boxSize = DpSize(180.dp, 60.dp)
 
     Canvas(Modifier.size(boxSize)) {

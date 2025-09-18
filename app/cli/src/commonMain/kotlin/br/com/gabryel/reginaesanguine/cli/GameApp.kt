@@ -17,17 +17,15 @@ import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.UPWARD
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.Result
 import br.com.gabryel.reginaesanguine.domain.State.Ended
 import br.com.gabryel.reginaesanguine.domain.State.Ended.Tie
 import br.com.gabryel.reginaesanguine.domain.State.Ended.Won
 import br.com.gabryel.reginaesanguine.domain.State.Ongoing
-import br.com.gabryel.reginaesanguine.domain.Success
 import br.com.gabryel.reginaesanguine.domain.atColumn
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameState
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameState.ChooseAction
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameState.ChoosePosition
-import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 import com.jakewharton.mosaic.LocalTerminalState
 import com.jakewharton.mosaic.layout.KeyEvent
 import com.jakewharton.mosaic.layout.height
@@ -45,16 +43,14 @@ import com.jakewharton.mosaic.ui.Text
 import com.jakewharton.mosaic.ui.TextStyle
 import com.jakewharton.mosaic.ui.TextStyle.Companion.Bold
 import com.jakewharton.mosaic.ui.unit.IntSize
-import kotlin.test.fail
 
 @Composable
-fun GameApp(viewModel: LocalGameViewModel) {
+fun GameApp(viewModel: GameViewModel) {
     val cellWidth = 9
     val terminal = LocalTerminalState.current
 
     val state by viewModel.state.collectAsState()
     val game = state.game
-    val player = game.players[game.playerTurn] ?: fail("Couldn´t find player ${game.playerTurn}")
 
     val area = game.size
     var selectedChoice by mutableStateOf(0)
@@ -95,7 +91,7 @@ fun GameApp(viewModel: LocalGameViewModel) {
                 }
                 Grid(gridWithSize(IntSize(area.width, area.height), cellSize)) { position ->
                     val cellContent = game.getCellAt(position)
-                    val cellPower = game.getTotalScoreAt(position) as? Success<Int> ?: return@Grid
+                    val cellPower = cellContent?.card?.power ?: return@Grid
 
                     val textStyle = if (state is ChoosePosition && position == selectedPosition) Bold
                     else TextStyle.Unspecified
@@ -103,7 +99,7 @@ fun GameApp(viewModel: LocalGameViewModel) {
                     Column(modifier = Modifier.matchParentSize(), horizontalAlignment = CenterHorizontally) {
                         Text(position.describePosition(), textStyle = textStyle)
                         Text(cellContent.describeOwner().orEmpty(), textStyle = textStyle)
-                        Text(cellContent.describeCard(cellPower.value).orEmpty(), textStyle = textStyle)
+                        Text(cellContent.describeCard(cellPower).orEmpty(), textStyle = textStyle)
                     }
                 }
                 Grid(gridWithSize(IntSize(1, area.height), cellSize).borderless()) { (lane) ->
@@ -153,11 +149,10 @@ fun GameApp(viewModel: LocalGameViewModel) {
                         selectedChoice = 0
                     }
                 }
-
                 is GameState.ChooseCard -> {
                     OptionChooser(
                         "Choose card:",
-                        player.hand,
+                        game.currentPlayerHand,
                         selectedIndex = selectedChoice,
                         onIndexChange = { selectedChoice = it },
                         describe = Card::describe,
@@ -179,10 +174,9 @@ fun Card.describe(): String = "$name (R $rank, P $power) - $increments"
 
 private fun Position.describePosition() = "$lane-$column"
 
-private fun Result<Cell>.describeOwner() = (this as? Success<Cell>)?.value
-    ?.owner?.name
+private fun Cell?.describeOwner() = this?.owner?.name
 
-private fun Result<Cell>.describeCard(cellPower: Int) = (this as? Success<Cell>)?.value
+private fun Cell?.describeCard(cellPower: Int) = this
     ?.takeIf { it.owner != null }
     ?.run {
         listOfNotNull(

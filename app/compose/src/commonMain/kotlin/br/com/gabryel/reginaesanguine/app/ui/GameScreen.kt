@@ -45,11 +45,12 @@ import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
 import br.com.gabryel.reginaesanguine.app.util.getTransferData
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.State
-import br.com.gabryel.reginaesanguine.viewmodel.game.LocalGameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameState
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 
 @Composable
 context(painterLoader: PainterLoader, nav: NavigationManager<NavigationScreens>)
-fun GameScreen(gameViewModel: LocalGameViewModel) {
+fun GameScreen(gameViewModel: GameViewModel) {
     val state by gameViewModel.state.collectAsState()
     val game = state.game
     val lateralSize = IntSize(1, game.size.height)
@@ -92,8 +93,8 @@ fun GameScreen(gameViewModel: LocalGameViewModel) {
         }
 
         Row(Modifier.align(BottomCenter), horizontalArrangement = Center) {
-            context(PlayerContext.getDefaultFor(game.playerTurn)) {
-                game.currentPlayer.hand.forEach { card ->
+            context(PlayerContext.getDefaultFor(game.playerHandPosition)) {
+                game.currentPlayerHand.forEach { card ->
                     val dragAndDrop = Modifier.dragAndDropSource { offset ->
                         getTransferData(offset, card.id)
                     }
@@ -112,6 +113,16 @@ fun GameScreen(gameViewModel: LocalGameViewModel) {
 
         if (game.getState() is State.Ended)
             ResultOverlay(gameViewModel, middleWidth)
+
+        // TODO Do this prettily
+        if (state is GameState.Wait)
+            Box(Modifier.fillMaxSize().background(Black.copy(alpha = 0.5f)), Alignment.Center) {
+                Text(
+                    "Waiting for opponent...",
+                    modifier = Modifier.background(WhiteDark).padding(16.dp),
+                    color = Black,
+                )
+            }
     }
 }
 

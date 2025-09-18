@@ -1,50 +1,85 @@
 package br.com.gabryel.reginaesanguine.viewmodel.game
 
-import br.com.gabryel.reginaesanguine.domain.Action
-import br.com.gabryel.reginaesanguine.domain.Action.Play
-import br.com.gabryel.reginaesanguine.domain.Failure
-import br.com.gabryel.reginaesanguine.domain.Game
+import br.com.gabryel.reginaesanguine.domain.Card
+import br.com.gabryel.reginaesanguine.domain.Cell
+import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.Success
+import br.com.gabryel.reginaesanguine.domain.Size
+import br.com.gabryel.reginaesanguine.domain.State
+
+/**
+ * Interface providing UI-safe access to game information.
+ * This ensures the UI gets the information it needs without breaking the GameClient abstraction.
+ */
+interface GameStateData {
+    val size: Size
+    val playerTurn: PlayerPosition
+    val localPlayerPosition: PlayerPosition
+    val playerHandPosition: PlayerPosition
+    val currentPlayerHand: List<Card>
+    val round: Int
+
+    fun getState(): State
+
+    fun getScores(): Map<PlayerPosition, Int>
+
+    fun getWinner(): PlayerPosition?
+
+    fun getCellAt(position: Position): Cell?
+
+    fun getBaseLaneScoreAt(lane: Int): Map<PlayerPosition, Int>
+
+    fun getLaneWinner(lane: Int): PlayerPosition?
+}
 
 interface Playable {
-    fun play(position: Position, cardId: String): GameState
+    suspend fun play(position: Position, cardId: String): GameState
 }
 
 sealed interface GameState {
-    val game: Game
+    val client: GameManager
     val error: String?
+    val game: GameStateData
 
-    data class ChooseAction(override val game: Game, override val error: String? = null) : GameState, Playable {
-        fun toChooseCard() = ChooseCard(game)
+    data class ChooseAction(
+        override val client: GameManager,
+        override val game: GameStateData,
+        override val error: String? = null
+    ) : GameState, Playable {
+        fun toChooseCard() = ChooseCard(client, game)
 
-        override fun play(position: Position, cardId: String): GameState =
-            when (val game = game.play(game.playerTurn, Play(position, cardId))) {
-                is Success<Game> -> ChooseAction(game.value)
-                is Failure -> copy(error = game.toString())
-            }
+        override suspend fun play(position: Position, cardId: String) = client.play(position, cardId)
 
-        fun skip() = when (val game = game.play(game.playerTurn, Action.Skip)) {
-            is Success<Game> -> ChooseAction(game.value)
-            is Failure -> copy(error = game.toString())
+        suspend fun skip() = client.skip()
+    }
+
+    data class ChooseCard(
+        override val client: GameManager,
+        override val game: GameStateData,
+        override val error: String? = null
+    ) : GameState, Playable {
+        fun chooseCard(cardId: String) = ChoosePosition(client, game, cardId)
+
+        override suspend fun play(position: Position, cardId: String) = client.play(position, cardId)
+    }
+
+    data class ChoosePosition(
+        override val client: GameManager,
+        override val game: GameStateData,
+        val cardId: String,
+        override val error: String? = null
+    ) : GameState {
+        suspend fun play(position: Position) = client.play(position, cardId)
+    }
+
+    data class Wait(
+        override val client: GameManager,
+        override val game: GameStateData,
+        override val error: String? = null,
+        private val execute: suspend () -> GameState
+    ) : GameState {
+        suspend fun trigger(callback: (GameState) -> Unit) {
+            callback(execute())
         }
-    }
-
-    data class ChooseCard(override val game: Game, override val error: String? = null) : GameState, Playable {
-        fun chooseCard(cardId: String) = ChoosePosition(game, cardId)
-
-        override fun play(position: Position, cardId: String): GameState =
-            when (val game = this.game.play(game.playerTurn, Play(position, cardId))) {
-                is Success<Game> -> ChooseAction(game.value)
-                is Failure -> copy(error = game.toString())
-            }
-    }
-
-    data class ChoosePosition(override val game: Game, val cardId: String, override val error: String? = null) : GameState {
-        fun play(position: Position) =
-            when (val game = game.play(game.playerTurn, Play(position, cardId))) {
-                is Success<Game> -> ChooseAction(game.value)
-                is Failure -> copy(error = game.toString())
-            }
     }
 }
