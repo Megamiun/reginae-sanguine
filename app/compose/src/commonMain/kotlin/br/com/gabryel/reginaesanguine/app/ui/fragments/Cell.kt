@@ -25,14 +25,14 @@ import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.util.getContent
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameStateData
+import br.com.gabryel.reginaesanguine.viewmodel.game.GamePlayerSummary
 
 private val playerCellInternalModifier = Modifier.fillMaxSize().border(1.dp, Black)
 
 @Composable
 context(_: PainterLoader)
 fun GridPlayableCell(
-    game: GameStateData,
+    game: GamePlayerSummary,
     position: Position,
     cardSize: DpSize,
     isPlayable: (String) -> Boolean,
@@ -79,7 +79,7 @@ private fun Modifier.dragAndDrop(isPlayable: (String) -> Boolean, putCard: (Stri
         }
     }
 
-    return Modifier.dragAndDropTarget({ true }, dropCallback).drawBehind {
+    return dragAndDropTarget({ true }, dropCallback).drawBehind {
         if (!isDroppable)
             return@drawBehind
 
@@ -101,7 +101,7 @@ private fun Modifier.dragAndDrop(isPlayable: (String) -> Boolean, putCard: (Stri
 
 @Composable
 context(player: PlayerContext)
-fun PlayerLanePowerCell(game: GameStateData, position: Position) {
+fun PlayerLanePowerCell(game: GamePlayerSummary, position: Position) {
     val playerPower = game.getBaseLaneScoreAt(position.lane)[player.position] ?: 0
 
     Box(modifier = playerCellInternalModifier, contentAlignment = Center) {

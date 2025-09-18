@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -29,14 +27,10 @@ import br.com.gabryel.reginaesanguine.app.ui.theme.Yellow
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameStateData
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.GamePlayerSummary
 
 @Composable
-fun ResultOverlay(gameViewModel: GameViewModel, boardSize: DpSize) {
-    val state by gameViewModel.state.collectAsState()
-    val game = state.game
-
+fun ResultOverlay(game: GamePlayerSummary, boardSize: DpSize) {
     Surface(color = Black.copy(alpha = 0.5f), modifier = Modifier.fillMaxSize()) {
         val score = game.getScores()
         Row(Modifier.fillMaxWidth().padding(20.dp), horizontalArrangement = Arrangement.Center) {
@@ -66,7 +60,7 @@ fun ResultOverlay(gameViewModel: GameViewModel, boardSize: DpSize) {
 }
 
 @Composable
-private fun ResultText(game: GameStateData) {
+private fun ResultText(game: GamePlayerSummary) {
     val boxSize = DpSize(180.dp, 60.dp)
 
     Canvas(Modifier.size(boxSize)) {

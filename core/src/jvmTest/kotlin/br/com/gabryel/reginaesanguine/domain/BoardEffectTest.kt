@@ -70,7 +70,7 @@ class BoardEffectTest {
     fun `when playing a card with RaiseRank effect, should increment rank on increment positions by specified amount`() {
         val cardWithRaiseRank = cardOf(
             "Rank Raiser",
-            increments = setOf(RIGHTWARD, UPWARD),
+            increments = setOf(RIGHTWARD, DOWNWARD),
             effect = RaiseRankDefault(2),
         )
 
@@ -129,7 +129,7 @@ class BoardEffectTest {
     fun `when playing a card with a Replace Effect over a card, should apply new effect`() {
         val originalAlly = cardOf(power = 2)
 
-        val replaceEffect = ReplaceAllyRaise(powerMultiplier = 1, ANY, affected = setOf(DOWNWARD))
+        val replaceEffect = ReplaceAllyRaise(powerMultiplier = 1, ANY, affected = setOf(UPWARD))
         val replaceCard = cardOf(effect = replaceEffect)
 
         val game = buildResult {

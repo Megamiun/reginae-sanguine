@@ -27,8 +27,8 @@ infix fun Int.atColumn(column: Int) = Position(column, this)
 @Serializable
 data class Displacement(val x: Int, val y: Int) {
     companion object {
-        val UPWARD = Displacement(0, 1)
-        val DOWNWARD = Displacement(0, -1)
+        val UPWARD = Displacement(0, -1)
+        val DOWNWARD = Displacement(0, 1)
         val LEFTWARD = Displacement(-1, 0)
         val RIGHTWARD = Displacement(1, 0)
     }

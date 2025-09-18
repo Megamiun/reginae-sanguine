@@ -31,10 +31,9 @@ fun DeckSelectionScreen(deckEditViewModel: DeckEditViewModel) {
 
     when (val state = editState) {
         is DeckView -> View(deckEditViewModel)
-        is DeckEdit ->
-            context(PlayerContext.getDefaultFor(state.player)) {
-                EditDeck(state.playerViewModel)
-            }
+        is DeckEdit -> context(PlayerContext.getDefaultFor(state.player)) {
+            EditDeck(state.playerViewModel)
+        }
     }
 }
 

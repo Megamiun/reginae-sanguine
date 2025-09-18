@@ -100,10 +100,12 @@ fun App(resourceLoader: ResourceLoader) {
                     DeckSelectionScreen(deckViewModel)
                 }
                 addRoute(GAME) {
-                    val player = Player(emptyList(), pack.cards)
                     val coroutineScope = rememberCoroutineScope()
-                    val gameViewModel = remember { createViewModel(player, player, coroutineScope) }
-                    GameScreen(gameViewModel)
+                    val game by produceState<GameViewModel?>(null) { value = createViewModel(deckViewModel, pack, coroutineScope) }
+
+                    game?.let {
+                        GameScreen(it)
+                    }
                 }
             }
         }
@@ -116,14 +118,20 @@ private fun createDeckViewModel(pack: Pack): DeckEditViewModel = when (mode) {
     REMOTE -> RemoteDeckViewModel(SingleDeckViewModel(pack))
 }
 
-context(mode: Mode)
-private fun createViewModel(left: Player, right: Player, coroutineScope: CoroutineScope): GameViewModel = when (mode) {
-    LOCAL -> {
-        val game = Game.forPlayers(left, right)
-        GameViewModel.forLocalGame(game, coroutineScope)
+private suspend fun createViewModel(deckViewModel: DeckEditViewModel, pack: Pack, coroutineScope: CoroutineScope): GameViewModel =
+    when (deckViewModel) {
+        is LocalDeckViewModel -> {
+            val leftDeck = deckViewModel.leftPlayer.viewDecks.value.selectedDeck
+            val rightDeck = deckViewModel.rightPlayer.viewDecks.value.selectedDeck
+
+            val leftPlayer = Player(emptyList(), leftDeck.shuffled())
+            val rightPlayer = Player(emptyList(), rightDeck.shuffled())
+            val game = Game.forPlayers(leftPlayer, rightPlayer)
+            GameViewModel.forLocalGame(game, coroutineScope)
+        }
+        is RemoteDeckViewModel -> {
+            val leftDeck = deckViewModel.leftPlayer.viewDecks.value.selectedDeck
+
+            GameViewModel.forRemoteGame(coroutineScope, pack, leftDeck.shuffled(), LEFT)
+        }
     }
-    REMOTE -> {
-        val game = Game.forPlayers(left, right)
-        GameViewModel.forRemoteGame(game, coroutineScope, LEFT)
-    }
-}

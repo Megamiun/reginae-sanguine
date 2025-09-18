@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.jakewharton.mosaic.layout.KeyEvent
 import com.jakewharton.mosaic.layout.onKeyEvent
 import com.jakewharton.mosaic.modifier.Modifier
+import com.jakewharton.mosaic.ui.Arrangement.Absolute.spacedBy
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Row
 import com.jakewharton.mosaic.ui.Text
@@ -18,7 +19,7 @@ fun <T> OptionChooser(
     onSelect: (T) -> Unit,
 ) {
     Column(
-        modifier = Modifier.onKeyEvent { keyEvent ->
+        Modifier.onKeyEvent { keyEvent ->
             val choice = when (keyEvent) {
                 KeyEvent("ArrowLeft"), KeyEvent("ArrowUp") -> selectedIndex - 1
                 KeyEvent("ArrowRight"), KeyEvent("ArrowDown") -> selectedIndex + 1
@@ -36,8 +37,8 @@ fun <T> OptionChooser(
     ) {
         Text(header)
         options.forEachIndexed { index, option ->
-            Row {
-                Text(if (selectedIndex == index) "* " else "  ")
+            Row(Modifier, spacedBy(1)) {
+                Text(if (selectedIndex == index) "*" else " ")
                 Text(option.describe())
             }
         }

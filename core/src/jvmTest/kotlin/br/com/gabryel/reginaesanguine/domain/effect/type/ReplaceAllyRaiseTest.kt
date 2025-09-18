@@ -2,7 +2,7 @@ package br.com.gabryel.reginaesanguine.domain.effect.type
 
 import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Board
-import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.DOWNWARD
+import br.com.gabryel.reginaesanguine.domain.Displacement.Companion.UPWARD
 import br.com.gabryel.reginaesanguine.domain.Failure.CellWithNoCardToReplace
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.ANY
@@ -37,7 +37,7 @@ class ReplaceAllyRaiseTest {
     fun `when playing a card with a Replace Effect over a card, should apply new effect`() {
         val originalAlly = cardOf(power = 2)
 
-        val replaceEffect = ReplaceAllyRaise(1, ANY, affected = setOf(DOWNWARD))
+        val replaceEffect = ReplaceAllyRaise(1, ANY, affected = setOf(UPWARD))
         val replaceCard = cardOf(effect = replaceEffect)
 
         val game = buildResult {

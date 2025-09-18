@@ -3,6 +3,7 @@ package br.com.gabryel.reginaesanguine.app.ui.fragments.deck
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.SpaceAround
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -109,7 +110,7 @@ fun EditDeck(deckViewModel: SingleDeckViewModel) {
                 LazyVerticalGrid(
                     FixedSize(cardSize.width + 10.dp),
                     baseModifier.height(gridHeight).background(FancyBoxBg).border(1.dp, WhiteLight),
-                    horizontalArrangement = Arrangement.SpaceAround,
+                    horizontalArrangement = SpaceAround,
                 ) {
                     items(deckViewModel.pack.cards.filterNot { it.spawnOnly }) { card ->
                         GridCell(card, isDeckFull = !isFull, editDeck, deckViewModel, cardSize)

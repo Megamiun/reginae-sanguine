@@ -1,35 +1,39 @@
 package br.com.gabryel.reginaesanguine.viewmodel.game
 
+import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Game
-import br.com.gabryel.reginaesanguine.domain.GameView
+import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameState.ChooseAction
-import br.com.gabryel.reginaesanguine.viewmodel.game.GameState.ChoosePosition
+import br.com.gabryel.reginaesanguine.viewmodel.game.local.LocalGameManager
+import br.com.gabryel.reginaesanguine.viewmodel.game.local.LocalGameStateData
+import br.com.gabryel.reginaesanguine.viewmodel.game.remote.RemoteGameManager
 import br.com.gabryel.reginaesanguine.viewmodel.require
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class GameViewModel(
-    private val stateFlow: MutableStateFlow<GameState>,
-    private val coroutineScope: CoroutineScope
-) {
+class GameViewModel(private val stateFlow: MutableStateFlow<GameState>, private val coroutineScope: CoroutineScope) {
     val state = stateFlow.asStateFlow()
 
     companion object {
         fun forLocalGame(game: Game, coroutineScope: CoroutineScope): GameViewModel {
             val client = LocalGameManager(game)
-            val gameUIData = LocalGameStateData(game)
-            return GameViewModel(MutableStateFlow(ChooseAction(client, gameUIData)), coroutineScope)
+            val state = LocalGameStateData(game)
+            return GameViewModel(MutableStateFlow(ChooseAction(client, state)), coroutineScope)
         }
 
-        fun forRemoteGame(game: Game, coroutineScope: CoroutineScope, localPlayerPosition: PlayerPosition): GameViewModel {
-            val client = RemoteGameManager.create(game, localPlayerPosition)
-            val gameView = GameView.forPlayer(game, localPlayerPosition)
-            val gameUIData = RemoteGameUIData(gameView)
-            return GameViewModel(MutableStateFlow(ChooseAction(client, gameUIData)), coroutineScope)
+        suspend fun forRemoteGame(
+            coroutineScope: CoroutineScope,
+            pack: Pack,
+            deck: List<Card>,
+            position: PlayerPosition
+        ): GameViewModel {
+            val manager = RemoteGameManager.create(deck, position, pack)
+
+            return GameViewModel(MutableStateFlow(manager.awaitGameCreation()), coroutineScope)
+                .trigger()
         }
     }
 
@@ -39,12 +43,13 @@ class GameViewModel(
         update<Playable> { state -> state.play(position, cardId) }
 
     fun isPlayable(position: Position, cardId: String): Boolean =
-        state.value.client.isPlayable(position, cardId)
+        state.value.let { state -> state is Playable && state.isPlayable(position, cardId) }
 
-    fun toChooseCard(): Boolean = update(ChooseAction::toChooseCard)
+    fun toChooseCard(): Boolean =
+        update(ChooseAction::toChooseCard)
 
     fun chooseCard(cardId: String): Boolean =
-        update<GameState.ChooseCard> { state -> state.chooseCard(cardId) }
+        update<ChooseCard> { state -> state.chooseCard(cardId) }
 
     fun choosePosition(position: Position): Boolean =
         update<ChoosePosition> { state -> state.play(position) }
@@ -57,10 +62,16 @@ class GameViewModel(
             val newState = execute(previousState)
             stateFlow.value = newState
 
-            if (newState is GameState.Wait) {
-                newState.trigger { stateFlow.value = it }
-            }
+            trigger()
         }
         return true
+    }
+
+    private suspend fun trigger(): GameViewModel {
+        val state = state.value
+        if (state is Awaitable)
+            state.trigger { stateFlow.value = it }
+
+        return this
     }
 }

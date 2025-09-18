@@ -5,16 +5,14 @@ import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.atColumn
 import com.jakewharton.mosaic.layout.ContentDrawScope
 import com.jakewharton.mosaic.layout.DrawModifier
-import com.jakewharton.mosaic.layout.height
-import com.jakewharton.mosaic.layout.offset
+import com.jakewharton.mosaic.layout.padding
 import com.jakewharton.mosaic.layout.size
-import com.jakewharton.mosaic.layout.width
 import com.jakewharton.mosaic.modifier.Modifier
+import com.jakewharton.mosaic.ui.Arrangement.Absolute.spacedBy
 import com.jakewharton.mosaic.ui.Box
 import com.jakewharton.mosaic.ui.BoxScope
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Row
-import com.jakewharton.mosaic.ui.Spacer
 import com.jakewharton.mosaic.ui.unit.IntOffset
 import com.jakewharton.mosaic.ui.unit.IntSize
 
@@ -27,21 +25,17 @@ fun Grid(
     val gridSize = gridConfiguration.gridSize
     val cellSize = gridConfiguration.cellSize
 
-    Box(modifier = gridConfiguration.then(modifier)) {
-        Column {
+    Box(gridConfiguration.then(modifier)) {
+        Column(Modifier.padding(1), spacedBy(1)) {
             (0 until gridSize.height).forEach { row ->
-                Row {
+                Row(Modifier, spacedBy(1)) {
                     (0 until gridSize.width).forEach { col ->
-                        Box(modifier = Modifier.height(cellSize.height + 1).width(cellSize.width + 1)) {
-                            Box(modifier = Modifier.size(cellSize).offset(1, 1)) {
-                                getData(row atColumn col)
-                            }
+                        Box(Modifier.size(cellSize)) {
+                            getData(row atColumn col)
                         }
                     }
-                    Spacer(modifier = Modifier.size(1))
                 }
             }
-            Spacer(modifier = Modifier.size(1))
         }
     }
 }

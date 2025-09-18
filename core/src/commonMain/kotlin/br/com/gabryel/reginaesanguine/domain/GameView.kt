@@ -5,7 +5,6 @@ package br.com.gabryel.reginaesanguine.domain
  * No opponent information is exposed.
  */
 data class GameView(
-    val boardScores: Map<PlayerPosition, Int>,
     val localPlayerHand: List<Card>,
     val localPlayerDeckSize: Int,
     val localPlayerPosition: PlayerPosition,
@@ -13,6 +12,7 @@ data class GameView(
     val round: Int = 1,
     val state: State,
     val boardCells: Map<Position, Cell> = emptyMap(),
+    val boardScores: Map<PlayerPosition, Int> = emptyMap(),
     val laneScores: Map<Int, Map<PlayerPosition, Int>> = emptyMap(),
     val laneWinners: Map<Int, PlayerPosition?> = emptyMap()
 ) {
@@ -20,8 +20,10 @@ data class GameView(
 
     fun getWinner(): PlayerPosition? = getScores().getWinner()
 
+    fun getBaseLaneScoreAt(lane: Int): Map<PlayerPosition, Int> = laneScores[lane] ?: emptyMap()
+
     private fun Map<PlayerPosition, Int>.getWinner(): PlayerPosition? {
-        val max = maxBy { it.value }
+        val max = maxByOrNull { it.value } ?: return null
         if (values.all { it == max.value }) return null
         return max.key
     }
@@ -34,10 +36,7 @@ data class GameView(
             val boardCells = (0 until game.size.width).flatMap { x ->
                 (0 until game.size.height).mapNotNull { y ->
                     val position = Position(x, y)
-                    when (val result = game.getCellAt(position)) {
-                        is Success<Cell> -> position to result.value
-                        is Failure -> null
-                    }
+                    game.getCellAt(position).map { position to it }.orNull()
                 }
             }.toMap()
 

@@ -226,23 +226,4 @@ data class EffectRegistry(
         PlayerPosition.entries.associateWith { position ->
             (acc[position] ?: 0) + (curr[position] ?: 0)
         }
-
-    private fun EffectApplicationResult.includeFrom(previous: EffectApplicationResult): EffectApplicationResult {
-        val newToAddToHand = PlayerPosition.entries.associateWith {
-            val prev = toAddToHand[it].orEmpty()
-            val current = previous.toAddToHand[it].orEmpty()
-
-            prev + current
-        }
-
-        val newToAddToBoard = PlayerPosition.entries.associateWith {
-            val prev = toAddToBoard[it].orEmpty()
-            val current = previous.toAddToBoard[it].orEmpty()
-
-            if (prev == current) prev
-            else prev + current
-        }
-
-        return copy(toAddToHand = newToAddToHand, toAddToBoard = newToAddToBoard, toDelete = toDelete + previous.toDelete)
-    }
 }
