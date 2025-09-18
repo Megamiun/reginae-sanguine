@@ -5,6 +5,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     kotlin("multiplatform")
@@ -31,10 +32,12 @@ kotlin {
         }
     }
 
-    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ReginaeSanguineCompose"
-            isStatic = true
+    if (HostManager.hostIsMac) {
+        listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+            iosTarget.binaries.framework {
+                baseName = "ReginaeSanguineCompose"
+                isStatic = true
+            }
         }
     }
 

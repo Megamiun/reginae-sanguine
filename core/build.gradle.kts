@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     kotlin("multiplatform")
@@ -12,11 +13,14 @@ kotlin {
     linuxArm64()
     linuxX64()
     mingwX64()
-    macosX64()
-    macosArm64()
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
+
+    if (HostManager.hostIsMac) {
+        macosX64()
+        macosArm64()
+        iosArm64()
+        iosX64()
+        iosSimulatorArm64()
+    }
 
     js {
         browser()
