@@ -1,4 +1,5 @@
 import br.com.gabryel.reginaesanguine.task.PrepareAssetsTask
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
@@ -42,6 +43,35 @@ allprojects {
         configureEach {
             if ("Resources" in name)
                 dependsOn(rootProject.tasks.getByName("prepareAssets"))
+        }
+
+        register("targets") {
+            group = "help"
+
+            val projectName = project.name
+            val kmpExtension = project.extensions.findByType<KotlinMultiplatformExtension>()
+            val sourceSetContainer = project.extensions.findByType<SourceSetContainer>()
+
+            val targetNames = kmpExtension?.targets?.map { it.name } ?: emptyList()
+
+            val kmpSourceSetNames = kmpExtension?.sourceSets?.map { it.name } ?: emptyList()
+            val jvmSourceSetNames = sourceSetContainer?.map { it.name } ?: emptyList()
+            val sourceSetNames = (kmpSourceSetNames + jvmSourceSetNames).toSet()
+
+            doLast {
+                println("Project: $projectName")
+                if (targetNames.isNotEmpty()) {
+                    println("KMP Targets:")
+                    targetNames.forEach { println(" - $it") }
+                }
+                if (sourceSetNames.isNotEmpty()) {
+                    println("Source Sets:")
+                    sourceSetNames.forEach { println(" - $it") }
+                }
+                if (targetNames.isEmpty() && sourceSetNames.isEmpty()) {
+                    println("No targets or source sets found")
+                }
+            }
         }
     }
 }
