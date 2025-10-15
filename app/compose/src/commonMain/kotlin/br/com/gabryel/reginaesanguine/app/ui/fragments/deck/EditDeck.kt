@@ -5,9 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.SpaceAround
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,10 +27,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterStart
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Black
@@ -42,9 +44,9 @@ import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.ActionableTooltip
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
 import br.com.gabryel.reginaesanguine.app.ui.components.RButton
+import br.com.gabryel.reginaesanguine.app.ui.decorations.addFancyCorners
 import br.com.gabryel.reginaesanguine.app.ui.fragments.CardDescription
 import br.com.gabryel.reginaesanguine.app.ui.fragments.DetailCard
-import br.com.gabryel.reginaesanguine.app.ui.theme.FancyBoxBg
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
@@ -54,7 +56,7 @@ import br.com.gabryel.reginaesanguine.viewmodel.deck.EditDeck
 import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
 
 @Composable
-context(_: PainterLoader, _: PlayerContext)
+context(_: PainterLoader, player: PlayerContext)
 fun EditDeck(deckViewModel: SingleDeckViewModel) {
     val editDeckState by deckViewModel.editDeck.collectAsState()
     val viewDecksState by deckViewModel.viewDecks.collectAsState()
@@ -73,7 +75,7 @@ fun EditDeck(deckViewModel: SingleDeckViewModel) {
                 )
             }
 
-            Column(Modifier.padding(vertical = 10.dp).background(FancyBoxBg)) {
+            Column(Modifier.padding(vertical = 10.dp).playerBackground()) {
                 Spacer(Modifier.height(1.dp).fillMaxWidth().background(WhiteLight))
 
                 BoxWithConstraints(Modifier.padding(15.dp), contentAlignment = Center) {
@@ -103,31 +105,35 @@ fun EditDeck(deckViewModel: SingleDeckViewModel) {
             }
 
             BoxWithConstraints(Modifier.weight(1f)) {
-                val buttonsHeight = 30.dp
-                val gridHeight = maxHeight - buttonsHeight
-                val cardSize = getCardSize(80.dp)
+                val gridPadding = 12.dp
+                val cellSize = getCardSize(maxHeight / 2.1f, 0.7f)
+                val cardSize = getCardSize(maxHeight / 2.8f)
 
                 LazyVerticalGrid(
-                    FixedSize(cardSize.width + 10.dp),
-                    baseModifier.height(gridHeight).background(FancyBoxBg).border(1.dp, WhiteLight),
+                    FixedSize(cellSize.width),
+                    baseModifier.playerBackground().border(1.dp, WhiteLight).addFancyCorners(),
+                    contentPadding = PaddingValues(gridPadding),
                     horizontalArrangement = SpaceAround,
                 ) {
                     items(deckViewModel.pack.cards.filterNot { it.spawnOnly }) { card ->
-                        GridCell(card, isDeckFull = !isFull, editDeck, deckViewModel, cardSize)
+                        Box(Modifier.size(cellSize), contentAlignment = Center) {
+                            GridCell(card, isDeckFull = !isFull, editDeck, deckViewModel, cardSize)
+                        }
                     }
                 }
+            }
 
-                Row(
-                    baseModifier.height(buttonsHeight).align(BottomCenter),
-                    horizontalArrangement = SpaceBetween,
-                ) {
-                    RButton("Return") { deckViewModel.cancelEditMode() }
-                    RButton("Save", enabled = isFull) { deckViewModel.saveDeck() }
-                }
+            Row(baseModifier.height(30.dp), SpaceBetween, CenterVertically) {
+                RButton("Return") { deckViewModel.cancelEditMode() }
+                RButton("Save", enabled = isFull) { deckViewModel.saveDeck() }
             }
         }
     }
 }
+
+context(player: PlayerContext)
+private fun Modifier.playerBackground(): Modifier =
+    background(Black).background(player.color.copy(alpha = 0.25f))
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -155,9 +161,17 @@ private fun GridCell(
         action = { deckViewModel.addToDeck(card) },
         tooltip = { CardDescription(card) },
     ) {
-        Column(Modifier.padding(5.dp, 7.dp), horizontalAlignment = CenterHorizontally) {
+        Column(Modifier.fillMaxSize().padding(2.dp), horizontalAlignment = CenterHorizontally, verticalArrangement = spacedBy(2.dp)) {
             DetailCard(card, cardSize)
-            Text("$available/$max", counterModifier, fontSize = 8.sp, lineHeight = 8.sp, color = YellowAccent, textAlign = TextAlign.Center)
+
+            Text(
+                "$available/$max",
+                counterModifier,
+                fontSize = 8.sp,
+                lineHeight = 8.sp,
+                color = YellowAccent,
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }

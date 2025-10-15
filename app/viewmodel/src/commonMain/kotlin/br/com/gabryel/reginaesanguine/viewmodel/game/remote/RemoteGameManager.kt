@@ -30,8 +30,12 @@ class RemoteGameManager(
     private val playerPosition: PlayerPosition
 ) : GameManager {
     companion object {
-        suspend fun create(deck: List<Card>, position: PlayerPosition, pack: Pack): RemoteGameManager {
-            val client = LocalGameClient(400)
+        suspend fun create(
+            client: GameClient,
+            position: PlayerPosition,
+            deck: List<Card>,
+            pack: Pack
+        ): RemoteGameManager {
             val gameId = client.initGame(deck, position, pack)
             return RemoteGameManager(client, gameId, position)
         }

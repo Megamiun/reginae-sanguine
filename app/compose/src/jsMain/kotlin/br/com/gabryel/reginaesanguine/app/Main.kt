@@ -16,7 +16,7 @@ import androidx.compose.ui.window.ComposeViewport
 import br.com.gabryel.reginaesanguine.app.service.WebResourceLoader
 import br.com.gabryel.reginaesanguine.app.services.LocalInteractionType
 import br.com.gabryel.reginaesanguine.app.services.ResPainterLoader
-import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleLight
+import br.com.gabryel.reginaesanguine.app.ui.theme.Background
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
 import br.com.gabryel.reginaesanguine.app.util.InteractionType.MOUSE
 import org.jetbrains.skiko.wasm.onWasmReady
@@ -27,7 +27,7 @@ fun main() {
         ComposeViewport("content") {
             ReginaeSanguineTheme {
                 CompositionLocalProvider(LocalDensity provides Density(2f), LocalInteractionType provides MOUSE) {
-                    Box(Modifier.fillMaxSize().background(PurpleLight), contentAlignment = TopCenter) {
+                    Box(Modifier.fillMaxSize().background(Background), contentAlignment = TopCenter) {
                         Box(Modifier.size(1000.dp, 500.dp), contentAlignment = Center) {
                             context(ResPainterLoader()) {
                                 App(WebResourceLoader())

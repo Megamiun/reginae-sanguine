@@ -1,10 +1,8 @@
 package br.com.gabryel.reginaesanguine.app.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RichTooltip
-import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition.Companion.Right
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults

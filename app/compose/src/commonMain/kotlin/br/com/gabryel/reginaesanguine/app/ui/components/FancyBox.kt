@@ -24,8 +24,7 @@ fun FancyBox(modifier: Modifier = Modifier, setup: FancyBoxScope.() -> Unit) {
 
     Box(Modifier.width(Max).then(modifier)) {
         Column {
-            (scope.header)()
-
+            scope.header?.let { it() }
             (scope.body)()
         }
 
@@ -34,19 +33,30 @@ fun FancyBox(modifier: Modifier = Modifier, setup: FancyBoxScope.() -> Unit) {
 }
 
 class FancyBoxScope {
-    var header: @Composable () -> Unit = {}
+    var header: (@Composable () -> Unit)? = null
     var body: @Composable () -> Unit = {}
     var decorations: @Composable BoxScope.() -> Unit = {}
 
-    fun header(background: Color = Emerald, content: @Composable BoxScope.() -> Unit) {
+    fun header(modifier: Modifier = Modifier, background: Color = Emerald, content: @Composable BoxScope.() -> Unit) {
+        val baseModifier = Modifier
+            .fillMaxWidth()
+            .background(background)
+            .border(1.dp, WhiteLight)
+
         header = {
-            Box(Modifier.fillMaxWidth().background(background).border(1.dp, WhiteLight), Center, content = content)
+            Box(baseModifier.then(modifier), Center, content = content)
         }
     }
 
-    fun body(background: Color = FancyBoxBg, content: @Composable BoxScope.() -> Unit) {
+    fun body(modifier: Modifier = Modifier, background: Color = FancyBoxBg, content: @Composable BoxScope.() -> Unit) {
+        val baseModifier = Modifier
+            .fillMaxWidth()
+            .offset(y = (-1).dp)
+            .background(background)
+            .border(1.dp, WhiteLight)
+
         body = {
-            Box(Modifier.fillMaxWidth().offset(y = (-1).dp).background(background).border(1.dp, WhiteLight), Center, content = content)
+            Box(baseModifier.then(modifier), Center, content = content)
         }
     }
 

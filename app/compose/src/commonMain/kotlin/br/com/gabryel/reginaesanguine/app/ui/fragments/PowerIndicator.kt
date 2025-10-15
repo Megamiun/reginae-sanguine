@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.PlayerContext
-import br.com.gabryel.reginaesanguine.app.ui.theme.BrownDark
+import br.com.gabryel.reginaesanguine.app.ui.theme.EffectGridBg
 import br.com.gabryel.reginaesanguine.app.ui.theme.Yellow
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.theme.createNumbersTextStyle
@@ -36,7 +36,7 @@ fun PlayerPowerIndicator(power: Int, size: Dp, modifier: Modifier = Modifier, ac
 
 @Composable
 fun CardPowerIndicator(power: Int, size: Dp, modifier: Modifier = Modifier, accented: Boolean = false) {
-    BasePlayerIndicator(BrownDark, power, accented, size, listOf(90f, 210f, 330f), modifier)
+    BasePlayerIndicator(EffectGridBg, power, accented, size, listOf(90f, 210f, 330f), modifier)
 }
 
 @Composable

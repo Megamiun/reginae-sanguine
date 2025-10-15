@@ -1,6 +1,7 @@
 package br.com.gabryel.reginaesanguine.app.ui.fragments.deck
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
@@ -28,7 +29,9 @@ import br.com.gabryel.reginaesanguine.app.services.PlayerContext
 import br.com.gabryel.reginaesanguine.app.ui.components.FancyBox
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
 import br.com.gabryel.reginaesanguine.app.ui.components.RButton
+import br.com.gabryel.reginaesanguine.app.ui.decorations.addFancyCorners
 import br.com.gabryel.reginaesanguine.app.ui.fragments.SimpleCard
+import br.com.gabryel.reginaesanguine.app.ui.theme.FancyBoxBg
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.theme.createNumbersTextStyle
@@ -44,9 +47,9 @@ fun ViewDecks(deckViewModel: SingleDeckViewModel) {
     val deck = viewDecksState.selectedDeck
 
     FancyBox {
-        header(player.color) {
+        header(Modifier.background(player.color.copy(alpha = 0.8f)), FancyBoxBg) {
             Row(
-                Modifier.fillMaxWidth().padding(24.dp, 8.dp),
+                Modifier.fillMaxWidth().padding(16.dp, 2.dp),
                 SpaceBetween,
                 CenterVertically,
             ) {
@@ -55,12 +58,12 @@ fun ViewDecks(deckViewModel: SingleDeckViewModel) {
             }
         }
 
-        body {
+        body(Modifier.background(player.color.copy(alpha = 0.2f)).addFancyCorners()) {
             Grid(
                 IntSize(5, 3),
-                Modifier.padding(8.dp),
-                horizontalArrangement = spacedBy(6.dp),
-                verticalArrangement = spacedBy(3.dp),
+                Modifier.padding(16.dp),
+                horizontalArrangement = spacedBy(3.dp),
+                verticalArrangement = spacedBy(7.dp),
             ) { (x, y) ->
                 val card = deck.getOrNull(x + (y * 5)) ?: this.run {
                     Box(Modifier.size(cardSize))

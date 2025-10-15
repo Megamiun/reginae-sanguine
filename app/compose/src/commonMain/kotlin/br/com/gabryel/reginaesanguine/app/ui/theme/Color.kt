@@ -2,33 +2,42 @@ package br.com.gabryel.reginaesanguine.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val PurpleLight = Color(63, 48, 60)
-val PurpleDark = Color(51, 51, 74)
+val Background = Color(63, 48, 60)
+val Border = Color(241, 225, 157)
 
-val WhiteLight = Color(194, 200, 210)
-val WhiteDark = Color(163, 190, 216)
+// Game Grid
+val GridCheckeredOn = Color(51, 51, 74)
+val GridCheckeredOff = Color(194, 200, 210)
 
-val BrownLight = Color(90, 75, 59)
-val BrownDark = Color(60, 45, 27)
+// Displacement Grid
+val EffectGridBg = Color(60, 45, 27)
+val EffectGridEmpty = Color(90, 75, 59)
+val EffectGridIncrement = Color(227, 181, 98)
+val EffectGridEffect = Color(147, 40, 31)
+val EffectGridBorder = Color(101, 101, 101)
 
+// Player
 val Emerald = Color(37, 88, 100)
 val EmeraldAccent = Color(53, 119, 136)
 
 val Ruby = Color(69, 12, 9)
 val RubyAccent = Color(147, 40, 31)
 
+// Card
+val CardBorderStandardLight = Color(207, 207, 207)
+val CardBorderStandardDark = Color(101, 101, 101)
+
+val CardBorderLegendaryLight = Color(241, 225, 157)
+val CardBorderLegendaryDark = Color(166, 126, 25)
+
+// Buttons
+val ButtonBackground = Color(131, 108, 68)
+
+// To rename
 val Yellow = Color(163, 123, 69)
 val YellowAccent = Color(198, 161, 85)
 
-val Orange = Color(227, 181, 98)
-
-val GreyLight = Color(207, 207, 207)
-val GreyDark = Color(101, 101, 101)
-
-val GoldLight = Color(241, 225, 157)
-
-val GoldLightDisabled = Color(232, 225, 197)
-
-val GoldDark = Color(166, 126, 25)
+val WhiteLight = Color(194, 200, 210)
+val WhiteDark = Color(163, 190, 216)
 
 val FancyBoxBg = Color(16, 25, 25)

@@ -1,21 +1,21 @@
 [versions]
 kotlin = "2.2.20"
-compose = "1.9.0-beta03"
+compose = "1.9.1"
 arrow = "2.1.2"
 kotest = "6.0.3"
 kotlinx-serialization = "1.9.0"
 kotlinx-coroutines = "1.10.2"
-mockk = "1.14.5"
+mockk = "1.14.6"
 mosaic = "0.18.0"
 coil = "3.3.0"
-spring-boot = "4.0.0-M2"
+spring-boot = "4.0.0-M3"
 spring-dependency-management = "1.1.7"
 spring-webmvc = "7.0.0-SNAPSHOT"
 
 # Android dependencies
 android = "8.11.1"
 appcompat = "1.7.1"
-lifecycle = "2.9.3"
+lifecycle = "2.9.4"
 activity-compose = "1.11.0"
 
 # Build plugins
@@ -39,9 +39,6 @@ kotest-property = { group = "io.kotest", name = "kotest-property", version.ref =
 kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
-
-# Jetpack Compose
-compose-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "compose" }
 
 # Coil
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }

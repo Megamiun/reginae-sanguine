@@ -24,16 +24,14 @@ import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
 import br.com.gabryel.reginaesanguine.app.ui.DeckSelectionScreen
 import br.com.gabryel.reginaesanguine.app.ui.GameScreen
 import br.com.gabryel.reginaesanguine.app.ui.HomeScreen
-import br.com.gabryel.reginaesanguine.app.ui.ModeScreen
 import br.com.gabryel.reginaesanguine.app.ui.components.InstanceNavigationStack
-import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
+import br.com.gabryel.reginaesanguine.app.ui.theme.GridCheckeredOn
 import br.com.gabryel.reginaesanguine.app.util.Mode
 import br.com.gabryel.reginaesanguine.app.util.Mode.LOCAL
 import br.com.gabryel.reginaesanguine.app.util.Mode.REMOTE
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.DECK_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.HOME
-import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.MODE_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.getStandardPack
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
@@ -44,6 +42,7 @@ import br.com.gabryel.reginaesanguine.viewmodel.deck.LocalDeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.RemoteDeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.game.remote.LocalGameClient
 import coil3.SingletonImageLoader
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
@@ -88,13 +87,10 @@ fun App(resourceLoader: ResourceLoader) {
 
         Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
 
-        Surface(Modifier.fillMaxSize(), color = PurpleDark.copy(alpha = 0.6f)) {
-            InstanceNavigationStack(MODE_SELECTION) {
-                addRoute(MODE_SELECTION) {
-                    ModeScreen { mode = it }
-                }
+        Surface(Modifier.fillMaxSize(), color = GridCheckeredOn.copy(alpha = 0.6f)) {
+            InstanceNavigationStack(HOME) {
                 addRoute(HOME) {
-                    HomeScreen()
+                    HomeScreen { mode = it }
                 }
                 addRoute(DECK_SELECTION) {
                     DeckSelectionScreen(deckViewModel)
@@ -127,11 +123,13 @@ private suspend fun createViewModel(deckViewModel: DeckEditViewModel, pack: Pack
             val leftPlayer = Player(emptyList(), leftDeck.shuffled())
             val rightPlayer = Player(emptyList(), rightDeck.shuffled())
             val game = Game.forPlayers(leftPlayer, rightPlayer)
+
             GameViewModel.forLocalGame(game, coroutineScope)
         }
         is RemoteDeckViewModel -> {
             val leftDeck = deckViewModel.leftPlayer.viewDecks.value.selectedDeck
+            val client = LocalGameClient(400)
 
-            GameViewModel.forRemoteGame(coroutineScope, pack, leftDeck.shuffled(), LEFT)
+            GameViewModel.forRemoteGame(pack, leftDeck.shuffled(), LEFT, client, coroutineScope)
         }
     }

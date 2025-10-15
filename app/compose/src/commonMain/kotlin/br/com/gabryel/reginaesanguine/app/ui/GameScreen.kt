@@ -37,9 +37,9 @@ import br.com.gabryel.reginaesanguine.app.ui.fragments.DetailCard
 import br.com.gabryel.reginaesanguine.app.ui.fragments.GridPlayableCell
 import br.com.gabryel.reginaesanguine.app.ui.fragments.PlayerLanePowerCell
 import br.com.gabryel.reginaesanguine.app.ui.fragments.ResultOverlay
-import br.com.gabryel.reginaesanguine.app.ui.theme.PurpleDark
+import br.com.gabryel.reginaesanguine.app.ui.theme.GridCheckeredOff
+import br.com.gabryel.reginaesanguine.app.ui.theme.GridCheckeredOn
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteDark
-import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
 import br.com.gabryel.reginaesanguine.app.util.getTransferData
@@ -142,11 +142,11 @@ fun GameScreen(gameViewModel: GameViewModel) {
 
 private fun Modifier.boardCell(position: Position): Modifier =
     if ((position.lane + position.column) % 2 == 0)
-        cell().background(WhiteLight).padding(2.dp)
+        cell().background(GridCheckeredOff).padding(2.dp)
     else
-        cell().background(PurpleDark).padding(2.dp)
+        cell().background(GridCheckeredOn).padding(2.dp)
 
 private fun Modifier.playerCell(position: Position): Modifier =
-    cell().background(PurpleDark).padding(2.dp)
+    cell().background(GridCheckeredOn).padding(2.dp)
 
 private fun Modifier.cell(): Modifier = size(getCardSize() + DpSize(1.dp, 1.dp))

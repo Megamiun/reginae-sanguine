@@ -86,8 +86,7 @@ kotlin {
 
                 implementation(compose.components.resources)
                 implementation(compose.foundation)
-                // TODO Change back to compose.material3 after material3 1.9.0 leaves beta
-                implementation(libs.compose.material3)
+                implementation(compose.material3)
                 implementation(compose.ui)
 
                 implementation(libs.coil.compose)
@@ -100,7 +99,7 @@ kotlin {
             implementation(libs.lifecycle.runtime.ktx)
             implementation(libs.activity.compose)
 
-            runtimeOnly(compose.preview)
+            implementation(compose.preview)
         }
 
         jvmMain.dependencies {

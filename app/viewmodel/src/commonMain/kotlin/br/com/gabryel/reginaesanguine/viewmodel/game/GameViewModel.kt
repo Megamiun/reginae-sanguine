@@ -25,12 +25,13 @@ class GameViewModel(private val stateFlow: MutableStateFlow<GameState>, private 
         }
 
         suspend fun forRemoteGame(
-            coroutineScope: CoroutineScope,
             pack: Pack,
             deck: List<Card>,
-            position: PlayerPosition
+            position: PlayerPosition,
+            client: GameClient,
+            coroutineScope: CoroutineScope
         ): GameViewModel {
-            val manager = RemoteGameManager.create(deck, position, pack)
+            val manager = RemoteGameManager.create(client, position, deck, pack)
 
             return GameViewModel(MutableStateFlow(manager.awaitGameCreation()), coroutineScope)
                 .trigger()

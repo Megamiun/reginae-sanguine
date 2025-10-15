@@ -30,7 +30,7 @@ fun DeckSelectionScreen(deckEditViewModel: DeckEditViewModel) {
     val editState by deckEditViewModel.editState.collectAsState()
 
     when (val state = editState) {
-        is DeckView -> View(deckEditViewModel)
+        is DeckView -> ViewDeck(deckEditViewModel)
         is DeckEdit -> context(PlayerContext.getDefaultFor(state.player)) {
             EditDeck(state.playerViewModel)
         }
@@ -39,7 +39,7 @@ fun DeckSelectionScreen(deckEditViewModel: DeckEditViewModel) {
 
 @Composable
 context(painterLoader: PainterLoader, nav: NavigationManager<NavigationScreens>)
-private fun View(deckEditViewModel: DeckEditViewModel) {
+private fun ViewDeck(deckEditViewModel: DeckEditViewModel) {
     Column(Modifier.fillMaxSize().padding(15.dp)) {
         RButton("Return", Modifier.align(Start)) { nav.pop() }
 

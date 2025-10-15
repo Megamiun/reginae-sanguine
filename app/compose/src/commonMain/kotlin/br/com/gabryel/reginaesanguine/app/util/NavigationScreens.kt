@@ -6,7 +6,6 @@ enum class Mode {
 }
 
 enum class NavigationScreens {
-    MODE_SELECTION,
     HOME,
     DECK_SELECTION,
     GAME
