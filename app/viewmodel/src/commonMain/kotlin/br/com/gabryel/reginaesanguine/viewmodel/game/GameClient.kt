@@ -1,21 +1,26 @@
 package br.com.gabryel.reginaesanguine.viewmodel.game
 
-import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.GameView
-import br.com.gabryel.reginaesanguine.domain.Pack
+import br.com.gabryel.reginaesanguine.domain.Action
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.viewmodel.game.dto.GameIdDto
+import br.com.gabryel.reginaesanguine.viewmodel.game.dto.GameViewDto
+import br.com.gabryel.reginaesanguine.viewmodel.game.dto.InitGameRequest
 
 /**
  * Service interface for game operations with UUID-based session management.
- * In real implementation, this would communicate with a server.
+ * Uses DTOs for communication to support both local and remote implementations.
  */
 interface GameClient {
-    suspend fun initGame(deck: List<Card>, position: PlayerPosition, pack: Pack): String
+    suspend fun initGame(request: InitGameRequest): GameIdDto
 
-    suspend fun skip(gameId: String, playerPosition: PlayerPosition): GameView
+    suspend fun submitAction(gameId: String, playerPosition: PlayerPosition, action: Action<out String>): GameViewDto
 
-    suspend fun play(gameId: String, playerPosition: PlayerPosition, position: Position, cardId: String): GameView
+    suspend fun fetchStatus(gameId: String, playerPosition: PlayerPosition): GameViewDto?
 
-    suspend fun fetchStatus(gameId: String, playerPosition: PlayerPosition): GameView?
+    suspend fun skip(gameId: String, playerPosition: PlayerPosition): GameViewDto =
+        submitAction(gameId, playerPosition, Action.Skip)
+
+    suspend fun play(gameId: String, playerPosition: PlayerPosition, position: Position, cardId: String): GameViewDto =
+        submitAction(gameId, playerPosition, Action.Play(position, cardId))
 }

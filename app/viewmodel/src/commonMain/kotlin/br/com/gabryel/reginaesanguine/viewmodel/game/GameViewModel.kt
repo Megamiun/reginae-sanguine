@@ -5,6 +5,7 @@ import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.viewmodel.game.dto.InitGameRequest
 import br.com.gabryel.reginaesanguine.viewmodel.game.local.LocalGameManager
 import br.com.gabryel.reginaesanguine.viewmodel.game.local.LocalGameStateData
 import br.com.gabryel.reginaesanguine.viewmodel.game.remote.RemoteGameManager
@@ -31,7 +32,8 @@ class GameViewModel(private val stateFlow: MutableStateFlow<GameState>, private 
             client: GameClient,
             coroutineScope: CoroutineScope
         ): GameViewModel {
-            val manager = RemoteGameManager.create(client, position, deck, pack)
+            val request = InitGameRequest(deck.map { it.id }, position, pack.id)
+            val manager = RemoteGameManager.create(client, request)
 
             return GameViewModel(MutableStateFlow(manager.awaitGameCreation()), coroutineScope)
                 .trigger()

@@ -1,15 +1,19 @@
 package br.com.gabryel.reginaesanguine.server.controller
 
 import br.com.gabryel.reginaesanguine.domain.Action
+import br.com.gabryel.reginaesanguine.domain.Board
 import br.com.gabryel.reginaesanguine.domain.Failure
 import br.com.gabryel.reginaesanguine.domain.Game
+import br.com.gabryel.reginaesanguine.domain.GameView
+import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.Player
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.Success
-import br.com.gabryel.reginaesanguine.server.domain.GameState
-import br.com.gabryel.reginaesanguine.server.domain.GameState.ONGOING
-import br.com.gabryel.reginaesanguine.server.domain.GameSummary
+import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
+import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
+import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
+import org.springframework.http.HttpStatus.BAD_REQUEST
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,52 +21,78 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import java.util.UUID
 
 @RestController
 @RequestMapping("game")
 class GameController {
-    val games = mutableMapOf<UUID, Game>()
+    private val packs = mutableMapOf<String, Pack>()
+
+    private val games = mutableMapOf<UUID, Game>()
+    private val gamePackIds = mutableMapOf<UUID, String>()
 
     @PostMapping
-    fun createGame(
-        @RequestHeader("Authorization") authorization: String,
-    ): GameSummary {
-        val id = UUID.randomUUID()
-        val player = Player(listOf(), listOf())
-        val game = Game.forPlayers(player, player)
+    fun initGame(
+        @RequestBody request: InitGameRequest
+    ): GameIdDto {
+        val gameId = UUID.randomUUID()
+        val pack = packs[request.packId]
+            ?: throw ResponseStatusException(NOT_FOUND, "Pack ${request.packId} not found")
 
-        games[id] = game
+        // Create entities later for storing data and improve this validation
+        val availableCards = pack.cards.associateBy { it.id }
+        val deck = request.deckCardIds.mapNotNull { availableCards[it] }
 
-        return GameSummary(id, ONGOING, LEFT)
+        if (deck.size != request.deckCardIds.size) {
+            throw ResponseStatusException(BAD_REQUEST, "Invalid card IDs in deck")
+        }
+
+        val player = Player(deck.take(5), deck.drop(5))
+        val opponent = Player(emptyList(), emptyList())
+
+        val game = Game(
+            Board.default(),
+            mapOf(request.position to player, request.position.opponent to opponent),
+            playerTurn = PlayerPosition.LEFT,
+            availableCards = availableCards,
+        )
+
+        games[gameId] = game
+        gamePackIds[gameId] = request.packId
+        return GameIdDto(gameId)
     }
 
-    @GetMapping("/{id}")
-    fun getGame(
+    @PostMapping("/{gameId}/action")
+    fun executeAction(
+        @PathVariable gameId: UUID,
         @RequestHeader("Authorization") authorization: String,
-        @PathVariable id: UUID
-    ): GameSummary {
-        val game = getGameBy(id)
-
-        return GameSummary(id, ONGOING, game.playerTurn)
-    }
-
-    @PostMapping("/{id}/action")
-    fun play(
-        @RequestHeader("Authorization") authorization: String,
-        @PathVariable id: UUID,
         @RequestBody action: Action<String>
-    ): GameSummary {
-        val player = PlayerPosition.valueOf(authorization)
-        when (val result = getGameBy(id).play(player, action)) {
-            is Success<Game> -> {
-                val game = result.value
-                games[id] = game
-                return GameSummary(id, GameState.from(game.getState()), result.value.playerTurn)
+    ): GameViewDto {
+        val playerPosition = PlayerPosition.valueOf(authorization)
+        val game = getGameBy(gameId)
+
+        return when (val result = game.play(game.playerTurn, action)) {
+            is Success -> {
+                games[gameId] = result.value
+                GameViewDto.from(GameView.forPlayer(result.value, playerPosition), getPackId(gameId))
             }
-            is Failure -> throw IllegalStateException(result.toString())
+            is Failure -> throw ResponseStatusException(BAD_REQUEST, result.toString())
         }
     }
 
-    private fun getGameBy(id: UUID): Game = games[id] ?: error("Game with id $id not found")
+    @GetMapping("/{gameId}/status")
+    fun fetchStatus(
+        @PathVariable gameId: UUID,
+        @RequestHeader("Authorization") authorization: String
+    ): GameViewDto? {
+        val playerPosition = PlayerPosition.valueOf(authorization)
+        return GameViewDto.from(GameView.forPlayer(getGameBy(gameId), playerPosition), getPackId(gameId))
+    }
+
+    private fun getPackId(gameId: UUID): String =
+        gamePackIds[gameId] ?: throw ResponseStatusException(NOT_FOUND, "Pack ID for game $gameId not found")
+
+    private fun getGameBy(gameId: UUID): Game =
+        games[gameId] ?: throw ResponseStatusException(NOT_FOUND, "Game $gameId not found")
 }

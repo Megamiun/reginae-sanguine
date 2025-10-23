@@ -1,18 +1,17 @@
 package br.com.gabryel.reginaesanguine.viewmodel.game.remote
 
-import br.com.gabryel.reginaesanguine.domain.Card
-import br.com.gabryel.reginaesanguine.domain.GameView
-import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.PlayableMove
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.viewmodel.game.AwaitMatch
 import br.com.gabryel.reginaesanguine.viewmodel.game.AwaitTurn
 import br.com.gabryel.reginaesanguine.viewmodel.game.ChooseAction
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameClient
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameManager
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameState
+import br.com.gabryel.reginaesanguine.viewmodel.game.dto.GameViewDto
+import br.com.gabryel.reginaesanguine.viewmodel.game.dto.InitGameRequest
+import br.com.gabryel.reginaesanguine.viewmodel.game.dto.StateDto
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -24,7 +23,7 @@ import kotlinx.coroutines.flow.map
  * Never exposes full Game objects to maintain security.
  *
  * - Local player: Actions are executed immediately via server
- * - Remote player: Waits 2 seconds then automatically skips
+ * - Remote player: Waits for their turn
  */
 class RemoteGameManager(
     private val gameClient: GameClient,
@@ -33,14 +32,9 @@ class RemoteGameManager(
     private val currentStateData: RemoteGameStateData? = null
 ) : GameManager {
     companion object {
-        suspend fun create(
-            client: GameClient,
-            position: PlayerPosition,
-            deck: List<Card>,
-            pack: Pack
-        ): RemoteGameManager {
-            val gameId = client.initGame(deck, position, pack)
-            return RemoteGameManager(client, gameId, position)
+        suspend fun create(client: GameClient, request: InitGameRequest): RemoteGameManager {
+            val gameId = client.initGame(request)
+            return RemoteGameManager(client, gameId, request.position)
         }
     }
 
@@ -57,9 +51,9 @@ class RemoteGameManager(
     override suspend fun play(position: Position, cardId: String): GameState =
         awaitTurn(gameClient.play(gameId, playerPosition, position, cardId))
 
-    private fun awaitTurn(view: GameView): GameState {
+    private fun awaitTurn(view: GameViewDto): GameState {
         val stateData = RemoteGameStateData(view)
-        if (view.playerTurn == playerPosition || view.state != State.Ongoing)
+        if (view.playerTurn == playerPosition || view.state !is StateDto.Ongoing)
             return ChooseAction(RemoteGameManager(gameClient, gameId, playerPosition, stateData), stateData)
 
         return AwaitTurn(stateData) {
