@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.BottomStart
@@ -109,8 +110,8 @@ fun GameScreen(gameViewModel: GameViewModel) {
         Row(Modifier.align(BottomCenter), horizontalArrangement = Center) {
             context(PlayerContext.getDefaultFor(game.playerHandPosition)) {
                 game.currentPlayerHand.forEach { card ->
-                    val dragAndDrop = Modifier.dragAndDropSource { offset ->
-                        getTransferData(offset, card.id)
+                    val dragAndDrop = remember(card.id) {
+                        Modifier.dragAndDropSource { offset -> getTransferData(offset, card.id) }
                     }
 
                     Box(Modifier.padding(1.dp)) {

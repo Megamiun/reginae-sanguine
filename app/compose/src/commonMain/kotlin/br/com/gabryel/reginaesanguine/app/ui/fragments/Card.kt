@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopCenter
@@ -67,6 +68,11 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.effect.type.EffectWithAffected
 
+private val STANDARD_BORDER_COLORS = listOf(CardBorderStandardDark, CardBorderStandardLight, CardBorderStandardDark)
+private val LEGENDARY_BORDER_COLORS = listOf(CardBorderLegendaryDark, CardBorderLegendaryLight, CardBorderLegendaryDark)
+
+private val CARD_SHAPE = RoundedCornerShape(5)
+
 @Composable
 context(painterLoader: PainterLoader, player: PlayerContext)
 fun SimpleCard(card: Card, size: DpSize, modifier: Modifier = Modifier) {
@@ -85,17 +91,16 @@ private fun Card(owner: PlayerPosition, card: Card, size: DpSize, modifier: Modi
     val background = loadBackgroundForPlayer(owner)
     val cardArt = painterLoader.loadCardImage("queens_blood", card.id)
 
-    val borderBrush = verticalGradient(card.getCardBorderColors())
-    val borderStroke = BorderStroke(1.dp, borderBrush)
-    val cardShape = RoundedCornerShape(5)
+    val borderBrush = remember(card.tier) { verticalGradient(card.getCardBorderColors()) }
+    val borderStroke = remember(card.tier) { BorderStroke(1.dp, borderBrush) }
     val totalWidth = size.width
 
-    val clippingModifier = Modifier.clip(cardShape)
+    val clippingModifier = Modifier.clip(CARD_SHAPE)
 
     Box(modifier) {
-        Box(clippingModifier.requiredSize(size).background(borderBrush, cardShape).padding(1.5.dp), Center) {
+        Box(clippingModifier.requiredSize(size).background(borderBrush, CARD_SHAPE).padding(1.5.dp), Center) {
             Image(background, null, clippingModifier.fillMaxSize(), TopCenter, FillWidth)
-            Box(clippingModifier.fillMaxSize().padding(1.dp).border(borderStroke, cardShape), Center) {
+            Box(clippingModifier.fillMaxSize().padding(1.dp).border(borderStroke, CARD_SHAPE), Center) {
                 if (cardArt != null)
                     Image(cardArt, "TODO", clippingModifier.fillMaxSize(), TopCenter, FillWidth)
 
@@ -113,12 +118,14 @@ fun BoxScope.CardDetails(owner: PlayerPosition, card: Card, totalWidth: Dp, size
     val notchHeight = size.height / 9
     val centerWidth = notchHeight / 10
 
+    val notchBrush = remember(card.tier) { horizontalGradient(card.getCardBorderColors()) }
+
     Column(Modifier.align(BottomCenter), verticalArrangement = spacedBy((-notchHeight * 0.9f))) {
         Box(Modifier.fillMaxWidth().zIndex(1f), Center) {
             DisplacementGrid(owner, card, totalWidth / 3f)
         }
 
-        NotchedBox(horizontalGradient(card.getCardBorderColors()), notchHeight, centerWidth) {
+        NotchedBox(notchBrush, notchHeight, centerWidth) {
             val fontSize = defineFontSize(totalWidth, card)
             Text(
                 card.name,
@@ -136,8 +143,8 @@ fun BoxScope.CardDetails(owner: PlayerPosition, card: Card, totalWidth: Dp, size
 }
 
 private fun Card.getCardBorderColors(): List<Color> = when (tier) {
-    STANDARD -> listOf(CardBorderStandardDark, CardBorderStandardLight, CardBorderStandardDark)
-    LEGENDARY -> listOf(CardBorderLegendaryDark, CardBorderLegendaryLight, CardBorderLegendaryDark)
+    STANDARD -> STANDARD_BORDER_COLORS
+    LEGENDARY -> LEGENDARY_BORDER_COLORS
 }
 
 @Composable
