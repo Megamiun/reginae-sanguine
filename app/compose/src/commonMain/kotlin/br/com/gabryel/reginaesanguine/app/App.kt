@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale.Companion.FillWidth
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.PainterLoader
@@ -43,8 +44,10 @@ import br.com.gabryel.reginaesanguine.viewmodel.deck.RemoteDeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.game.remote.LocalGameClient
+import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.compose.LocalPlatformContext
+import coil3.request.Disposable
 import coil3.request.ImageRequest
 import kotlinx.coroutines.CoroutineScope
 
@@ -55,23 +58,17 @@ fun App(resourceLoader: ResourceLoader) {
 
     var loaded by remember { mutableStateOf(false) }
     LaunchedEffect(true) {
-        val resources = Res.allDrawableResources.map { (key) ->
-            val request = ImageRequest.Builder(context)
-                .data(Res.getUri("drawable/$key.png"))
-                .build()
-            SingletonImageLoader.get(context).enqueue(request)
-        }
+        val startupResources = listOf(
+            "static_temp_fandom_bgblur",
+            "static_temp_boardgamegeek_logo",
+        ).map { preload(context, it) }
 
+        startupResources.forEach { it.job.await() }
+
+        val resources = Res.allDrawableResources.map { (key) -> preload(context, key) }
         resources.forEach { it.job.await() }
 
         loaded = true
-    }
-
-    if (!loaded) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Center) {
-            CircularProgressIndicator(modifier = Modifier.width(64.dp))
-        }
-        return
     }
 
     val packState by produceState<Pack?>(null) {
@@ -106,6 +103,21 @@ fun App(resourceLoader: ResourceLoader) {
             }
         }
     }
+
+    if (!loaded) {
+        Surface(Modifier.fillMaxSize(), color = Black.copy(alpha = 0.5f)) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Center) {
+                CircularProgressIndicator(modifier = Modifier.width(64.dp))
+            }
+        }
+    }
+}
+
+private fun preload(context: PlatformContext, key: String): Disposable {
+    val request = ImageRequest.Builder(context)
+        .data(Res.getUri("drawable/$key.png"))
+        .build()
+    return SingletonImageLoader.get(context).enqueue(request)
 }
 
 context(mode: Mode)
