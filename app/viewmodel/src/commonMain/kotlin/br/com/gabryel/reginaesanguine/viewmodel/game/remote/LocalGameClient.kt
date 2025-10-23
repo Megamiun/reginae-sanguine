@@ -8,6 +8,7 @@ import br.com.gabryel.reginaesanguine.domain.Failure
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.GameView
 import br.com.gabryel.reginaesanguine.domain.Pack
+import br.com.gabryel.reginaesanguine.domain.PlayableMove
 import br.com.gabryel.reginaesanguine.domain.Player
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
@@ -71,10 +72,5 @@ class LocalGameClient(val delayInMillis: Long) : GameClient {
 
         skip(gameId, game.playerTurn)
         return fetchStatus(gameId, playerPosition)
-    }
-
-    override fun isPlayable(gameId: String, playerPosition: PlayerPosition, position: Position, cardId: String): Boolean {
-        val game = games[gameId] ?: return false
-        return game.play(game.playerTurn, Play(position, cardId)) is Success
     }
 }

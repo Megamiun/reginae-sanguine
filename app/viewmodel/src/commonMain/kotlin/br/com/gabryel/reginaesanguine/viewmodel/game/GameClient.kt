@@ -18,6 +18,4 @@ interface GameClient {
     suspend fun play(gameId: String, playerPosition: PlayerPosition, position: Position, cardId: String): GameView
 
     suspend fun fetchStatus(gameId: String, playerPosition: PlayerPosition): GameView?
-
-    fun isPlayable(gameId: String, playerPosition: PlayerPosition, position: Position, cardId: String): Boolean
 }

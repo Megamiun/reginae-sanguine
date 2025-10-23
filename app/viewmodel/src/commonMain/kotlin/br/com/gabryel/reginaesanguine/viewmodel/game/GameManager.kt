@@ -1,5 +1,6 @@
 package br.com.gabryel.reginaesanguine.viewmodel.game
 
+import br.com.gabryel.reginaesanguine.domain.PlayableMove
 import br.com.gabryel.reginaesanguine.domain.Position
 
 /**
@@ -22,10 +23,17 @@ interface GameManager {
     suspend fun play(position: Position, cardId: String): GameState
 
     /**
+     * Get all valid moves for the current game state.
+     * @return Set of all valid (position, cardId) combinations
+     */
+    fun getPlayableMoves(): Set<PlayableMove>
+
+    /**
      * Check if a specific play action would be valid.
      * @param position Board position to check
      * @param cardId ID of the card to check
      * @return true if the play would be valid
      */
-    fun isPlayable(position: Position, cardId: String): Boolean
+    fun isPlayable(position: Position, cardId: String): Boolean =
+        getPlayableMoves().contains(PlayableMove(position, cardId))
 }

@@ -3,8 +3,10 @@ package br.com.gabryel.reginaesanguine.viewmodel.game.remote
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.GameView
 import br.com.gabryel.reginaesanguine.domain.Pack
+import br.com.gabryel.reginaesanguine.domain.PlayableMove
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.viewmodel.game.AwaitMatch
 import br.com.gabryel.reginaesanguine.viewmodel.game.AwaitTurn
 import br.com.gabryel.reginaesanguine.viewmodel.game.ChooseAction
@@ -27,7 +29,8 @@ import kotlinx.coroutines.flow.map
 class RemoteGameManager(
     private val gameClient: GameClient,
     private val gameId: String,
-    private val playerPosition: PlayerPosition
+    private val playerPosition: PlayerPosition,
+    private val currentStateData: RemoteGameStateData? = null
 ) : GameManager {
     companion object {
         suspend fun create(
@@ -55,18 +58,22 @@ class RemoteGameManager(
         awaitTurn(gameClient.play(gameId, playerPosition, position, cardId))
 
     private fun awaitTurn(view: GameView): GameState {
-        if (view.playerTurn == playerPosition)
-            return ChooseAction(this, RemoteGameStateData(view))
+        val stateData = RemoteGameStateData(view)
+        if (view.playerTurn == playerPosition || view.state != State.Ongoing)
+            return ChooseAction(RemoteGameManager(gameClient, gameId, playerPosition, stateData), stateData)
 
-        return AwaitTurn(RemoteGameStateData(view)) {
+        return AwaitTurn(stateData) {
             flow { while (true) emit(gameClient.fetchStatus(gameId, playerPosition)) }
                 .filterNotNull()
                 .filter { it.playerTurn == playerPosition }
-                .map { ChooseAction(this, RemoteGameStateData(it)) }
+                .map {
+                    val newStateData = RemoteGameStateData(it)
+                    ChooseAction(RemoteGameManager(gameClient, gameId, playerPosition, newStateData), newStateData)
+                }
                 .first()
         }
     }
 
-    override fun isPlayable(position: Position, cardId: String): Boolean =
-        gameClient.isPlayable(gameId, playerPosition, position, cardId)
+    override fun getPlayableMoves(): Set<PlayableMove> =
+        currentStateData?.playableMoves ?: emptySet()
 }

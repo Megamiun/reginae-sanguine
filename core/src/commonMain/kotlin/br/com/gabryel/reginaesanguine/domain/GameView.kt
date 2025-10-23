@@ -14,11 +14,10 @@ data class GameView(
     val boardCells: Map<Position, Cell> = emptyMap(),
     val boardScores: Map<PlayerPosition, Int> = emptyMap(),
     val laneScores: Map<Int, Map<PlayerPosition, Int>> = emptyMap(),
-    val laneWinners: Map<Int, PlayerPosition?> = emptyMap()
+    val laneWinners: Map<Int, PlayerPosition?> = emptyMap(),
+    val playableMoves: Set<PlayableMove> = emptySet()
 ) {
-    fun getScores(): Map<PlayerPosition, Int> = boardScores
-
-    fun getWinner(): PlayerPosition? = getScores().getWinner()
+    fun getWinner(): PlayerPosition? = boardScores.getWinner()
 
     fun getBaseLaneScoreAt(lane: Int): Map<PlayerPosition, Int> = laneScores[lane] ?: emptyMap()
 
@@ -51,6 +50,7 @@ data class GameView(
                 laneScores = (0 until game.size.height).associateWith { lane -> game.getBaseLaneScoreAt(lane) },
                 laneWinners = (0 until game.size.height).associateWith { lane -> game.getLaneWinner(lane) },
                 state = game.getState(),
+                playableMoves = game.getPlayableMoves(playerPosition),
             )
         }
     }

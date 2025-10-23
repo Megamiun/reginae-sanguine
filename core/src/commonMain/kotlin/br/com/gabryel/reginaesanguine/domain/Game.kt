@@ -84,6 +84,25 @@ data class Game(
         else
             Ongoing
 
+    fun getPlayableMoves(playerPosition: PlayerPosition): Set<PlayableMove> {
+        if (getState() !is Ongoing || playerTurn != playerPosition)
+            return emptySet()
+
+        val player = players[playerPosition] ?: return emptySet()
+        val positions = (0 until size.width).flatMap { x ->
+            (0 until size.height).map { y -> Position(x, y) }
+        }
+
+        return positions.flatMap { position ->
+            player.hand.mapNotNull { card ->
+                if (play(playerTurn, Play(position, card.id)) is Success)
+                    PlayableMove(position, card.id)
+                else
+                    null
+            }
+        }.toSet()
+    }
+
     fun getLaneWinner(lane: Int): PlayerPosition? = board.getBaseLaneScoreAt(lane).getWinner()
 
     fun getWinner(): PlayerPosition? = getScores().getWinner()

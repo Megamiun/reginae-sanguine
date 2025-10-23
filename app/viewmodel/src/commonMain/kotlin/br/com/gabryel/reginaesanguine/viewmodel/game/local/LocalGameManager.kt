@@ -4,6 +4,7 @@ import br.com.gabryel.reginaesanguine.domain.Action
 import br.com.gabryel.reginaesanguine.domain.Action.Play
 import br.com.gabryel.reginaesanguine.domain.Failure
 import br.com.gabryel.reginaesanguine.domain.Game
+import br.com.gabryel.reginaesanguine.domain.PlayableMove
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.domain.Success
 import br.com.gabryel.reginaesanguine.viewmodel.game.ChooseAction
@@ -26,6 +27,6 @@ class LocalGameManager(private val currentGame: Game) : GameManager {
             is Failure -> ChooseAction(this, LocalGameStateData(currentGame), error = result.toString())
         }
 
-    override fun isPlayable(position: Position, cardId: String): Boolean =
-        currentGame.play(currentGame.playerTurn, Play(position, cardId)) is Success
+    override fun getPlayableMoves(): Set<PlayableMove> =
+        currentGame.getPlayableMoves(currentGame.playerTurn)
 }
