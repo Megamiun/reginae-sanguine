@@ -1,11 +1,8 @@
 package br.com.gabryel.reginaesanguine.server.domain
 
-import br.com.gabryel.reginaesanguine.domain.Cell
 import br.com.gabryel.reginaesanguine.domain.GameView
 import br.com.gabryel.reginaesanguine.domain.PlayableMove
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
-import br.com.gabryel.reginaesanguine.domain.Position
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 /**
@@ -21,10 +18,10 @@ data class GameViewDto(
     val playerTurn: PlayerPosition,
     val round: Int,
     val state: StateDto,
-    val boardCells: Map<Position, @Contextual Cell>,
-    val boardScores: Map<PlayerPosition, Int>,
-    val laneScores: Map<Int, Map<PlayerPosition, Int>>,
-    val laneWinners: Map<Int, PlayerPosition?>,
+    val boardCells: List<BoardCellDto>,
+    val boardScores: List<PlayerScoreDto>,
+    val laneScores: List<LaneScoreDto>,
+    val laneWinners: List<LaneWinnerDto>,
     val playableMoves: Set<PlayableMove>
 ) {
     companion object {
@@ -37,10 +34,10 @@ data class GameViewDto(
                 playerTurn = gameView.playerTurn,
                 round = gameView.round,
                 state = StateDto.from(gameView.state),
-                boardCells = gameView.boardCells,
-                boardScores = gameView.boardScores,
-                laneScores = gameView.laneScores,
-                laneWinners = gameView.laneWinners,
+                boardCells = gameView.boardCells.map { (position, cell) -> BoardCellDto.from(position, cell) },
+                boardScores = gameView.boardScores.map { (player, score) -> PlayerScoreDto.from(player, score) },
+                laneScores = gameView.laneScores.map { (lane, scores) -> LaneScoreDto.from(lane, scores) },
+                laneWinners = gameView.laneWinners.map { (lane, winner) -> LaneWinnerDto.from(lane, winner) },
                 playableMoves = gameView.playableMoves,
             )
     }

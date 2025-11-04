@@ -1,7 +1,9 @@
 package br.com.gabryel.reginaesanguine.domain
 
+import kotlinx.serialization.Serializable
 import kotlin.math.min
 
+@Serializable
 data class Cell(
     val owner: PlayerPosition? = null,
     val rank: Int = 0,

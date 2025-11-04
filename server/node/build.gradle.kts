@@ -6,15 +6,23 @@ plugins {
 kotlin {
     js {
         nodejs()
+        binaries.executable()
     }
 
     sourceSets {
-        commonMain {
-            resources.srcDirs(rootProject.layout.buildDirectory.dir("generated/resources"))
-
+        jsMain {
             dependencies {
-                implementation(kotlin("reflect"))
                 implementation(project(":core"))
+                implementation(project(":server:common"))
+                implementation(npm("express", "^4.18.2"))
+            }
+        }
+
+        jsTest {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.kotlinx.coroutines)
+                implementation(npm("node-fetch", "^2.7.0"))
             }
         }
     }

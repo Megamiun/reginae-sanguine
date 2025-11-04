@@ -140,7 +140,7 @@ private suspend fun createViewModel(deckViewModel: DeckEditViewModel, pack: Pack
         }
         is RemoteDeckViewModel -> {
             val leftDeck = deckViewModel.leftPlayer.viewDecks.value.selectedDeck
-            val client = LocalGameClient(400)
+            val client = LocalGameClient(400, mapOf(pack.id to pack))
 
             GameViewModel.forRemoteGame(pack, leftDeck.shuffled(), LEFT, client, coroutineScope)
         }

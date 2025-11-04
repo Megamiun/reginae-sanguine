@@ -85,7 +85,8 @@ data class Board(
             .groupBy({ column -> getCellAt(lane atColumn column).orNull()?.owner }) { column ->
                 getTotalPowerAt(lane atColumn column)
             }.mapValues { (_, values) -> values.sum() }
-            .filterKeys { it != null } as Map<PlayerPosition, Int>
+            .filterKeys { it != null }
+            .mapKeys { it.key!! }
 
     override fun getExtraLaneScoreAt(lane: Int): Map<PlayerPosition, Int> =
         effectRegistry.getExtraPowerAtLane(lane, this)

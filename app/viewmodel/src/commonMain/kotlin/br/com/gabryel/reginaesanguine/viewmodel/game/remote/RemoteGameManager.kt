@@ -34,7 +34,7 @@ class RemoteGameManager(
     companion object {
         suspend fun create(client: GameClient, request: InitGameRequest): RemoteGameManager {
             val gameId = client.initGame(request)
-            return RemoteGameManager(client, gameId, request.position)
+            return RemoteGameManager(client, gameId.gameId, request.position)
         }
     }
 

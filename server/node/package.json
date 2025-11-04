@@ -1,0 +1,11 @@
+{
+  "name": "reginae-sanguine-server",
+  "version": "1.0.0",
+  "description": "Reginae Sanguine Node.js Server",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}

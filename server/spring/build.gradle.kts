@@ -12,19 +12,24 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter)
-    implementation(libs.spring.boot.starter.web) {
-        exclude(module = "org.springframework:spring-webmvc") // TODO Remove on Spring Boot 7.0.0-M9
-    }
-
-    implementation(libs.spring.webmvc) // TODO Remove on Spring Boot 7.0.0-M9
+    implementation(libs.spring.boot.starter.web)
 
     implementation(project(":core"))
+    implementation(project(":server:common"))
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.restclient)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotlinx.coroutines)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 sourceSets {

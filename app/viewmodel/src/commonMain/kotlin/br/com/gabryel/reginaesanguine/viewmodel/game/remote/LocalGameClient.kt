@@ -12,6 +12,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.domain.Success
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameClient
+import br.com.gabryel.reginaesanguine.viewmodel.game.dto.GameIdDto
 import br.com.gabryel.reginaesanguine.viewmodel.game.dto.GameViewDto
 import br.com.gabryel.reginaesanguine.viewmodel.game.dto.InitGameRequest
 import kotlinx.coroutines.delay
@@ -25,7 +26,7 @@ class LocalGameClient(val delayInMillis: Long, private val packs: Map<String, Pa
     private val games = mutableMapOf<String, Game>()
     private val gamePackIds = mutableMapOf<String, String>()
 
-    override suspend fun initGame(request: InitGameRequest): String {
+    override suspend fun initGame(request: InitGameRequest): GameIdDto {
         val pack = packs[request.packId] ?: error("Pack ${request.packId} not found")
         val availableCards = pack.cards.associateBy { it.id }
         val deck = request.deckCards.mapNotNull { availableCards[it] }
@@ -43,7 +44,7 @@ class LocalGameClient(val delayInMillis: Long, private val packs: Map<String, Pa
             availableCards = availableCards,
         )
         gamePackIds[gameId] = request.packId
-        return gameId
+        return GameIdDto(gameId)
     }
 
     override suspend fun submitAction(gameId: String, playerPosition: PlayerPosition, action: Action<out String>): GameViewDto {
