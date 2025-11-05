@@ -8,6 +8,9 @@ import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
 import br.com.gabryel.reginaesanguine.server.domain.StateDto.Ongoing
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
+import io.kotest.assertions.fail
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.engine.test.logging.debug
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotBeBlank
@@ -16,63 +19,65 @@ import io.kotest.matchers.string.shouldNotBeBlank
  * Abstract test suite defining the contract for server implementations.
  * Both Spring and Node.js servers should extend this and implement the HTTP client methods.
  *
- * Platform-specific test classes should add @Test annotations to each test method.
+ * Uses Kotest FunSpec for consistent test structure across platforms.
  */
-abstract class AbstractServerIntegrationTest {
-    suspend fun testCreateGame() {
-        // Given
-        val request = InitGameRequest(
-            packId = "queens_blood",
-            deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
-            position = LEFT,
-        )
+abstract class AbstractServerIntegrationTest : FunSpec() {
+    init {
+        test("given valid deck, when creating game, should return game ID") {
+            // Given
+            val request = InitGameRequest(
+                packId = "queens_blood",
+                deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
+                position = LEFT,
+            )
 
-        // When
-        val result = postInitGame(request, LEFT)
+            // When
+            val result = postInitGame(request, LEFT)
 
-        // Then
-        result.gameId.shouldNotBeBlank()
-    }
+            // Then
+            result.gameId.shouldNotBeBlank()
+        }
 
-    suspend fun testFetchGameStatus() {
-        // Given
-        val initRequest = InitGameRequest(
-            packId = "queens_blood",
-            deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
-            position = LEFT,
-        )
-        val gameId = postInitGame(initRequest, LEFT).gameId
+        test("given created game, when fetching status, should return game view with initial state") {
+            // Given
+            val initRequest = InitGameRequest(
+                packId = "queens_blood",
+                deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
+                position = LEFT,
+            )
+            val gameId = postInitGame(initRequest, LEFT).gameId
 
-        // When
-        val gameView = getGameStatus(gameId, LEFT)
+            // When
+            val gameView = getGameStatus(gameId, LEFT)
 
-        // Then
-        gameView.packId shouldBe "queens_blood"
-        gameView.localPlayerPosition shouldBe LEFT
-        gameView.localPlayerHand shouldHaveSize 5
-        gameView.localPlayerDeckSize shouldBe 5
-        gameView.playerTurn shouldBe LEFT
-        gameView.state shouldBe Ongoing
-        gameView.boardCells.size shouldBe 15
-    }
+            // Then
+            gameView.packId shouldBe "queens_blood"
+            gameView.localPlayerPosition shouldBe LEFT
+            gameView.localPlayerHand shouldHaveSize 5
+            gameView.localPlayerDeckSize shouldBe 5
+            gameView.playerTurn shouldBe LEFT
+            gameView.state shouldBe Ongoing
+            gameView.boardCells.size shouldBe 15
+        }
 
-    suspend fun testPlayerAction() {
-        // Given
-        val initRequest = InitGameRequest(
-            packId = "queens_blood",
-            deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
-            position = LEFT,
-        )
-        val gameId = postInitGame(initRequest, LEFT).gameId
-        val initialStatus = getGameStatus(gameId, LEFT)
-        initialStatus.playerTurn shouldBe LEFT
+        test("given created game, when player makes action, should update game state and switch turn") {
+            // Given
+            val initRequest = InitGameRequest(
+                packId = "queens_blood",
+                deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
+                position = LEFT,
+            )
+            val gameId = postInitGame(initRequest, LEFT).gameId
+            val initialStatus = getGameStatus(gameId, LEFT)
+            initialStatus.playerTurn shouldBe LEFT
 
-        // When
-        val result = postAction(gameId, LEFT, ActionDto.Skip)
+            // When
+            val result = postAction(gameId, LEFT, ActionDto.Skip)
 
-        // Then
-        result.playerTurn shouldBe RIGHT
-        result.state shouldBe Ongoing
+            // Then
+            result.playerTurn shouldBe RIGHT
+            result.state shouldBe Ongoing
+        }
     }
 
     abstract suspend fun postInitGame(request: InitGameRequest, playerPosition: PlayerPosition): GameIdDto

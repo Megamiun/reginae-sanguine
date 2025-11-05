@@ -24,8 +24,10 @@ dependencies {
 
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.restclient)
+    testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotlinx.coroutines)
+    testImplementation("io.kotest:kotest-extensions-spring:${libs.versions.kotest.get()}")
 }
 
 tasks.withType<Test> {

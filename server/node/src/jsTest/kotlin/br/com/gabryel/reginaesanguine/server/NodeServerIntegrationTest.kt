@@ -8,30 +8,44 @@ import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.server.node.createApp
 import br.com.gabryel.reginaesanguine.server.test.AbstractServerIntegrationTest
-import kotlinx.coroutines.GlobalScope
+import io.kotest.common.KotestInternal
+import io.kotest.core.log
+import io.kotest.core.spec.Spec
 import kotlinx.coroutines.await
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.promise
 import kotlin.js.Promise
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 
 @JsModule("node-fetch")
 @JsNonModule
 external fun fetch(url: String, options: dynamic = definedExternally): Promise<dynamic>
 
 /**
- * Node.js integration test implementation.
+ * Node.js integration test implementation using Kotest FunSpec.
  * Embeds the Express server in-process for testing.
  *
  * Run with: ./gradlew :server:node:jsTest
  */
+@OptIn(KotestInternal::class)
 class NodeServerIntegrationTest : AbstractServerIntegrationTest() {
     private var server: dynamic = null
     private val testPort = 3001
     private val baseUrl = "http://localhost:$testPort"
     private val json = gameJsonParser()
+
+    override suspend fun beforeSpec(spec: Spec) {
+        super.beforeSpec(spec)
+        val app = createApp()
+        server = app.listen(testPort)
+        server?.unref()
+    }
+
+    override suspend fun afterSpec(spec: Spec) {
+        log { "Closing server..." }
+        server?.close()
+        server = null
+        log { "Server closed" }
+        super.afterSpec(spec)
+    }
 
     override suspend fun postInitGame(request: InitGameRequest, playerPosition: PlayerPosition): GameIdDto {
         val requestJson = json.encodeToString<InitGameRequest>(request)
@@ -92,28 +106,4 @@ class NodeServerIntegrationTest : AbstractServerIntegrationTest() {
         val bodyStr = JSON.stringify(body)
         return json.decodeFromString<GameViewDto>(bodyStr)
     }
-
-    @BeforeTest
-    fun startServer() = GlobalScope.promise {
-        val app = createApp()
-        server = app.listen(testPort)
-        delay(500)
-    }
-
-    @AfterTest
-    fun stopServer() {
-        server.close()
-    }
-
-    @Test
-    fun testGivenValidDeckWhenCreatingGameShouldReturnGameID() =
-        GlobalScope.promise { testCreateGame() }
-
-    @Test
-    fun testGivenCreatedGameWhenFetchingStatusShouldReturnGameViewWithInitialState() =
-        GlobalScope.promise { testFetchGameStatus() }
-
-    @Test
-    fun testGivenCreatedGameWhenPlayerMakesActionShouldUpdateGameStateAndSwitchTurn() =
-        GlobalScope.promise { testPlayerAction() }
 }

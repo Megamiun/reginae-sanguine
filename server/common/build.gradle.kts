@@ -15,10 +15,15 @@ kotlin {
                 implementation(kotlin("reflect"))
                 implementation(project(":core"))
                 implementation(kotlin("test"))
+                implementation(libs.kotest.framework.engine)
                 implementation(libs.kotest.assertions.core)
 
                 api(libs.kotlinx.coroutines)
             }
         }
+    }
+
+    tasks.withType<Test> {
+        enabled = false
     }
 }

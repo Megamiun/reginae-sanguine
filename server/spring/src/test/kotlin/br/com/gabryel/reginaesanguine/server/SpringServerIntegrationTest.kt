@@ -8,10 +8,11 @@ import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.server.test.AbstractServerIntegrationTest
-import kotlinx.coroutines.runBlocking
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.Spec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.extensions.spring.testContextManager
 import kotlinx.serialization.modules.contextual
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.http.HttpHeaders.CONTENT_TYPE
@@ -25,13 +26,16 @@ import org.springframework.web.context.WebApplicationContext
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@ApplyExtension(SpringExtension::class)
 class SpringServerIntegrationTest : AbstractServerIntegrationTest() {
     private val json = gameJsonParser { contextual(UUIDSerializer) }
 
     private lateinit var client: RestTestClient
 
-    @BeforeEach
-    fun setUp(context: WebApplicationContext) {
+    override suspend fun beforeSpec(spec: Spec) {
+        super.beforeSpec(spec)
+
+        val context = testContextManager().testContext.applicationContext as WebApplicationContext
         client = RestTestClient
             .bindToApplicationContext(context)
             .configureMessageConverters<WebAppContextSetupBuilder> {
@@ -72,13 +76,4 @@ class SpringServerIntegrationTest : AbstractServerIntegrationTest() {
             .returnResult(GameViewDto::class.java)
             .responseBody
             ?: throw IllegalStateException("Empty response")
-
-    @Test
-    fun `given valid deck, when creating game, should return game ID`() = runBlocking { testCreateGame() }
-
-    @Test
-    fun `given created game, when fetching status, should return game view with initial state`() = runBlocking { testFetchGameStatus() }
-
-    @Test
-    fun `given created game, when player makes action, should update game state and switch turn`() = runBlocking { testPlayerAction() }
 }

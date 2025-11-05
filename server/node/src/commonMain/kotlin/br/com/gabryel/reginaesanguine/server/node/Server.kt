@@ -10,12 +10,13 @@ import br.com.gabryel.reginaesanguine.server.service.GameService
 
 external fun require(module: String): dynamic
 
+val express = require("express")
+
 /**
  * Creates and configures the Express application.
  * Can be used both for production and testing.
  */
 fun createApp(): dynamic {
-    val express = require("express")
     val app = express()
 
     val json = gameJsonParser()
@@ -39,7 +40,7 @@ fun createApp(): dynamic {
 
     app.post(
         "/game",
-        requestBody { req: dynamic, res: dynamic ->
+        handleRequest { req: dynamic, res: dynamic ->
             val requestBody = JSON.stringify(req.body)
             val request = json.decodeFromString<InitGameRequest>(requestBody)
             val gameId = gameService.initGame(request)
@@ -50,7 +51,7 @@ fun createApp(): dynamic {
 
     app.post(
         "/game/:gameId/action",
-        requestBody { req: dynamic, res: dynamic ->
+        handleRequest { req: dynamic, res: dynamic ->
             val gameId = req.params.gameId as String
             val authorization = req.headers.authorization as String
             val playerPosition = PlayerPosition.valueOf(authorization)
@@ -67,7 +68,7 @@ fun createApp(): dynamic {
 
     app.get(
         "/game/:gameId/status",
-        requestBody { req: dynamic, res: dynamic ->
+        handleRequest { req: dynamic, res: dynamic ->
             val gameId = req.params.gameId as String
             val authorization = req.headers.authorization as String
             val playerPosition = PlayerPosition.valueOf(authorization)
@@ -84,7 +85,7 @@ fun createApp(): dynamic {
     // Deck routes
     app.get(
         "/deck/pack/:packId",
-        requestBody { req: dynamic, res: dynamic ->
+        handleRequest { req: dynamic, res: dynamic ->
             val packId = req.params.packId as String
             val pack = deckService.getPack(packId)
             res.json(JSON.parse(json.encodeToString(pack)))
@@ -94,7 +95,7 @@ fun createApp(): dynamic {
     return app
 }
 
-fun requestBody(function: (dynamic, dynamic) -> Unit) = { req: dynamic, res: dynamic ->
+fun handleRequest(function: (dynamic, dynamic) -> Unit) = { req: dynamic, res: dynamic ->
     try {
         function(req, res)
     } catch (e: Throwable) {
