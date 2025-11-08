@@ -19,4 +19,6 @@ class DestroyCardsDefault(
     override val trigger: Trigger,
     override val affected: Set<Displacement> = setOf(),
     override val description: String = "Destroy $target cards on $trigger",
-) : DestroyCards
+) : DestroyCards {
+    override val discriminator = "DestroyCards"
+}

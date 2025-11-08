@@ -1,4 +1,5 @@
 [versions]
+flyway = "11.15.0"
 kotlin = "2.2.21"
 compose = "1.9.2"
 arrow = "2.2.0"
@@ -8,9 +9,10 @@ kotlinx-coroutines = "1.10.2"
 mockk = "1.14.6"
 mosaic = "0.18.0"
 coil = "3.3.0"
+postgresql = "42.7.8"
+testcontainers = "1.21.3"
 spring-boot = "4.0.0-RC1"
 spring-dependency-management = "1.1.7"
-spring-webmvc = "7.0.0-SNAPSHOT"
 
 # Android dependencies
 android = "8.11.1"
@@ -37,6 +39,8 @@ arrow-core = { group = "io.arrow-kt", name = "arrow-core" }
 # Kotest
 kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotest" }
 kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+kotest-extensions-spring = { module = "io.kotest:kotest-extensions-spring", version.ref = "kotest" }
+kotest-extensions-testcontainers = { module = "io.kotest:kotest-extensions-testcontainers", version.ref = "kotest" }
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
 
@@ -49,14 +53,23 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 
+# Database
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
+
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+
 # Third-party
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mosaic-runtime = { group = "com.jakewharton.mosaic", name = "mosaic-runtime", version.ref = "mosaic" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }
 spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

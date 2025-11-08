@@ -41,6 +41,8 @@ class RaisePower(
 ) : RaiseCell {
     override fun getDefaultAmount(game: GameSummarizer, sourcePlayer: PlayerPosition, sourcePosition: Position, self: Boolean): Int =
         amount
+
+    override val discriminator = "RaisePower"
 }
 
 @Serializable
@@ -65,6 +67,8 @@ class RaisePowerByCount(
 
             status.isUnderStatus(game.getExtraPowerAt(targetPosition))
         } * amount
+
+    override val discriminator = "RaisePowerByCount"
 }
 
 @Serializable
@@ -88,4 +92,6 @@ class RaisePowerOnStatus(
             else -> 0
         }
     }
+
+    override val discriminator = "RaisePowerOnStatus"
 }

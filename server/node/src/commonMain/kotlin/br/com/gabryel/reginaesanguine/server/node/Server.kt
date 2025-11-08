@@ -5,7 +5,7 @@ import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
-import br.com.gabryel.reginaesanguine.server.node.service.NodeDeckService
+import br.com.gabryel.reginaesanguine.server.service.DeckService
 import br.com.gabryel.reginaesanguine.server.service.GameService
 
 external fun require(module: String): dynamic
@@ -16,12 +16,10 @@ val express = require("express")
  * Creates and configures the Express application.
  * Can be used both for production and testing.
  */
-fun createApp(): dynamic {
+fun createApp(deckService: DeckService, gameService: GameService = GameService(deckService)): dynamic {
     val app = express()
 
     val json = gameJsonParser()
-    val deckService = NodeDeckService(json)
-    val gameService = GameService(deckService)
 
     // Middleware
     app.use(express.json())
@@ -40,7 +38,7 @@ fun createApp(): dynamic {
 
     app.post(
         "/game",
-        handleRequest { req: dynamic, res: dynamic ->
+        handleRequestAsync { req: dynamic, res: dynamic ->
             val requestBody = JSON.stringify(req.body)
             val request = json.decodeFromString<InitGameRequest>(requestBody)
             val gameId = gameService.initGame(request)
@@ -85,10 +83,25 @@ fun createApp(): dynamic {
     // Deck routes
     app.get(
         "/deck/pack/:packId",
-        handleRequest { req: dynamic, res: dynamic ->
+        handleRequestAsync { req: dynamic, res: dynamic ->
             val packId = req.params.packId as String
-            val pack = deckService.getPack(packId)
-            res.json(JSON.parse(json.encodeToString(pack)))
+            val pack = deckService.loadPack(packId)
+            if (pack != null) {
+                res.json(JSON.parse(json.encodeToString(pack)))
+            } else {
+                res.status(404).json(js("{ error: 'Pack not found' }"))
+            }
+        },
+    )
+
+    // Admin routes
+    app.post(
+        "/admin/seed-packs",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            // TODO: Implement pack seeding with PackSeederService
+            val result = js("{}")
+            result.message = "Pack seeding endpoint created - implementation pending"
+            res.json(result)
         },
     )
 
@@ -105,9 +118,43 @@ fun handleRequest(function: (dynamic, dynamic) -> Unit) = { req: dynamic, res: d
     }
 }
 
+fun handleRequestAsync(function: suspend (dynamic, dynamic) -> Unit) = { req: dynamic, res: dynamic ->
+    kotlinx.coroutines.GlobalScope.launch {
+        try {
+            function(req, res)
+        } catch (e: Throwable) {
+            val errorObj = js("{}")
+            errorObj.error = e.message
+            res.status(400).json(errorObj)
+        }
+    }
+}
+
 fun main() {
     val port = 3000
-    val app = createApp()
+
+    // TODO: Replace with NodePackRepository when PostgreSQL implementation is ready
+    val packRepository = object : br.com.gabryel.reginaesanguine.server.repository.PackRepository {
+        override suspend fun savePack(
+            pack: br.com.gabryel.reginaesanguine.domain.Pack
+        ): Unit = throw UnsupportedOperationException("Node.js repository not yet implemented")
+
+        override suspend fun packExists(packId: String): Boolean = throw UnsupportedOperationException(
+            "Node.js repository not yet implemented",
+        )
+
+        override suspend fun findPack(packId: String): br.com.gabryel.reginaesanguine.domain.Pack? {
+            // For now, load from JSON files (temporary until PostgreSQL is implemented)
+            return null // TODO: Implement file-based loading
+        }
+
+        override suspend fun findAllPacks(): List<br.com.gabryel.reginaesanguine.domain.Pack> = throw UnsupportedOperationException(
+            "Node.js repository not yet implemented",
+        )
+    }
+
+    val deckService = DeckService(packRepository)
+    val app = createApp(deckService)
 
     app.listen(port) {
         console.log("Server running at http://localhost:$port")

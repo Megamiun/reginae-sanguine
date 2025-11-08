@@ -26,4 +26,6 @@ class SpawnCardsPerRank(
 
         return mapOf(player to cardsToAdd)
     }
+
+    override val discriminator = "SpawnCardsPerRank"
 }

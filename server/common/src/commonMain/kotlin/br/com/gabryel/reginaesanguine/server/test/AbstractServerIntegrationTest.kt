@@ -8,9 +8,9 @@ import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
 import br.com.gabryel.reginaesanguine.server.domain.StateDto.Ongoing
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
-import io.kotest.assertions.fail
+import br.com.gabryel.reginaesanguine.server.service.SeedResult
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.engine.test.logging.debug
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotBeBlank
@@ -20,8 +20,17 @@ import io.kotest.matchers.string.shouldNotBeBlank
  * Both Spring and Node.js servers should extend this and implement the HTTP client methods.
  *
  * Uses Kotest FunSpec for consistent test structure across platforms.
+ *
+ * TODO Move to a test module later
  */
 abstract class AbstractServerIntegrationTest : FunSpec() {
+    override suspend fun beforeSpec(spec: Spec) {
+        super.beforeSpec(spec)
+
+        val result = seedPacks()
+        println("Pack seeding result: seeded=${result.seeded}, skipped=${result.skipped}")
+    }
+
     init {
         test("given valid deck, when creating game, should return game ID") {
             // Given
@@ -79,6 +88,8 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
             result.state shouldBe Ongoing
         }
     }
+
+    abstract suspend fun seedPacks(): SeedResult
 
     abstract suspend fun postInitGame(request: InitGameRequest, playerPosition: PlayerPosition): GameIdDto
 

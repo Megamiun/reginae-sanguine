@@ -27,4 +27,6 @@ class AddCardsToHandDefault(
         sourcePlayer: PlayerPosition,
         sourcePosition: Position
     ) = mapOf(sourcePlayer to cardIds)
+
+    override val discriminator = "AddCardsToHand"
 }

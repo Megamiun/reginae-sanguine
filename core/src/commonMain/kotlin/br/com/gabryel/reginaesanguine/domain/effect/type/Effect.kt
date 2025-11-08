@@ -14,6 +14,7 @@ import kotlinx.serialization.Transient
 sealed interface Effect {
     val trigger: Trigger
     val description: String
+    val discriminator: String
 }
 
 sealed interface EffectWithAffected : Effect {
@@ -33,11 +34,17 @@ sealed interface EffectWithAffected : Effect {
 class FlavourText(override val description: String) : Effect {
     @Transient
     override val trigger = None
+
+    override val discriminator = "FlavourText"
 }
 
 @Serializable
 @SerialName("NoEffect")
 object NoEffect : Effect {
     override val description = "This card has no abilities"
+
+    @Transient
     override val trigger = None
+
+    override val discriminator = "NoEffect"
 }

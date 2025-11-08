@@ -1,3 +1,17 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/reginae_sanguine}
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/reginae_sanguine}
+    user: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: none
+
 management:
   endpoints:
     web:

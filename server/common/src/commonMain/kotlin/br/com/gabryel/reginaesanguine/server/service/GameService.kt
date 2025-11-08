@@ -18,7 +18,7 @@ class GameService(private val deckService: DeckService) {
     private val games = mutableMapOf<String, Game>()
     private val gamePackIds = mutableMapOf<String, String>()
 
-    fun initGame(request: InitGameRequest): String {
+    suspend fun initGame(request: InitGameRequest): String {
         val gameId = Uuid.random().toString()
         val pack = deckService.loadPack(request.packId)
             ?: throw IllegalArgumentException("Pack ${request.packId} not found")

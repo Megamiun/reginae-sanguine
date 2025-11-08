@@ -1,9 +1,0 @@
-logging:
-  level:
-    br.com.gabryel.reginaesanguine: DEBUG
-    org.springframework.web: DEBUG
-
-server:
-  error:
-    include-message: always
-    include-binding-errors: always

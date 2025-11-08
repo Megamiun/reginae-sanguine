@@ -19,4 +19,6 @@ class RaiseRankDefault(
 ) : RaiseRank {
     @Transient
     override val trigger = None
+
+    override val discriminator: String = "RaiseRank"
 }

@@ -6,6 +6,7 @@ import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.server.service.GameService
+import kotlinx.coroutines.runBlocking
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,11 +24,13 @@ class GameController(private val gameService: GameService) {
     @PostMapping
     fun initGame(
         @RequestBody request: InitGameRequest
-    ): GameIdDto = try {
-        val gameId = gameService.initGame(request)
-        GameIdDto(gameId)
-    } catch (e: IllegalArgumentException) {
-        throw ResponseStatusException(BAD_REQUEST, e.message, e)
+    ): GameIdDto = runBlocking {
+        try {
+            val gameId = gameService.initGame(request)
+            GameIdDto(gameId)
+        } catch (e: IllegalArgumentException) {
+            throw ResponseStatusException(BAD_REQUEST, e.message, e)
+        }
     }
 
     @PostMapping("/{gameId}/action")

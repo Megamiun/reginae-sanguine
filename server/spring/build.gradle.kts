@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     kotlin("plugin.spring")
+    kotlin("plugin.jpa") version libs.versions.kotlin.get()
 
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
@@ -15,19 +16,28 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
+    implementation(project(":core"))
+    implementation(project(":server:common"))
+
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter)
     implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.flyway)
+    implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.flyway.core)
 
-    implementation(project(":core"))
-    implementation(project(":server:common"))
+    runtimeOnly(libs.postgresql)
+    runtimeOnly(libs.flyway.database.postgresql)
 
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.restclient)
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotlinx.coroutines)
-    testImplementation("io.kotest:kotest-extensions-spring:${libs.versions.kotest.get()}")
+    testImplementation(libs.kotest.extensions.spring)
+    testImplementation(libs.kotest.extensions.testcontainers)
+
+    testImplementation(libs.testcontainers.postgresql)
 }
 
 tasks.withType<Test> {

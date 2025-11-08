@@ -27,6 +27,8 @@ class ReplaceAllyDefault(
     override val trigger = None
 
     override fun getReplaceEffect(replacedCard: Card) = NoEffect
+
+    override val discriminator: String = "ReplaceAlly"
 }
 
 @Serializable
@@ -42,4 +44,6 @@ class ReplaceAllyRaise(
 
     override fun getReplaceEffect(replacedCard: Card) =
         RaisePower(replacedCard.power, target, WhenPlayed(SELF), affected)
+
+    override val discriminator: String = "ReplaceAllyRaise"
 }

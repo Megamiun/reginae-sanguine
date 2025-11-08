@@ -40,6 +40,8 @@ class RaiseLaneIfWon(
             mapOf(lane to mapOf(source to amount))
         else emptyMap()
     }
+
+    override val discriminator: String = "RaiseLaneIfWon"
 }
 
 @Serializable
@@ -68,4 +70,6 @@ class RaiseWinnerLanesByLoserScore(
 
             mapOf(winner.first() to laneScores.minOf { it.value })
         }
+
+    override val discriminator: String = "RaiseWinnerLanesByLoserScore"
 }
