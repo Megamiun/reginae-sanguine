@@ -33,8 +33,8 @@ class SpringPackRepository(
         }
     }
 
-    override suspend fun packExists(packId: String): Boolean = withContext(Dispatchers.IO) {
-        packJpaRepository.existsByAlias(packId)
+    override suspend fun packExists(alias: String): Boolean = withContext(Dispatchers.IO) {
+        packJpaRepository.existsByAlias(alias)
     }
 
     override suspend fun findPack(alias: String): Pack? = withContext(Dispatchers.IO) {
@@ -42,8 +42,14 @@ class SpringPackRepository(
         toPackDomain(pack)
     }
 
-    override suspend fun findAllPacks(): List<Pack> = withContext(Dispatchers.IO) {
-        packJpaRepository.findAll().map { toPackDomain(it) }
+    override suspend fun countPacks(): Long = withContext(Dispatchers.IO) {
+        packJpaRepository.count()
+    }
+
+    override suspend fun findAllPacks(page: Int, size: Int): List<Pack> = withContext(Dispatchers.IO) {
+        val offset = page * size
+        // TODO Change to Pageable query
+        packJpaRepository.findAll().drop(offset).take(size).map { toPackDomain(it) }
     }
 
     private fun toPackDomain(pack: PackEntity): Pack {

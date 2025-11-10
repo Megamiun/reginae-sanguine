@@ -26,9 +26,7 @@ class GameService(private val deckService: DeckService) {
         val availableCards = pack.cards.associateBy { it.id }
         val deck = request.deckCardIds.mapNotNull { availableCards[it] }
 
-        if (deck.size != request.deckCardIds.size) {
-            throw IllegalArgumentException("Invalid card IDs in deck")
-        }
+        require(deck.size == request.deckCardIds.size) { "Invalid card IDs in deck" }
 
         val player = Player(deck.take(5), deck.drop(5))
         val opponent = Player(emptyList(), emptyList())

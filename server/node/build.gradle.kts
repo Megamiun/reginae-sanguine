@@ -13,10 +13,13 @@ kotlin {
 
     sourceSets {
         jsMain {
+            resources.srcDirs(rootProject.layout.buildDirectory.dir("generated/resources"))
+
             dependencies {
                 implementation(project(":core"))
                 implementation(project(":server:common"))
                 implementation(npm("express", "^4.18.2"))
+                implementation(npm("pg", "^8.11.3"))
             }
         }
 

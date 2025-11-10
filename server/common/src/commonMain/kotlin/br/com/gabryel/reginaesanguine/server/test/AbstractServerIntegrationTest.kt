@@ -6,6 +6,7 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
+import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
 import br.com.gabryel.reginaesanguine.server.domain.StateDto.Ongoing
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.server.service.SeedResult
@@ -24,6 +25,8 @@ import io.kotest.matchers.string.shouldNotBeBlank
  * TODO Move to a test module later
  */
 abstract class AbstractServerIntegrationTest : FunSpec() {
+    protected abstract var client: ServerClient
+
     override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
 
@@ -32,23 +35,31 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
     }
 
     init {
+        test("given seeded packs, when getting paginated packs, should return page with packs") {
+            val page = getPacks(page = 0, size = 10)
+
+            page.page shouldBe 0
+            page.size shouldBe 10
+            page.totalElements shouldBe 1L
+            page.totalPages shouldBe 1
+            page.content shouldHaveSize 1
+            page.content[0].name shouldBe "Standard"
+            page.content[0].cards shouldHaveSize 166
+        }
+
         test("given valid deck, when creating game, should return game ID") {
-            // Given
             val request = InitGameRequest(
                 packId = "queens_blood",
                 deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
                 position = LEFT,
             )
 
-            // When
             val result = postInitGame(request, LEFT)
 
-            // Then
             result.gameId.shouldNotBeBlank()
         }
 
         test("given created game, when fetching status, should return game view with initial state") {
-            // Given
             val initRequest = InitGameRequest(
                 packId = "queens_blood",
                 deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
@@ -56,10 +67,8 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
             )
             val gameId = postInitGame(initRequest, LEFT).gameId
 
-            // When
             val gameView = getGameStatus(gameId, LEFT)
 
-            // Then
             gameView.packId shouldBe "queens_blood"
             gameView.localPlayerPosition shouldBe LEFT
             gameView.localPlayerHand shouldHaveSize 5
@@ -70,7 +79,6 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         }
 
         test("given created game, when player makes action, should update game state and switch turn") {
-            // Given
             val initRequest = InitGameRequest(
                 packId = "queens_blood",
                 deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005"),
@@ -80,20 +88,24 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
             val initialStatus = getGameStatus(gameId, LEFT)
             initialStatus.playerTurn shouldBe LEFT
 
-            // When
             val result = postAction(gameId, LEFT, ActionDto.Skip)
 
-            // Then
             result.playerTurn shouldBe RIGHT
             result.state shouldBe Ongoing
         }
     }
 
-    abstract suspend fun seedPacks(): SeedResult
+    suspend fun getPacks(page: Int = 0, size: Int = 10): PackPageDto = client
+        .get("/deck/packs?page=$page&size=$size")
 
-    abstract suspend fun postInitGame(request: InitGameRequest, playerPosition: PlayerPosition): GameIdDto
+    suspend fun postInitGame(request: InitGameRequest, playerPosition: PlayerPosition): GameIdDto = client
+        .post("/game", request, mapOf("Authorization" to playerPosition.name))
 
-    abstract suspend fun getGameStatus(gameId: String, playerPosition: PlayerPosition): GameViewDto
+    suspend fun getGameStatus(gameId: String, playerPosition: PlayerPosition): GameViewDto = client
+        .get("/game/$gameId/status", mapOf("Authorization" to playerPosition.name))
 
-    abstract suspend fun postAction(gameId: String, playerPosition: PlayerPosition, action: ActionDto): GameViewDto
+    suspend fun postAction(gameId: String, playerPosition: PlayerPosition, action: ActionDto): GameViewDto = client
+        .post("/game/$gameId/action", action, mapOf("Authorization" to playerPosition.name))
+
+    suspend fun seedPacks(): SeedResult = client.post("/admin/seed-packs", null)
 }

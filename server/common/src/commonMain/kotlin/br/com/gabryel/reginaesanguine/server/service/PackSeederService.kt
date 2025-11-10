@@ -11,10 +11,10 @@ class PackSeederService(
     suspend fun seedPacks(): SeedResult {
         val availablePacks = packLoader.loadAllPacks()
         val (seededPacks, skippedPacks) = availablePacks.partition { pack ->
-            val skip = packRepository.packExists(pack.id)
+            val exists = packRepository.packExists(pack.id)
 
-            if (!skip) packRepository.savePack(pack)
-            skip
+            if (!exists) packRepository.savePack(pack)
+            !exists
         }
 
         return SeedResult(seededPacks.map { it.id }, skippedPacks.map { it.id })

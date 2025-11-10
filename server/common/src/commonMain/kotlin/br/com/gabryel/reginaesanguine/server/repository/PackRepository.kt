@@ -5,9 +5,11 @@ import br.com.gabryel.reginaesanguine.domain.Pack
 interface PackRepository {
     suspend fun savePack(pack: Pack)
 
-    suspend fun packExists(packId: String): Boolean
+    suspend fun packExists(alias: String): Boolean
 
-    suspend fun findPack(packId: String): Pack?
+    suspend fun findPack(alias: String): Pack?
 
-    suspend fun findAllPacks(): List<Pack>
+    suspend fun countPacks(): Long
+
+    suspend fun findAllPacks(page: Int, size: Int): List<Pack>
 }
