@@ -24,6 +24,7 @@ class SpringPackRepository(
         val packEntity = PackEntity.fromDomain(pack)
         packJpaRepository.save(packEntity)
 
+        // TODO Use a single saveAll for both
         pack.cards.forEach { domainCard ->
             val cardEntity = PackCardEntity.fromDomain(domainCard, packEntity)
             packCardJpaRepository.save(cardEntity)
@@ -54,6 +55,7 @@ class SpringPackRepository(
 
     private fun toPackDomain(pack: PackEntity): Pack {
         val packId = requireNotNull(pack.id) { "Pack ID not found" }
+        // TODO Avoid a N+1 here
         val cards = packCardJpaRepository.findByPackId(packId).map { cardEntity ->
             val cardId = requireNotNull(cardEntity.id) { "Card ID not found" }
 

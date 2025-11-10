@@ -42,7 +42,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
                 arrayOf(packId, pack.id, pack.name),
             ).await()
 
-            // TODO Do this in just one insert. Same for Effects
+            // TODO Do this in just one insert. Same for Effects. Avoid n+1 issues
             pack.cards.forEach { card ->
                 val cardId = generateUUID()
 
@@ -100,12 +100,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
             arrayOf(alias),
         ).await()
 
-        console.log("DEBUG: packExists - result.rows:", result.rows)
-
-        if (result.rows.isEmpty()) {
-            console.log("DEBUG: packExists - no rows returned, returning false")
-            return false
-        }
+        if (result.rows.isEmpty()) return false
 
         val count = when (val countValue = result.rows[0].count) {
             is Number -> countValue.toInt()
@@ -288,11 +283,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
     }
 
     override suspend fun countPacks(): Long {
-        console.log("DEBUG: countPacks - querying")
         val result = pool.query("SELECT COUNT(*) as count FROM pack").await()
-
-        console.log("DEBUG: countPacks - result.rows:", result.rows)
-        console.log("DEBUG: countPacks - rowCount:", result.rowCount)
 
         if (result.rows.isEmpty()) return 0
 
@@ -329,6 +320,7 @@ private fun Effect.getEffectData(): EffectData = when (this) {
     else -> EmptyData
 }
 
+// TODO Share impls between JS and JVM
 // Data classes matching Spring implementation
 @Serializable
 sealed interface EffectData

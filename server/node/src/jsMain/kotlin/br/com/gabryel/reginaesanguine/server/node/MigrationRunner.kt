@@ -13,6 +13,8 @@ object MigrationRunner {
      * For now, we only have V0__init_pack.sql embedded directly.
      */
     suspend fun runMigrations(pool: Pool) {
+        // TODO Load migrations from fisk
+        // TODO Create a version table mirroiring the Java Flyway
         pool.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public;").await()
 
         // V0__init_pack.sql - embedded for simplicity
