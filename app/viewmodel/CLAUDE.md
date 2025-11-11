@@ -84,10 +84,11 @@ ChooseAction -> ChooseCard -> ChoosePosition -> ChooseAction
 ### Kotlin Multiplatform Setup
 ```kotlin
 kotlin {
-    jvm()                                          // For Android and desktop usage
+    jvm()                                         // For Android and desktop usage
     linuxX64(), linuxArm64(), mingwX64()          // Native desktop targets
     macosX64(), macosArm64()                      // macOS native (conditional)
     iosArm64(), iosX64(), iosSimulatorArm64()     // iOS targets
+    js(), wasmJs()                                // Web targets
 }
 ```
 
@@ -104,48 +105,7 @@ kotlin {
 - State validation logic
 - ViewModel lifecycle management
 
-### Test Organization
-```bash
-# Run viewmodel module tests
-./gradlew :app:viewmodel:test
-
-# Platform-specific tests
-./gradlew :app:viewmodel:jvmTest
-./gradlew :app:viewmodel:linuxX64Test
-```
-
-## Integration Examples
-
-### Compose Integration (Android/Desktop)
-```kotlin
-// In Compose UI
-val viewModel = remember { GameViewModel.forGame(game) }
-val state by viewModel.state.collectAsState()
-
-when (state) {
-    is ChooseAction -> ActionUI(onSkip = viewModel::skip)
-    is ChooseCard -> CardSelectionUI(onChoose = viewModel::chooseCard)
-    is ChoosePosition -> PositionUI(onChoose = viewModel::choosePosition)
-}
-```
-
-### CLI Integration
-```kotlin
-// In terminal UI
-val viewModel = GameViewModel.forGame(game)
-runBlocking {
-    viewModel.state.collect { state ->
-        when (state) {
-            is ChooseAction -> renderActionPrompt()
-            is ChooseCard -> renderCardSelection()
-            is ChoosePosition -> renderBoardPositions()
-        }
-    }
-}
-```
-
 ## Error Handling
-
 ### State Error Management
 - States can contain error information
 - UI components should handle and display errors appropriately
@@ -155,11 +115,3 @@ runBlocking {
 - Use Kotlin contracts for compile-time state validation
 - Runtime checks with meaningful error messages
 - Graceful degradation for invalid state transitions
-
-## Future Enhancements
-
-### Planned Features
-- **Animation States**: Support for UI transition animations
-- **History Management**: Undo/redo functionality
-- **Persistence**: Save and restore UI state
-- **Multiplayer States**: Support for networked game states

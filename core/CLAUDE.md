@@ -13,23 +13,9 @@ The **Core module** provides the pure game engine implementation with domain log
 ## Development Commands
 
 ```bash
-# Build core module
-./gradlew :core:build
-
-# Run core tests
-./gradlew :core:jvmTest
-
-# Check code style (run before committing)
-./gradlew :core:ktlintCheck
-
-# Format code
-./gradlew :core:ktlintFormat
-
-# Clean core module
-./gradlew :core:clean
-
-# When validating changes, run:
-./gradlew check :app:cli:linkDebugExecutableLinuxX64 # Change targets on other platforms
+./gradlew :core:build         # Build core module
+./gradlew :core:jvmTest       # Run core tests
+./gradlew :core:ktlintCheck   # Check code style
 ```
 
 ## Architecture & Structure

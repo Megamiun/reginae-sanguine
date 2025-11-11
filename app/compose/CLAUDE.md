@@ -11,33 +11,23 @@ This file provides guidance for working with the multiplatform Compose applicati
 ## Module Structure
 
 ```
-app/compose/
-├── CLAUDE.md                           # This file - Compose module documentation
-├── build.gradle.kts                    # Multiplatform build configuration
-└── src/
-    ├── androidMain/
-    │   ├── AndroidManifest.xml         # Android app manifest
-    │   ├── kotlin/                     # Android-specific implementations
-    │   └── res/                        # Android resources
-    ├── commonMain/
-    │   ├── kotlin/br/com/gabryel/reginaesanguine/app/
-    │   │   ├── App.kt                  # Main application entry point
-    │   │   ├── services/               # Resource loading and card image services
-    │   │   ├── ui/                     # UI components and screens
-    │   │   │   ├── components/         # Reusable UI components
-    │   │   │   ├── theme/             # Compose theme definitions
-    │   │   │   ├── GameBoard.kt       # Main game board UI
-    │   │   │   ├── HomeScreen.kt      # Main menu screen
-    │   │   │   └── Navigation.kt      # Custom navigation system
-    │   │   └── util/                  # Utility functions
-    │   └── composeResources/          # Generated compose resources
-    ├── jvmMain/
-    │   ├── kotlin/                    # JVM/Desktop-specific implementations
-    │   └── Main.kt                    # Desktop application entry point
-    ├── nativeMain/
-    │   └── kotlin/                    # Native platform implementations
-    └── iosMain/ (generated)
-        └── kotlin/                    # iOS-specific implementations
+app/
+├── compose
+│   └── src/
+│       ├── androidMain/                                    # Android-specific code
+│       │   └── kotlin/br/com/gabryel/reginaesanguine/app/
+│       │       └── GameActivity.kt                         # Android application entry point
+│       ├── commonMain/                                     # Shared UI code
+│       ├── jvmMain/                                        # Desktop-specific code
+│       │   └── kotlin/br/com/gabryel/reginaesanguine/app/
+│       │       └── Main.kt                                 # Desktop application entry point
+│       ├── jsMain/                                         # Web-specific code
+│       │   └── kotlin/br/com/gabryel/reginaesanguine/app/
+│       │       └── Main.kt                                 # Web application entry point
+│       └── iosMain/                                        # iOS-specific code
+│           └── kotlin/br/com/gabryel/reginaesanguine/app/
+│               └── App.kt                                  # iOS application entry point
+└── xcode/                                                  # iOS integration layer
 ```
 
 ## Architecture & Design
@@ -117,49 +107,13 @@ app/compose/
 ## Development Commands
 
 ```bash
-# Build all platforms
-./gradlew :app:compose:build
-
-# Run desktop application
-./gradlew :app:compose:run
-
-# Build Android APK
-./gradlew :app:compose:assembleDebug
-
-# Install Android debug build
-./gradlew :app:compose:installDebug
-
-# Prepare assets (runs automatically during build)
-./gradlew prepareAssets
-
-# Check code style
-./gradlew :app:compose:ktlintCheck
-
-# Format code
-./gradlew :app:compose:ktlintFormat
+./gradlew :app:compose:build          # Build all platforms
+./gradlew :app:compose:run            # Run desktop
+./gradlew :app:compose:assembleDebug  # Build Android APK
+./gradlew :app:compose:ktlintCheck    # Check code style
 ```
 
-## Future Development Areas
-
-### Immediate Priorities
-1. **Card selection screen** for deck building
-2. **Game settings and preferences** management
-3. **Enhanced game state management** with proper persistence
-4. **Multiplayer lobby** integration with server module
-
-### Advanced Features
-1. **Custom card animations** during gameplay
-2. **Audio and haptic feedback** integration
-3. **Accessibility improvements** for inclusive design
-4. **Performance optimizations** for smooth gameplay
-
-### Platform-Specific Features
-1. **Android**: Integration with Android-specific APIs
-2. **Desktop**: Keyboard shortcuts and menu bar integration
-3. **iOS**: Native iOS design patterns and gestures
-
 ## Integration Points
-
 ### With Core Module
 - **Game engine**: All business logic delegated to core
 - **Domain models**: Direct usage of Game, Player, Card entities
@@ -177,7 +131,6 @@ app/compose/
 - **Type-safe access**: Generated resource classes for compile-time safety
 
 ## Notes for Development
-
 ### Experimental Features
 - **Context receivers** are experimental but provide clean dependency injection
 - **When guards** enable advanced pattern matching in UI logic

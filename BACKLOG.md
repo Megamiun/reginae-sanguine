@@ -1,0 +1,7 @@
+- [ ] Implement Drag and Drop on iOS
+- [ ] Add a back button after finishing a game
+- [ ] Beautify cards
+- [ ] Add Accounts to the server
+- [ ] Add Deck Edit capabilities to the server
+- [ ] Add Game capabilities to the server
+- [ ] Normalize pack_card_effect on DB

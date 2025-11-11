@@ -24,9 +24,15 @@ reginae-sanguine/
 │   └── viewmodel/        # Shared UI state management
 │       ├── CLAUDE.md     # ViewModel module documentation
 │       └── src/          # ViewModels for UI components
-├── server/spring/        # Spring Boot server module
-│   ├── CLAUDE.md         # Server module documentation
-│   └── src/              # REST API and web server
+├── server/               # Server implementations directory
+│   ├── common/           # Shared server code (DTOs, services, repositories)
+│   │   └── src/          # Common server logic
+│   ├── spring/           # Spring Boot server module
+│   │   ├── CLAUDE.md     # Spring server documentation
+│   │   └── src/          # JVM REST API with PostgreSQL
+│   └── node/             # Node.js server module
+│       ├── CLAUDE.md     # Node server documentation
+│       └── src/          # JS REST API with PostgreSQL
 ├── assets/               # Game assets and resources
 │   ├── packs/            # Card pack definitions and assets
 │   ├── fonts/            # Font resources
@@ -67,14 +73,35 @@ reginae-sanguine/
 - Platform-specific implementations for Android, JVM, iOS, and WASM
 - Integration with core game engine and viewmodel
 
-### Server Module (`server/spring/`)
-**Purpose**: Spring Boot web server for online multiplayer  
-**Technology**: Kotlin/JVM with Spring Boot  
+### Server Common Module (`server/common/`)
+**Purpose**: Shared server code across JVM and Node.js implementations
+**Technology**: Kotlin Multiplatform (Common + JVM + JS)
+**Responsibilities**:
+- Shared DTOs for API contracts
+- Common service interfaces (DeckService, GameService, PackSeederService)
+- Repository abstractions (PackRepository)
+- Domain models for server operations
+- Database migration scripts
+
+### Spring Server Module (`server/spring/`)
+**Purpose**: Spring Boot web server for online multiplayer
+**Technology**: Kotlin/JVM with Spring Boot, PostgreSQL, JPA/Hibernate
 **Responsibilities**:
 - REST API for game management and deck operations
-- Online multiplayer game sessions
-- Card pack management and serving
-- Game state persistence and synchronization
+- PostgreSQL persistence with JPA entities
+- Flyway database migrations
+- Card pack seeding and serving
+- TestContainers integration tests
+
+### Node.js Server Module (`server/node/`)
+**Purpose**: Node.js/Express alternative server implementation
+**Technology**: Kotlin/JS with Express, PostgreSQL, node-postgres
+**Responsibilities**:
+- REST API matching Spring server endpoints
+- PostgreSQL persistence with pg driver
+- JavaScript-based database migrations
+- Card pack seeding and serving
+- TestContainers integration tests
 
 ### ViewModel Module (`app/viewmodel/`)
 **Purpose**: Shared UI state management across client platforms  
@@ -95,20 +122,10 @@ reginae-sanguine/
 ## Development Commands
 
 ```bash
-# Build entire project
-./gradlew build
-
-# Run all tests
-./gradlew test
-
-# Check code style across all modules
-./gradlew ktlintCheck
-
-# Format code across all modules
-./gradlew ktlintFormat
-
-# Clean build
-./gradlew clean
+./gradlew build              # Build entire project
+./gradlew test               # Run all tests
+./gradlew ktlintCheck        # Check code style
+./gradlew ktlintFormat       # Format code
 ```
 
 ## Architecture Principles
@@ -165,4 +182,5 @@ For detailed module-specific guidance, refer to:
 - [CLI Module Documentation](app/cli/CLAUDE.md)
 - [Compose App Documentation](app/compose/CLAUDE.md)
 - [ViewModel Module Documentation](app/viewmodel/CLAUDE.md)
-- [Server Module Documentation](server/spring/CLAUDE.md)
+- [Spring Server Documentation](server/spring/CLAUDE.md)
+- [Node.js Server Documentation](server/node/CLAUDE.md)

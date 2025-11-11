@@ -14,29 +14,9 @@ The **CLI module** provides a terminal-based interface for the Reginae Sanguine 
 ## Development Commands
 
 ```bash
-# Build CLI module specifically
-./gradlew :app:cli:build
-
-# Run CLI tests
-./gradlew :app:cli:allTests
-
-# Check code style for CLI module
-./gradlew :app:cli:ktlintCheck
-
-# Format CLI module code
-./gradlew :app:cli:ktlintFormat
-
-# Run the CLI application (Linux x64)
-./gradlew :app:cli:linkDebugExecutableLinuxX64 && ./app/cli/build/bin/linuxX64/debugExecutable/cli.kexe
-
-# Run on other platforms:
-# Linux ARM64: ./gradlew :app:cli:linkDebugExecutableLinuxArm64 && ./app/cli/build/bin/linuxArm64/debugExecutable/cli.kexe
-# Windows x64: ./gradlew :app:cli:linkDebugExecutableMingwX64 && ./app/cli/build/bin/mingwX64/debugExecutable/cli.exe
-# macOS x64:   ./gradlew :app:cli:linkDebugExecutableMacosX64 && ./app/cli/build/bin/macosX64/debugExecutable/cli.kexe
-# macOS ARM64: ./gradlew :app:cli:linkDebugExecutableMacosArm64 && ./app/cli/build/bin/macosArm64/debugExecutable/cli.kexe
-
-# When validating changes, run:
-./gradlew :app:cli:check :app:cli:linkDebugExecutableLinuxX64
+./gradlew :app:cli:build                          # Build CLI module
+./gradlew :app:cli:linkDebugExecutableLinuxX64    # Run CLI on Linux x64 (Substitutors: LinuxArm64, MingwX64, MacosX64, MacosArm64)
+./gradlew :app:cli:ktlintCheck                    # Check code style
 ```
 
 ## Architecture & Structure
