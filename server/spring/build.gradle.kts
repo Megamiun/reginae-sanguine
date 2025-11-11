@@ -46,7 +46,10 @@ tasks.withType<Test> {
 
 sourceSets {
     main {
-        resources.srcDirs(rootProject.layout.buildDirectory.dir("generated/resources"))
+        resources.srcDirs(
+            rootProject.layout.buildDirectory.dir("generated/resources"),
+            project(":server:common").projectDir.resolve("src/commonMain/resources"),
+        )
     }
 }
 

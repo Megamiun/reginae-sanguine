@@ -13,7 +13,10 @@ kotlin {
 
     sourceSets {
         jsMain {
-            resources.srcDirs(rootProject.layout.buildDirectory.dir("generated/resources"))
+            resources.srcDirs(
+                rootProject.layout.buildDirectory.dir("generated/resources"),
+                project(":server:common").projectDir.resolve("src/commonMain/resources"),
+            )
 
             dependencies {
                 implementation(project(":core"))

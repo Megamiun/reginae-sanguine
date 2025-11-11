@@ -55,6 +55,7 @@ class NodePackLoader : PackLoader {
     private fun fileExistsSync(path: String): Boolean = try {
         fs.existsSync(path) as Boolean
     } catch (e: Throwable) {
+        console.log("Error checking for file existence", e)
         false
     }
 
