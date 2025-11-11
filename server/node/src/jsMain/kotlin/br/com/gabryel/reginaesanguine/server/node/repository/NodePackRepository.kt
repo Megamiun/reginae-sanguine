@@ -5,7 +5,6 @@ import br.com.gabryel.reginaesanguine.domain.CardTier
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.effect.None
-import br.com.gabryel.reginaesanguine.domain.effect.StatusType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
 import br.com.gabryel.reginaesanguine.domain.effect.type.AddCardsToHandDefault
@@ -19,16 +18,21 @@ import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePower
 import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePowerByCount
 import br.com.gabryel.reginaesanguine.domain.effect.type.RaisePowerOnStatus
 import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseRankDefault
+import br.com.gabryel.reginaesanguine.domain.effect.type.RaiseWinnerLanesByLoserScore
 import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAllyDefault
 import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAllyRaise
 import br.com.gabryel.reginaesanguine.domain.effect.type.SpawnCardsPerRank
 import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
+import br.com.gabryel.reginaesanguine.server.domain.AmountData
+import br.com.gabryel.reginaesanguine.server.domain.CardIdsData
+import br.com.gabryel.reginaesanguine.server.domain.PowerMultiplierData
+import br.com.gabryel.reginaesanguine.server.domain.RaisePowerByCountData
+import br.com.gabryel.reginaesanguine.server.domain.RaisePowerOnStatusData
+import br.com.gabryel.reginaesanguine.server.domain.toEffectData
 import br.com.gabryel.reginaesanguine.server.node.pg.Pool
 import br.com.gabryel.reginaesanguine.server.node.pg.PoolClient
 import br.com.gabryel.reginaesanguine.server.repository.PackRepository
 import kotlinx.coroutines.await
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
 class NodePackRepository(private val pool: Pool) : PackRepository {
     private val json = gameJsonParser()
@@ -42,35 +46,30 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
                 arrayOf(packId, pack.id, pack.name),
             ).await()
 
-            // TODO Do this in just one insert. Same for Effects. Avoid n+1 issues
-            pack.cards.forEach { card ->
-                val cardId = generateUUID()
+            if (pack.cards.isEmpty()) return@withTransaction
 
-                client.query(
-                    """
-                    INSERT INTO pack_card (id, pack_id, pack_internal_card_id, name, tier, rank, power, spawn_only, increments)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-                    """.trimIndent(),
-                    arrayOf(
-                        cardId,
-                        packId,
-                        card.id,
-                        card.name,
-                        card.tier.name,
-                        card.rank,
-                        card.power,
-                        card.spawnOnly,
-                        json.encodeToString(card.increments.toList()),
-                    ),
-                ).await()
+            val cardIdsAndCards = pack.cards.map { card -> generateUUID() to card }
 
-                saveEffect(client, cardId, card.effect)
+            client.persistAll(
+                "pack_card",
+                listOf("id", "pack_id", "pack_internal_card_id", "name", "tier", "rank", "power", "spawn_only", "increments"),
+                cardIdsAndCards,
+            ) { (id, card) ->
+                val increments = json.encodeToString(card.increments.toList())
+                listOf(id, packId, card.id, card.name, card.tier.name, card.rank, card.power, card.spawnOnly, increments)
             }
+
+            client.persistAll(
+                "pack_card_effect",
+                listOf("id", "type", "target", "affected", "description", "trigger_data", "effect_data"),
+                cardIdsAndCards,
+            ) { (cardId, card) -> mapEffectColumns(card, cardId) }
         }
     }
 
-    private suspend fun saveEffect(client: PoolClient, cardId: String, effect: Effect) {
-        val effectData = json.encodeToString(effect.getEffectData())
+    private fun mapEffectColumns(card: Card, cardId: String): List<String> {
+        val effect = card.effect
+        val effectData = json.encodeToString(effect.toEffectData())
         val triggerData = json.encodeToString(effect.trigger)
         val affectedData = if (effect is EffectWithAffected) {
             json.encodeToString(effect.affected.toList())
@@ -78,27 +77,39 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
             json.encodeToString(emptyList<Displacement>())
         }
 
-        val target = if (effect is EffectWithAffected) {
-            effect.target.name
-        } else {
-            "SELF"
-        }
+        val target = if (effect is EffectWithAffected) effect.target.name else "SELF"
 
-        client.query(
+        return listOf(cardId, effect.discriminator, target, affectedData, effect.description, triggerData, effectData)
+    }
+
+    private suspend fun PoolClient.persistAll(
+        table: String,
+        columns: List<String>,
+        data: List<Pair<String, Card>>,
+        mapData: (Pair<String, Card>) -> Iterable<Any>
+    ) {
+        val columnsSize = columns.size
+
+        val queryValues = data.mapIndexed { itemIndex, _ ->
+            val baseIndex = (itemIndex * columnsSize) + 1
+            columns.mapIndexed { index, _ -> index }.joinToString(prefix = "(", postfix = ")") { """$${baseIndex + it}""" }
+        }.joinToString()
+
+        val formattedColumns = columns.joinToString()
+        val values = data.flatMap(mapData).toTypedArray()
+
+        query(
             """
-            INSERT INTO pack_card_effect (id, type, target, affected, description, trigger_data, effect_data)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            INSERT INTO $table ($formattedColumns)
+            VALUES $queryValues
             """.trimIndent(),
-            arrayOf(cardId, effect.discriminator, target, affectedData, effect.description, triggerData, effectData),
+            values,
         ).await()
     }
 
     override suspend fun packExists(alias: String): Boolean {
-        console.log("DEBUG: packExists - checking for alias: $alias")
-        val result = pool.query(
-            "SELECT COUNT(*) as count FROM pack WHERE alias = $1",
-            arrayOf(alias),
-        ).await()
+        val result = pool.query("SELECT COUNT(*) as count FROM pack WHERE alias = $1", arrayOf(alias))
+            .await()
 
         if (result.rows.isEmpty()) return false
 
@@ -108,26 +119,20 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
             else -> 0
         }
 
-        val exists = count > 0
-        console.log("DEBUG: packExists - count: $count, returning: $exists")
-        return exists
+        return count > 0
     }
 
     override suspend fun findPack(alias: String): Pack? {
-        val packResult = pool.query(
-            "SELECT id, alias, name FROM pack WHERE alias = $1",
-            arrayOf(alias),
-        ).await()
+        val packResult = pool.query("SELECT id, alias, name FROM pack WHERE alias = $1", arrayOf(alias))
+            .await()
 
         if (packResult.rows.isEmpty()) {
             console.log("DEBUG: Pack not found")
             return null
         }
 
-        console.log("DEBUG: Pack not found")
-
         val packRow = packResult.rows[0]
-        val packUuid = packRow.id as String
+        val packUuid = packRow.id
 
         val cardsResult = pool.query(
             """
@@ -139,14 +144,13 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
         ).await()
 
         val cards = cardsResult.rows.map { cardRow ->
-            val cardId = cardRow.id as String
-
+            val cardId = cardRow.id
             val effect = loadEffect(cardId) ?: NoEffect
 
             Card(
-                id = cardRow.pack_internal_card_id as String,
-                name = cardRow.name as String,
-                tier = CardTier.valueOf(cardRow.tier as String),
+                id = cardRow.pack_internal_card_id,
+                name = cardRow.name,
+                tier = CardTier.valueOf(cardRow.tier),
                 rank = (cardRow.rank as Number).toInt(),
                 power = (cardRow.power as Number).toInt(),
                 spawnOnly = cardRow.spawn_only as Boolean,
@@ -155,7 +159,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
             )
         }
 
-        return Pack(id = packRow.alias as String, name = packRow.name as String, cards = cards)
+        return Pack(id = packRow.alias, name = packRow.name, cards = cards)
     }
 
     private suspend fun loadEffect(cardId: String): Effect? {
@@ -173,10 +177,10 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
         val row = effectResult.rows[0]
 
         return parseEffect(
-            type = row.type as String,
-            target = row.target as String,
+            type = row.type,
+            target = row.target,
             affected = JSON.stringify(row.affected),
-            description = row.description as? String,
+            description = row.description,
             triggerData = JSON.stringify(row.trigger_data),
             effectData = JSON.stringify(row.effect_data),
         )
@@ -234,8 +238,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
                     description = desc,
                 )
             }
-            "RaiseWinnerLanesByLoserScore" ->
-                br.com.gabryel.reginaesanguine.domain.effect.type.RaiseWinnerLanesByLoserScore(description = desc)
+            "RaiseWinnerLanesByLoserScore" -> RaiseWinnerLanesByLoserScore(description = desc)
             "RaiseRank" -> {
                 val data = json.decodeFromString<AmountData>(effectData)
                 RaiseRankDefault(
@@ -306,52 +309,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
 }
 
 // TODO Exchange to another better impl
-private fun generateUUID(): String = js("require('crypto').randomUUID()") as String
-
-private fun Effect.getEffectData(): EffectData = when (this) {
-    is AddCardsToHandDefault -> CardIdsData(cardIds = cardIds)
-    is SpawnCardsPerRank -> CardIdsData(cardIds = cardIds)
-    is RaisePower -> AmountData(amount = amount)
-    is RaiseRankDefault -> AmountData(amount = amount)
-    is RaiseLaneIfWon -> AmountData(amount = amount)
-    is RaisePowerOnStatus -> RaisePowerOnStatusData(enhancedAmount = enhancedAmount, enfeebledAmount = enfeebledAmount)
-    is RaisePowerByCount -> RaisePowerByCountData(amount = amount, status = status, scope = scope)
-    is ReplaceAllyRaise -> PowerMultiplierData(powerMultiplier = powerMultiplier)
-    else -> EmptyData
-}
-
-// TODO Share impls between JS and JVM
-// Data classes matching Spring implementation
-@Serializable
-sealed interface EffectData
-
-@Serializable
-@SerialName("AmountData")
-private data class AmountData(val amount: Int) : EffectData
-
-@Serializable
-@SerialName("RaisePowerByCount")
-private data class RaisePowerByCountData(
-    val amount: Int,
-    val status: StatusType,
-    val scope: TargetType
-) : EffectData
-
-@Serializable
-@SerialName("RaisePowerOnStatusData")
-private data class RaisePowerOnStatusData(val enhancedAmount: Int, val enfeebledAmount: Int) : EffectData
-
-@Serializable
-@SerialName("CardIdsData")
-private data class CardIdsData(val cardIds: List<String>) : EffectData
-
-@Serializable
-@SerialName("PowerMultiplierData")
-private data class PowerMultiplierData(val powerMultiplier: Int) : EffectData
-
-@Serializable
-@SerialName("EmptyData")
-private data object EmptyData : EffectData
+private fun generateUUID(): String = js("require('crypto').randomUUID()")
 
 /**
  * Execute a block of code within a PostgreSQL transaction.

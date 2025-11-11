@@ -20,18 +20,18 @@ class SpringPackRepository(
     private val packCardEffectJpaRepository: PackCardEffectJpaRepository,
 ) : PackRepository {
     @Transactional
-    override suspend fun savePack(pack: Pack) = withContext(Dispatchers.IO) {
+    override suspend fun savePack(pack: Pack): Unit = withContext(Dispatchers.IO) {
         val packEntity = PackEntity.fromDomain(pack)
         packJpaRepository.save(packEntity)
 
-        // TODO Use a single saveAll for both
-        pack.cards.forEach { domainCard ->
-            val cardEntity = PackCardEntity.fromDomain(domainCard, packEntity)
-            packCardJpaRepository.save(cardEntity)
+        val cardEntities = pack.cards.map { domainCard -> PackCardEntity.fromDomain(domainCard, packEntity) }
+        val savedCards = packCardJpaRepository.saveAll(cardEntities).toList()
 
+        val effectEntities = savedCards.zip(pack.cards).map { (cardEntity, domainCard) ->
             val cardId = requireNotNull(cardEntity.id)
-            packCardEffectJpaRepository.save(domainCard.effect.toEntity(cardId))
+            domainCard.effect.toEntity(cardId)
         }
+        packCardEffectJpaRepository.saveAll(effectEntities)
     }
 
     override suspend fun packExists(alias: String): Boolean = withContext(Dispatchers.IO) {
@@ -55,13 +55,15 @@ class SpringPackRepository(
 
     private fun toPackDomain(pack: PackEntity): Pack {
         val packId = requireNotNull(pack.id) { "Pack ID not found" }
-        // TODO Avoid a N+1 here
-        val cards = packCardJpaRepository.findByPackId(packId).map { cardEntity ->
+        val cardEntities = packCardJpaRepository.findByPackId(packId)
+
+        val cardIds = cardEntities.map { requireNotNull(it.id) }
+        val effectsMap = packCardEffectJpaRepository.findAllById(cardIds).associateBy { it.id }
+
+        val cards = cardEntities.map { cardEntity ->
             val cardId = requireNotNull(cardEntity.id) { "Card ID not found" }
-
-            val effectEntity = packCardEffectJpaRepository.findById(cardId).orElse(null)
+            val effectEntity = effectsMap[cardId]
             val effect = effectEntity?.toDomain()
-
             cardEntity.toDomain(effect)
         }
 

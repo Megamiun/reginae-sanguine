@@ -141,7 +141,7 @@ fun handleRequestAsync(function: suspend (dynamic, dynamic) -> Unit) = { req: dy
         try {
             function(req, res)
         } catch (e: Throwable) {
-            console.error("Error in async handler: ${e.message}")
+            console.error("Error in async handler: ${e.message}", e)
             e.printStackTrace()
             val errorObj = js("{}")
             errorObj.error = e.message ?: "Unknown error"

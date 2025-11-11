@@ -2,7 +2,6 @@ package br.com.gabryel.reginaesanguine.server.entity
 
 import br.com.gabryel.reginaesanguine.domain.Displacement
 import br.com.gabryel.reginaesanguine.domain.effect.None
-import br.com.gabryel.reginaesanguine.domain.effect.StatusType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType
 import br.com.gabryel.reginaesanguine.domain.effect.TargetType.SELF
 import br.com.gabryel.reginaesanguine.domain.effect.Trigger
@@ -22,14 +21,20 @@ import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAllyDefault
 import br.com.gabryel.reginaesanguine.domain.effect.type.ReplaceAllyRaise
 import br.com.gabryel.reginaesanguine.domain.effect.type.SpawnCardsPerRank
 import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
+import br.com.gabryel.reginaesanguine.server.domain.AmountData
+import br.com.gabryel.reginaesanguine.server.domain.CardIdsData
+import br.com.gabryel.reginaesanguine.server.domain.EffectData
+import br.com.gabryel.reginaesanguine.server.domain.EmptyData
+import br.com.gabryel.reginaesanguine.server.domain.PowerMultiplierData
+import br.com.gabryel.reginaesanguine.server.domain.RaisePowerByCountData
+import br.com.gabryel.reginaesanguine.server.domain.RaisePowerOnStatusData
+import br.com.gabryel.reginaesanguine.server.domain.toEffectData
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType.STRING
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.polymorphic
 import org.hibernate.annotations.JdbcType
 import org.hibernate.annotations.JdbcTypeCode
@@ -57,33 +62,6 @@ class PackCardEffectEntity(
     @JdbcTypeCode(JSON)
     val effectData: String,
 )
-
-// Data classes for effect-specific data
-interface EffectData
-
-@Serializable
-@SerialName("AmountData")
-private data class AmountData(val amount: Int) : EffectData
-
-@Serializable
-@SerialName("RaisePowerByCount")
-private data class RaisePowerByCountData(val amount: Int, val status: StatusType, val scope: TargetType) : EffectData
-
-@Serializable
-@SerialName("RaisePowerOnStatusData")
-private data class RaisePowerOnStatusData(val enhancedAmount: Int, val enfeebledAmount: Int) : EffectData
-
-@Serializable
-@SerialName("CardIdsData")
-private data class CardIdsData(val cardIds: List<String>) : EffectData
-
-@Serializable
-@SerialName("PowerMultiplierData")
-private data class PowerMultiplierData(val powerMultiplier: Int) : EffectData
-
-@Serializable
-@SerialName("EmptyData")
-private object EmptyData : EffectData
 
 private val json = gameJsonParser {
     polymorphic(EffectData::class) {
@@ -204,18 +182,6 @@ fun Effect.toEntity(cardId: UUID): PackCardEffectEntity {
         description = description,
         affected = affectedJson,
         triggerData = json.encodeToString(trigger),
-        effectData = json.encodeToString(getEffectData()),
+        effectData = json.encodeToString(toEffectData()),
     )
-}
-
-private fun Effect.getEffectData(): EffectData = when (this) {
-    is AddCardsToHandDefault -> CardIdsData(cardIds = cardIds)
-    is SpawnCardsPerRank -> CardIdsData(cardIds = cardIds)
-    is RaisePower -> AmountData(amount = amount)
-    is RaiseRankDefault -> AmountData(amount = amount)
-    is RaiseLaneIfWon -> AmountData(amount = amount)
-    is RaisePowerOnStatus -> RaisePowerOnStatusData(enhancedAmount = enhancedAmount, enfeebledAmount = enfeebledAmount)
-    is RaisePowerByCount -> RaisePowerByCountData(amount = amount, status = status, scope = scope)
-    is ReplaceAllyRaise -> PowerMultiplierData(powerMultiplier = powerMultiplier)
-    else -> EmptyData
 }
