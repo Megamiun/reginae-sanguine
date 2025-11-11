@@ -30,6 +30,7 @@ kotlin {
                 implementation(libs.kotest.assertions.core)
                 implementation(libs.kotlinx.coroutines)
                 implementation(npm("node-fetch", "^2.7.0"))
+                implementation(npm("@testcontainers/postgresql", "^10.13.2"))
             }
         }
     }
