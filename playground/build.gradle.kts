@@ -2,12 +2,27 @@ import org.gradle.api.JavaVersion.VERSION_11
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.compose")
+
     alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.compose)
 }
 
 kotlin {
     jvm()
     androidTarget()
+
+    sourceSets {
+        androidMain.dependencies {
+            implementation(libs.appcompat)
+            implementation(libs.lifecycle.runtime.ktx)
+            implementation(libs.activity.compose)
+            implementation(compose.material3)
+            implementation(compose.ui)
+
+            runtimeOnly(compose.runtime)
+        }
+    }
 }
 
 android {
