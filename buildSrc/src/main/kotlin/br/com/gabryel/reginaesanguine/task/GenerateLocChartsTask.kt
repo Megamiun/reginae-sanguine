@@ -27,6 +27,7 @@ data class TargetLoc(
 
 data class ChartData(
     val targets: List<String>,
+    val categories: List<String>,
     val locs: List<Int>,
     val labels: List<String>
 )
@@ -137,7 +138,6 @@ abstract class GenerateLocChartsTask : DefaultTask() {
         val productionData = locData.filter { it.type == "production" }
         val buildData = locData.filter { it.type == "build" }
 
-        // Generate individual module charts
         productionData.groupBy { it.module }
             .filter { (_, data) -> data.isNotEmpty() }
             .forEach { (module, data) ->
@@ -147,7 +147,6 @@ abstract class GenerateLocChartsTask : DefaultTask() {
         if (buildData.isNotEmpty())
             generateBuildFilesCategoryChart(buildData)
 
-        // Generate aggregate chart for all production code
         generateSimpleChart(
             "aggregate_all_modules",
             productionData,
@@ -155,7 +154,6 @@ abstract class GenerateLocChartsTask : DefaultTask() {
             "Total Lines of Code - All Modules (Production)",
         )
 
-        // Generate aggregate charts by module type
         productionData.groupBy { getModuleType(it.module) }
             .filter { (moduleType, moduleData) -> moduleType != null && moduleData.isNotEmpty() }
             .mapKeys { (moduleType) -> moduleType!! }
@@ -164,28 +162,6 @@ abstract class GenerateLocChartsTask : DefaultTask() {
                 val fileName = "aggregate_${moduleType.lowercase()}"
                 generateSimpleChart(fileName, moduleData, color, "Lines of Code - $moduleType Modules")
             }
-
-        // Generate comparison chart
-        generateComparisonChart(locData)
-    }
-
-    private fun prepareChartData(data: List<TargetLoc>): ChartData? {
-        val aggregated = data.groupBy { it.target }
-            .mapValues { it.value.sumOf { loc -> loc.loc } }
-            .toList()
-            .sortedByDescending { it.second }
-
-        if (aggregated.isEmpty()) return null
-
-        val totalLoc = aggregated.sumOf { it.second }
-        val targets = aggregated.map { it.first }
-        val locs = aggregated.map { max(it.second, 1) }
-        val labels = aggregated.map { (_, loc) ->
-            val percentage = (loc.toDouble() / totalLoc * 100).roundToInt()
-            "$loc\n($percentage%)"
-        }
-
-        return ChartData(targets, locs, labels)
     }
 
     private fun generateSimpleChart(
@@ -220,25 +196,13 @@ abstract class GenerateLocChartsTask : DefaultTask() {
     }
 
     private fun generateBuildFilesCategoryChart(data: List<TargetLoc>) {
-        val aggregated = data.groupBy { it.module }
-            .mapValues { it.value.sumOf { loc -> loc.loc } }
-            .toList()
-            .sortedByDescending { it.second }
-
-        if (aggregated.isEmpty()) return
-
-        val totalLoc = aggregated.sumOf { it.second }
-        val categories = aggregated.map { it.first }
-        val locs = aggregated.map { max(it.second, 1) }
-        val labels = aggregated.map { (_, loc) ->
-            val percentage = (loc.toDouble() / totalLoc * 100).roundToInt()
-            "$loc\n($percentage%)"
-        }
+        val chartData = prepareChartData(data)
+            ?: return
 
         val dataMap = mapOf(
-            "category" to categories,
-            "loc" to locs,
-            "label" to labels,
+            "category" to chartData.categories,
+            "loc" to chartData.locs,
+            "label" to chartData.labels,
         )
 
         val plot = ggplot(dataMap) {
@@ -248,7 +212,7 @@ abstract class GenerateLocChartsTask : DefaultTask() {
             geomBar(stat = Stat.identity, color = "#4682B4", fill = "#4682B4", alpha = 0.7) +
             scaleYLog10() +
             geomText(vjust = "top", color = "black") { label = "label" } +
-            ggtitle("Lines of Code - Build Files by Category ($totalLoc total)") +
+            ggtitle("Lines of Code - Build Files by Category (${chartData.locs} total)") +
             labs(x = "Category", y = "LOC (log scale)")
 
         val outputFile = File(outputDir.asFile.get(), "build.png")
@@ -256,48 +220,24 @@ abstract class GenerateLocChartsTask : DefaultTask() {
         logger.lifecycle("Generated build files chart: ${outputFile.absolutePath}")
     }
 
-    private fun generateComparisonChart(data: List<TargetLoc>) {
-        val aggregated = data.groupBy { Pair(it.target, it.type) }
+    private fun prepareChartData(data: List<TargetLoc>): ChartData? {
+        val aggregated = data.groupBy { it.target }
             .mapValues { it.value.sumOf { loc -> loc.loc } }
-            .filter { it.value > 0 }
+            .toList()
+            .sortedByDescending { it.second }
 
-        if (aggregated.isEmpty()) return
+        if (aggregated.isEmpty()) return null
 
-        val totalByTarget = aggregated.entries.groupBy { it.key.first }
-            .mapValues { it.value.sumOf { entry -> entry.value } }
-
-        val entries = aggregated.entries.toList()
-
-        val targets = entries.map { it.key.first }
-        val locs = entries.map { max(it.value, 1) }
-        val types = entries.map { it.key.second }
-        val labels = entries.map { (key, value) ->
-            val targetTotal = totalByTarget[key.first] ?: value
-            val percentage = (value.toDouble() / targetTotal * 100).roundToInt()
-            "$value\n($percentage%)"
+        val totalLoc = aggregated.sumOf { it.second }
+        val categories = aggregated.map { it.first }
+        val targets = aggregated.map { it.first }
+        val locs = aggregated.map { max(it.second, 1) }
+        val labels = aggregated.map { (_, loc) ->
+            val percentage = (loc.toDouble() / totalLoc * 100).roundToInt()
+            "$loc\n($percentage%)"
         }
 
-        val chartData = mapOf(
-            "target" to targets,
-            "loc" to locs,
-            "type" to types,
-            "label" to labels,
-        )
-
-        val plot = ggplot(chartData) {
-            x = "target"
-            y = "loc"
-            fill = "type"
-        } +
-            geomBar(stat = Stat.identity, position = positionDodge(), alpha = 0.7) +
-            scaleYLog10() +
-            geomText(position = positionDodge(width = 0.9), vjust = "top", color = "black") { label = "label" } +
-            ggtitle("Lines of Code by Type - All Modules") +
-            labs(x = "Target Type", y = "LOC (log scale)", fill = "Code Type")
-
-        val outputFile = File(outputDir.asFile.get(), "comparison_by_type.png")
-        ggsave(plot, outputFile.name, path = outputFile.parent)
-        logger.lifecycle("Generated comparison chart: ${outputFile.absolutePath}")
+        return ChartData(targets, categories, locs, labels)
     }
 
     private fun getModuleTypeColor(moduleType: String): String = when (moduleType) {
