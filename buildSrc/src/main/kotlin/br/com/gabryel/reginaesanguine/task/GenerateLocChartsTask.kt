@@ -100,20 +100,37 @@ abstract class GenerateLocChartsTask : DefaultTask() {
 
         val buildFiles = projectRoot.walkTopDown()
             .filter { file ->
-                (file.name == "build.gradle.kts" ||
-                    file.name == "settings.gradle.kts" ||
-                    file.name == "gradle.properties") &&
+                (
+                    file.name == "build.gradle.kts" ||
+                        file.name == "settings.gradle.kts" ||
+                        file.name == "gradle.properties"
+                ) &&
                     !file.path.contains("/build/") &&
                     !file.path.contains("/node_modules/")
             }
+            .map { file ->
+                val relativePath = file.relativeTo(projectRoot).path
+                val loc = file.readLines().size
+                val category = when {
+                    file.name.endsWith(".gradle.kts") -> "build.gradle.kts"
+                    file.name == "gradle.properties" -> "gradle.properties"
+                    else -> "others"
+                }
+                TargetLoc(category, relativePath, loc, "build")
+            }
             .toList()
 
-        return if (buildFiles.isNotEmpty()) {
-            val buildLoc = buildFiles.sumOf { it.readLines().size }
-            results + TargetLoc("build", "common", buildLoc, "build")
-        } else {
-            results
-        }
+        val taskFiles = File(projectRoot, "buildSrc/src/main/kotlin")
+            .walkTopDown()
+            .filter { it.extension == "kt" }
+            .map { file ->
+                val relativePath = file.relativeTo(projectRoot).path
+                val loc = file.readLines().size
+                TargetLoc("*Task.kt", relativePath, loc, "build")
+            }
+            .toList()
+
+        return results + buildFiles + taskFiles
     }
 
     private fun generateAllCharts(locData: List<TargetLoc>) {
@@ -127,17 +144,15 @@ abstract class GenerateLocChartsTask : DefaultTask() {
                 generateSimpleChart(module, data, "#4682B4", "Lines of Code - $module")
             }
 
-        // Generate build files chart
-        if (buildData.isNotEmpty()) {
-            generateSimpleChart("build", buildData, "#4682B4", "Lines of Code - build")
-        }
+        if (buildData.isNotEmpty())
+            generateBuildFilesCategoryChart(buildData)
 
         // Generate aggregate chart for all production code
         generateSimpleChart(
             "aggregate_all_modules",
             productionData,
             "#006400",
-            "Total Lines of Code - All Modules (Production)"
+            "Total Lines of Code - All Modules (Production)",
         )
 
         // Generate aggregate charts by module type
@@ -177,7 +192,8 @@ abstract class GenerateLocChartsTask : DefaultTask() {
         fileName: String,
         data: List<TargetLoc>,
         color: String,
-        title: String
+        title: String,
+        xAxisLabel: String = "Target Type"
     ) {
         val chartData = prepareChartData(data) ?: return
 
@@ -195,12 +211,49 @@ abstract class GenerateLocChartsTask : DefaultTask() {
             scaleYLog10() +
             geomText(vjust = "top", color = "black") { label = "label" } +
             ggtitle(title) +
-            labs(x = "Target Type", y = "LOC (log scale)")
+            labs(x = xAxisLabel, y = "LOC (log scale)")
 
         val outputFileName = fileName.replace("/", "_")
         val outputFile = File(outputDir.asFile.get(), "$outputFileName.png")
         ggsave(plot, outputFile.name, path = outputFile.parent)
         logger.lifecycle("Generated chart for $fileName: ${outputFile.absolutePath}")
+    }
+
+    private fun generateBuildFilesCategoryChart(data: List<TargetLoc>) {
+        val aggregated = data.groupBy { it.module }
+            .mapValues { it.value.sumOf { loc -> loc.loc } }
+            .toList()
+            .sortedByDescending { it.second }
+
+        if (aggregated.isEmpty()) return
+
+        val totalLoc = aggregated.sumOf { it.second }
+        val categories = aggregated.map { it.first }
+        val locs = aggregated.map { max(it.second, 1) }
+        val labels = aggregated.map { (_, loc) ->
+            val percentage = (loc.toDouble() / totalLoc * 100).roundToInt()
+            "$loc\n($percentage%)"
+        }
+
+        val dataMap = mapOf(
+            "category" to categories,
+            "loc" to locs,
+            "label" to labels,
+        )
+
+        val plot = ggplot(dataMap) {
+            x = "category"
+            y = "loc"
+        } +
+            geomBar(stat = Stat.identity, color = "#4682B4", fill = "#4682B4", alpha = 0.7) +
+            scaleYLog10() +
+            geomText(vjust = "top", color = "black") { label = "label" } +
+            ggtitle("Lines of Code - Build Files by Category ($totalLoc total)") +
+            labs(x = "Category", y = "LOC (log scale)")
+
+        val outputFile = File(outputDir.asFile.get(), "build.png")
+        ggsave(plot, outputFile.name, path = outputFile.parent)
+        logger.lifecycle("Generated build files chart: ${outputFile.absolutePath}")
     }
 
     private fun generateComparisonChart(data: List<TargetLoc>) {
