@@ -157,6 +157,8 @@ reginae-sanguine/
 ## Coding Rules
 - Never use !!. Always use error(), ensure() or throw explicit exceptions when something that shouldn't be null is null
 - Test names should follow pattern: `[given setup], when doing action, should expect result`
+- Minimize code comments - write self-documenting code with clear names and simple logic. Only add comments when something is counter-intuitive or too confusing
+- Prefer immutability and small, clear, well-named methods for better code maintainability
 
 ## AI Coding Rules
 - Tests for debugging should be cleaned after debugging is done

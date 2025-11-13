@@ -1,3 +1,4 @@
+import br.com.gabryel.reginaesanguine.task.GenerateLocChartsTask
 import br.com.gabryel.reginaesanguine.task.PrepareAssetsTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
@@ -82,5 +83,13 @@ tasks {
 
         assetsDir = rootProject.layout.projectDirectory.dir("assets")
         generatedDir = rootProject.layout.buildDirectory.dir("generated")
+    }
+
+    register("generateLocCharts", GenerateLocChartsTask::class) {
+        group = "documentation"
+        description = "Generate LOC charts for all modules"
+
+        projectDir = rootProject.layout.projectDirectory
+        outputDir = rootProject.layout.buildDirectory.dir("charts")
     }
 }

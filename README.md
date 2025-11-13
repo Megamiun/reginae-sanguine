@@ -69,13 +69,9 @@ Study project for learning Domain Driven Design and Kotlin Multiplatform inspire
   - [ ] Should allow for local play on same device
   - [ ] Should allow signup/login to server
   - [ ] Should allow for remote play via server
-- [ ] Have an local iOS version using Swift and calling core library via interop
+- [ ] Have a local iOS version using Swift and calling core library via interop
   - [ ] Should allow for deck management
   - [ ] Should allow for local play on same device
-- [ ] Create a Kotlin/JS webserver which allows people to play online
-  - [ ] Should allow users to register in server
-  - [ ] Should allow users to create custom decks
-  - [ ] Should allow users to invite each other
 
 ## Decisions
 

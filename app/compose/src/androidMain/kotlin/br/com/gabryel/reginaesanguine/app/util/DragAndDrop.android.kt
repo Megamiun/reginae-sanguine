@@ -10,4 +10,5 @@ actual fun getTransferData(offset: Offset, data: String) =
     DragAndDropTransferData(ClipData.newPlainText("CARD:$data", data))
 
 actual fun getContent(event: DragAndDropEvent) =
-    event.toAndroidDragEvent().clipDescription?.label?.split(":")?.last()
+    event.toAndroidDragEvent().clipDescription?.label
+        ?.split(":")?.last()

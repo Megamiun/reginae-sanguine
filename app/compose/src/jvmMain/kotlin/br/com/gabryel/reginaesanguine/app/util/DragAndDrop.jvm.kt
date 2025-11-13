@@ -19,4 +19,5 @@ actual fun getTransferData(offset: Offset, data: String): DragAndDropTransferDat
 }
 
 actual fun getContent(event: DragAndDropEvent) =
-    (event.nativeEvent as? DropTargetDropEvent)?.transferable?.getTransferData(DataFlavor.stringFlavor)?.toString()
+    (event.nativeEvent as? DropTargetDropEvent)?.transferable
+        ?.getTransferData(DataFlavor.stringFlavor)?.toString()

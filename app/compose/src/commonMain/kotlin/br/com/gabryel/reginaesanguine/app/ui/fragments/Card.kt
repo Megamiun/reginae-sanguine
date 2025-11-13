@@ -93,7 +93,9 @@ private fun Card(owner: PlayerPosition, card: Card, size: DpSize, modifier: Modi
 
     val borderBrush = remember(card.tier) { verticalGradient(card.getCardBorderColors()) }
     val borderStroke = remember(card.tier) { BorderStroke(1.dp, borderBrush) }
+
     val totalWidth = size.width
+    val powerIndicationSize = totalWidth / 4.5f
 
     val clippingModifier = Modifier.clip(CARD_SHAPE)
 
@@ -108,7 +110,7 @@ private fun Card(owner: PlayerPosition, card: Card, size: DpSize, modifier: Modi
                     CardDetails(owner, card, totalWidth, size)
             }
 
-            CardPowerIndicator(card.power, totalWidth / 4.5f, Modifier.align(TopEnd))
+            CardPowerIndicator(card.power, powerIndicationSize, Modifier.align(TopEnd))
         }
     }
 }
