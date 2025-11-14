@@ -33,7 +33,8 @@ kotlin {
     }
 
     if (HostManager.hostIsMac) {
-        listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+        val iosTargets = listOf(iosX64(), iosArm64(), iosSimulatorArm64())
+        iosTargets.forEach { iosTarget ->
             iosTarget.binaries.framework {
                 baseName = "ReginaeSanguineCompose"
                 isStatic = true
@@ -71,6 +72,17 @@ kotlin {
                 implementation(libs.coil.compose)
                 implementation(compose.ui)
             }
+        }
+
+        if (HostManager.hostIsMac) {
+            val iosMain by creating {
+                dependsOn(commonMain.get())
+                dependsOn(nonAndroidMain)
+            }
+
+            val iosX64Main by getting { dependsOn(iosMain) }
+            val iosArm64Main by getting { dependsOn(iosMain) }
+            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
         }
 
         all {
