@@ -19,7 +19,13 @@ val generatedResources = rootProject.layout.buildDirectory.dir("generated/resour
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.addAll(listOf("-Xcontext-parameters", "-Xexpect-actual-classes", "-XXLanguage:+WhenGuards"))
+        freeCompilerArgs.addAll(
+            listOf(
+                "-Xcontext-parameters",
+                "-Xexpect-actual-classes",
+                "-XXLanguage:+WhenGuards",
+            ),
+        )
     }
 
     androidTarget()
@@ -93,9 +99,11 @@ kotlin {
             dependencies {
                 implementation(project(":core"))
                 implementation(project(":app:viewmodel"))
+                implementation(project(":server:dto"))
 
                 runtimeOnly(compose.runtime)
 
+                implementation(compose.materialIconsExtended)
                 implementation(compose.components.resources)
                 implementation(compose.foundation)
                 implementation(compose.material3)
@@ -103,6 +111,10 @@ kotlin {
 
                 implementation(libs.coil.compose)
                 runtimeOnly(libs.coil.network.ktor)
+
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
             }
         }
 
@@ -112,12 +124,22 @@ kotlin {
             implementation(libs.activity.compose)
 
             implementation(compose.preview)
+            implementation(libs.ktor.client.okhttp)
         }
 
         jvmMain.dependencies {
             runtimeOnly(compose.desktop.currentOs)
             runtimeOnly(compose.desktop.common)
             runtimeOnly(libs.kotlinx.coroutines.swing)
+            implementation(libs.ktor.client.okhttp)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
 
         commonMain {
@@ -142,7 +164,10 @@ compose {
         packageOfResClass = "br.com.gabryel.reginaesanguine.app"
         generateResClass = always
 
-        customDirectory("commonMain", rootProject.layout.buildDirectory.dir("generated/composeResources"))
+        customDirectory(
+            "commonMain",
+            rootProject.layout.buildDirectory.dir("generated/composeResources"),
+        )
     }
 
     desktop {

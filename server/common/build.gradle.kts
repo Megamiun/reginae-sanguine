@@ -12,8 +12,10 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                api(project(":core"))
+                api(project(":server:dto"))
+
                 implementation(kotlin("reflect"))
-                implementation(project(":core"))
                 implementation(kotlin("test"))
                 implementation(libs.kotest.framework.engine)
                 implementation(libs.kotest.assertions.core)

@@ -3,9 +3,18 @@ package br.com.gabryel.reginaesanguine.app
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,6 +27,8 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale.Companion.FillWidth
 import androidx.compose.ui.unit.dp
 import br.com.gabryel.reginaesanguine.app.services.PainterLoader
@@ -27,6 +38,7 @@ import br.com.gabryel.reginaesanguine.app.ui.GameScreen
 import br.com.gabryel.reginaesanguine.app.ui.HomeScreen
 import br.com.gabryel.reginaesanguine.app.ui.components.InstanceNavigationStack
 import br.com.gabryel.reginaesanguine.app.ui.theme.GridCheckeredOn
+import br.com.gabryel.reginaesanguine.app.util.Logger
 import br.com.gabryel.reginaesanguine.app.util.Mode
 import br.com.gabryel.reginaesanguine.app.util.Mode.LOCAL
 import br.com.gabryel.reginaesanguine.app.util.Mode.REMOTE
@@ -34,6 +46,7 @@ import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.DECK_SELECTION
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.GAME
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens.HOME
 import br.com.gabryel.reginaesanguine.app.util.getStandardPack
+import br.com.gabryel.reginaesanguine.app.util.getStandardPackFromServer
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.Player
@@ -54,10 +67,17 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 context(painterLoader: PainterLoader)
 fun App(resourceLoader: ResourceLoader) {
+    val logger = Logger("App")
     val context = LocalPlatformContext.current
 
-    var loaded by remember { mutableStateOf(false) }
+    var loadingImages by remember { mutableStateOf(false) }
+    var loadingPack by remember { mutableStateOf(true) }
+    var pack by remember { mutableStateOf<Pack?>(null) }
+    var mode by remember { mutableStateOf(LOCAL) }
+    val snackbar = remember { SnackbarHostState() }
+
     LaunchedEffect(true) {
+        logger.info("Loading images")
         val startupResources = listOf(
             "static_temp_fandom_bgblur",
             "static_temp_boardgamegeek_logo",
@@ -68,18 +88,34 @@ fun App(resourceLoader: ResourceLoader) {
         val resources = Res.allDrawableResources.map { (key) -> preload(context, key) }
         resources.forEach { it.job.await() }
 
-        loaded = true
+        loadingImages = false
     }
 
-    val packState by produceState<Pack?>(null) {
-        value = getStandardPack(resourceLoader)
+    LaunchedEffect(mode) {
+        logger.info("Start loading pack = $mode")
+        loadingPack = true
+        when (mode) {
+            LOCAL -> pack = getStandardPack(resourceLoader)
+            REMOTE -> try {
+                pack = getStandardPackFromServer()
+            } catch (e: Exception) {
+                logger.error("Failed to load pack from server. Switching to local.", e)
+                // TODO Stop waiting for snackbar to continue
+                snackbar.showSnackbar(
+                    "Failed to load pack from server. Switching to local.",
+                    withDismissAction = true
+                )
+                mode = LOCAL
+            }
+        }
+        loadingPack = false
+        logger.info("End loading pack = $mode")
     }
 
-    val pack = packState ?: return
-    var mode by remember { mutableStateOf(LOCAL) }
+    val currentPack = pack ?: return
 
     context(mode) {
-        val deckViewModel = createDeckViewModel(pack)
+        val deckViewModel = createDeckViewModel(currentPack)
         val background = painterLoader.loadStaticImage(Res.drawable.static_temp_fandom_bgblur)
 
         Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
@@ -94,7 +130,9 @@ fun App(resourceLoader: ResourceLoader) {
                 }
                 addRoute(GAME) {
                     val coroutineScope = rememberCoroutineScope()
-                    val game by produceState<GameViewModel?>(null) { value = createViewModel(deckViewModel, pack, coroutineScope) }
+                    val game by produceState<GameViewModel?>(null) {
+                        value = createViewModel(deckViewModel, currentPack, coroutineScope)
+                    }
 
                     game?.let {
                         GameScreen(it)
@@ -104,13 +142,30 @@ fun App(resourceLoader: ResourceLoader) {
         }
     }
 
-    if (!loaded) {
+    if (loadingImages || loadingPack) {
         Surface(Modifier.fillMaxSize(), color = Black.copy(alpha = 0.5f)) {
             Box(Modifier.fillMaxSize(), contentAlignment = Center) {
                 CircularProgressIndicator(modifier = Modifier.width(64.dp))
             }
         }
     }
+
+    SnackbarHost(
+        hostState = snackbar,
+        modifier = Modifier.padding(horizontal = 16.dp),
+        snackbar = { data ->
+            Snackbar(
+                containerColor = Red,
+                contentColor = White,
+                dismissAction = {
+                    IconButton(onClick = data::dismiss) {
+                        Icon(imageVector = Icons.Default.Close, contentDescription = "Dismiss")
+                    }
+                },
+            ) {
+                Text(data.visuals.message)
+            }
+        })
 }
 
 private fun preload(context: PlatformContext, key: String): Disposable {
@@ -126,7 +181,11 @@ private fun createDeckViewModel(pack: Pack): DeckEditViewModel = when (mode) {
     REMOTE -> RemoteDeckViewModel(SingleDeckViewModel(pack))
 }
 
-private suspend fun createViewModel(deckViewModel: DeckEditViewModel, pack: Pack, coroutineScope: CoroutineScope): GameViewModel =
+private suspend fun createViewModel(
+    deckViewModel: DeckEditViewModel,
+    pack: Pack,
+    coroutineScope: CoroutineScope
+): GameViewModel =
     when (deckViewModel) {
         is LocalDeckViewModel -> {
             val leftDeck = deckViewModel.leftPlayer.viewDecks.value.selectedDeck
@@ -138,6 +197,7 @@ private suspend fun createViewModel(deckViewModel: DeckEditViewModel, pack: Pack
 
             GameViewModel.forLocalGame(game, coroutineScope)
         }
+
         is RemoteDeckViewModel -> {
             val leftDeck = deckViewModel.leftPlayer.viewDecks.value.selectedDeck
             val client = LocalGameClient(400, mapOf(pack.id to pack))

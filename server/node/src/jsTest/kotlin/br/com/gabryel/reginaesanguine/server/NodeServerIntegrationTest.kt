@@ -1,18 +1,12 @@
 package br.com.gabryel.reginaesanguine.server
 
-import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
+import br.com.gabryel.reginaesanguine.server.client.KtorServerClient
+import br.com.gabryel.reginaesanguine.server.client.ServerClient
 import br.com.gabryel.reginaesanguine.server.node.runServer
 import br.com.gabryel.reginaesanguine.server.test.AbstractServerIntegrationTest
-import br.com.gabryel.reginaesanguine.server.test.ServerClient
 import io.kotest.common.KotestInternal
-import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.log
 import io.kotest.core.spec.Spec
-import kotlin.js.Promise
-
-@JsModule("node-fetch")
-@JsNonModule
-external fun fetch(url: String, options: dynamic = definedExternally): Promise<dynamic>
 
 /**
  * Node.js integration test implementation using Kotest FunSpec.
@@ -26,9 +20,8 @@ class NodeServerIntegrationTest : AbstractServerIntegrationTest() {
 
     private var server: dynamic = null
     private val testPort = 3001
-    private val json = gameJsonParser()
 
-    override var client: ServerClient = NodeServerClient("http://localhost:$testPort/", json)
+    override var client: ServerClient = KtorServerClient("http://localhost:$testPort")
 
     override suspend fun beforeSpec(spec: Spec) {
         testContainersExtension.prepareSpec(NodeServerIntegrationTest::class)

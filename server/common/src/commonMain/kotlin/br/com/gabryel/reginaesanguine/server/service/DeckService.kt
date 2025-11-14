@@ -1,8 +1,8 @@
 package br.com.gabryel.reginaesanguine.server.service
 
 import br.com.gabryel.reginaesanguine.domain.Pack
-import br.com.gabryel.reginaesanguine.server.domain.PackDto
-import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
+import br.com.gabryel.reginaesanguine.server.dto.PackDto
+import br.com.gabryel.reginaesanguine.server.dto.PackPageDto
 import br.com.gabryel.reginaesanguine.server.repository.PackRepository
 import kotlin.math.ceil
 

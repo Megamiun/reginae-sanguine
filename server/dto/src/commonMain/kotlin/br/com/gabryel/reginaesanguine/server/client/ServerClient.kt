@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.server.test
+package br.com.gabryel.reginaesanguine.server.client
 
 import kotlin.reflect.KClass
 
@@ -18,11 +18,14 @@ interface ServerClient {
     ): V
 }
 
-suspend inline fun <reified T : Any> ServerClient.get(path: String, headers: Map<String, String> = emptyMap()) =
+suspend inline fun <reified T : Any> ServerClient.get(
+    path: String,
+    headers: Map<String, String> = emptyMap()
+) =
     get(path, T::class, headers)
 
 suspend inline fun <reified T : Any, reified V : Any> ServerClient.post(
     path: String,
-    body: T? = null,
+    body: T?,
     headers: Map<String, String> = emptyMap()
 ) = post(path, body, T::class, V::class, headers)

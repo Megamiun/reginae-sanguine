@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.server.domain
+package br.com.gabryel.reginaesanguine.server.dto
 
 import kotlinx.serialization.Serializable
 
