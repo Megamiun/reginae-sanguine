@@ -10,9 +10,9 @@ import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto.Skip
 import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
+import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
 import br.com.gabryel.reginaesanguine.server.domain.StateDto.Ongoing
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
-import br.com.gabryel.reginaesanguine.server.dto.PackPageDto
 import br.com.gabryel.reginaesanguine.server.service.SeedResult
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.FunSpec

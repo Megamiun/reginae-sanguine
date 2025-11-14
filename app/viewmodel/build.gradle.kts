@@ -33,6 +33,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":core"))
+            implementation(project(":server:dto"))
 
             implementation(project.dependencies.platform(libs.arrow.stack))
             implementation(libs.arrow.core)

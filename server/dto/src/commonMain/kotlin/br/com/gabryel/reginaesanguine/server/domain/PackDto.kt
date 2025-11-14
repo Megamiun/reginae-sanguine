@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.server.dto
+package br.com.gabryel.reginaesanguine.server.domain
 
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Pack

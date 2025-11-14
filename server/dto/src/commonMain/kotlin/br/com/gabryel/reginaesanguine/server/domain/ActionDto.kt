@@ -19,7 +19,7 @@ sealed interface ActionDto {
     data class Play(val position: Position, val card: String) : ActionDto
 
     companion object {
-        fun from(action: Action<String>): ActionDto = when (action) {
+        fun from(action: Action<out String>): ActionDto = when (action) {
             is Action.Skip -> Skip
             is Action.Play -> Play(action.position, action.card)
         }

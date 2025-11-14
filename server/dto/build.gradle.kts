@@ -1,4 +1,6 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     kotlin("multiplatform")
@@ -11,14 +13,30 @@ kotlin {
             jvmTarget.set(JVM_11)
         }
     }
+
+    linuxArm64()
+    linuxX64()
+    mingwX64()
+
+    if (HostManager.hostIsMac) {
+        macosX64()
+        macosArm64()
+        iosArm64()
+        iosX64()
+        iosSimulatorArm64()
+    }
+
     js {
         nodejs()
         browser()
+        binaries.library()
     }
 
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.library()
+    }
 
     sourceSets {
         commonMain {
@@ -44,10 +62,52 @@ kotlin {
             }
         }
 
-        iosMain {
+        wasmJsMain {
             dependencies {
-                implementation(libs.ktor.client.darwin)
+                implementation(libs.ktor.client.js)
             }
+        }
+
+        if (HostManager.hostIsMac) {
+            iosMain {
+                dependencies {
+                    implementation(libs.ktor.client.darwin)
+                }
+            }
+
+            val macosMain by creating {
+                dependsOn(commonMain.get())
+                dependencies {
+                    implementation(libs.ktor.client.darwin)
+                }
+            }
+
+            macosX64Main {
+                dependsOn(macosMain)
+            }
+
+            macosArm64Main {
+                dependsOn(macosMain)
+            }
+        }
+
+        val nativeDesktopMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                implementation(libs.ktor.client.curl)
+            }
+        }
+
+        linuxArm64Main {
+            dependsOn(nativeDesktopMain)
+        }
+
+        linuxX64Main {
+            dependsOn(nativeDesktopMain)
+        }
+
+        mingwX64Main {
+            dependsOn(nativeDesktopMain)
         }
     }
 }

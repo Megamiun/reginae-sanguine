@@ -21,8 +21,7 @@ interface ServerClient {
 suspend inline fun <reified T : Any> ServerClient.get(
     path: String,
     headers: Map<String, String> = emptyMap()
-) =
-    get(path, T::class, headers)
+) = get(path, T::class, headers)
 
 suspend inline fun <reified T : Any, reified V : Any> ServerClient.post(
     path: String,

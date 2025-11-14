@@ -3,15 +3,15 @@ package br.com.gabryel.reginaesanguine.viewmodel.game.remote
 import br.com.gabryel.reginaesanguine.domain.PlayableMove
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
+import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
+import br.com.gabryel.reginaesanguine.server.domain.StateDto
+import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.viewmodel.game.AwaitMatch
 import br.com.gabryel.reginaesanguine.viewmodel.game.AwaitTurn
 import br.com.gabryel.reginaesanguine.viewmodel.game.ChooseAction
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameClient
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameManager
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameState
-import br.com.gabryel.reginaesanguine.viewmodel.game.dto.GameViewDto
-import br.com.gabryel.reginaesanguine.viewmodel.game.dto.InitGameRequest
-import br.com.gabryel.reginaesanguine.viewmodel.game.dto.StateDto
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -54,7 +54,10 @@ class RemoteGameManager(
     private fun awaitTurn(view: GameViewDto): GameState {
         val stateData = RemoteGameStateData(view)
         if (view.playerTurn == playerPosition || view.state !is StateDto.Ongoing)
-            return ChooseAction(RemoteGameManager(gameClient, gameId, playerPosition, stateData), stateData)
+            return ChooseAction(
+                RemoteGameManager(gameClient, gameId, playerPosition, stateData),
+                stateData,
+            )
 
         return AwaitTurn(stateData) {
             flow { while (true) emit(gameClient.fetchStatus(gameId, playerPosition)) }
@@ -62,7 +65,15 @@ class RemoteGameManager(
                 .filter { it.playerTurn == playerPosition }
                 .map {
                     val newStateData = RemoteGameStateData(it)
-                    ChooseAction(RemoteGameManager(gameClient, gameId, playerPosition, newStateData), newStateData)
+                    ChooseAction(
+                        RemoteGameManager(
+                            gameClient,
+                            gameId,
+                            playerPosition,
+                            newStateData,
+                        ),
+                        newStateData,
+                    )
                 }
                 .first()
         }

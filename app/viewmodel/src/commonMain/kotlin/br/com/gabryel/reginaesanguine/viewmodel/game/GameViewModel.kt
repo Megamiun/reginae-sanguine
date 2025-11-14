@@ -5,7 +5,7 @@ import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.viewmodel.game.dto.InitGameRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.viewmodel.game.local.LocalGameManager
 import br.com.gabryel.reginaesanguine.viewmodel.game.local.LocalGameStateData
 import br.com.gabryel.reginaesanguine.viewmodel.game.remote.RemoteGameManager
@@ -15,7 +15,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class GameViewModel(private val stateFlow: MutableStateFlow<GameState>, private val coroutineScope: CoroutineScope) {
+class GameViewModel(
+    private val stateFlow: MutableStateFlow<GameState>,
+    private val coroutineScope: CoroutineScope
+) {
     val state = stateFlow.asStateFlow()
 
     companion object {

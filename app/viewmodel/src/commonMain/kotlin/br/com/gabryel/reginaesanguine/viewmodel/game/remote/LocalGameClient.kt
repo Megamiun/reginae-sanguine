@@ -11,10 +11,10 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.domain.Success
+import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
+import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
+import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameClient
-import br.com.gabryel.reginaesanguine.viewmodel.game.dto.GameIdDto
-import br.com.gabryel.reginaesanguine.viewmodel.game.dto.GameViewDto
-import br.com.gabryel.reginaesanguine.viewmodel.game.dto.InitGameRequest
 import kotlinx.coroutines.delay
 import kotlin.random.Random.Default.nextLong
 
@@ -29,9 +29,9 @@ class LocalGameClient(val delayInMillis: Long, private val packs: Map<String, Pa
     override suspend fun initGame(request: InitGameRequest): GameIdDto {
         val pack = packs[request.packId] ?: error("Pack ${request.packId} not found")
         val availableCards = pack.cards.associateBy { it.id }
-        val deck = request.deckCards.mapNotNull { availableCards[it] }
+        val deck = request.deckCardIds.mapNotNull { availableCards[it] }
 
-        if (deck.size != request.deckCards.size)
+        if (deck.size != request.deckCardIds.size)
             error("Invalid card IDs in deck")
 
         val gameId = "local-${nextLong()}"
@@ -47,7 +47,11 @@ class LocalGameClient(val delayInMillis: Long, private val packs: Map<String, Pa
         return GameIdDto(gameId)
     }
 
-    override suspend fun submitAction(gameId: String, playerPosition: PlayerPosition, action: Action<out String>): GameViewDto {
+    override suspend fun submitAction(
+        gameId: String,
+        playerPosition: PlayerPosition,
+        action: Action<out String>
+    ): GameViewDto {
         val game = games[gameId] ?: error("Game with $gameId not available")
         val packId = gamePackIds[gameId] ?: error("Pack ID for game $gameId not found")
 
@@ -56,6 +60,7 @@ class LocalGameClient(val delayInMillis: Long, private val packs: Map<String, Pa
                 games[gameId] = result.value
                 GameViewDto.from(GameView.forPlayer(result.value, playerPosition), packId)
             }
+
             is Failure -> GameViewDto.from(GameView.forPlayer(game, playerPosition), packId)
         }
     }

@@ -1,10 +1,10 @@
 package br.com.gabryel.reginaesanguine.app.util
 
-import br.com.gabryel.reginaesanguine.app.client.PackClient
 import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import br.com.gabryel.reginaesanguine.server.client.KtorServerClient
+import br.com.gabryel.reginaesanguine.viewmodel.pack.remote.RemotePackClient
 
 val parser = gameJsonParser()
 
@@ -15,7 +15,7 @@ suspend fun getStandardPack(resourceLoader: ResourceLoader): Pack {
 
 suspend fun getPacksFromServer(serverUrl: String = "http://localhost:8080"): List<Pack> {
     val client = KtorServerClient(serverUrl, gameJsonParser())
-    val packClient = PackClient(client)
+    val packClient = RemotePackClient(client)
     return try {
         packClient.getAllPacks()
     } finally {
