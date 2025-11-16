@@ -68,27 +68,39 @@ kotlin {
             }
         }
 
-        if (HostManager.hostIsMac) {
-            iosMain {
-                dependencies {
-                    implementation(libs.ktor.client.darwin)
-                }
+        appleMain {
+            dependsOn(commonMain.get())
+            dependencies {
+                implementation(libs.ktor.client.darwin)
             }
+        }
 
-            val macosMain by creating {
-                dependsOn(commonMain.get())
-                dependencies {
-                    implementation(libs.ktor.client.darwin)
-                }
-            }
+        iosMain {
+            dependsOn(appleMain.get())
+        }
 
-            macosX64Main {
-                dependsOn(macosMain)
-            }
+        iosArm64Main {
+            dependsOn(iosMain.get())
+        }
 
-            macosArm64Main {
-                dependsOn(macosMain)
-            }
+        iosSimulatorArm64Main {
+            dependsOn(iosMain.get())
+        }
+
+        iosX64Main {
+            dependsOn(iosMain.get())
+        }
+
+        macosMain {
+            dependsOn(appleMain.get())
+        }
+
+        macosArm64Main {
+            dependsOn(macosMain.get())
+        }
+
+        macosX64Main {
+            dependsOn(macosMain.get())
         }
 
         val nativeDesktopMain by creating {

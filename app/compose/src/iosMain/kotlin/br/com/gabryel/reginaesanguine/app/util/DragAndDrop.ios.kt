@@ -4,6 +4,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.geometry.Offset
+import kotlinx.cinterop.BetaInteropApi
 import platform.Foundation.NSItemProvider
 import platform.Foundation.NSString
 import platform.Foundation.create
@@ -15,11 +16,10 @@ private val logger = Logger("DragAndDrop")
 // Workaround: Store dragged data globally since extracting multiple times from NSItemProvider doesn't work
 private var currentDragData: String? = null
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, BetaInteropApi::class)
 actual fun getTransferData(offset: Offset, data: String): DragAndDropTransferData {
     val nsString = NSString.create(string = data)
-    val itemProvider =
-        NSItemProvider(item = nsString, typeIdentifier = UTTypeUTF8PlainText.identifier)
+    val itemProvider = NSItemProvider(item = nsString, typeIdentifier = UTTypeUTF8PlainText.identifier)
     val dragItem = UIDragItem(itemProvider)
 
     currentDragData = data

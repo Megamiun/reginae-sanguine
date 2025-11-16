@@ -55,10 +55,8 @@ kotlin {
             commonWebpackConfig {
                 outputFileName = "reginae-sanguine-app-compose.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        add(rootDirPath)
-                        add(projectDirPath)
-                    }
+                    static(rootDirPath)
+                    static(projectDirPath)
                 }
 
                 watchOptions = KotlinWebpackConfig.WatchOptions(ignored = listOf("**/node_modules"))
@@ -78,17 +76,6 @@ kotlin {
                 implementation(libs.coil.compose)
                 implementation(compose.ui)
             }
-        }
-
-        if (HostManager.hostIsMac) {
-            val iosMain by creating {
-                dependsOn(commonMain.get())
-                dependsOn(nonAndroidMain)
-            }
-
-            val iosX64Main by getting { dependsOn(iosMain) }
-            val iosArm64Main by getting { dependsOn(iosMain) }
-            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
         }
 
         all {
@@ -154,6 +141,23 @@ kotlin {
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
             implementation(libs.mockk)
+        }
+
+        iosMain {
+            dependsOn(nonAndroidMain)
+            dependsOn(commonMain.get())
+        }
+
+        iosX64Main {
+            dependsOn(iosMain.get())
+        }
+
+        iosArm64Main {
+            dependsOn(iosMain.get())
+        }
+
+        iosSimulatorArm64Main {
+            dependsOn(iosMain.get())
         }
     }
 }

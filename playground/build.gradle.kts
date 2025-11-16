@@ -13,14 +13,16 @@ kotlin {
     androidTarget()
 
     sourceSets {
+        commonMain.dependencies {
+            implementation(compose.runtime)
+        }
+
         androidMain.dependencies {
             implementation(libs.appcompat)
             implementation(libs.lifecycle.runtime.ktx)
             implementation(libs.activity.compose)
             implementation(compose.material3)
             implementation(compose.ui)
-
-            runtimeOnly(compose.runtime)
         }
     }
 }
