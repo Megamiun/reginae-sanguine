@@ -21,6 +21,7 @@ kotlin {
                 implementation(libs.kotest.assertions.core)
 
                 api(libs.kotlinx.coroutines)
+                api(libs.kotlinx.datetime)
             }
         }
     }

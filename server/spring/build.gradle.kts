@@ -24,13 +24,20 @@ dependencies {
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.flyway)
     implementation(libs.spring.boot.starter.data.jpa)
+    implementation("org.springframework.security:spring-security-crypto")
+
     implementation(libs.flyway.core)
+    implementation(libs.jjwt.api)
+
+    runtimeOnly(libs.jjwt.impl)
+    runtimeOnly(libs.jjwt.jackson)
 
     runtimeOnly(libs.postgresql)
     runtimeOnly(libs.flyway.database.postgresql)
 
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.restclient)
+
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotlinx.coroutines)
@@ -49,6 +56,13 @@ sourceSets {
         resources.srcDirs(
             rootProject.layout.buildDirectory.dir("generated/resources"),
             project(":server:common").projectDir.resolve("src/commonMain/resources"),
+        )
+    }
+
+    test {
+        resources.srcDirs(
+            rootProject.layout.buildDirectory.dir("generated/resources"),
+            project(":server:common").projectDir.resolve("src/commonTest/resources"),
         )
     }
 }

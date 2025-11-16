@@ -4,14 +4,21 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
+import br.com.gabryel.reginaesanguine.server.domain.action.CreateAccountRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.LoginRequest
 import br.com.gabryel.reginaesanguine.server.node.MigrationRunner.runMigrations
 import br.com.gabryel.reginaesanguine.server.node.pg.createPool
+import br.com.gabryel.reginaesanguine.server.node.repository.NodeAccountRepository
 import br.com.gabryel.reginaesanguine.server.node.repository.NodePackRepository
 import br.com.gabryel.reginaesanguine.server.node.service.NodePackLoader
+import br.com.gabryel.reginaesanguine.server.service.AccountService
 import br.com.gabryel.reginaesanguine.server.service.DeckService
 import br.com.gabryel.reginaesanguine.server.service.GameService
 import br.com.gabryel.reginaesanguine.server.service.PackSeederService
+import br.com.gabryel.reginaesanguine.server.service.security.Bcrypt
+import br.com.gabryel.reginaesanguine.server.service.security.JwtService
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -24,6 +31,7 @@ val express = require("express")
 fun createApp(
     deckService: DeckService,
     packSeederService: PackSeederService,
+    accountService: AccountService,
     gameService: GameService = GameService(deckService)
 ): dynamic {
     val app = express()
@@ -123,6 +131,27 @@ fun createApp(
         },
     )
 
+    // Account routes
+    app.post(
+        "/account",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val requestBody = JSON.stringify(req.body)
+            val request = json.decodeFromString<CreateAccountRequest>(requestBody)
+            val accountDto = accountService.create(request)
+            res.status(201).json(JSON.parse(json.encodeToString(accountDto)))
+        },
+    )
+
+    app.post(
+        "/account/login",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val requestBody = JSON.stringify(req.body)
+            val request = json.decodeFromString<LoginRequest>(requestBody)
+            val loginResponse = accountService.login(request)
+            res.json(JSON.parse(json.encodeToString(loginResponse)))
+        },
+    )
+
     return app
 }
 
@@ -136,6 +165,7 @@ fun handleRequest(function: (dynamic, dynamic) -> Unit) = { req: dynamic, res: d
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 fun handleRequestAsync(function: suspend (dynamic, dynamic) -> Unit) = { req: dynamic, res: dynamic ->
     GlobalScope.launch {
         try {
@@ -163,21 +193,47 @@ suspend fun main() {
     val dbName = js("process.env.DATABASE_NAME || 'reginae_sanguine'") as String
     val dbUser = js("process.env.DATABASE_USER || 'postgres'") as String
     val dbPassword = js("process.env.DATABASE_PASSWORD || 'postgres'") as String
+    val jwtPrivateKey = js("process.env.JWT_PRIVATE_KEY") as? String ?: loadTestPrivateKey()
+    val jwtPublicKey = js("process.env.JWT_PUBLIC_KEY") as? String ?: loadTestPublicKey()
 
-    runServer(dbHost, dbPort, dbName, dbUser, dbPassword, port)
+    runServer(dbHost, dbPort, dbName, dbUser, dbPassword, jwtPrivateKey, jwtPublicKey, port)
 }
 
-suspend fun runServer(dbHost: String, dbPort: Int, dbName: String, dbUser: String, dbPassword: String, port: Int): dynamic {
+private fun loadTestPrivateKey(): String = loadResource("jwt/private.pem")
+
+private fun loadTestPublicKey(): String = loadResource("jwt/public.pem")
+
+private fun loadResource(path: String): String {
+    val fs = js("require('fs')")
+    val pathModule = js("require('path')")
+    val resourcePath = pathModule.join(js("__dirname"), path) as String
+    return fs.readFileSync(resourcePath, "utf-8") as String
+}
+
+suspend fun runServer(
+    dbHost: String,
+    dbPort: Int,
+    dbName: String,
+    dbUser: String,
+    dbPassword: String,
+    jwtPrivateKey: String,
+    jwtPublicKey: String,
+    port: Int,
+): dynamic {
     val pool = createPool(host = dbHost, port = dbPort, database = dbName, user = dbUser, password = dbPassword)
 
     runMigrations(pool)
 
     val packRepository = NodePackRepository(pool)
+    val accountRepository = NodeAccountRepository(pool)
     val packLoader = NodePackLoader()
     val packSeederService = PackSeederService(packRepository, packLoader)
     val deckService = DeckService(packRepository)
+    val passwordHasher = Bcrypt()
+    val tokenService = JwtService(jwtPrivateKey, jwtPublicKey)
+    val accountService = AccountService(accountRepository, passwordHasher, tokenService)
 
-    return createApp(deckService, packSeederService).listen(port) {
+    return createApp(deckService, packSeederService, accountService).listen(port) {
         console.log("Server running at http://localhost:$port")
         console.log("Database: $dbHost:$dbPort/$dbName")
     }

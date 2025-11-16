@@ -23,10 +23,17 @@ kotlin {
                 implementation(project(":server:common"))
                 implementation(npm("express", "^4.18.2"))
                 implementation(npm("pg", "^8.11.3"))
+                implementation(npm("bcryptjs", "^2.4.3"))
+                implementation(npm("jsonwebtoken", "^9.0.2"))
             }
         }
 
         jsTest {
+            resources.srcDirs(
+                rootProject.layout.buildDirectory.dir("generated/resources"),
+                project(":server:common").projectDir.resolve("src/commonTest/resources"),
+            )
+
             dependencies {
                 implementation(kotlin("test"))
                 implementation(libs.kotest.framework.engine)

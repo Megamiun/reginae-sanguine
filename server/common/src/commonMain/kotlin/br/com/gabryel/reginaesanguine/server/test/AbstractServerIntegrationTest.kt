@@ -6,13 +6,17 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.server.client.ServerClient
 import br.com.gabryel.reginaesanguine.server.client.get
 import br.com.gabryel.reginaesanguine.server.client.post
+import br.com.gabryel.reginaesanguine.server.domain.AccountDto
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto.Skip
 import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
 import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
 import br.com.gabryel.reginaesanguine.server.domain.StateDto.Ongoing
+import br.com.gabryel.reginaesanguine.server.domain.action.CreateAccountRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.LoginRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.LoginResponse
 import br.com.gabryel.reginaesanguine.server.service.SeedResult
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.FunSpec
@@ -31,6 +35,8 @@ import io.kotest.matchers.string.shouldNotBeBlank
 abstract class AbstractServerIntegrationTest : FunSpec() {
     protected abstract var client: ServerClient
 
+    private var testCounter = 0
+
     override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
 
@@ -38,7 +44,11 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         println("Pack seeding result: seeded=${result.seeded}, skipped=${result.skipped}")
     }
 
+    private fun uniqueSuffix(): String = "${++testCounter}_${hashCode()}"
+
     init {
+        val deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005")
+
         test("given seeded packs, when getting paginated packs, should return page with packs") {
             val page = getPacks(page = 0, size = 10)
 
@@ -54,18 +64,7 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         test("given valid deck, when creating game, should return game ID") {
             val request = InitGameRequest(
                 packId = "queens_blood",
-                deckCardIds = listOf(
-                    "001",
-                    "002",
-                    "003",
-                    "004",
-                    "005",
-                    "001",
-                    "002",
-                    "003",
-                    "004",
-                    "005",
-                ),
+                deckCardIds = deckCardIds,
                 position = LEFT,
             )
 
@@ -77,18 +76,7 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         test("given created game, when fetching status, should return game view with initial state") {
             val initRequest = InitGameRequest(
                 packId = "queens_blood",
-                deckCardIds = listOf(
-                    "001",
-                    "002",
-                    "003",
-                    "004",
-                    "005",
-                    "001",
-                    "002",
-                    "003",
-                    "004",
-                    "005",
-                ),
+                deckCardIds = deckCardIds,
                 position = LEFT,
             )
             val gameId = postInitGame(initRequest, LEFT).gameId
@@ -107,18 +95,7 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         test("given created game, when player makes action, should update game state and switch turn") {
             val initRequest = InitGameRequest(
                 packId = "queens_blood",
-                deckCardIds = listOf(
-                    "001",
-                    "002",
-                    "003",
-                    "004",
-                    "005",
-                    "001",
-                    "002",
-                    "003",
-                    "004",
-                    "005",
-                ),
+                deckCardIds = deckCardIds,
                 position = LEFT,
             )
             val gameId = postInitGame(initRequest, LEFT).gameId
@@ -129,6 +106,38 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
 
             result.playerTurn shouldBe RIGHT
             result.state shouldBe Ongoing
+        }
+
+        test("given valid account data, when creating account, should return account with ID") {
+            val suffix = uniqueSuffix()
+            val request = CreateAccountRequest(
+                username = "testuser_$suffix",
+                email = "test_$suffix@example.com",
+                password = "password123",
+            )
+
+            val result = postCreateAccount(request)
+
+            result.id.shouldNotBeBlank()
+            result.username shouldBe request.username
+            result.email shouldBe request.email
+        }
+
+        test("given created account, when logging in with correct credentials, should return token") {
+            val suffix = uniqueSuffix()
+            val username = "logintest_$suffix"
+            val email = "login_$suffix@example.com"
+            val password = "securepass"
+
+            val createRequest = CreateAccountRequest(username, email, password)
+            postCreateAccount(createRequest)
+
+            val loginRequest = LoginRequest(username, password)
+            val result = postLogin(loginRequest)
+
+            result.token.shouldNotBeBlank()
+            result.account.username shouldBe username
+            result.account.email shouldBe email
         }
     }
 
@@ -149,4 +158,10 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         client.post("/game/$gameId/action", action, mapOf("Authorization" to playerPosition.name))
 
     suspend fun seedPacks(): SeedResult = client.post("/admin/seed-packs", null)
+
+    suspend fun postCreateAccount(request: CreateAccountRequest): AccountDto =
+        client.post("/account", request)
+
+    suspend fun postLogin(request: LoginRequest): LoginResponse =
+        client.post("/account/login", request)
 }

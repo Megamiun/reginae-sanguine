@@ -34,11 +34,24 @@ class NodeServerIntegrationTest : AbstractServerIntegrationTest() {
             dbName = config.database,
             dbUser = config.user,
             dbPassword = config.password,
+            jwtPrivateKey = loadTestPrivateKey(),
+            jwtPublicKey = loadTestPublicKey(),
             port = testPort,
         )
 
         server?.unref()
         super.beforeSpec(spec)
+    }
+
+    private fun loadTestPrivateKey(): String = loadResource("jwt/private.pem")
+
+    private fun loadTestPublicKey(): String = loadResource("jwt/public.pem")
+
+    private fun loadResource(path: String): String {
+        val fs = js("require('fs')")
+        val pathModule = js("require('path')")
+        val resourcePath = pathModule.join(js("__dirname"), path) as String
+        return fs.readFileSync(resourcePath, "utf-8") as String
     }
 
     override suspend fun afterSpec(spec: Spec) {

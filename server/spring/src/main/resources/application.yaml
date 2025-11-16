@@ -12,6 +12,11 @@ spring:
     hibernate:
       ddl-auto: none
 
+app:
+  jwt:
+    private-key: ${JWT_PRIVATE_KEY:}
+    public-key: ${JWT_PUBLIC_KEY:}
+
 management:
   endpoints:
     web:

@@ -37,34 +37,42 @@ import kotlinx.coroutines.await
 class NodePackRepository(private val pool: Pool) : PackRepository {
     private val json = gameJsonParser()
 
-    override suspend fun savePack(pack: Pack) {
-        withTransaction(pool) { client ->
-            val packId = generateUUID()
+    override suspend fun savePack(pack: Pack) = withTransaction(pool) { client ->
+        val packId = generateUUID()
 
-            client.query(
-                "INSERT INTO pack (id, alias, name) VALUES ($1, $2, $3)",
-                arrayOf(packId, pack.id, pack.name),
-            ).await()
+        client.query(
+            "INSERT INTO pack (id, alias, name) VALUES ($1, $2, $3)",
+            arrayOf(packId, pack.id, pack.name),
+        ).await()
 
-            if (pack.cards.isEmpty()) return@withTransaction
+        if (pack.cards.isEmpty()) return@withTransaction
 
-            val cardIdsAndCards = pack.cards.map { card -> generateUUID() to card }
+        val cardIdsAndCards = pack.cards.map { card -> generateUUID() to card }
 
-            client.persistAll(
-                "pack_card",
-                listOf("id", "pack_id", "pack_internal_card_id", "name", "tier", "rank", "power", "spawn_only", "increments"),
-                cardIdsAndCards,
-            ) { (id, card) ->
-                val increments = json.encodeToString(card.increments.toList())
-                listOf(id, packId, card.id, card.name, card.tier.name, card.rank, card.power, card.spawnOnly, increments)
-            }
-
-            client.persistAll(
-                "pack_card_effect",
-                listOf("id", "type", "target", "affected", "description", "trigger_data", "effect_data"),
-                cardIdsAndCards,
-            ) { (cardId, card) -> mapEffectColumns(card, cardId) }
+        client.persistAll(
+            "pack_card",
+            listOf(
+                "id",
+                "pack_id",
+                "pack_internal_card_id",
+                "name",
+                "tier",
+                "rank",
+                "power",
+                "spawn_only",
+                "increments",
+            ),
+            cardIdsAndCards,
+        ) { (id, card) ->
+            val increments = json.encodeToString(card.increments.toList())
+            listOf(id, packId, card.id, card.name, card.tier.name, card.rank, card.power, card.spawnOnly, increments)
         }
+
+        client.persistAll(
+            "pack_card_effect",
+            listOf("id", "type", "target", "affected", "description", "trigger_data", "effect_data"),
+            cardIdsAndCards,
+        ) { (cardId, card) -> mapEffectColumns(card, cardId) }
     }
 
     private fun mapEffectColumns(card: Card, cardId: String): List<String> {
@@ -92,7 +100,8 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
 
         val queryValues = data.mapIndexed { itemIndex, _ ->
             val baseIndex = (itemIndex * columnsSize) + 1
-            columns.mapIndexed { index, _ -> index }.joinToString(prefix = "(", postfix = ")") { """$${baseIndex + it}""" }
+            columns.mapIndexed { index, _ -> index }
+                .joinToString(prefix = "(", postfix = ")") { """$${baseIndex + it}""" }
         }.joinToString()
 
         val formattedColumns = columns.joinToString()
@@ -127,7 +136,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
             .await()
 
         if (packResult.rows.isEmpty()) {
-            console.log("DEBUG: Pack not found")
+            console.log("DEBUG: Pack with $alias not found")
             return null
         }
 
@@ -210,6 +219,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
                     description = desc,
                 )
             }
+
             "RaisePowerByCount" -> {
                 val data = json.decodeFromString<RaisePowerByCountData>(effectData)
                 RaisePowerByCount(
@@ -221,6 +231,7 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
                     description = desc,
                 )
             }
+
             "RaisePowerOnStatus" -> {
                 val data = json.decodeFromString<RaisePowerOnStatusData>(effectData)
                 RaisePowerOnStatus(
@@ -231,21 +242,18 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
                     description = desc,
                 )
             }
+
             "RaiseLaneIfWon" -> {
                 val data = json.decodeFromString<AmountData>(effectData)
-                RaiseLaneIfWon(
-                    amount = data.amount,
-                    description = desc,
-                )
+                RaiseLaneIfWon(amount = data.amount, description = desc)
             }
+
             "RaiseWinnerLanesByLoserScore" -> RaiseWinnerLanesByLoserScore(description = desc)
             "RaiseRank" -> {
                 val data = json.decodeFromString<AmountData>(effectData)
-                RaiseRankDefault(
-                    amount = data.amount,
-                    description = desc,
-                )
+                RaiseRankDefault(amount = data.amount, description = desc)
             }
+
             "ReplaceAllyRaise" -> {
                 val data = json.decodeFromString<PowerMultiplierData>(effectData)
                 ReplaceAllyRaise(
@@ -255,29 +263,24 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
                     description = desc,
                 )
             }
+
             "SpawnCardsPerRank" -> {
                 val data = json.decodeFromString<CardIdsData>(effectData)
-                SpawnCardsPerRank(
-                    cardIds = data.cardIds,
-                    trigger = actualTrigger,
-                    description = desc,
-                )
+                SpawnCardsPerRank(cardIds = data.cardIds, trigger = actualTrigger, description = desc)
             }
+
             "AddCardsToHand" -> {
                 val data = json.decodeFromString<CardIdsData>(effectData)
-                AddCardsToHandDefault(
-                    cardIds = data.cardIds,
-                    trigger = actualTrigger,
-                    description = desc,
-                )
+                AddCardsToHandDefault(cardIds = data.cardIds, trigger = actualTrigger, description = desc)
             }
-            "DestroyCards" ->
-                DestroyCardsDefault(
-                    target = targetType,
-                    trigger = actualTrigger,
-                    affected = affectedDisplacements,
-                    description = desc,
-                )
+
+            "DestroyCards" -> DestroyCardsDefault(
+                target = targetType,
+                trigger = actualTrigger,
+                affected = affectedDisplacements,
+                description = desc,
+            )
+
             "ReplaceAlly" -> ReplaceAllyDefault(description = desc)
             "NoEffect" -> NoEffect
             "FlavourText" -> FlavourText(desc)
@@ -302,34 +305,6 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
         val packsResult = pool.query("SELECT alias FROM pack LIMIT $1 OFFSET $2", arrayOf(size, offset))
             .await()
 
-        console.log(packsResult.rows)
-
         return packsResult.rows.mapNotNull { row -> findPack(row.alias) }
-    }
-}
-
-// TODO Exchange to another better impl
-private fun generateUUID(): String = js("require('crypto').randomUUID()")
-
-/**
- * Execute a block of code within a PostgreSQL transaction.
- * Automatically commits on success and rolls back on failure.
- */
-private suspend fun <T> withTransaction(pool: Pool, block: suspend (PoolClient) -> T): T {
-    val client = pool.connect().await()
-    return try {
-        client.query("BEGIN").await()
-        val result = block(client)
-        client.query("COMMIT").await()
-        result
-    } catch (e: Throwable) {
-        try {
-            client.query("ROLLBACK").await()
-        } catch (rollbackError: Throwable) {
-            console.error("Error during rollback: ${rollbackError.message}")
-        }
-        throw e
-    } finally {
-        client.release()
     }
 }
