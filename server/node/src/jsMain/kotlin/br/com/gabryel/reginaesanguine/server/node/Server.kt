@@ -5,19 +5,24 @@ import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.action.CreateAccountRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.CreateDeckRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.LoginRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.UpdateDeckRequest
 import br.com.gabryel.reginaesanguine.server.node.MigrationRunner.runMigrations
 import br.com.gabryel.reginaesanguine.server.node.pg.createPool
+import br.com.gabryel.reginaesanguine.server.node.repository.NodeAccountDeckRepository
 import br.com.gabryel.reginaesanguine.server.node.repository.NodeAccountRepository
 import br.com.gabryel.reginaesanguine.server.node.repository.NodePackRepository
 import br.com.gabryel.reginaesanguine.server.node.service.NodePackLoader
+import br.com.gabryel.reginaesanguine.server.service.AccountDeckService
 import br.com.gabryel.reginaesanguine.server.service.AccountService
 import br.com.gabryel.reginaesanguine.server.service.DeckService
 import br.com.gabryel.reginaesanguine.server.service.GameService
 import br.com.gabryel.reginaesanguine.server.service.PackSeederService
 import br.com.gabryel.reginaesanguine.server.service.security.Bcrypt
 import br.com.gabryel.reginaesanguine.server.service.security.JwtService
+import br.com.gabryel.reginaesanguine.server.service.security.TokenService
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -32,7 +37,9 @@ fun createApp(
     deckService: DeckService,
     packSeederService: PackSeederService,
     accountService: AccountService,
-    gameService: GameService = GameService(deckService)
+    accountDeckService: AccountDeckService,
+    tokenService: TokenService,
+    gameService: GameService,
 ): dynamic {
     val app = express()
     val json = gameJsonParser()
@@ -152,7 +159,69 @@ fun createApp(
         },
     )
 
+    // User deck routes
+    app.post(
+        "/user-deck",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
+            val requestBody = JSON.stringify(req.body)
+            val request = json.decodeFromString<CreateDeckRequest>(requestBody)
+            val deckDto = accountDeckService.create(accountId, request)
+            res.status(201).json(JSON.parse(json.encodeToString(deckDto)))
+        },
+    )
+
+    app.get(
+        "/user-deck",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
+            val decks = accountDeckService.getAllByAccountId(accountId)
+            res.json(JSON.parse(json.encodeToString(decks)))
+        },
+    )
+
+    app.get(
+        "/user-deck/:deckId",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
+            val deckId = req.params.deckId as String
+            val deck = accountDeckService.getById(accountId, deckId)
+            res.json(JSON.parse(json.encodeToString(deck)))
+        },
+    )
+
+    app.put(
+        "/user-deck/:deckId",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
+            val deckId = req.params.deckId as String
+            val requestBody = JSON.stringify(req.body)
+            val request = json.decodeFromString<UpdateDeckRequest>(requestBody)
+            val deckDto = accountDeckService.update(accountId, deckId, request)
+            res.json(JSON.parse(json.encodeToString(deckDto)))
+        },
+    )
+
     return app
+}
+
+private fun extractAccountId(req: dynamic, tokenService: TokenService, res: dynamic): String? {
+    val authorization = req.headers.authorization as? String
+    if (authorization == null) {
+        val errorObj = js("{}")
+        errorObj.error = "Authorization header required"
+        res.status(401).json(errorObj)
+        return null
+    }
+    val token = authorization.removePrefix("Bearer ").trim()
+    val accountId = tokenService.validateToken(token)
+    if (accountId == null) {
+        val errorObj = js("{}")
+        errorObj.error = "Invalid or expired token"
+        res.status(401).json(errorObj)
+        return null
+    }
+    return accountId
 }
 
 fun handleRequest(function: (dynamic, dynamic) -> Unit) = { req: dynamic, res: dynamic ->
@@ -226,14 +295,24 @@ suspend fun runServer(
 
     val packRepository = NodePackRepository(pool)
     val accountRepository = NodeAccountRepository(pool)
+    val accountDeckRepository = NodeAccountDeckRepository(pool)
     val packLoader = NodePackLoader()
     val packSeederService = PackSeederService(packRepository, packLoader)
     val deckService = DeckService(packRepository)
     val passwordHasher = Bcrypt()
     val tokenService = JwtService(jwtPrivateKey, jwtPublicKey)
     val accountService = AccountService(accountRepository, passwordHasher, tokenService)
+    val accountDeckService = AccountDeckService(accountDeckRepository)
+    val gameService = GameService(deckService, accountDeckRepository)
 
-    return createApp(deckService, packSeederService, accountService).listen(port) {
+    return createApp(
+        deckService,
+        packSeederService,
+        accountService,
+        accountDeckService,
+        tokenService,
+        gameService,
+    ).listen(port) {
         console.log("Server running at http://localhost:$port")
         console.log("Database: $dbHost:$dbPort/$dbName")
     }

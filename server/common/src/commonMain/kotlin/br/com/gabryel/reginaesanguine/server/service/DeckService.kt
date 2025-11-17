@@ -4,7 +4,6 @@ import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.server.domain.PackDto
 import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
 import br.com.gabryel.reginaesanguine.server.repository.PackRepository
-import kotlin.math.ceil
 
 /**
  * Service for managing card packs and decks.
@@ -14,16 +13,14 @@ class DeckService(private val packRepository: PackRepository) {
     suspend fun loadPack(alias: String): Pack? = packRepository.findPack(alias)
 
     suspend fun loadPacks(page: Int = 0, size: Int = 10): PackPageDto {
-        val totalElements = packRepository.countPacks()
         val packs = packRepository.findAllPacks(page, size)
-        val totalPages = ceil(totalElements.toDouble() / size).toInt()
 
         return PackPageDto(
-            content = packs.map { PackDto.from(it) },
+            content = packs.content.map { PackDto.from(it) },
             page = page,
             size = size,
-            totalElements = totalElements,
-            totalPages = totalPages,
+            totalElements = packs.totalElements,
+            totalPages = packs.totalPages,
         )
     }
 }

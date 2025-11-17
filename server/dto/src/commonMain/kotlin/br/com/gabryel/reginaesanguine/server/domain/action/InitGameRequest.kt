@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class InitGameRequest(
-    val deckCardIds: List<String>,
+    val deckStateId: String,
     val position: PlayerPosition,
-    val packId: String
 )

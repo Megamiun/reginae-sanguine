@@ -10,23 +10,31 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Success
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
+import br.com.gabryel.reginaesanguine.server.repository.AccountDeckRepository
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
-class GameService(private val deckService: DeckService) {
+class GameService(
+    private val deckService: DeckService,
+    private val accountDeckRepository: AccountDeckRepository,
+) {
     private val games = mutableMapOf<String, Game>()
     private val gamePackIds = mutableMapOf<String, String>()
+    private val gameDeckStateIds = mutableMapOf<String, String>()
 
     suspend fun initGame(request: InitGameRequest): String {
+        val accountDeck = requireNotNull(accountDeckRepository.findByStateId(request.deckStateId)) {
+            "Deck state ${request.deckStateId} not found"
+        }
+
         val gameId = Uuid.random().toString()
-        val pack = deckService.loadPack(request.packId)
-            ?: throw IllegalArgumentException("Pack ${request.packId} not found")
+        val pack = requireNotNull(deckService.loadPack(accountDeck.packId)) { "Pack ${accountDeck.packId} not found" }
 
         val availableCards = pack.cards.associateBy { it.id }
-        val deck = request.deckCardIds.mapNotNull { availableCards[it] }
+        val deck = accountDeck.cardIds.mapNotNull { availableCards[it] }
 
-        require(deck.size == request.deckCardIds.size) { "Invalid card IDs in deck" }
+        require(deck.size == accountDeck.cardIds.size) { "Invalid card IDs in deck" }
 
         val player = Player(deck.take(5), deck.drop(5))
         val opponent = Player(emptyList(), emptyList())
@@ -39,20 +47,22 @@ class GameService(private val deckService: DeckService) {
         )
 
         games[gameId] = game
-        gamePackIds[gameId] = request.packId
+        gamePackIds[gameId] = accountDeck.packId
+        gameDeckStateIds[gameId] = accountDeck.stateId
         return gameId
     }
 
     fun executeAction(gameId: String, playerPosition: PlayerPosition, action: Action<out String>): GameViewDto {
         val game = getGameBy(gameId)
-        val packId = gamePackIds[gameId]
-            ?: throw IllegalArgumentException("Pack ID for game $gameId not found")
+        val packId = requireNotNull(gamePackIds[gameId]) { "Pack ID for game $gameId not found" }
+        val deckStateId = requireNotNull(gameDeckStateIds[gameId]) { "Deck state ID for game $gameId not found" }
 
         return when (val result = game.play(game.playerTurn, action)) {
             is Success -> {
                 games[gameId] = result.value
-                GameViewDto.from(GameView.forPlayer(result.value, playerPosition), packId)
+                GameViewDto.from(GameView.forPlayer(result.value, playerPosition), packId, deckStateId)
             }
+
             is Failure -> throw IllegalArgumentException(result.toString())
         }
     }
@@ -60,7 +70,9 @@ class GameService(private val deckService: DeckService) {
     fun fetchStatus(gameId: String, playerPosition: PlayerPosition): GameViewDto? {
         val game = games[gameId] ?: return null
         val packId = gamePackIds[gameId] ?: return null
-        return GameViewDto.from(GameView.forPlayer(game, playerPosition), packId)
+        val deckStateId = gameDeckStateIds[gameId] ?: return null
+
+        return GameViewDto.from(GameView.forPlayer(game, playerPosition), packId, deckStateId)
     }
 
     private fun getGameBy(gameId: String): Game =

@@ -1,6 +1,7 @@
 package br.com.gabryel.reginaesanguine.server.repository
 
 import br.com.gabryel.reginaesanguine.domain.Pack
+import br.com.gabryel.reginaesanguine.server.domain.PageDto
 
 interface PackRepository {
     suspend fun savePack(pack: Pack)
@@ -11,5 +12,5 @@ interface PackRepository {
 
     suspend fun countPacks(): Long
 
-    suspend fun findAllPacks(page: Int, size: Int): List<Pack>
+    suspend fun findAllPacks(page: Int, size: Int): PageDto<Pack>
 }

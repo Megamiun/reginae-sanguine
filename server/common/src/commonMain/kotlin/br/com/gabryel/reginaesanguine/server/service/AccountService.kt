@@ -22,11 +22,8 @@ class AccountService(
         require(request.email.isNotBlank()) { "Email cannot be empty" }
         require(request.password.isNotBlank()) { "Password cannot be empty" }
 
-        if (accountRepository.existsByUsername(request.username))
-            throw IllegalArgumentException("Username already exists")
-
-        if (accountRepository.existsByEmail(request.email))
-            throw IllegalArgumentException("Email already exists")
+        require(!accountRepository.existsByUsername(request.username)) { "Username already exists" }
+        require(!accountRepository.existsByEmail(request.email)) { "Email already exists" }
 
         val now = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val account = Account(
@@ -46,11 +43,10 @@ class AccountService(
         require(request.username.isNotBlank()) { "Username cannot be empty" }
         require(request.password.isNotBlank()) { "Password cannot be empty" }
 
-        val account = accountRepository.findByUsername(request.username)
-            ?: throw IllegalArgumentException("Invalid username or password")
-
-        if (!passwordHasher.verify(request.password, account.passwordHash))
-            throw IllegalArgumentException("Invalid username or password")
+        val account = requireNotNull(accountRepository.findByUsername(request.username)) {
+            "Invalid username or password"
+        }
+        require(passwordHasher.verify(request.password, account.passwordHash)) { "Invalid username or password" }
 
         val token = tokenService.generateToken(account.id)
         return LoginResponse(account.toDto(), token)

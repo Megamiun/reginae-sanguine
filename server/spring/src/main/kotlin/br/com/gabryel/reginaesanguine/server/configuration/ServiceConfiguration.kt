@@ -1,7 +1,9 @@
 package br.com.gabryel.reginaesanguine.server.configuration
 
+import br.com.gabryel.reginaesanguine.server.repository.AccountDeckRepository
 import br.com.gabryel.reginaesanguine.server.repository.AccountRepository
 import br.com.gabryel.reginaesanguine.server.repository.PackRepository
+import br.com.gabryel.reginaesanguine.server.service.AccountDeckService
 import br.com.gabryel.reginaesanguine.server.service.AccountService
 import br.com.gabryel.reginaesanguine.server.service.DeckService
 import br.com.gabryel.reginaesanguine.server.service.GameService
@@ -19,7 +21,8 @@ class ServiceConfiguration {
     fun deckService(packRepository: PackRepository) = DeckService(packRepository)
 
     @Bean
-    fun gameService(deckService: DeckService) = GameService(deckService)
+    fun gameService(deckService: DeckService, accountDeckRepository: AccountDeckRepository) =
+        GameService(deckService, accountDeckRepository)
 
     @Bean
     fun packSeederService(
@@ -33,6 +36,10 @@ class ServiceConfiguration {
         passwordHasher: PasswordHasher,
         tokenService: TokenService,
     ) = AccountService(accountRepository, passwordHasher, tokenService)
+
+    @Bean
+    fun accountDeckService(accountDeckRepository: AccountDeckRepository) =
+        AccountDeckService(accountDeckRepository)
 
     @Bean
     fun jwtProperties(

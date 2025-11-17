@@ -6,17 +6,22 @@ import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
 import br.com.gabryel.reginaesanguine.server.client.ServerClient
 import br.com.gabryel.reginaesanguine.server.client.get
 import br.com.gabryel.reginaesanguine.server.client.post
+import br.com.gabryel.reginaesanguine.server.client.put
 import br.com.gabryel.reginaesanguine.server.domain.AccountDto
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto.Skip
+import br.com.gabryel.reginaesanguine.server.domain.DeckDto
+import br.com.gabryel.reginaesanguine.server.domain.DeckPageDto
 import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.GameViewDto
 import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
 import br.com.gabryel.reginaesanguine.server.domain.StateDto.Ongoing
 import br.com.gabryel.reginaesanguine.server.domain.action.CreateAccountRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.CreateDeckRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.LoginRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.LoginResponse
+import br.com.gabryel.reginaesanguine.server.domain.action.UpdateDeckRequest
 import br.com.gabryel.reginaesanguine.server.service.SeedResult
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.FunSpec
@@ -44,10 +49,10 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         println("Pack seeding result: seeded=${result.seeded}, skipped=${result.skipped}")
     }
 
-    private fun uniqueSuffix(): String = "${++testCounter}_${hashCode()}"
+    private fun uniqueSuffix(): String = "${++testCounter}}"
 
     init {
-        val deckCardIds = listOf("001", "002", "003", "004", "005", "001", "002", "003", "004", "005")
+        val deckCardIds = List(15) { index -> "00${(index % 9) + 1}" }
 
         test("given seeded packs, when getting paginated packs, should return page with packs") {
             val page = getPacks(page = 0, size = 10)
@@ -62,11 +67,10 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         }
 
         test("given valid deck, when creating game, should return game ID") {
-            val request = InitGameRequest(
-                packId = "queens_blood",
-                deckCardIds = deckCardIds,
-                position = LEFT,
-            )
+            val suffix = uniqueSuffix()
+            val token = createTestAccountAndLogin(suffix)
+            val deck = postCreateUserDeck(token, CreateDeckRequest("queens_blood", deckCardIds))
+            val request = InitGameRequest(deckStateId = deck.stateId, position = LEFT)
 
             val result = postInitGame(request, LEFT)
 
@@ -74,11 +78,10 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
         }
 
         test("given created game, when fetching status, should return game view with initial state") {
-            val initRequest = InitGameRequest(
-                packId = "queens_blood",
-                deckCardIds = deckCardIds,
-                position = LEFT,
-            )
+            val suffix = uniqueSuffix()
+            val token = createTestAccountAndLogin(suffix)
+            val deck = postCreateUserDeck(token, CreateDeckRequest("queens_blood", deckCardIds))
+            val initRequest = InitGameRequest(deckStateId = deck.stateId, position = LEFT)
             val gameId = postInitGame(initRequest, LEFT).gameId
 
             val gameView = getGameStatus(gameId, LEFT)
@@ -86,18 +89,17 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
             gameView.packId shouldBe "queens_blood"
             gameView.localPlayerPosition shouldBe LEFT
             gameView.localPlayerHand shouldHaveSize 5
-            gameView.localPlayerDeckSize shouldBe 5
+            gameView.localPlayerDeckSize shouldBe 10
             gameView.playerTurn shouldBe LEFT
             gameView.state shouldBe Ongoing
             gameView.boardCells.size shouldBe 15
         }
 
         test("given created game, when player makes action, should update game state and switch turn") {
-            val initRequest = InitGameRequest(
-                packId = "queens_blood",
-                deckCardIds = deckCardIds,
-                position = LEFT,
-            )
+            val suffix = uniqueSuffix()
+            val token = createTestAccountAndLogin(suffix)
+            val deck = postCreateUserDeck(token, CreateDeckRequest("queens_blood", deckCardIds))
+            val initRequest = InitGameRequest(deckStateId = deck.stateId, position = LEFT)
             val gameId = postInitGame(initRequest, LEFT).gameId
             val initialStatus = getGameStatus(gameId, LEFT)
             initialStatus.playerTurn shouldBe LEFT
@@ -139,6 +141,43 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
             result.account.username shouldBe username
             result.account.email shouldBe email
         }
+
+        test("given account, when creating deck with 15 cards, should return deck") {
+            val suffix = uniqueSuffix()
+            val token = createTestAccountAndLogin(suffix)
+
+            val request = CreateDeckRequest(packAlias = "queens_blood", cardIds = deckCardIds)
+
+            val result = postCreateUserDeck(token, request)
+
+            result.id.shouldNotBeBlank()
+            result.packId shouldBe "queens_blood"
+            result.cardIds shouldBe deckCardIds
+        }
+
+        test("given account with deck, when getting all decks, should return list with deck") {
+            val suffix = uniqueSuffix()
+            val token = createTestAccountAndLogin(suffix)
+            val deck = postCreateUserDeck(token, CreateDeckRequest("queens_blood", deckCardIds))
+
+            val result = getUserDecks(token).content
+
+            result shouldHaveSize 1
+            result[0].id shouldBe deck.id
+            result[0].cardIds shouldBe deckCardIds
+        }
+
+        test("given deck, when updating cards, should return updated deck") {
+            val suffix = uniqueSuffix()
+            val token = createTestAccountAndLogin(suffix)
+            val deck = postCreateUserDeck(token, CreateDeckRequest("queens_blood", deckCardIds))
+
+            val newCardIds = List(15) { "003" }
+            val updateRequest = UpdateDeckRequest(newCardIds)
+            val result = putUpdateUserDeck(token, deck.id, updateRequest)
+
+            result.cardIds shouldBe newCardIds
+        }
     }
 
     suspend fun getPacks(page: Int = 0, size: Int = 10): PackPageDto =
@@ -164,4 +203,34 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
 
     suspend fun postLogin(request: LoginRequest): LoginResponse =
         client.post("/account/login", request)
+
+    suspend fun postCreateUserDeck(token: String, request: CreateDeckRequest): DeckDto =
+        client.post("/user-deck", request, mapOf("Authorization" to "Bearer $token"))
+
+    suspend fun getUserDecks(token: String): DeckPageDto =
+        client.get("/user-deck", mapOf("Authorization" to "Bearer $token"))
+
+    suspend fun putUpdateUserDeck(
+        token: String,
+        deckId: String,
+        request: UpdateDeckRequest,
+    ): DeckDto = client.put<UpdateDeckRequest, DeckDto>(
+        "/user-deck/$deckId",
+        request,
+        mapOf("Authorization" to "Bearer $token"),
+    )
+
+    private suspend fun createTestAccountAndLogin(suffix: String): String {
+        val username = "decktest_$suffix"
+        val password = "password123"
+        postCreateAccount(
+            CreateAccountRequest(
+                username = username,
+                email = "deck_$suffix@example.com",
+                password = password,
+            ),
+        )
+        val loginResponse = postLogin(LoginRequest(username, password))
+        return loginResponse.token
+    }
 }

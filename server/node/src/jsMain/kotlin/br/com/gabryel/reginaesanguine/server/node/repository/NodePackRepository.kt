@@ -25,6 +25,8 @@ import br.com.gabryel.reginaesanguine.domain.effect.type.SpawnCardsPerRank
 import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import br.com.gabryel.reginaesanguine.server.domain.AmountData
 import br.com.gabryel.reginaesanguine.server.domain.CardIdsData
+import br.com.gabryel.reginaesanguine.server.domain.GenericPageDto
+import br.com.gabryel.reginaesanguine.server.domain.PageDto
 import br.com.gabryel.reginaesanguine.server.domain.PowerMultiplierData
 import br.com.gabryel.reginaesanguine.server.domain.RaisePowerByCountData
 import br.com.gabryel.reginaesanguine.server.domain.RaisePowerOnStatusData
@@ -33,6 +35,7 @@ import br.com.gabryel.reginaesanguine.server.node.pg.Pool
 import br.com.gabryel.reginaesanguine.server.node.pg.PoolClient
 import br.com.gabryel.reginaesanguine.server.repository.PackRepository
 import kotlinx.coroutines.await
+import kotlin.math.ceil
 
 class NodePackRepository(private val pool: Pool) : PackRepository {
     private val json = gameJsonParser()
@@ -300,11 +303,19 @@ class NodePackRepository(private val pool: Pool) : PackRepository {
         }
     }
 
-    override suspend fun findAllPacks(page: Int, size: Int): List<Pack> {
+    override suspend fun findAllPacks(page: Int, size: Int): PageDto<Pack> {
         val offset = page * size
+        val totalElements = countPacks()
+
         val packsResult = pool.query("SELECT alias FROM pack LIMIT $1 OFFSET $2", arrayOf(size, offset))
             .await()
 
-        return packsResult.rows.mapNotNull { row -> findPack(row.alias) }
+        return GenericPageDto(
+            packsResult.rows.mapNotNull { row -> findPack(row.alias) },
+            page,
+            size,
+            totalElements,
+            ceil(totalElements.toDouble() / size).toInt(),
+        )
     }
 }

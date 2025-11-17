@@ -4,9 +4,11 @@ import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -31,13 +33,8 @@ class KtorServerClient(
         path: String,
         responseClass: KClass<T>,
         headers: Map<String, String>
-    ): T = client.get(getUrl(path)) {
-        headers {
-            headers.forEach { (key, value) ->
-                append(key, value)
-            }
-        }
-    }.body(TypeInfo(responseClass))
+    ): T = client.get(getUrl(path)) { buildRequest(headers, null, Any::class) }
+        .body(TypeInfo(responseClass))
 
     @OptIn(InternalSerializationApi::class)
     override suspend fun <T : Any, V : Any> post(
@@ -46,15 +43,34 @@ class KtorServerClient(
         requestClass: KClass<T>,
         responseClass: KClass<V>,
         headers: Map<String, String>
-    ): V = client.post(getUrl(path)) {
-        contentType(ContentType.Application.Json)
+    ): V = client.post(getUrl(path)) { buildRequest(headers, body, requestClass) }
+        .body(TypeInfo(responseClass))
+
+    @OptIn(InternalSerializationApi::class)
+    override suspend fun <T : Any, V : Any> put(
+        path: String,
+        body: T,
+        requestClass: KClass<T>,
+        responseClass: KClass<V>,
+        headers: Map<String, String>
+    ): V = client.put(getUrl(path)) { buildRequest(headers, body, requestClass) }
+        .body(TypeInfo(responseClass))
+
+    private fun <T : Any> HttpRequestBuilder.buildRequest(
+        headers: Map<String, String>,
+        body: T?,
+        requestClass: KClass<T>
+    ) {
         headers {
             headers.forEach { (key, value) ->
                 append(key, value)
             }
         }
-        if (body != null) setBody(body, TypeInfo(requestClass))
-    }.body(TypeInfo(responseClass))
+        if (body != null) {
+            contentType(ContentType.Application.Json)
+            setBody(body, TypeInfo(requestClass))
+        }
+    }
 
     private fun getUrl(path: String): String =
         baseUrl.removeSuffix("/") + "/" + path.removePrefix("/")

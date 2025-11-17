@@ -16,6 +16,14 @@ interface ServerClient {
         responseClass: KClass<V>,
         headers: Map<String, String> = emptyMap()
     ): V
+
+    suspend fun <T : Any, V : Any> put(
+        path: String,
+        body: T,
+        requestClass: KClass<T>,
+        responseClass: KClass<V>,
+        headers: Map<String, String> = emptyMap()
+    ): V
 }
 
 suspend inline fun <reified T : Any> ServerClient.get(
@@ -28,3 +36,9 @@ suspend inline fun <reified T : Any, reified V : Any> ServerClient.post(
     body: T?,
     headers: Map<String, String> = emptyMap()
 ) = post(path, body, T::class, V::class, headers)
+
+suspend inline fun <reified T : Any, reified V : Any> ServerClient.put(
+    path: String,
+    body: T,
+    headers: Map<String, String> = emptyMap()
+) = put(path, body, T::class, V::class, headers)

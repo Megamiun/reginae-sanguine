@@ -9,5 +9,5 @@ import java.util.UUID
 interface PackJpaRepository : JpaRepository<PackEntity, UUID> {
     fun existsByAlias(alias: String): Boolean
 
-    fun findByAlias(alias: String): PackEntity
+    fun findByAlias(alias: String): PackEntity?
 }
