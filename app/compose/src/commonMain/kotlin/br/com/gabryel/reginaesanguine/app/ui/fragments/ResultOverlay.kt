@@ -75,9 +75,11 @@ private fun ResultText(game: GamePlayerSummary) {
             .background(radialGradient(colors = listOf(Yellow, Transparent))),
     )
 
-    when (game.getWinner()) {
-        LEFT -> Text("Victory", color = YellowAccent)
-        RIGHT -> Text("Lost", color = YellowAccent)
-        else -> Text("Tie", color = YellowAccent)
+    val winner = game.getWinner()
+    val text = when {
+        winner == null -> "Tie"
+        winner == game.localPlayerPosition -> "Victory"
+        else -> "Defeat"
     }
+    Text(text, color = YellowAccent)
 }
