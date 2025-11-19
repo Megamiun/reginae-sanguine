@@ -1,7 +1,15 @@
-- [ ] Implement Drag and Drop on iOS
+- [x] Implement Drag and Drop on iOS
+- [x] Add Accounts to the server
+- [x] Add Deck Edit capabilities to the server
+- [x] Add Game capabilities to the server
+- [ ] Create a Game Lobby
+    - [ ] Allow player to create Game Request in Lobby
+    - [ ] Allow player to join Game Request in Lobby
+    - [ ] Randomize which player is LEFT or RIGHT
+- [ ] Improve configuration
+    - [ ] Add server URL configuration
+    - [ ] Save LOCAL/REMOTE mode on Storage
+- [ ] Review all viewModels for simplicity sake
 - [ ] Add a back button after finishing a game
 - [ ] Beautify cards
-- [ ] Add Accounts to the server
-- [ ] Add Deck Edit capabilities to the server
-- [ ] Add Game capabilities to the server
 - [ ] Normalize pack_card_effect on DB

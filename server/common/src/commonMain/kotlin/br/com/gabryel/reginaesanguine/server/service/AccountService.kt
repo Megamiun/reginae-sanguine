@@ -17,7 +17,7 @@ class AccountService(
     private val passwordHasher: PasswordHasher,
     private val tokenService: TokenService,
 ) {
-    suspend fun create(request: CreateAccountRequest): AccountDto {
+    suspend fun create(request: CreateAccountRequest): LoginResponse {
         require(request.username.isNotBlank()) { "Username cannot be empty" }
         require(request.email.isNotBlank()) { "Email cannot be empty" }
         require(request.password.isNotBlank()) { "Password cannot be empty" }
@@ -36,7 +36,8 @@ class AccountService(
         )
 
         val savedAccount = accountRepository.save(account)
-        return savedAccount.toDto()
+        val token = tokenService.generateToken(savedAccount.id)
+        return LoginResponse(savedAccount.toDto(), token)
     }
 
     suspend fun login(request: LoginRequest): LoginResponse {

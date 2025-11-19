@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
 @RestController
-@RequestMapping("deck", produces = [APPLICATION_JSON_VALUE])
-class DeckController(private val deckService: DeckService) {
-    @GetMapping("packs")
+@RequestMapping("pack", produces = [APPLICATION_JSON_VALUE])
+class PackController(private val deckService: DeckService) {
+    @GetMapping
     fun getPacks(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "10") size: Int
@@ -24,7 +24,7 @@ class DeckController(private val deckService: DeckService) {
         deckService.loadPacks(page, size)
     }
 
-    @GetMapping("pack/{packId}")
+    @GetMapping("{packId}")
     fun getPack(
         @PathVariable packId: String
     ): PackDto = runBlocking {

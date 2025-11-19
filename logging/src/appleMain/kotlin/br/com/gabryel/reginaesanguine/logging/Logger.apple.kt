@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.app.util
+package br.com.gabryel.reginaesanguine.logging
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSLog

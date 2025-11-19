@@ -4,6 +4,7 @@ import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
@@ -23,6 +24,9 @@ class KtorServerClient(
     private val json: Json = gameJsonParser()
 ) : ServerClient {
     private val client = HttpClient {
+        install(Logging) {
+            logger = KtorLogger(KtorServerClient::class)
+        }
         install(ContentNegotiation) {
             json(json)
         }

@@ -2,7 +2,6 @@ package br.com.gabryel.reginaesanguine.viewmodel.game
 
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Game
-import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
@@ -29,14 +28,14 @@ class GameViewModel(
         }
 
         suspend fun forRemoteGame(
-            pack: Pack,
-            deck: List<Card>,
+            deckStateId: String,
             position: PlayerPosition,
             client: GameClient,
-            coroutineScope: CoroutineScope
+            coroutineScope: CoroutineScope,
+            availableCards: Map<String, Card>
         ): GameViewModel {
-            val request = InitGameRequest(deck.map { it.id }, position, pack.id)
-            val manager = RemoteGameManager.create(client, request)
+            val request = InitGameRequest(deckStateId, position)
+            val manager = RemoteGameManager.create(client, request, availableCards)
 
             return GameViewModel(MutableStateFlow(manager.awaitGameCreation()), coroutineScope)
                 .trigger()

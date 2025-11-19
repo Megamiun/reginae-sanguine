@@ -15,7 +15,6 @@ interface GamePlayerSummary {
     val size: Size
     val playerTurn: PlayerPosition
     val localPlayerPosition: PlayerPosition
-    val playerHandPosition: PlayerPosition
     val currentPlayerHand: List<Card>
     val round: Int
 

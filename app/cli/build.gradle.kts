@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     kotlin("multiplatform")
@@ -26,9 +25,8 @@ kotlin {
     mutableListOf(linuxArm64(), linuxX64(), mingwX64())
         .forEach(::configureNative)
 
-    if (HostManager.hostIsMac)
-        listOf(macosX64(), macosArm64())
-            .forEach(::configureNative)
+    listOf(macosX64(), macosArm64())
+        .forEach(::configureNative)
 
     sourceSets {
         commonMain {

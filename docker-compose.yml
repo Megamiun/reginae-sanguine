@@ -1,0 +1,54 @@
+services:
+  rs-postgres:
+    image: postgres:16-alpine
+    container_name: rs-postgres
+    environment:
+      POSTGRES_DB: reginae_sanguine
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d reginae_sanguine" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rs-spring:
+    build:
+      context: .
+      dockerfile: server/spring/Dockerfile
+    container_name: rs-spring
+    depends_on:
+      rs-postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: jdbc:postgresql://rs-postgres:5432/reginae_sanguine
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+
+  rs-node:
+    build:
+      context: .
+      dockerfile: server/node/Dockerfile
+    container_name: rs-node
+    depends_on:
+      rs-postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_HOST: rs-postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: reginae_sanguine
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      PORT: 3000
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  gradle_cache:

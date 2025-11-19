@@ -30,17 +30,17 @@ import br.com.gabryel.reginaesanguine.app.ui.components.FancyBox
 import br.com.gabryel.reginaesanguine.app.ui.components.Grid
 import br.com.gabryel.reginaesanguine.app.ui.components.RButton
 import br.com.gabryel.reginaesanguine.app.ui.decorations.addFancyCorners
-import br.com.gabryel.reginaesanguine.app.ui.fragments.SimpleCard
+import br.com.gabryel.reginaesanguine.app.ui.fragments.DetailCard
 import br.com.gabryel.reginaesanguine.app.ui.theme.FancyBoxBg
 import br.com.gabryel.reginaesanguine.app.ui.theme.WhiteLight
 import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.theme.createNumbersTextStyle
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
-import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
 
 @Composable
 context(_: PainterLoader, player: PlayerContext)
-fun ViewDecks(deckViewModel: SingleDeckViewModel) {
+fun ViewDecks(deckViewModel: DeckViewModel) {
     val viewDecksState by deckViewModel.viewDecks.collectAsState()
     val cardSize = getCardSize(80.dp)
 
@@ -70,7 +70,7 @@ fun ViewDecks(deckViewModel: SingleDeckViewModel) {
                     return@Grid
                 }
 
-                SimpleCard(card, cardSize)
+                DetailCard(card, cardSize)
             }
         }
 
@@ -90,6 +90,19 @@ fun ViewDecks(deckViewModel: SingleDeckViewModel) {
                         textStyle = createNumbersTextStyle(16.sp),
                         textOffset = 0.dp,
                     ) { deckViewModel.changeDeckView(index) }
+                }
+
+                if (viewDecksState.deckAmount < 6) {
+                    RButton(
+                        "+",
+                        Modifier.size(20.dp),
+                        shape = CircleShape,
+                        border = BorderStroke(1.dp, WhiteLight),
+                        colors = colors,
+                        contentPadding = PaddingValues(0.dp),
+                        textStyle = createNumbersTextStyle(16.sp),
+                        textOffset = 0.dp,
+                    ) { deckViewModel.createDeck() }
                 }
             }
         }

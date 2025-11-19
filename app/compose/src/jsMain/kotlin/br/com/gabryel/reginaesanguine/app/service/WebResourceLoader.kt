@@ -1,7 +1,7 @@
 package br.com.gabryel.reginaesanguine.app.service
 
 import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
-import br.com.gabryel.reginaesanguine.app.util.Logger
+import br.com.gabryel.reginaesanguine.logging.Logger
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import org.khronos.webgl.ArrayBuffer

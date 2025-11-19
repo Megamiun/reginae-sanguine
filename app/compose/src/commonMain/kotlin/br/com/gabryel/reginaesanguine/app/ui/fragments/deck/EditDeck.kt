@@ -52,12 +52,12 @@ import br.com.gabryel.reginaesanguine.app.ui.theme.YellowAccent
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
 import br.com.gabryel.reginaesanguine.app.ui.util.getCardSizeByWidth
 import br.com.gabryel.reginaesanguine.domain.Card
+import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.deck.EditDeck
-import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
 
 @Composable
 context(_: PainterLoader, player: PlayerContext)
-fun EditDeck(deckViewModel: SingleDeckViewModel) {
+fun EditDeck(deckViewModel: DeckViewModel) {
     val editDeckState by deckViewModel.editDeck.collectAsState()
     val viewDecksState by deckViewModel.viewDecks.collectAsState()
 
@@ -142,7 +142,7 @@ private fun GridCell(
     card: Card,
     isDeckFull: Boolean,
     editDeck: EditDeck,
-    deckViewModel: SingleDeckViewModel,
+    deckViewModel: DeckViewModel,
     cardSize: DpSize
 ) {
     val max = editDeck.getMax(card)
@@ -161,7 +161,11 @@ private fun GridCell(
         action = { deckViewModel.addToDeck(card) },
         tooltip = { CardDescription(card) },
     ) {
-        Column(Modifier.fillMaxSize().padding(2.dp), horizontalAlignment = CenterHorizontally, verticalArrangement = spacedBy(2.dp)) {
+        Column(
+            Modifier.fillMaxSize().padding(2.dp),
+            horizontalAlignment = CenterHorizontally,
+            verticalArrangement = spacedBy(2.dp),
+        ) {
             DetailCard(card, cardSize)
 
             Text(

@@ -3,8 +3,7 @@ package br.com.gabryel.reginaesanguine.app.util
 import br.com.gabryel.reginaesanguine.app.services.ResourceLoader
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
-import br.com.gabryel.reginaesanguine.server.client.KtorServerClient
-import br.com.gabryel.reginaesanguine.viewmodel.pack.remote.RemotePackClient
+import br.com.gabryel.reginaesanguine.viewmodel.pack.PackClient
 
 val parser = gameJsonParser()
 
@@ -13,19 +12,12 @@ suspend fun getStandardPack(resourceLoader: ResourceLoader): Pack {
     return parser.decodeFromString<Pack>(resource)
 }
 
-suspend fun getPacksFromServer(serverUrl: String = "http://localhost:8080"): List<Pack> {
-    val client = KtorServerClient(serverUrl, gameJsonParser())
-    val packClient = RemotePackClient(client)
-    return try {
-        packClient.getAllPacks()
-    } finally {
-        client.close()
-    }
-}
+suspend fun getPacksFromServer(packClient: PackClient): List<Pack> =
+    packClient.getAllPacks()
 
-suspend fun getStandardPackFromServer(serverUrl: String = "http://localhost:8080"): Pack {
-    val packs = getPacksFromServer(serverUrl)
+suspend fun getStandardPackFromServer(packClient: PackClient): Pack {
+    val packs = getPacksFromServer(packClient)
     return packs.firstOrNull { it.id.contains("queens_blood", ignoreCase = true) }
         ?: packs.firstOrNull()
-        ?: error("No packs available from server at $serverUrl")
+        ?: error("No packs available from server")
 }

@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -38,7 +39,6 @@ import br.com.gabryel.reginaesanguine.app.ui.GameScreen
 import br.com.gabryel.reginaesanguine.app.ui.HomeScreen
 import br.com.gabryel.reginaesanguine.app.ui.components.InstanceNavigationStack
 import br.com.gabryel.reginaesanguine.app.ui.theme.GridCheckeredOn
-import br.com.gabryel.reginaesanguine.app.util.Logger
 import br.com.gabryel.reginaesanguine.app.util.Mode
 import br.com.gabryel.reginaesanguine.app.util.Mode.LOCAL
 import br.com.gabryel.reginaesanguine.app.util.Mode.REMOTE
@@ -51,12 +51,23 @@ import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.Player
 import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
+import br.com.gabryel.reginaesanguine.logging.Logger
+import br.com.gabryel.reginaesanguine.server.client.KtorServerClient
+import br.com.gabryel.reginaesanguine.viewmodel.auth.AuthState
+import br.com.gabryel.reginaesanguine.viewmodel.auth.AuthViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.auth.Storage
+import br.com.gabryel.reginaesanguine.viewmodel.auth.remote.RemoteAuthClient
 import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckEditViewModel
-import br.com.gabryel.reginaesanguine.viewmodel.deck.LocalDeckViewModel
-import br.com.gabryel.reginaesanguine.viewmodel.deck.RemoteDeckViewModel
-import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.DualDeckEditViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.SingleDeckEditViewModel
+import br.com.gabryel.reginaesanguine.viewmodel.deck.local.LocalDeckManager
+import br.com.gabryel.reginaesanguine.viewmodel.deck.remote.RemoteDeckClient
+import br.com.gabryel.reginaesanguine.viewmodel.deck.remote.RemoteDeckManager
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameClient
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
-import br.com.gabryel.reginaesanguine.viewmodel.game.remote.LocalGameClient
+import br.com.gabryel.reginaesanguine.viewmodel.game.remote.RemoteGameClient
+import br.com.gabryel.reginaesanguine.viewmodel.pack.remote.RemotePackClient
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.compose.LocalPlatformContext
@@ -66,9 +77,10 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 context(painterLoader: PainterLoader)
-fun App(resourceLoader: ResourceLoader) {
+fun App(resourceLoader: ResourceLoader, storage: Storage) {
     val logger = Logger("App")
     val context = LocalPlatformContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     var loadingImages by remember { mutableStateOf(false) }
     var loadingPack by remember { mutableStateOf(true) }
@@ -76,12 +88,17 @@ fun App(resourceLoader: ResourceLoader) {
     var mode by remember { mutableStateOf(LOCAL) }
     val snackbar = remember { SnackbarHostState() }
 
+    val baseUrl = remember { storage.serverUrl.retrieve() ?: "http://10.0.2.2:8080" }
+    val serverClient = remember { KtorServerClient(baseUrl) }
+    val authClient = remember { RemoteAuthClient(serverClient) }
+    val packClient = remember { RemotePackClient(serverClient) }
+    val gameClient = remember { RemoteGameClient(serverClient) }
+    val authViewModel = remember { AuthViewModel(authClient, storage, coroutineScope) }
+
     LaunchedEffect(true) {
         logger.info("Loading images")
-        val startupResources = listOf(
-            "static_temp_fandom_bgblur",
-            "static_temp_boardgamegeek_logo",
-        ).map { preload(context, it) }
+        val startupResources = listOf("static_temp_fandom_bgblur", "static_temp_boardgamegeek_logo")
+            .map { preload(context, it) }
 
         startupResources.forEach { it.job.await() }
 
@@ -97,13 +114,13 @@ fun App(resourceLoader: ResourceLoader) {
         when (mode) {
             LOCAL -> pack = getStandardPack(resourceLoader)
             REMOTE -> try {
-                pack = getStandardPackFromServer()
+                pack = getStandardPackFromServer(packClient)
             } catch (e: Exception) {
                 logger.error("Failed to load pack from server. Switching to local.", e)
                 // TODO Stop waiting for snackbar to continue
                 snackbar.showSnackbar(
                     "Failed to load pack from server. Switching to local.",
-                    withDismissAction = true
+                    withDismissAction = true,
                 )
                 mode = LOCAL
             }
@@ -115,7 +132,9 @@ fun App(resourceLoader: ResourceLoader) {
     val currentPack = pack ?: return
 
     context(mode) {
-        val deckViewModel = createDeckViewModel(currentPack)
+        val authState = authViewModel.state.collectAsState().value
+        val token = (authState as? AuthState.Authenticated)?.token
+        val deckViewModel = createDeckViewModel(currentPack, serverClient, token, coroutineScope)
         val background = painterLoader.loadStaticImage(Res.drawable.static_temp_fandom_bgblur)
 
         Image(background, null, Modifier.fillMaxSize(), TopCenter, FillWidth)
@@ -123,7 +142,7 @@ fun App(resourceLoader: ResourceLoader) {
         Surface(Modifier.fillMaxSize(), color = GridCheckeredOn.copy(alpha = 0.6f)) {
             InstanceNavigationStack(HOME) {
                 addRoute(HOME) {
-                    HomeScreen { mode = it }
+                    HomeScreen(authViewModel) { newMode -> mode = newMode }
                 }
                 addRoute(DECK_SELECTION) {
                     DeckSelectionScreen(deckViewModel)
@@ -131,7 +150,7 @@ fun App(resourceLoader: ResourceLoader) {
                 addRoute(GAME) {
                     val coroutineScope = rememberCoroutineScope()
                     val game by produceState<GameViewModel?>(null) {
-                        value = createViewModel(deckViewModel, currentPack, coroutineScope)
+                        value = createViewModel(deckViewModel, currentPack, gameClient, coroutineScope)
                     }
 
                     game?.let {
@@ -165,7 +184,8 @@ fun App(resourceLoader: ResourceLoader) {
             ) {
                 Text(data.visuals.message)
             }
-        })
+        },
+    )
 }
 
 private fun preload(context: PlatformContext, key: String): Disposable {
@@ -176,18 +196,39 @@ private fun preload(context: PlatformContext, key: String): Disposable {
 }
 
 context(mode: Mode)
-private fun createDeckViewModel(pack: Pack): DeckEditViewModel = when (mode) {
-    LOCAL -> LocalDeckViewModel(SingleDeckViewModel(pack), SingleDeckViewModel(pack))
-    REMOTE -> RemoteDeckViewModel(SingleDeckViewModel(pack))
+private fun createDeckViewModel(
+    pack: Pack,
+    serverClient: KtorServerClient,
+    token: String?,
+    coroutineScope: CoroutineScope
+): DeckEditViewModel = when (mode) {
+    LOCAL -> {
+        val leftManager = LocalDeckManager(pack)
+        val rightManager = LocalDeckManager(pack)
+        DualDeckEditViewModel(
+            DeckViewModel(pack, leftManager, coroutineScope),
+            DeckViewModel(pack, rightManager, coroutineScope),
+        )
+    }
+
+    REMOTE -> {
+        val authToken = token ?: error("Token required for remote mode")
+        val deckClient = RemoteDeckClient(serverClient, authToken)
+        val deckManager = RemoteDeckManager(deckClient, coroutineScope, pack)
+        val deckViewModel = DeckViewModel(pack, deckManager, coroutineScope)
+        deckViewModel.refresh()
+        SingleDeckEditViewModel(deckViewModel, deckManager = deckManager)
+    }
 }
 
 private suspend fun createViewModel(
     deckViewModel: DeckEditViewModel,
     pack: Pack,
+    gameClient: GameClient,
     coroutineScope: CoroutineScope
 ): GameViewModel =
     when (deckViewModel) {
-        is LocalDeckViewModel -> {
+        is DualDeckEditViewModel -> {
             val leftDeck = deckViewModel.leftPlayer.viewDecks.value.selectedDeck
             val rightDeck = deckViewModel.rightPlayer.viewDecks.value.selectedDeck
 
@@ -198,10 +239,10 @@ private suspend fun createViewModel(
             GameViewModel.forLocalGame(game, coroutineScope)
         }
 
-        is RemoteDeckViewModel -> {
-            val leftDeck = deckViewModel.leftPlayer.viewDecks.value.selectedDeck
-            val client = LocalGameClient(400, mapOf(pack.id to pack))
+        is SingleDeckEditViewModel -> {
+            val deckStateId = deckViewModel.getSelectedDeckStateId()
+                ?: error("No deck selected for remote game")
 
-            GameViewModel.forRemoteGame(pack, leftDeck.shuffled(), LEFT, client, coroutineScope)
+            GameViewModel.forRemoteGame(deckStateId, LEFT, gameClient, coroutineScope, pack.cards.associateBy { it.id })
         }
     }

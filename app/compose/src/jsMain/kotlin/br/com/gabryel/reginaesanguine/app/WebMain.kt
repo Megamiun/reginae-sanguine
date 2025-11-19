@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -16,6 +17,7 @@ import androidx.compose.ui.window.ComposeViewport
 import br.com.gabryel.reginaesanguine.app.service.WebResourceLoader
 import br.com.gabryel.reginaesanguine.app.services.LocalInteractionType
 import br.com.gabryel.reginaesanguine.app.services.ResPainterLoader
+import br.com.gabryel.reginaesanguine.app.storage.LocalStorage
 import br.com.gabryel.reginaesanguine.app.ui.theme.Background
 import br.com.gabryel.reginaesanguine.app.ui.theme.ReginaeSanguineTheme
 import br.com.gabryel.reginaesanguine.app.util.InteractionType.MOUSE
@@ -25,12 +27,15 @@ import org.jetbrains.skiko.wasm.onWasmReady
 fun main() {
     onWasmReady {
         ComposeViewport("content") {
+            val resourceLoader = remember { WebResourceLoader() }
+            val storage = remember { LocalStorage() }
+
             ReginaeSanguineTheme {
                 CompositionLocalProvider(LocalDensity provides Density(2f), LocalInteractionType provides MOUSE) {
                     Box(Modifier.fillMaxSize().background(Background), contentAlignment = TopCenter) {
                         Box(Modifier.size(1000.dp, 500.dp), contentAlignment = Center) {
                             context(ResPainterLoader()) {
-                                App(WebResourceLoader())
+                                App(resourceLoader, storage)
                             }
                         }
                     }

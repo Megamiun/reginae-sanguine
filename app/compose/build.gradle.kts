@@ -5,7 +5,6 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
-import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     kotlin("multiplatform")
@@ -31,20 +30,17 @@ kotlin {
     androidTarget()
     jvm {
         mainRun {
-            mainClass = "br.com.gabryel.reginaesanguine.app.MainKt"
+            mainClass = "br.com.gabryel.reginaesanguine.app.JvmMainKt"
         }
         compilerOptions {
             jvmTarget = JVM_11
         }
     }
 
-    if (HostManager.hostIsMac) {
-        val iosTargets = listOf(iosX64(), iosArm64(), iosSimulatorArm64())
-        iosTargets.forEach { iosTarget ->
-            iosTarget.binaries.framework {
-                baseName = "ReginaeSanguineCompose"
-                isStatic = true
-            }
+    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ReginaeSanguineCompose"
+            isStatic = true
         }
     }
 
@@ -85,6 +81,7 @@ kotlin {
 
             dependencies {
                 implementation(project(":core"))
+                implementation(project(":logging"))
                 implementation(project(":app:viewmodel"))
                 implementation(project(":server:dto"))
 
@@ -176,7 +173,7 @@ compose {
 
     desktop {
         application {
-            mainClass = "br.com.gabryel.reginaesanguine.app.MainKt"
+            mainClass = "br.com.gabryel.reginaesanguine.app.JvmMainKt"
 
             nativeDistributions {
                 targetFormats(Dmg, Msi, Deb)

@@ -4,8 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import br.com.gabryel.reginaesanguine.app.Res
 import br.com.gabryel.reginaesanguine.app.allDrawableResources
-import br.com.gabryel.reginaesanguine.app.util.Logger
-import coil3.compose.AsyncImagePainter
+import br.com.gabryel.reginaesanguine.logging.Logger
 import coil3.compose.LocalPlatformContext
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
@@ -33,7 +32,7 @@ class ResPainterLoader : PainterLoader {
     }
 
     @Composable
-    private fun loadRes(name: String, transformations: List<Transformation> = emptyList()): AsyncImagePainter? = runCatching {
+    private fun loadRes(name: String, transformations: List<Transformation> = emptyList()) = runCatching {
         val resUri = Res.getUri("drawable/$name.png")
 
         val request = ImageRequest.Builder(LocalPlatformContext.current)

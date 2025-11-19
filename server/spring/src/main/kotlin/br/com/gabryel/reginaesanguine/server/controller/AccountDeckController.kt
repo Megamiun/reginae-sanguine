@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
 @RestController
-@RequestMapping("user-deck", produces = [APPLICATION_JSON_VALUE])
+@RequestMapping("account-deck", produces = [APPLICATION_JSON_VALUE])
 class AccountDeckController(
     private val accountDeckService: AccountDeckService,
     private val tokenService: TokenService,

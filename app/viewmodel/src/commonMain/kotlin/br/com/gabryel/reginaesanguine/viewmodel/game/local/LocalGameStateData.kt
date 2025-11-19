@@ -11,11 +11,11 @@ import br.com.gabryel.reginaesanguine.viewmodel.game.GamePlayerSummary
  * GameUIData implementation for local games with full Game access.
  * Provides all necessary UI information from the complete game state.
  */
-class LocalGameStateData(private val game: Game, override val localPlayerPosition: PlayerPosition = LEFT) : GamePlayerSummary {
+class LocalGameStateData(private val game: Game, override val localPlayerPosition: PlayerPosition = LEFT) :
+    GamePlayerSummary {
     override val size = game.size
     override val playerTurn = game.playerTurn
-    override val playerHandPosition = game.playerTurn
-    override val currentPlayerHand = game.players[playerHandPosition]?.hand ?: emptyList()
+    override val currentPlayerHand = game.players[localPlayerPosition]?.hand ?: emptyList()
     override val round = game.round
 
     override fun getState() = game.getState()

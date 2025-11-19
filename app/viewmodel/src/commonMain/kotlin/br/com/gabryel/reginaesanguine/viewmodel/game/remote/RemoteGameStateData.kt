@@ -22,11 +22,10 @@ import br.com.gabryel.reginaesanguine.viewmodel.game.GamePlayerSummary
  */
 class RemoteGameStateData(
     private val gameView: GameViewDto,
-    private val availableCards: Map<String, Card> = emptyMap()
+    private val availableCards: Map<String, Card>
 ) : GamePlayerSummary {
     override val size = DEFAULT_BOARD_SIZE
     override val playerTurn = gameView.playerTurn
-    override val playerHandPosition = gameView.localPlayerPosition
     override val localPlayerPosition = gameView.localPlayerPosition
     override val currentPlayerHand = gameView.localPlayerHand.mapNotNull { availableCards[it] }
     override val round = gameView.round

@@ -7,7 +7,6 @@ import br.com.gabryel.reginaesanguine.server.client.ServerClient
 import br.com.gabryel.reginaesanguine.server.client.get
 import br.com.gabryel.reginaesanguine.server.client.post
 import br.com.gabryel.reginaesanguine.server.client.put
-import br.com.gabryel.reginaesanguine.server.domain.AccountDto
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto.Skip
 import br.com.gabryel.reginaesanguine.server.domain.DeckDto
@@ -120,9 +119,10 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
 
             val result = postCreateAccount(request)
 
-            result.id.shouldNotBeBlank()
-            result.username shouldBe request.username
-            result.email shouldBe request.email
+            result.account.id.shouldNotBeBlank()
+            result.account.username shouldBe request.username
+            result.account.email shouldBe request.email
+            result.token.shouldNotBeBlank()
         }
 
         test("given created account, when logging in with correct credentials, should return token") {
@@ -181,7 +181,7 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
     }
 
     suspend fun getPacks(page: Int = 0, size: Int = 10): PackPageDto =
-        client.get("/deck/packs?page=$page&size=$size")
+        client.get("/pack?page=$page&size=$size")
 
     suspend fun postInitGame(request: InitGameRequest, playerPosition: PlayerPosition): GameIdDto =
         client.post("/game", request, mapOf("Authorization" to playerPosition.name))
@@ -198,24 +198,24 @@ abstract class AbstractServerIntegrationTest : FunSpec() {
 
     suspend fun seedPacks(): SeedResult = client.post("/admin/seed-packs", null)
 
-    suspend fun postCreateAccount(request: CreateAccountRequest): AccountDto =
+    suspend fun postCreateAccount(request: CreateAccountRequest): LoginResponse =
         client.post("/account", request)
 
     suspend fun postLogin(request: LoginRequest): LoginResponse =
         client.post("/account/login", request)
 
     suspend fun postCreateUserDeck(token: String, request: CreateDeckRequest): DeckDto =
-        client.post("/user-deck", request, mapOf("Authorization" to "Bearer $token"))
+        client.post("/account-deck", request, mapOf("Authorization" to "Bearer $token"))
 
     suspend fun getUserDecks(token: String): DeckPageDto =
-        client.get("/user-deck", mapOf("Authorization" to "Bearer $token"))
+        client.get("/account-deck", mapOf("Authorization" to "Bearer $token"))
 
     suspend fun putUpdateUserDeck(
         token: String,
         deckId: String,
         request: UpdateDeckRequest,
     ): DeckDto = client.put<UpdateDeckRequest, DeckDto>(
-        "/user-deck/$deckId",
+        "/account-deck/$deckId",
         request,
         mapOf("Authorization" to "Bearer $token"),
     )

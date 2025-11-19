@@ -6,7 +6,7 @@ class JwtService(
     private val privateKey: String,
     private val publicKey: String,
 ) : TokenService {
-    private val expiration = "24h"
+    private val expiration = "30d"
     private val algorithm = "RS256"
 
     override fun generateToken(accountId: String): String {

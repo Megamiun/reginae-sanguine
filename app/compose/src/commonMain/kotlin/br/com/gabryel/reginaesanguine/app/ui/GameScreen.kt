@@ -92,9 +92,12 @@ fun GameScreen(gameViewModel: GameViewModel) {
                 }
                 Grid(gridSize, modifier = Modifier.border(0.1.dp, WhiteDark)) { position ->
                     Box(Modifier.boardCell(position)) {
-                        GridPlayableCell(game, position, cardSize, { gameViewModel.isPlayable(position, it) }) { cardId ->
-                            gameViewModel.play(position, cardId)
-                        }
+                        GridPlayableCell(
+                            game,
+                            position,
+                            cardSize,
+                            { gameViewModel.isPlayable(position, it) },
+                        ) { cardId -> gameViewModel.play(position, cardId) }
                     }
                 }
                 context(PlayerContext.right) {
@@ -108,7 +111,7 @@ fun GameScreen(gameViewModel: GameViewModel) {
         }
 
         Row(Modifier.align(BottomCenter), horizontalArrangement = Center) {
-            context(PlayerContext.getDefaultFor(game.playerHandPosition)) {
+            context(PlayerContext.getDefaultFor(game.localPlayerPosition)) {
                 game.currentPlayerHand.forEach { card ->
                     val dragAndDrop = remember(card.id) {
                         Modifier.dragAndDropSource { offset -> getTransferData(offset, card.id) }

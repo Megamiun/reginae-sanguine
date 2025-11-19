@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.toList
  */
 class RemotePackClient(private val client: ServerClient) : PackClient {
     override suspend fun getPacks(page: Int, size: Int): PackPageDto =
-        client.get("/api/packs?page=$page&size=$size")
+        client.get("/pack?page=$page&size=$size")
 
     override suspend fun getPackById(packId: String): Pack {
-        val packDto = client.get<PackDto>("/api/packs/$packId")
+        val packDto = client.get<PackDto>("/pack/$packId")
         return Pack(
             id = packDto.id,
             name = packDto.name,

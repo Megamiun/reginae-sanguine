@@ -4,9 +4,12 @@ import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.CardTier.LEGENDARY
 import br.com.gabryel.reginaesanguine.domain.CardTier.STANDARD
 
+fun <T> List<T>.replace(index: Int, element: T): List<T> =
+    mapIndexed { i, item -> if (i == index) element else item }
+
 data class ViewDecks(val decks: List<List<Card>>, val selectedDeckIndex: Int = 0, val error: String? = null) {
     val deckAmount: Int = decks.size
-    val selectedDeck = decks[selectedDeckIndex]
+    val selectedDeck = decks.getOrNull(selectedDeckIndex).orEmpty()
 
     fun replaceCurrent(deck: List<Card>) = copy(decks = decks.replace(selectedDeckIndex, deck))
 }

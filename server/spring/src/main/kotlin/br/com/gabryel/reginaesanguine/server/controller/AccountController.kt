@@ -1,6 +1,5 @@
 package br.com.gabryel.reginaesanguine.server.controller
 
-import br.com.gabryel.reginaesanguine.server.domain.AccountDto
 import br.com.gabryel.reginaesanguine.server.domain.action.CreateAccountRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.LoginRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.LoginResponse
@@ -23,13 +22,19 @@ class AccountController(private val accountService: AccountService) {
     @ResponseStatus(CREATED)
     fun createAccount(
         @RequestBody request: CreateAccountRequest
-    ): AccountDto = runBlocking {
+    ): LoginResponse = runBlocking {
         try {
             accountService.create(request)
         } catch (e: IllegalArgumentException) {
             throw ResponseStatusException(BAD_REQUEST, e.message, e)
         }
     }
+
+    @PostMapping("register")
+    @ResponseStatus(CREATED)
+    fun register(
+        @RequestBody request: CreateAccountRequest
+    ): LoginResponse = createAccount(request)
 
     @PostMapping("login")
     fun login(

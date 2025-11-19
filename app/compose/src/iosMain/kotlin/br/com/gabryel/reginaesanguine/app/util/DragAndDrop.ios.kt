@@ -4,6 +4,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTransferData
 import androidx.compose.ui.geometry.Offset
+import br.com.gabryel.reginaesanguine.logging.Logger
 import kotlinx.cinterop.BetaInteropApi
 import platform.Foundation.NSItemProvider
 import platform.Foundation.NSString

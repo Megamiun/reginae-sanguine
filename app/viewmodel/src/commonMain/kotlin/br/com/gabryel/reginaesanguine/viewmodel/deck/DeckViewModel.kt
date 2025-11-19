@@ -1,48 +1,75 @@
 package br.com.gabryel.reginaesanguine.viewmodel.deck
 
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.RIGHT
-import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckEditState.DeckEdit
-import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckEditState.DeckView
+import br.com.gabryel.reginaesanguine.domain.Card
+import br.com.gabryel.reginaesanguine.domain.Pack
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-sealed interface DeckEditState {
-    object DeckView : DeckEditState
+class DeckViewModel(
+    val pack: Pack,
+    private val deckManager: DeckManager,
+    private val coroutineScope: CoroutineScope
+) {
+    private val editFlow = MutableStateFlow<EditDeck?>(null)
+    val editDeck = editFlow.asStateFlow()
 
-    data class DeckEdit(val player: PlayerPosition, val editDeck: EditDeck, val playerViewModel: SingleDeckViewModel) : DeckEditState
-}
-
-sealed interface DeckEditViewModel {
-    val leftPlayer: SingleDeckViewModel
-    val editState: StateFlow<DeckEditState>
-}
-
-class RemoteDeckViewModel(override val leftPlayer: SingleDeckViewModel) : DeckEditViewModel {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-
-    override val editState: StateFlow<DeckEditState> = leftPlayer.editDeck.map { editDeck ->
-        editDeck ?: return@map DeckView
-
-        DeckEdit(LEFT, editDeck, leftPlayer)
-    }.stateIn(scope, Eagerly, DeckView)
-}
-
-class LocalDeckViewModel(override val leftPlayer: SingleDeckViewModel, val rightPlayer: SingleDeckViewModel) : DeckEditViewModel {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-
-    override val editState: StateFlow<DeckEditState> = combine(leftPlayer.editDeck, rightPlayer.editDeck) { left, right ->
-        when {
-            left != null -> DeckEdit(LEFT, left, leftPlayer)
-            right != null -> DeckEdit(RIGHT, right, rightPlayer)
-            else -> DeckView
+    val viewDecks: StateFlow<ViewDecks> = deckManager.state.map { managerState ->
+        when (managerState) {
+            is DeckManagerState.Loading -> ViewDecks(listOf(emptyList()), error = "Loading...")
+            is DeckManagerState.Error -> ViewDecks(listOf(emptyList()), error = managerState.message)
+            is DeckManagerState.Loaded -> ViewDecks(managerState.decks, managerState.selectedIndex)
         }
-    }.stateIn(scope, Eagerly, DeckView)
+    }.stateIn(coroutineScope, Eagerly, ViewDecks(listOf(emptyList())))
+
+    fun changeDeckView(index: Int) {
+        deckManager.selectDeck(index)
+    }
+
+    fun enterEditMode() {
+        editFlow.update { EditDeck(viewDecks.value.selectedDeck) }
+    }
+
+    fun cancelEditMode() {
+        editFlow.update { null }
+    }
+
+    fun addToDeck(card: Card) {
+        editFlow.update {
+            requireNotNull(it) { "Not on edit flow, should not be able to add cards" }
+            it.addToDeck(card)
+        }
+    }
+
+    fun removeFromDeck(card: Card) {
+        editFlow.update {
+            requireNotNull(it) { "Not on edit flow, should not be able to remove cards" }
+            it.removeFromDeck(card)
+        }
+    }
+
+    fun saveDeck() {
+        val currentEdit = editDeck.value ?: return
+        coroutineScope.launch {
+            deckManager.saveDeck(currentEdit.deck)
+            editFlow.update { null }
+        }
+    }
+
+    fun createDeck() {
+        coroutineScope.launch {
+            val initialDeck = pack.cards.filter { !it.spawnOnly }.take(15)
+            deckManager.createDeck(initialDeck)
+        }
+    }
+
+    fun refresh() {
+        deckManager.refresh()
+    }
 }

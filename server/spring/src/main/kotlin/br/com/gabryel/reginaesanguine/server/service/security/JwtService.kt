@@ -15,7 +15,7 @@ import java.util.Date
 class JwtService(jwtProperties: JwtProperties) : TokenService {
     private val privateKey: PrivateKey = parsePrivateKey(jwtProperties.privateKey)
     private val publicKey: PublicKey = parsePublicKey(jwtProperties.publicKey)
-    private val expirationMs = 24 * 60 * 60 * 1000L
+    private val expirationMs = 30 * 24 * 60 * 60 * 1000L
 
     override fun generateToken(accountId: String): String {
         val now = Date()

@@ -104,7 +104,7 @@ fun createApp(
 
     // Deck routes
     app.get(
-        "/deck/packs",
+        "/pack",
         handleRequestAsync { req: dynamic, res: dynamic ->
             val page = (req.query.page as? String)?.toIntOrNull() ?: 0
             val size = (req.query.size as? String)?.toIntOrNull() ?: 10
@@ -114,7 +114,7 @@ fun createApp(
     )
 
     app.get(
-        "/deck/pack/:packId",
+        "/pack/:packId",
         handleRequestAsync { req: dynamic, res: dynamic ->
             val packId = req.params.packId as String
             val pack = deckService.loadPack(packId)
@@ -144,8 +144,8 @@ fun createApp(
         handleRequestAsync { req: dynamic, res: dynamic ->
             val requestBody = JSON.stringify(req.body)
             val request = json.decodeFromString<CreateAccountRequest>(requestBody)
-            val accountDto = accountService.create(request)
-            res.status(201).json(JSON.parse(json.encodeToString(accountDto)))
+            val response = accountService.create(request)
+            res.status(201).json(JSON.parse(json.encodeToString(response)))
         },
     )
 
@@ -161,7 +161,7 @@ fun createApp(
 
     // User deck routes
     app.post(
-        "/user-deck",
+        "/account-deck",
         handleRequestAsync { req: dynamic, res: dynamic ->
             val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
             val requestBody = JSON.stringify(req.body)
@@ -172,7 +172,7 @@ fun createApp(
     )
 
     app.get(
-        "/user-deck",
+        "/account-deck",
         handleRequestAsync { req: dynamic, res: dynamic ->
             val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
             val decks = accountDeckService.getAllByAccountId(accountId)
@@ -181,7 +181,7 @@ fun createApp(
     )
 
     app.get(
-        "/user-deck/:deckId",
+        "/account-deck/:deckId",
         handleRequestAsync { req: dynamic, res: dynamic ->
             val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
             val deckId = req.params.deckId as String
@@ -191,7 +191,7 @@ fun createApp(
     )
 
     app.put(
-        "/user-deck/:deckId",
+        "/account-deck/:deckId",
         handleRequestAsync { req: dynamic, res: dynamic ->
             val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
             val deckId = req.params.deckId as String

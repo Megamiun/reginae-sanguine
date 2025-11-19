@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
     kotlin("multiplatform")
@@ -14,17 +13,15 @@ kotlin {
         }
     }
 
+    macosX64()
+    macosArm64()
+    iosArm64()
+    iosX64()
+    iosSimulatorArm64()
+
     linuxArm64()
     linuxX64()
     mingwX64()
-
-    if (HostManager.hostIsMac) {
-        macosX64()
-        macosArm64()
-        iosArm64()
-        iosX64()
-        iosSimulatorArm64()
-    }
 
     js {
         nodejs()
@@ -42,9 +39,11 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core"))
+                implementation(project(":logging"))
                 api(libs.kotlinx.serialization.json)
 
                 implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.logging)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)
             }
