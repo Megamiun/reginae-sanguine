@@ -21,7 +21,7 @@ sealed interface ActiveGameState : GameState {
 }
 
 sealed interface Awaitable : GameState {
-    suspend fun trigger(callback: (GameState) -> Unit)
+    suspend fun trigger(callback: suspend (GameState) -> Unit)
 }
 
 data class ChooseAction(
@@ -52,18 +52,20 @@ data class ChoosePosition(
 data class AwaitTurn(
     override val game: GamePlayerSummary,
     override val error: String? = null,
-    private val execute: suspend () -> GameState
+    private val execute: suspend (suspend (GameState) -> Unit) -> Unit
 ) : ActiveGameState, Awaitable {
-    override suspend fun trigger(callback: (GameState) -> Unit) {
-        callback(execute())
+    override suspend fun trigger(callback: suspend (GameState) -> Unit) {
+        execute(callback)
     }
 }
 
 data class AwaitMatch(
     override val error: String? = null,
-    private val execute: suspend () -> GameState
+    private val execute: suspend (suspend (GameState) -> Unit) -> Unit
 ) : GameState, Awaitable {
-    override suspend fun trigger(callback: (GameState) -> Unit) {
-        callback(execute())
+    override suspend fun trigger(callback: suspend (GameState) -> Unit) {
+        execute(callback)
     }
 }
+
+data class GameEnd(override val game: GamePlayerSummary, override val error: String? = null) : ActiveGameState

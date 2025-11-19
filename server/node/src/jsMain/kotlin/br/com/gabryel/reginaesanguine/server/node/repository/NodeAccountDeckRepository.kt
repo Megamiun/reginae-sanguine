@@ -1,8 +1,8 @@
 package br.com.gabryel.reginaesanguine.server.node.repository
 
 import br.com.gabryel.reginaesanguine.server.domain.AccountDeck
-import br.com.gabryel.reginaesanguine.server.domain.PageDto
-import br.com.gabryel.reginaesanguine.server.domain.map
+import br.com.gabryel.reginaesanguine.server.domain.page.PageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.map
 import br.com.gabryel.reginaesanguine.server.node.pg.Pool
 import br.com.gabryel.reginaesanguine.server.repository.AccountDeckRepository
 import kotlinx.coroutines.await

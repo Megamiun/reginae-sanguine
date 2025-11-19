@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class GameViewDto(
+    val id: String,
     val packId: String,
     val deckStateId: String,
     val localPlayerHand: List<String>,
@@ -26,7 +27,8 @@ data class GameViewDto(
     val playableMoves: Set<PlayableMove>
 ) {
     companion object {
-        fun from(gameView: GameView, packId: String, deckStateId: String) = GameViewDto(
+        fun from(gameId: String, gameView: GameView, packId: String, deckStateId: String) = GameViewDto(
+            id = gameId,
             packId = packId,
             deckStateId = deckStateId,
             localPlayerHand = gameView.localPlayerHand.map { it.id },

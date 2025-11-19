@@ -35,7 +35,11 @@ fun main() {
                     Box(Modifier.fillMaxSize().background(Background), contentAlignment = TopCenter) {
                         Box(Modifier.size(1000.dp, 500.dp), contentAlignment = Center) {
                             context(ResPainterLoader()) {
-                                App(resourceLoader, storage)
+                                App(
+                                    resourceLoader,
+                                    storage,
+                                    remember { storage.serverUrl.retrieve() ?: "http://10.0.2.2:8080" },
+                                )
                             }
                         }
                     }

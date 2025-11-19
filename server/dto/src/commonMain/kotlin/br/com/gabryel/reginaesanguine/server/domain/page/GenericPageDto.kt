@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.server.domain
+package br.com.gabryel.reginaesanguine.server.domain.page
 
 data class GenericPageDto<T>(
     override val content: List<T>,

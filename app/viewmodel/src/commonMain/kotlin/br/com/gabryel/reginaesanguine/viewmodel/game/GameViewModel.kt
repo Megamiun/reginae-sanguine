@@ -2,12 +2,11 @@ package br.com.gabryel.reginaesanguine.viewmodel.game
 
 import br.com.gabryel.reginaesanguine.domain.Card
 import br.com.gabryel.reginaesanguine.domain.Game
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
 import br.com.gabryel.reginaesanguine.viewmodel.game.local.LocalGameManager
 import br.com.gabryel.reginaesanguine.viewmodel.game.local.LocalGameStateData
 import br.com.gabryel.reginaesanguine.viewmodel.game.remote.RemoteGameManager
+import br.com.gabryel.reginaesanguine.viewmodel.lobby.GameRequestClient
 import br.com.gabryel.reginaesanguine.viewmodel.require
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,16 +28,20 @@ class GameViewModel(
 
         suspend fun forRemoteGame(
             deckStateId: String,
-            position: PlayerPosition,
             client: GameClient,
+            gameRequestClient: GameRequestClient,
             coroutineScope: CoroutineScope,
             availableCards: Map<String, Card>
         ): GameViewModel {
-            val request = InitGameRequest(deckStateId, position)
-            val manager = RemoteGameManager.create(client, request, availableCards)
+            val manager = RemoteGameManager.create(client, gameRequestClient, deckStateId, availableCards)
+            val viewModel = GameViewModel(MutableStateFlow(manager.awaitGameCreation()), coroutineScope)
 
-            return GameViewModel(MutableStateFlow(manager.awaitGameCreation()), coroutineScope)
-                .trigger()
+            // Launch trigger in a separate coroutine so UI can see initial state
+            coroutineScope.launch {
+                viewModel.trigger()
+            }
+
+            return viewModel
         }
     }
 
@@ -73,9 +76,13 @@ class GameViewModel(
     }
 
     private suspend fun trigger(): GameViewModel {
-        val state = state.value
-        if (state is Awaitable)
-            state.trigger { stateFlow.value = it }
+        var currentState = state.value
+        while (currentState is Awaitable) {
+            currentState.trigger { newState ->
+                stateFlow.value = newState
+                currentState = newState
+            }
+        }
 
         return this
     }

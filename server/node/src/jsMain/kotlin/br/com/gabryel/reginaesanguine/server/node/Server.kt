@@ -1,24 +1,27 @@
 package br.com.gabryel.reginaesanguine.server.node
 
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition
 import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import br.com.gabryel.reginaesanguine.server.domain.ActionDto
 import br.com.gabryel.reginaesanguine.server.domain.GameIdDto
 import br.com.gabryel.reginaesanguine.server.domain.action.CreateAccountRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.CreateDeckRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.CreateGameRequestRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.InitGameRequest
+import br.com.gabryel.reginaesanguine.server.domain.action.JoinGameRequestRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.LoginRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.UpdateDeckRequest
 import br.com.gabryel.reginaesanguine.server.node.MigrationRunner.runMigrations
 import br.com.gabryel.reginaesanguine.server.node.pg.createPool
 import br.com.gabryel.reginaesanguine.server.node.repository.NodeAccountDeckRepository
 import br.com.gabryel.reginaesanguine.server.node.repository.NodeAccountRepository
+import br.com.gabryel.reginaesanguine.server.node.repository.NodeGameRequestRepository
 import br.com.gabryel.reginaesanguine.server.node.repository.NodePackRepository
 import br.com.gabryel.reginaesanguine.server.node.service.NodePackLoader
 import br.com.gabryel.reginaesanguine.server.service.AccountDeckService
 import br.com.gabryel.reginaesanguine.server.service.AccountService
 import br.com.gabryel.reginaesanguine.server.service.DeckService
 import br.com.gabryel.reginaesanguine.server.service.GameService
+import br.com.gabryel.reginaesanguine.server.service.Lobby
 import br.com.gabryel.reginaesanguine.server.service.PackSeederService
 import br.com.gabryel.reginaesanguine.server.service.security.Bcrypt
 import br.com.gabryel.reginaesanguine.server.service.security.JwtService
@@ -40,6 +43,7 @@ fun createApp(
     accountDeckService: AccountDeckService,
     tokenService: TokenService,
     gameService: GameService,
+    lobby: Lobby,
 ): dynamic {
     val app = express()
     val json = gameJsonParser()
@@ -71,33 +75,79 @@ fun createApp(
 
     app.post(
         "/game/:gameId/action",
-        handleRequest { req: dynamic, res: dynamic ->
+        handleRequestAsync { req: dynamic, res: dynamic ->
             val gameId = req.params.gameId as String
-            val authorization = req.headers.authorization as String
-            val playerPosition = PlayerPosition.valueOf(authorization)
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
 
             val actionBody = JSON.stringify(req.body)
             val actionDto = json.decodeFromString<ActionDto>(actionBody)
 
             val action = actionDto.toDomain()
 
-            val result = gameService.executeAction(gameId, playerPosition, action)
+            val result = gameService.executeAction(gameId, accountId, action)
             res.json(JSON.parse(json.encodeToString(result)))
         },
     )
 
     app.get(
         "/game/:gameId/status",
-        handleRequest { req: dynamic, res: dynamic ->
+        handleRequestAsync { req: dynamic, res: dynamic ->
             val gameId = req.params.gameId as String
-            val authorization = req.headers.authorization as String
-            val playerPosition = PlayerPosition.valueOf(authorization)
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
 
-            val result = gameService.fetchStatus(gameId, playerPosition)
+            val result = gameService.fetchStatus(gameId, accountId)
             if (result != null) {
                 res.json(JSON.parse(json.encodeToString(result)))
             } else {
                 res.status(404).json(js("{ error: 'Game not found' }"))
+            }
+        },
+    )
+
+    // Lobby routes
+    app.post(
+        "/game-request",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
+            val requestBody = JSON.stringify(req.body)
+            val request = json.decodeFromString<CreateGameRequestRequest>(requestBody)
+            val response = lobby.createGameRequest(accountId, request)
+            res.json(JSON.parse(json.encodeToString(response)))
+        },
+    )
+
+    app.get(
+        "/game-request",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val page = (req.query.page as? String)?.toIntOrNull() ?: 0
+            val size = (req.query.size as? String)?.toIntOrNull() ?: 10
+            val gameRequests = lobby.listAvailableGameRequests(page, size)
+            res.json(JSON.parse(json.encodeToString(gameRequests)))
+        },
+    )
+
+    app.post(
+        "/game-request/:gameRequestId/join",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
+            val gameRequestId = req.params.gameRequestId as String
+            val requestBody = JSON.stringify(req.body)
+            val request = json.decodeFromString<JoinGameRequestRequest>(requestBody)
+            val response = lobby.joinGameRequest(gameRequestId, accountId, request)
+            res.json(JSON.parse(json.encodeToString(response)))
+        },
+    )
+
+    app.get(
+        "/game-request/:gameRequestId/status",
+        handleRequestAsync { req: dynamic, res: dynamic ->
+            val accountId = extractAccountId(req, tokenService, res) ?: return@handleRequestAsync
+            val gameRequestId = req.params.gameRequestId as String
+            val result = lobby.getGameRequestStatus(gameRequestId, accountId)
+            if (result != null) {
+                res.json(JSON.parse(json.encodeToString(result)))
+            } else {
+                res.status(204).send()
             }
         },
     )
@@ -224,16 +274,6 @@ private fun extractAccountId(req: dynamic, tokenService: TokenService, res: dyna
     return accountId
 }
 
-fun handleRequest(function: (dynamic, dynamic) -> Unit) = { req: dynamic, res: dynamic ->
-    try {
-        function(req, res)
-    } catch (e: Throwable) {
-        val errorObj = js("{}")
-        errorObj.error = e.message
-        res.status(400).json(errorObj)
-    }
-}
-
 @OptIn(DelicateCoroutinesApi::class)
 fun handleRequestAsync(function: suspend (dynamic, dynamic) -> Unit) = { req: dynamic, res: dynamic ->
     GlobalScope.launch {
@@ -296,6 +336,8 @@ suspend fun runServer(
     val packRepository = NodePackRepository(pool)
     val accountRepository = NodeAccountRepository(pool)
     val accountDeckRepository = NodeAccountDeckRepository(pool)
+    val gameRequestRepository = NodeGameRequestRepository(pool)
+
     val packLoader = NodePackLoader()
     val packSeederService = PackSeederService(packRepository, packLoader)
     val deckService = DeckService(packRepository)
@@ -304,6 +346,7 @@ suspend fun runServer(
     val accountService = AccountService(accountRepository, passwordHasher, tokenService)
     val accountDeckService = AccountDeckService(accountDeckRepository)
     val gameService = GameService(deckService, accountDeckRepository)
+    val lobby = Lobby(gameService, gameRequestRepository)
 
     return createApp(
         deckService,
@@ -312,6 +355,7 @@ suspend fun runServer(
         accountDeckService,
         tokenService,
         gameService,
+        lobby,
     ).listen(port) {
         console.log("Server running at http://localhost:$port")
         console.log("Database: $dbHost:$dbPort/$dbName")

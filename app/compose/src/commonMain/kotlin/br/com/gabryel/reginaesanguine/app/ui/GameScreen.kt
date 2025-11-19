@@ -45,9 +45,9 @@ import br.com.gabryel.reginaesanguine.app.ui.util.getCardSize
 import br.com.gabryel.reginaesanguine.app.util.NavigationScreens
 import br.com.gabryel.reginaesanguine.app.util.getTransferData
 import br.com.gabryel.reginaesanguine.domain.Position
-import br.com.gabryel.reginaesanguine.domain.State
 import br.com.gabryel.reginaesanguine.viewmodel.game.ActiveGameState
-import br.com.gabryel.reginaesanguine.viewmodel.game.Awaitable
+import br.com.gabryel.reginaesanguine.viewmodel.game.AwaitTurn
+import br.com.gabryel.reginaesanguine.viewmodel.game.GameEnd
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 
 @Composable
@@ -57,13 +57,7 @@ fun GameScreen(gameViewModel: GameViewModel) {
     val state = collectedState
 
     if (state !is ActiveGameState) {
-        Box(Modifier.fillMaxSize().background(Black.copy(alpha = 0.5f)), Alignment.Center) {
-            Text(
-                "Waiting for opponent...",
-                modifier = Modifier.background(WhiteDark).padding(16.dp),
-                color = Black,
-            )
-        }
+        AwaitMessage("Waiting for opponent to join...")
         return
     }
 
@@ -129,18 +123,22 @@ fun GameScreen(gameViewModel: GameViewModel) {
 
         val middleWidth = DpSize(cardSize.width * 8, cardSize.height * 3.1f)
 
-        if (game.getState() is State.Ended)
-            ResultOverlay(game, middleWidth)
+        when (state) {
+            is GameEnd -> ResultOverlay(game, middleWidth)
+            is AwaitTurn -> AwaitMessage("Waiting for opponent to move...")
+            else -> {}
+        }
+    }
+}
 
-        // TODO Do this prettily
-        if (state is Awaitable)
-            Box(Modifier.fillMaxSize().background(Black.copy(alpha = 0.5f)), Alignment.Center) {
-                Text(
-                    "Waiting for opponent...",
-                    modifier = Modifier.background(WhiteDark).padding(16.dp),
-                    color = Black,
-                )
-            }
+@Composable
+private fun AwaitMessage(message: String) {
+    Box(Modifier.fillMaxSize().background(Black.copy(alpha = 0.5f)), Alignment.Center) {
+        Text(
+            message,
+            modifier = Modifier.background(WhiteDark).padding(16.dp),
+            color = Black,
+        )
     }
 }
 

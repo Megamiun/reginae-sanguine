@@ -4,7 +4,7 @@ import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.server.client.ServerClient
 import br.com.gabryel.reginaesanguine.server.client.get
 import br.com.gabryel.reginaesanguine.server.domain.PackDto
-import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.PackPageDto
 import br.com.gabryel.reginaesanguine.viewmodel.pack.PackClient
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.takeWhile

@@ -37,7 +37,11 @@ fun main() = application {
                 CompositionLocalProvider(LocalDensity provides Density(2f), LocalInteractionType provides MOUSE) {
                     Scaffold { paddingValues ->
                         Box(Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Center) {
-                            App(resourceLoader, storage)
+                            App(
+                                resourceLoader,
+                                storage,
+                                remember { storage.serverUrl.retrieve() ?: "http://10.0.2.2:8080" },
+                            )
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 package br.com.gabryel.reginaesanguine.server.controller
 
 import br.com.gabryel.reginaesanguine.server.domain.PackDto
-import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.PackPageDto
 import br.com.gabryel.reginaesanguine.server.service.DeckService
 import kotlinx.coroutines.runBlocking
 import org.springframework.http.HttpStatus.NOT_FOUND

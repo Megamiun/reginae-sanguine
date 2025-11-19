@@ -18,7 +18,7 @@ fun mainViewController(): UIViewController = ComposeUIViewController {
     CompositionLocalProvider(LocalInteractionType provides TOUCH) {
         context(ResPainterLoader()) {
             ReginaeSanguineTheme {
-                App(resourceLoader, storage)
+                App(resourceLoader, storage, remember { storage.serverUrl.retrieve() ?: "http://localhost:8080" })
             }
         }
     }

@@ -25,10 +25,10 @@ class RemoteGameStateData(
     private val availableCards: Map<String, Card>
 ) : GamePlayerSummary {
     override val size = DEFAULT_BOARD_SIZE
-    override val playerTurn = gameView.playerTurn
     override val localPlayerPosition = gameView.localPlayerPosition
     override val currentPlayerHand = gameView.localPlayerHand.mapNotNull { availableCards[it] }
     override val round = gameView.round
+    override val id = gameView.id
 
     val playableMoves: Set<PlayableMove> = gameView.playableMoves
 

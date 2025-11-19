@@ -1,4 +1,4 @@
-package br.com.gabryel.reginaesanguine.server.domain
+package br.com.gabryel.reginaesanguine.server.domain.page
 
 /**
  * Generic pagination interface.
@@ -10,6 +10,10 @@ interface PageDto<T> {
     val size: Int
     val totalElements: Long
     val totalPages: Int
+
+    fun isEmpty() = content.isEmpty()
+
+    fun isNotEmpty() = content.isNotEmpty()
 
     fun <V : PageDto<T>> upcast(upcaster: (List<T>, Int, Int, Long, Int) -> V): V =
         upcaster(content, page, size, totalElements, totalPages)

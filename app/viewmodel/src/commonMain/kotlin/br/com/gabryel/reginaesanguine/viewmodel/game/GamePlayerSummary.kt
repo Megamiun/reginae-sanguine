@@ -12,8 +12,8 @@ import br.com.gabryel.reginaesanguine.domain.State
  * This ensures the UI gets the information it needs without breaking the GameClient abstraction.
  */
 interface GamePlayerSummary {
+    val id: String
     val size: Size
-    val playerTurn: PlayerPosition
     val localPlayerPosition: PlayerPosition
     val currentPlayerHand: List<Card>
     val round: Int

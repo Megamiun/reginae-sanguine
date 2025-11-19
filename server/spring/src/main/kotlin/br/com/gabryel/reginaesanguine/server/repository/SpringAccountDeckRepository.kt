@@ -1,7 +1,7 @@
 package br.com.gabryel.reginaesanguine.server.repository
 
 import br.com.gabryel.reginaesanguine.server.domain.AccountDeck
-import br.com.gabryel.reginaesanguine.server.domain.PageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.PageDto
 import br.com.gabryel.reginaesanguine.server.entity.UserDeckEntity
 import br.com.gabryel.reginaesanguine.server.entity.UserDeckStateEntity
 import br.com.gabryel.reginaesanguine.server.jpa.PackJpaRepository

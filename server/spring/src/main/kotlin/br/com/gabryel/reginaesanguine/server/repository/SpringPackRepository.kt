@@ -1,8 +1,8 @@
 package br.com.gabryel.reginaesanguine.server.repository
 
 import br.com.gabryel.reginaesanguine.domain.Pack
-import br.com.gabryel.reginaesanguine.server.domain.GenericPageDto
-import br.com.gabryel.reginaesanguine.server.domain.PageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.GenericPageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.PageDto
 import br.com.gabryel.reginaesanguine.server.entity.PackCardEntity
 import br.com.gabryel.reginaesanguine.server.entity.PackEntity
 import br.com.gabryel.reginaesanguine.server.entity.toDomain

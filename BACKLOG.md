@@ -6,10 +6,13 @@
     - [ ] Allow player to create Game Request in Lobby
     - [ ] Allow player to join Game Request in Lobby
     - [ ] Randomize which player is LEFT or RIGHT
+- [ ] Add a back button after finishing a game
+- [ ] Add mulligan feature:
+    - [ ] Core
+    - [ ] Compose
 - [ ] Improve configuration
     - [ ] Add server URL configuration
     - [ ] Save LOCAL/REMOTE mode on Storage
 - [ ] Review all viewModels for simplicity sake
-- [ ] Add a back button after finishing a game
 - [ ] Beautify cards
 - [ ] Normalize pack_card_effect on DB

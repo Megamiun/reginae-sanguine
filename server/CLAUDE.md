@@ -122,6 +122,8 @@ Both implementations use:
 - **REST Conventions**: Standard HTTP methods (GET, POST, PUT, DELETE)
 - **Status Codes**: Appropriate HTTP status codes (200, 201, 400, 404, 500)
 - **Error Handling**: Consistent error response format with meaningful messages
+- **No Generic Types**: Never return generic types (List, Map, Set) directly from endpoints - always wrap in a specific DTO
+- **Prefer Pagination**: Always prefer returning a Page/PageDto over a bare List for collection endpoints - this allows future pagination without breaking API contracts
 
 ### Database Best Practices
 

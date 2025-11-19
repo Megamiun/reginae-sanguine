@@ -50,7 +50,6 @@ import br.com.gabryel.reginaesanguine.app.util.getStandardPackFromServer
 import br.com.gabryel.reginaesanguine.domain.Game
 import br.com.gabryel.reginaesanguine.domain.Pack
 import br.com.gabryel.reginaesanguine.domain.Player
-import br.com.gabryel.reginaesanguine.domain.PlayerPosition.LEFT
 import br.com.gabryel.reginaesanguine.logging.Logger
 import br.com.gabryel.reginaesanguine.server.client.KtorServerClient
 import br.com.gabryel.reginaesanguine.viewmodel.auth.AuthState
@@ -67,6 +66,8 @@ import br.com.gabryel.reginaesanguine.viewmodel.deck.remote.RemoteDeckManager
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameClient
 import br.com.gabryel.reginaesanguine.viewmodel.game.GameViewModel
 import br.com.gabryel.reginaesanguine.viewmodel.game.remote.RemoteGameClient
+import br.com.gabryel.reginaesanguine.viewmodel.lobby.GameRequestClient
+import br.com.gabryel.reginaesanguine.viewmodel.lobby.RemoteGameRequestClient
 import br.com.gabryel.reginaesanguine.viewmodel.pack.remote.RemotePackClient
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
@@ -77,7 +78,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 context(painterLoader: PainterLoader)
-fun App(resourceLoader: ResourceLoader, storage: Storage) {
+fun App(resourceLoader: ResourceLoader, storage: Storage, baseUrl: String) {
     val logger = Logger("App")
     val context = LocalPlatformContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -88,11 +89,11 @@ fun App(resourceLoader: ResourceLoader, storage: Storage) {
     var mode by remember { mutableStateOf(LOCAL) }
     val snackbar = remember { SnackbarHostState() }
 
-    val baseUrl = remember { storage.serverUrl.retrieve() ?: "http://10.0.2.2:8080" }
-    val serverClient = remember { KtorServerClient(baseUrl) }
+    val serverClient = remember { KtorServerClient(baseUrl, enabledLogging = true) }
     val authClient = remember { RemoteAuthClient(serverClient) }
     val packClient = remember { RemotePackClient(serverClient) }
-    val gameClient = remember { RemoteGameClient(serverClient) }
+    val gameRequestClient = remember { RemoteGameRequestClient(serverClient) { storage.token.retrieve() } }
+    val gameClient = remember { RemoteGameClient(serverClient) { storage.token.retrieve() } }
     val authViewModel = remember { AuthViewModel(authClient, storage, coroutineScope) }
 
     LaunchedEffect(true) {
@@ -150,7 +151,8 @@ fun App(resourceLoader: ResourceLoader, storage: Storage) {
                 addRoute(GAME) {
                     val coroutineScope = rememberCoroutineScope()
                     val game by produceState<GameViewModel?>(null) {
-                        value = createViewModel(deckViewModel, currentPack, gameClient, coroutineScope)
+                        value =
+                            createViewModel(deckViewModel, currentPack, gameClient, gameRequestClient, coroutineScope)
                     }
 
                     game?.let {
@@ -225,6 +227,7 @@ private suspend fun createViewModel(
     deckViewModel: DeckEditViewModel,
     pack: Pack,
     gameClient: GameClient,
+    gameRequestClient: GameRequestClient,
     coroutineScope: CoroutineScope
 ): GameViewModel =
     when (deckViewModel) {
@@ -243,6 +246,12 @@ private suspend fun createViewModel(
             val deckStateId = deckViewModel.getSelectedDeckStateId()
                 ?: error("No deck selected for remote game")
 
-            GameViewModel.forRemoteGame(deckStateId, LEFT, gameClient, coroutineScope, pack.cards.associateBy { it.id })
+            GameViewModel.forRemoteGame(
+                deckStateId,
+                gameClient,
+                gameRequestClient,
+                coroutineScope,
+                pack.cards.associateBy { it.id },
+            )
         }
     }

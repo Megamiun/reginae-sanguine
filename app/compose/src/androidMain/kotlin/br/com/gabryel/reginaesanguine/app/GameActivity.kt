@@ -31,7 +31,11 @@ class GameActivity : ComponentActivity() {
             CompositionLocalProvider(LocalInteractionType provides TOUCH) {
                 context(ResPainterLoader()) {
                     ReginaeSanguineTheme {
-                        App(resourceLoader, storage)
+                        App(
+                            resourceLoader,
+                            storage,
+                            remember { storage.serverUrl.retrieve() ?: "http://10.0.2.2:8080" },
+                        )
                     }
                 }
             }

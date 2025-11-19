@@ -1,9 +1,12 @@
 package br.com.gabryel.reginaesanguine.domain
 
+import kotlin.uuid.ExperimentalUuidApi
+
 /**
  * Minimal view for remote clients - contains only essential information.
  * No opponent information is exposed.
  */
+@OptIn(ExperimentalUuidApi::class)
 data class GameView(
     val localPlayerHand: List<Card>,
     val localPlayerDeckSize: Int,
@@ -17,15 +20,7 @@ data class GameView(
     val laneWinners: Map<Int, PlayerPosition?> = emptyMap(),
     val playableMoves: Set<PlayableMove> = emptySet()
 ) {
-    fun getWinner(): PlayerPosition? = boardScores.getWinner()
-
     fun getBaseLaneScoreAt(lane: Int): Map<PlayerPosition, Int> = laneScores[lane] ?: emptyMap()
-
-    private fun Map<PlayerPosition, Int>.getWinner(): PlayerPosition? {
-        val max = maxByOrNull { it.value } ?: return null
-        if (values.all { it == max.value }) return null
-        return max.key
-    }
 
     companion object {
         fun forPlayer(game: Game, playerPosition: PlayerPosition): GameView {

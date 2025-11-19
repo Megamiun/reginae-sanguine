@@ -1,7 +1,7 @@
 package br.com.gabryel.reginaesanguine.viewmodel.pack
 
 import br.com.gabryel.reginaesanguine.domain.Pack
-import br.com.gabryel.reginaesanguine.server.domain.PackPageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.PackPageDto
 
 /**
  * Client interface for pack operations.

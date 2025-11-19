@@ -1,7 +1,7 @@
 package br.com.gabryel.reginaesanguine.server.repository
 
 import br.com.gabryel.reginaesanguine.server.domain.AccountDeck
-import br.com.gabryel.reginaesanguine.server.domain.PageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.PageDto
 
 interface AccountDeckRepository {
     suspend fun create(accountId: String, packAlias: String, cardIds: List<String>): AccountDeck

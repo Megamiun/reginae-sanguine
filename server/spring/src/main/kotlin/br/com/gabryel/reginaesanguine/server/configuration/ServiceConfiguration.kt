@@ -2,11 +2,13 @@ package br.com.gabryel.reginaesanguine.server.configuration
 
 import br.com.gabryel.reginaesanguine.server.repository.AccountDeckRepository
 import br.com.gabryel.reginaesanguine.server.repository.AccountRepository
+import br.com.gabryel.reginaesanguine.server.repository.GameRequestRepository
 import br.com.gabryel.reginaesanguine.server.repository.PackRepository
 import br.com.gabryel.reginaesanguine.server.service.AccountDeckService
 import br.com.gabryel.reginaesanguine.server.service.AccountService
 import br.com.gabryel.reginaesanguine.server.service.DeckService
 import br.com.gabryel.reginaesanguine.server.service.GameService
+import br.com.gabryel.reginaesanguine.server.service.Lobby
 import br.com.gabryel.reginaesanguine.server.service.PackLoader
 import br.com.gabryel.reginaesanguine.server.service.PackSeederService
 import br.com.gabryel.reginaesanguine.server.service.security.PasswordHasher
@@ -23,6 +25,10 @@ class ServiceConfiguration {
     @Bean
     fun gameService(deckService: DeckService, accountDeckRepository: AccountDeckRepository) =
         GameService(deckService, accountDeckRepository)
+
+    @Bean
+    fun gameRequestService(gameService: GameService, gameRequestRepository: GameRequestRepository) =
+        Lobby(gameService, gameRequestRepository)
 
     @Bean
     fun packSeederService(

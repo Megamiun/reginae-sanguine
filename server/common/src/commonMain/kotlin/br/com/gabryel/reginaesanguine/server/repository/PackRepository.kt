@@ -1,7 +1,7 @@
 package br.com.gabryel.reginaesanguine.server.repository
 
 import br.com.gabryel.reginaesanguine.domain.Pack
-import br.com.gabryel.reginaesanguine.server.domain.PageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.PageDto
 
 interface PackRepository {
     suspend fun savePack(pack: Pack)

@@ -1,5 +1,6 @@
-package br.com.gabryel.reginaesanguine.server.domain
+package br.com.gabryel.reginaesanguine.server.domain.page
 
+import br.com.gabryel.reginaesanguine.server.domain.PackDto
 import kotlinx.serialization.Serializable
 
 /**
@@ -7,10 +8,10 @@ import kotlinx.serialization.Serializable
  * Serializable for cross-platform compatibility (especially Kotlin/JS).
  */
 @Serializable
-data class DeckPageDto(
-    override val content: List<DeckDto>,
+data class PackPageDto(
+    override val content: List<PackDto>,
     override val page: Int,
     override val size: Int,
     override val totalElements: Long,
     override val totalPages: Int
-) : PageDto<DeckDto>
+) : PageDto<PackDto>

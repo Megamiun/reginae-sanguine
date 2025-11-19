@@ -5,9 +5,9 @@ import br.com.gabryel.reginaesanguine.server.client.get
 import br.com.gabryel.reginaesanguine.server.client.post
 import br.com.gabryel.reginaesanguine.server.client.put
 import br.com.gabryel.reginaesanguine.server.domain.DeckDto
-import br.com.gabryel.reginaesanguine.server.domain.DeckPageDto
 import br.com.gabryel.reginaesanguine.server.domain.action.CreateDeckRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.UpdateDeckRequest
+import br.com.gabryel.reginaesanguine.server.domain.page.DeckPageDto
 import br.com.gabryel.reginaesanguine.viewmodel.deck.DeckClient
 
 class RemoteDeckClient(private val client: ServerClient, token: String) : DeckClient {

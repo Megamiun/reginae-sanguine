@@ -2,10 +2,10 @@ package br.com.gabryel.reginaesanguine.server.service
 
 import br.com.gabryel.reginaesanguine.server.domain.AccountDeck
 import br.com.gabryel.reginaesanguine.server.domain.DeckDto
-import br.com.gabryel.reginaesanguine.server.domain.DeckPageDto
 import br.com.gabryel.reginaesanguine.server.domain.action.CreateDeckRequest
 import br.com.gabryel.reginaesanguine.server.domain.action.UpdateDeckRequest
-import br.com.gabryel.reginaesanguine.server.domain.map
+import br.com.gabryel.reginaesanguine.server.domain.page.DeckPageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.map
 import br.com.gabryel.reginaesanguine.server.repository.AccountDeckRepository
 
 class AccountDeckService(private val accountDeckRepository: AccountDeckRepository) {

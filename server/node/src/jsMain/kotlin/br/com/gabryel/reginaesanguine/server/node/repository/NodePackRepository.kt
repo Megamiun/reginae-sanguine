@@ -25,11 +25,11 @@ import br.com.gabryel.reginaesanguine.domain.effect.type.SpawnCardsPerRank
 import br.com.gabryel.reginaesanguine.domain.parser.gameJsonParser
 import br.com.gabryel.reginaesanguine.server.domain.AmountData
 import br.com.gabryel.reginaesanguine.server.domain.CardIdsData
-import br.com.gabryel.reginaesanguine.server.domain.GenericPageDto
-import br.com.gabryel.reginaesanguine.server.domain.PageDto
 import br.com.gabryel.reginaesanguine.server.domain.PowerMultiplierData
 import br.com.gabryel.reginaesanguine.server.domain.RaisePowerByCountData
 import br.com.gabryel.reginaesanguine.server.domain.RaisePowerOnStatusData
+import br.com.gabryel.reginaesanguine.server.domain.page.GenericPageDto
+import br.com.gabryel.reginaesanguine.server.domain.page.PageDto
 import br.com.gabryel.reginaesanguine.server.domain.toEffectData
 import br.com.gabryel.reginaesanguine.server.node.pg.Pool
 import br.com.gabryel.reginaesanguine.server.node.pg.PoolClient

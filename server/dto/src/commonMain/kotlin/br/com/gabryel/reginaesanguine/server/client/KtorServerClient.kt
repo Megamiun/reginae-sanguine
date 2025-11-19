@@ -19,20 +19,23 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KClass
 
+@OptIn(InternalSerializationApi::class)
 class KtorServerClient(
     private val baseUrl: String,
-    private val json: Json = gameJsonParser()
+    private val json: Json = gameJsonParser(),
+    enabledLogging: Boolean = false
 ) : ServerClient {
     private val client = HttpClient {
-        install(Logging) {
-            logger = KtorLogger(KtorServerClient::class)
+        if (enabledLogging) {
+            install(Logging) {
+                logger = KtorLogger(KtorServerClient::class)
+            }
         }
         install(ContentNegotiation) {
             json(json)
         }
     }
 
-    @OptIn(InternalSerializationApi::class)
     override suspend fun <T : Any> get(
         path: String,
         responseClass: KClass<T>,
@@ -40,7 +43,6 @@ class KtorServerClient(
     ): T = client.get(getUrl(path)) { buildRequest(headers, null, Any::class) }
         .body(TypeInfo(responseClass))
 
-    @OptIn(InternalSerializationApi::class)
     override suspend fun <T : Any, V : Any> post(
         path: String,
         body: T?,
@@ -50,7 +52,6 @@ class KtorServerClient(
     ): V = client.post(getUrl(path)) { buildRequest(headers, body, requestClass) }
         .body(TypeInfo(responseClass))
 
-    @OptIn(InternalSerializationApi::class)
     override suspend fun <T : Any, V : Any> put(
         path: String,
         body: T,
